@@ -5,6 +5,7 @@
 Welcome to the most comprehensive **Machine Learning for Semiconductor Engineers** learning pathway available! This 20-week program transforms semiconductor professionals into ML-powered engineers, bridging traditional semiconductor expertise with cutting-edge AI/ML technologies.
 
 ### What Makes This Special
+
 - **Industry-Focused**: Real semiconductor datasets (SECOM, WM-811K wafer maps)
 - **Hands-On Learning**: 4 content types per module (notebooks, theory, scripts, quick refs)
 - **Production-Ready**: Professional code quality with Docker, CI/CD, and testing
@@ -13,57 +14,72 @@ Welcome to the most comprehensive **Machine Learning for Semiconductor Engineers
 ## 📚 Learning Series Structure
 
 ### 🔧 Foundation Series (Weeks 1-5)
+
 **Module 1: Python & Data Fundamentals**
+
 - 1.1: Python for Engineers with wafer map data examples
 - 1.2: Statistical Foundations with DOE concepts
 - **Deliverables**: Wafer yield analysis script, SPC toolkit
 
 **Module 2: Data Quality & Statistical Analysis**
+
 - 2.1: Data Quality using SECOM dataset
 - 2.2: Outlier Detection with semiconductor methods
 - 2.3: Advanced Statistical Analysis with ANOVA
 - **Deliverables**: Data quality framework, outlier detection pipeline
 
 **Module 3: Introduction to Machine Learning**
+
 - 3.1: Regression for Process Engineers
 - 3.2: Classification Fundamentals
 - **Deliverables**: Process parameter predictor, wafer pass/fail classifier
 
 ### ⚙️ Intermediate Series (Weeks 6-8)
+
 **Module 4: Advanced ML Techniques**
+
 - 4.1: Ensemble Methods (XGBoost/LightGBM)
 - 4.2: Unsupervised Learning (clustering, PCA)
 - **Deliverables**: Advanced yield prediction, anomaly detection system
 
 **Module 5: Time Series & Predictive Maintenance**
+
 - 5.1: Time Series Analysis (ARIMA, Prophet)
 - 5.2: Predictive Maintenance systems
 - **Deliverables**: Tool drift predictor, equipment health monitoring
 
 ### 🧠 Advanced Series (Weeks 9-12)
+
 **Module 6: Deep Learning Foundations**
+
 - 6.1: Neural Networks with PyTorch/TensorFlow
 - 6.2: CNNs for Defect Detection
 - **Deliverables**: Deep learning optimizer, visual defect classifier
 
 **Module 7: Computer Vision Applications**
+
 - 7.1: Advanced Defect Analysis (YOLO, Faster R-CNN)
 - 7.2: Pattern Recognition for wafer maps
 - **Deliverables**: Automated optical inspection, pattern classification
 
 ### 🚀 Cutting-Edge Series (Weeks 13-16)
+
 **Module 8: Generative AI & Advanced Applications**
+
 - 8.1: GANs for Data Augmentation
 - 8.2: LLMs for Manufacturing
 - **Deliverables**: Data augmentation pipeline, intelligent report analyzer
 
 **Module 9: MLOps & Deployment**
+
 - 9.1: Model Deployment (APIs, containers)
 - 9.2: Monitoring & Maintenance
 - **Deliverables**: Deployable model template, MLOps starter kit
 
 ### 🎯 Project Development Series (Weeks 17-20)
+
 **Module 10: Production-Ready ML Projects**
+
 - 10.1: Project Architecture & Best Practices
 - 10.2: Testing & Quality Assurance
 - 10.3: Documentation & Reproducibility
@@ -72,6 +88,7 @@ Welcome to the most comprehensive **Machine Learning for Semiconductor Engineers
 ## 🛠️ Installation & Setup
 
 ### Quick Start with Docker
+
 ```bash
 git clone https://github.com/kennedym-ds/python-for-semiconductors-.git
 cd python-for-semiconductors-
@@ -80,6 +97,7 @@ docker run -p 8888:8888 ml-semiconductors
 ```
 
 ### Virtual Environment Setup
+
 ```bash
 git clone https://github.com/kennedym-ds/python-for-semiconductors-.git
 cd python-for-semiconductors-
@@ -95,7 +113,7 @@ jupyter lab
    - Real-time monitoring with predictive analytics
    - Interactive visualizations and alerts
 
-2. **🔬 Defect Pattern Classifier** 
+2. **🔬 Defect Pattern Classifier**
    - Automated categorization with root cause analysis
    - Computer vision for wafer map analysis
 
@@ -158,6 +176,7 @@ python-for-semiconductors-/
 ## 🎓 Learning Outcomes
 
 By completion, you'll be able to:
+
 - ✅ Apply ML techniques to semiconductor manufacturing challenges
 - ✅ Build production-ready ML systems with proper testing/deployment
 - ✅ Analyze semiconductor datasets and extract actionable insights

@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  ml-semiconductors:
+    build: .
+    ports:
+      - "8888:8888"
+      - "8501:8501"  # For Streamlit apps
+      - "8000:8000"  # For FastAPI apps
+    volumes:
+      - ./datasets:/app/datasets
+      - ./outputs:/app/outputs
+      - ./models:/app/models
+      - ./modules:/app/modules
+      - ./projects:/app/projects
+    environment:
+      - PYTHONPATH=/app
+      - JUPYTER_ENABLE_LAB=yes
+    command: jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token="" --NotebookApp.password=""
