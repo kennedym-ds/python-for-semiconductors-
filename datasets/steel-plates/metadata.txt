@@ -1,0 +1,41 @@
+=== DATASET METADATA ===
+{'uci_id': 198, 'name': 'Steel Plates Faults', 'repository_url': 'https://archive.ics.uci.edu/dataset/198/steel+plates+faults', 'data_url': 'https://archive.ics.uci.edu/static/public/198/data.csv', 'abstract': 'A dataset of steel platesâ€™ faults, classified into 7 different types. \nThe goal was to train machine learning for automatic pattern recognition.\n', 'area': 'Physics and Chemistry', 'tasks': ['Classification'], 'characteristics': ['Multivariate'], 'num_instances': 1941, 'num_features': 27, 'feature_types': ['Integer', 'Real'], 'demographics': [], 'target_col': ['Pastry', 'Z_Scratch', 'K_Scratch', 'Stains', 'Dirtiness', 'Bumps', 'Other_Faults'], 'index_col': None, 'has_missing_values': 'no', 'missing_values_symbol': None, 'year_of_dataset_creation': 2010, 'last_updated': 'Tue Apr 09 2024', 'dataset_doi': '10.24432/C5J88N', 'creators': ['M Buscema', 'S Terzi', 'W Tastle'], 'intro_paper': None, 'additional_info': {'summary': 'Type of dependent variables (7 Types of Steel Plates Faults):\r\n1.Pastry\r\n2.Z_Scratch\r\n3.K_Scatch\r\n4.Stains\r\n5.Dirtiness\r\n6.Bumps\r\n7.Other_Faults\r\n', 'purpose': None, 'funded_by': None, 'instances_represent': None, 'recommended_data_splits': None, 'sensitive_data': None, 'preprocessing_description': None, 'variable_info': '27 independent variables:\r\nX_Minimum\r\nX_Maximum\r\nY_Minimum\r\nY_Maximum\r\nPixels_Areas\r\nX_Perimeter\r\nY_Perimeter\r\nSum_of_Luminosity\r\nMinimum_of_Luminosity\r\nMaximum_of_Luminosity\r\nLength_of_Conveyer\r\nTypeOfSteel_A300\r\nTypeOfSteel_A400\r\nSteel_Plate_Thickness\r\nEdges_Index\r\nEmpty_Index\r\nSquare_Index\r\nOutside_X_Index\r\nEdges_X_Index\r\nEdges_Y_Index\r\nOutside_Global_Index\r\nLogOfAreas\r\nLog_X_Index\r\nLog_Y_Index\r\nOrientation_Index\r\nLuminosity_Index\r\nSigmoidOfAreas\r\n', 'citation': None}}
+
+=== VARIABLE INFORMATION ===
+                     name     role        type  ... description units missing_values
+0               X_Minimum  Feature     Integer  ...        None  None             no
+1               X_Maximum  Feature     Integer  ...        None  None             no
+2               Y_Minimum  Feature     Integer  ...        None  None             no
+3               Y_Maximum  Feature     Integer  ...        None  None             no
+4            Pixels_Areas  Feature     Integer  ...        None  None             no
+5             X_Perimeter  Feature     Integer  ...        None  None             no
+6             Y_Perimeter  Feature     Integer  ...        None  None             no
+7       Sum_of_Luminosity  Feature     Integer  ...        None  None             no
+8   Maximum_of_Luminosity  Feature     Integer  ...        None  None             no
+9      Length_of_Conveyer  Feature     Integer  ...        None  None             no
+10       TypeOfSteel_A300  Feature     Integer  ...        None  None             no
+11       TypeOfSteel_A400  Feature     Integer  ...        None  None             no
+12  Steel_Plate_Thickness  Feature     Integer  ...        None  None             no
+13            Edges_Index  Feature  Continuous  ...        None  None             no
+14            Empty_Index  Feature  Continuous  ...        None  None             no
+15           Square_Index  Feature  Continuous  ...        None  None             no
+16        Outside_X_Index  Feature  Continuous  ...        None  None             no
+17          Edges_X_Index  Feature  Continuous  ...        None  None             no
+18          Edges_Y_Index  Feature  Continuous  ...        None  None             no
+19   Outside_Global_Index  Feature  Continuous  ...        None  None             no
+20             LogOfAreas  Feature  Continuous  ...        None  None             no
+21            Log_X_Index  Feature  Continuous  ...        None  None             no
+22            Log_Y_Index  Feature  Continuous  ...        None  None             no
+23      Orientation_Index  Feature  Continuous  ...        None  None             no
+24       Luminosity_Index  Feature  Continuous  ...        None  None             no
+25         SigmoidOfAreas  Feature  Continuous  ...        None  None             no
+26  Minimum_of_Luminosity  Feature     Integer  ...        None  None             no
+27                 Pastry   Target      Binary  ...        None  None             no
+28              Z_Scratch   Target      Binary  ...        None  None             no
+29              K_Scratch   Target      Binary  ...        None  None             no
+30                 Stains   Target      Binary  ...        None  None             no
+31              Dirtiness   Target      Binary  ...        None  None             no
+32                  Bumps   Target      Binary  ...        None  None             no
+33           Other_Faults   Target      Binary  ...        None  None             no
+
+[34 rows x 7 columns]

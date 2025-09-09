@@ -5,6 +5,7 @@ This repository provides organized access to semiconductor manufacturing and mat
 ## Available Datasets
 
 ### 1. SECOM Dataset (`secom/`)
+
 - **Source**: UCI Machine Learning Repository (ID: 179)
 - **Task**: Binary classification (Pass/Fail prediction)
 - **Size**: 1,567 instances × 591 features
@@ -13,6 +14,7 @@ This repository provides organized access to semiconductor manufacturing and mat
 - **Usage**: Data quality (Module 2.1), outlier detection (2.2), classification (3.2), ensemble methods (4.1)
 
 ### 2. Steel Plates Faults Dataset (`steel-plates/`)
+
 - **Source**: UCI Machine Learning Repository (ID: 198)  
 - **Task**: Multi-class classification (7 fault types)
 - **Size**: 1,941 instances × 27 features
@@ -21,6 +23,7 @@ This repository provides organized access to semiconductor manufacturing and mat
 - **Usage**: Multi-class classification examples, manufacturing quality control
 
 ### 3. WM-811K Wafer Maps (`wm811k/`)
+
 - **Source**: [Kaggle WM-811K Wafer Map](https://www.kaggle.com/datasets/qingyi/wm811k-wafer-map)
 - **Task**: Wafer defect pattern classification
 - **Size**: ~811K wafer maps (~5GB unzipped)
@@ -77,6 +80,7 @@ datasets/
 ## Quick Load Examples
 
 ### SECOM Dataset
+
 ```python
 import pandas as pd
 from pathlib import Path
@@ -88,6 +92,7 @@ labels = pd.read_csv(secom_dir / 'secom_labels.data', sep=' ', header=None, name
 ```
 
 ### Steel Plates Dataset  
+
 ```python
 import pandas as pd
 from pathlib import Path
@@ -109,11 +114,13 @@ targets = pd.read_csv(steel_dir / 'steel_plates_targets.csv')
 ## Requirements
 
 The download script requires basic Python packages (included in basic tier):
+
 - `urllib` (built-in) for direct downloads
 - `pandas` for UCI ML repo datasets
 - `ucimlrepo` (auto-installed) for modern UCI access
 
 For Kaggle datasets:
+
 ```bash
 pip install kaggle
 # Set up API credentials per Kaggle documentation

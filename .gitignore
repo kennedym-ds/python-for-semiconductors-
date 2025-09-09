@@ -1,15 +1,15 @@
-# Dataset directories - large files excluded, metadata preserved
-datasets/*/raw/
-datasets/*/processed/
-datasets/wm811k/
-datasets/time_series/
-datasets/vision_defects/
-datasets/secom/
-datasets/steel-plates/
-# Allow small documentation and metadata files
+# Allow only documentation and metadata files
 !datasets/*/README.md
 !datasets/*/metadata.txt
-!datasets/vision_defects/samples/
+!datasets/*/README_*.txt
+
+# Additional data file patterns to ignore
+*.csv
+*.data
+*.names
+*.parquet
+*.h5
+*.hdf5
 
 # Archives and compressed files
 *.zip
