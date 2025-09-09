@@ -1,0 +1,83 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lint-and-test:
+    name: Lint & Test (basic tier)
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: |
+            requirements-basic.txt
+            requirements-intermediate.txt
+            requirements-advanced.txt
+            requirements-full.txt
+
+      - name: Upgrade pip tooling
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+
+      - name: Install basic tier
+        run: |
+          python -m pip install -r requirements-basic.txt
+
+      - name: Lint (flake8)
+        run: |
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics || true
+          flake8 . --count --exit-zero --max-complexity=12 --max-line-length=120 --statistics
+
+      - name: Format check (black)
+        run: |
+          python -m black --check .
+
+      - name: Run targeted tests
+        run: |
+          python modules/intermediate/module-4/test_ensemble_pipeline.py
+          if [ -f test_regression_pipeline.py ]; then python test_regression_pipeline.py; fi
+
+      - name: Basic import smoke
+        run: |
+          python - <<'EOF'
+          import sys, sklearn, numpy, pandas
+          print('Python:', sys.version)
+          print('sklearn:', sklearn.__version__)
+          print('numpy:', numpy.__version__)
+          print('pandas:', pandas.__version__)
+          EOF
+
+  # Future extension: matrix tiers (uncomment to enable broader coverage)
+  # tier-matrix:
+  #   name: Matrix Tiers
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       tier: [basic, intermediate, advanced]
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: actions/setup-python@v5
+  #       with:
+  #         python-version: '3.11'
+  #         cache: 'pip'
+  #     - name: Install tier
+  #       run: |
+  #         python env_setup.py --tier ${{ matrix.tier }}
+  #     - name: Smoke test
+  #       run: python -c "import numpy, sklearn; print('OK')"

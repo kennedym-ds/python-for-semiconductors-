@@ -1,0 +1,45 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Env: Setup Basic",
+      "type": "shell",
+      "command": "python",
+      "args": ["env_setup.py", "--tier", "basic"],
+      "problemMatcher": [],
+      "group": "none"
+    },
+    {
+      "label": "Env: Setup Intermediate",
+      "type": "shell",
+      "command": "python",
+      "args": ["env_setup.py", "--tier", "intermediate"],
+      "problemMatcher": [],
+      "group": "none"
+    },
+    {
+      "label": "Env: Setup Advanced",
+      "type": "shell",
+      "command": "python",
+      "args": ["env_setup.py", "--tier", "advanced"],
+      "problemMatcher": [],
+      "group": "none"
+    },
+    {
+      "label": "Env: Setup Full",
+      "type": "shell",
+      "command": "python",
+      "args": ["env_setup.py", "--tier", "full"],
+      "problemMatcher": [],
+      "group": "none"
+    },
+    {
+      "label": "Env: Recreate Full (Force)",
+      "type": "shell",
+      "command": "python",
+      "args": ["env_setup.py", "--tier", "full", "--force"],
+      "problemMatcher": [],
+      "group": "none"
+    }
+  ]
+}

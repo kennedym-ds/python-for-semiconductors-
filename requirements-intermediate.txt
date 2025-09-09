@@ -1,0 +1,25 @@
+###############################################
+# Intermediate Tier Requirements
+# Extends: Basic (+ outlier detection, classification, imbalance, feature engineering, time series)
+# Modules: 2.2 (outliers), 3.2 (classification), 4.1 (ensembles), 5.x (intro time series)
+###############################################
+
+-r requirements-basic.txt
+
+# Imbalanced learning
+imbalanced-learn>=0.11.0
+
+# Time series & stats
+statsmodels>=0.14.0
+pmdarima>=2.0.0
+
+# Advanced ML libs (boosting)
+xgboost>=1.7.0
+lightgbm>=4.0.0
+catboost>=1.2.0
+
+# Visualization extras
+plotly>=5.15.0
+
+# Data validation
+pandera>=0.15.0

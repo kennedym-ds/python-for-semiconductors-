@@ -1,0 +1,54 @@
+# Dataset directories - large files excluded, metadata preserved
+datasets/*/raw/
+datasets/*/processed/
+datasets/wm811k/
+datasets/time_series/
+datasets/vision_defects/
+datasets/secom/
+datasets/steel-plates/
+# Allow small documentation and metadata files
+!datasets/*/README.md
+!datasets/*/metadata.txt
+!datasets/vision_defects/samples/
+
+# Archives and compressed files
+*.zip
+*.tar
+*.tar.gz
+*.7z
+
+# Model artifacts and caches
+*.joblib
+*.pkl
+models/
+temp_models/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Virtual environments
+.venv/
+venv/
+.env
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+
+# IDE and OS files
+.DS_Store
+Thumbs.db
+.vscode/settings.json
+*.swp
+*.swo
+
+# Logs and temporary files
+logs/
+*.log
+.tmp/
+
+# Processed data and cache directories
+resources/processed/

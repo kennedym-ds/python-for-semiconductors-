@@ -1,0 +1,17 @@
+###############################################
+# Full / Complete Requirements
+# Extends: Advanced (+ optional domain-specific simulation packages, Prophet)
+###############################################
+
+-r requirements-advanced.txt
+
+# Time series advanced
+prophet>=1.1.0
+
+# Semiconductor simulation / RF
+PySpice>=1.5.0
+scikit-rf>=0.24.0
+
+# Additional testing & typing
+pytest-cov>=4.1.0
+mypy>=1.5.0

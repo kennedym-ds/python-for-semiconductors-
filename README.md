@@ -1,5 +1,7 @@
 # Machine Learning for Semiconductor Engineers: 20-Week Learning Series
 
+[![CI](https://github.com/kennedym-ds/python-for-semiconductors-/actions/workflows/ci.yml/badge.svg)](https://github.com/kennedym-ds/python-for-semiconductors-/actions/workflows/ci.yml)
+
 ## 🚀 Project Overview
 
 Welcome to the most comprehensive **Machine Learning for Semiconductor Engineers** learning pathway available! This 20-week program transforms semiconductor professionals into ML-powered engineers, bridging traditional semiconductor expertise with cutting-edge AI/ML technologies.
@@ -96,15 +98,58 @@ docker build -t ml-semiconductors .
 docker run -p 8888:8888 ml-semiconductors
 ```
 
-### Virtual Environment Setup
+### Tiered Virtual Environment Setup
 
-```bash
+This project provides **tiered dependency sets** so you only install what you need:
+
+| Tier | File | Includes | Suitable For |
+|------|------|----------|--------------|
+| basic | `requirements-basic.txt` | Core Python + statistics + notebooks | Modules 1.1–3.1 |
+| intermediate | `requirements-intermediate.txt` | + imbalance, boosting, time series basics | Outliers, Classification, Ensembles |
+| advanced | `requirements-advanced.txt` | + deep learning, CV, optimization, MLOps | Vision, Deployment prep |
+| full | `requirements-full.txt` | + Prophet, simulation (PySpice), RF, typing tools | All modules & experiments |
+
+Use the automation script (recommended):
+
+```powershell
+# Clone repository
 git clone https://github.com/kennedym-ds/python-for-semiconductors-.git
 cd python-for-semiconductors-
-python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
-pip install -r requirements.txt
+
+# Create a basic environment
+python env_setup.py --tier basic
+
+# Or create intermediate / advanced / full
+python env_setup.py --tier intermediate
+python env_setup.py --tier advanced
+python env_setup.py --tier full
+
+# Recreate from scratch (danger: deletes .venv)
+python env_setup.py --tier full --force
+```
+
+Manual (not recommended) full install:
+
+```powershell
+python -m venv .venv
+. .venv\Scripts\Activate.ps1  # (cmd: .venv\Scripts\activate.bat)
+pip install -r requirements-full.txt
+```
+
+VS Code tasks are available (Terminal > Run Task) under names:
+`Env: Setup Basic`, `Env: Setup Intermediate`, `Env: Setup Advanced`, `Env: Setup Full`.
+
+After activation launch Jupyter:
+
+```powershell
+python -m ipykernel install --user --name semicon-basic
 jupyter lab
+```
+
+To verify environment:
+
+```powershell
+python -c "import sys, sklearn, numpy; print(sys.executable); print(sklearn.__version__)"
 ```
 
 ## 🎯 Starter Projects (Fully Implemented)
@@ -145,7 +190,7 @@ jupyter lab
 
 ## 🗂️ Repository Structure
 
-```
+```text
 python-for-semiconductors-/
 ├── README.md
 ├── docs/                    # Documentation and guides
