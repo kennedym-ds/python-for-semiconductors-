@@ -1,0 +1,45 @@
+# FastAPI Model Serving Docker Image
+FROM python:3.11-slim
+
+# Set working directory
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements for advanced tier (includes FastAPI)
+COPY requirements-advanced.txt .
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements-advanced.txt
+
+# Copy application code
+COPY infrastructure/api/ ./api/
+COPY modules/cutting-edge/module-9/ ./modules/cutting-edge/module-9/
+
+# Create directories for models and data
+RUN mkdir -p /app/temp_models /app/logs
+
+# Set environment variables
+ENV PYTHONPATH=/app
+ENV MODEL_PATH=/app/temp_models/model.joblib
+ENV METADATA_PATH=/app/temp_models/metadata.json
+ENV API_VERSION=v1
+ENV SERVICE_NAME=semiconductor-ml-api
+
+# Create a non-root user for security
+RUN useradd -m -u 1000 apiuser && chown -R apiuser:apiuser /app
+USER apiuser
+
+# Expose the FastAPI port
+EXPOSE 8000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
+
+# Run the FastAPI application
+CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]
