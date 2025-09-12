@@ -1,0 +1,24 @@
+# Pre-commit configuration that mirrors the CI workflow exactly
+# This ensures identical behavior between local pre-commit hooks and CI
+
+repos:
+  # Black code formatting (matches CI: python -m black --check .)
+  - repo: https://github.com/psf/black
+    rev: 23.7.0
+    hooks:
+      - id: black
+        language_version: python3
+        args: [--line-length=120]
+        
+  # Flake8 linting (matches CI settings exactly)
+  - repo: https://github.com/pycqa/flake8
+    rev: 6.0.0
+    hooks:
+      - id: flake8
+        # First pass: critical errors only (matches CI first flake8 call)
+        name: flake8-critical
+        args: [--select=E9,F63,F7,F82, --show-source, --statistics]
+      - id: flake8
+        # Second pass: full check (matches CI second flake8 call)
+        name: flake8-full
+        args: [--exit-zero, --max-complexity=12, --max-line-length=120, --statistics]
