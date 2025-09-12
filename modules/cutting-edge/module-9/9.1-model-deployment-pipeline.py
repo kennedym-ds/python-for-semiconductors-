@@ -79,7 +79,7 @@ class ModelDeploymentPipeline:
         self.metadata = ModelDeploymentMetadata(
             model_name=model_info.get('name', 'unknown'),
             version=version,
-            created_at=datetime.datetime.utcnow().isoformat(),
+            created_at=datetime.datetime.now(datetime.timezone.utc).isoformat(),
             model_type=model_info.get('type', 'unknown'),
             input_schema=model_info.get('input_schema', {}),
             output_schema=model_info.get('output_schema', {}),
