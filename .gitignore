@@ -52,3 +52,6 @@ logs/
 
 # Processed data and cache directories
 resources/processed/
+
+# Documentation build artifacts
+docs-site/site/
