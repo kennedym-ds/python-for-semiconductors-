@@ -13,7 +13,27 @@ services:
       - ./models:/app/models
       - ./modules:/app/modules
       - ./projects:/app/projects
+      - ./temp_models:/app/temp_models
     environment:
       - PYTHONPATH=/app
       - JUPYTER_ENABLE_LAB=yes
     command: jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token="" --NotebookApp.password=""
+
+  # FastAPI Model Serving Service
+  model-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    ports:
+      - "8001:8000"  # Different port to avoid conflicts
+    volumes:
+      - ./temp_models:/app/temp_models
+      - ./logs:/app/logs
+    environment:
+      - MODEL_PATH=/app/temp_models/model.joblib
+      - METADATA_PATH=/app/temp_models/metadata.json
+      - API_VERSION=v1
+      - SERVICE_NAME=semiconductor-ml-api
+    depends_on:
+      - ml-semiconductors
+    restart: unless-stopped
