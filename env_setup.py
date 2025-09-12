@@ -130,7 +130,16 @@ def upgrade_tooling(python_path: Path) -> None:
     """Upgrade pip, setuptools, and wheel for reliable installs."""
     print("[env-setup] Upgrading packaging tooling (pip, setuptools, wheel)...")
     subprocess.check_call(
-        [str(python_path), "-m", "pip", "install", "--upgrade", "pip", "setuptools", "wheel"]
+        [
+            str(python_path),
+            "-m",
+            "pip",
+            "install",
+            "--upgrade",
+            "pip",
+            "setuptools",
+            "wheel",
+        ]
     )
 
 
@@ -145,15 +154,17 @@ def install_requirements(python_path: Path, tier: str) -> None:
     if not req_file.exists():
         raise FileNotFoundError(f"Missing requirements file: {req_file}")
     print(f"[env-setup] Installing tier '{tier}' requirements from {req_file.name}...")
-    subprocess.check_call([
-        str(python_path),
-        "-m",
-        "pip",
-        "install",
-        "--upgrade",
-        "-r",
-        str(req_file),
-    ])
+    subprocess.check_call(
+        [
+            str(python_path),
+            "-m",
+            "pip",
+            "install",
+            "--upgrade",
+            "-r",
+            str(req_file),
+        ]
+    )
 
 
 def summarize_activation(venv_dir: Path) -> None:
@@ -167,7 +178,7 @@ def summarize_activation(venv_dir: Path) -> None:
     else:
         print("\nActivation instructions:")
         print(f"  Bash/Zsh: source {venv_dir}/bin/activate")
-    print("\nTo verify: python -c \"import sys; print(sys.executable)\"")
+    print('\nTo verify: python -c "import sys; print(sys.executable)"')
 
 
 def main() -> None:

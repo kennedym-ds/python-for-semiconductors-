@@ -5,7 +5,7 @@ provides instructions and placeholders but will not bypass required logins.
 
 Implemented:
 - SECOM dataset (UCI Machine Learning Repository) automatic download
-- Steel Plates Faults dataset (UCI Machine Learning Repository) 
+- Steel Plates Faults dataset (UCI Machine Learning Repository)
 - Modern UCI ML repository support via ucimlrepo package
 
 Placeholders:
@@ -18,6 +18,7 @@ Usage (PowerShell):
   python datasets/download_semiconductor_datasets.py --dataset all
 
 """
+
 from __future__ import annotations
 
 import argparse
@@ -45,6 +46,7 @@ def check_ucimlrepo() -> bool:
     """Check if ucimlrepo package is available for modern UCI downloads."""
     try:
         import ucimlrepo  # noqa: F401
+
         return True
     except ImportError:
         return False
@@ -62,9 +64,10 @@ def download_secom(root: Path) -> None:
     secom_dir = root / "secom"
     secom_dir.mkdir(parents=True, exist_ok=True)
     print(f"Downloading SECOM dataset into {secom_dir} ...")
-    
+
     # Create README for SECOM dataset
-    readme_content = textwrap.dedent("""
+    readme_content = textwrap.dedent(
+        """
     # SECOM Dataset
     
     **Source**: UCI Machine Learning Repository  
@@ -97,13 +100,14 @@ def download_secom(root: Path) -> None:
     ```
     
     Original source: https://archive.ics.uci.edu/ml/datasets/SECOM
-    """).strip()
-    
+    """
+    ).strip()
+
     readme_path = secom_dir / "README.md"
     if not readme_path.exists():
         readme_path.write_text(readme_content, encoding="utf-8")
         print(f"  [created] SECOM README.md")
-    
+
     for fname, url in SECOM_FILES.items():
         dest = secom_dir / fname
         if dest.exists():
@@ -114,7 +118,9 @@ def download_secom(root: Path) -> None:
         if fname in SECOM_SHA256:
             digest = sha256sum(dest)
             if digest != SECOM_SHA256[fname]:
-                raise ValueError(f"Checksum mismatch for {fname} (expected {SECOM_SHA256[fname]}, got {digest})")
+                raise ValueError(
+                    f"Checksum mismatch for {fname} (expected {SECOM_SHA256[fname]}, got {digest})"
+                )
     print("SECOM download complete.")
 
 
@@ -123,9 +129,10 @@ def download_steel_plates(root: Path) -> None:
     steel_dir = root / "steel-plates"
     steel_dir.mkdir(parents=True, exist_ok=True)
     print(f"Downloading Steel Plates Faults dataset into {steel_dir} ...")
-    
+
     # Create README for Steel Plates dataset
-    readme_content = textwrap.dedent("""
+    readme_content = textwrap.dedent(
+        """
     # Steel Plates Faults Dataset
     
     **Source**: UCI Machine Learning Repository (ID: 198)  
@@ -168,32 +175,36 @@ def download_steel_plates(root: Path) -> None:
     ```
     
     Original source: https://archive.ics.uci.edu/dataset/198/steel+plates+faults
-    """).strip()
-    
+    """
+    ).strip()
+
     readme_path = steel_dir / "README.md"
     if not readme_path.exists():
         readme_path.write_text(readme_content, encoding="utf-8")
         print(f"  [created] Steel Plates README.md")
-    
+
     # Try modern UCI ML repo approach first
     if check_ucimlrepo():
         try:
             from ucimlrepo import fetch_ucirepo
-            print(f"  [fetch] Using ucimlrepo package for dataset ID {STEEL_PLATES_UCI_ID}")
+
+            print(
+                f"  [fetch] Using ucimlrepo package for dataset ID {STEEL_PLATES_UCI_ID}"
+            )
             dataset = fetch_ucirepo(id=STEEL_PLATES_UCI_ID)
-            
+
             # Save as CSV files for easier use
             features_path = steel_dir / "steel_plates_features.csv"
             targets_path = steel_dir / "steel_plates_targets.csv"
-            
+
             if not features_path.exists():
                 dataset.data.features.to_csv(features_path, index=False)
                 print(f"  [saved] Features -> {features_path.name}")
-            
+
             if not targets_path.exists():
                 dataset.data.targets.to_csv(targets_path, index=False)
                 print(f"  [saved] Targets -> {targets_path.name}")
-                
+
             # Save metadata
             metadata_path = steel_dir / "metadata.txt"
             if not metadata_path.exists():
@@ -203,7 +214,7 @@ def download_steel_plates(root: Path) -> None:
                     f.write("\n\n=== VARIABLE INFORMATION ===\n")
                     f.write(str(dataset.variables))
                 print(f"  [saved] Metadata -> {metadata_path.name}")
-                
+
         except Exception as e:
             print(f"  [error] UCI ML repo fetch failed: {e}")
             print(f"  [fallback] Manual download not implemented for Steel Plates")
@@ -212,20 +223,22 @@ def download_steel_plates(root: Path) -> None:
         print(f"  [info] ucimlrepo not available. Install with: pip install ucimlrepo")
         print(f"  [skip] Steel Plates dataset requires ucimlrepo package")
         return
-    
+
     print("Steel Plates download complete.")
 
 
 def kaggle_instructions(dataset: str) -> str:
     """Generate instructions for downloading Kaggle datasets."""
-    return textwrap.dedent(f"""
+    return textwrap.dedent(
+        f"""
     Dataset '{dataset}' requires Kaggle authentication.
     Steps:
       1. Install Kaggle CLI: pip install kaggle
       2. Obtain API token (Account > Create New Token) and place kaggle.json in %USERPROFILE%/.kaggle (Windows) or ~/.kaggle
       3. Run: kaggle datasets download -d {dataset} -p datasets/wm811k/raw --unzip
       4. Do NOT commit large extracted files.
-    """)
+    """
+    )
 
 
 def download_all_datasets(root: Path) -> None:
@@ -243,13 +256,24 @@ def download_wm811k_placeholder(root: Path) -> None:
     """Create placeholder instructions for WM-811K Kaggle dataset."""
     root.mkdir(parents=True, exist_ok=True)
     print(kaggle_instructions("qingyi/wm811k-wafer-map"))
-    (root / "README_fetch.txt").write_text("See console instructions for Kaggle download process.\n", encoding="utf-8")
+    (root / "README_fetch.txt").write_text(
+        "See console instructions for Kaggle download process.\n", encoding="utf-8"
+    )
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Download semiconductor and manufacturing datasets")
-    parser.add_argument("--dataset", required=True, choices=["secom", "steel-plates", "wm811k", "all"], help="Dataset key to download or scaffold")
-    parser.add_argument("--datasets-dir", default="datasets", help="Base datasets directory")
+    parser = argparse.ArgumentParser(
+        description="Download semiconductor and manufacturing datasets"
+    )
+    parser.add_argument(
+        "--dataset",
+        required=True,
+        choices=["secom", "steel-plates", "wm811k", "all"],
+        help="Dataset key to download or scaffold",
+    )
+    parser.add_argument(
+        "--datasets-dir", default="datasets", help="Base datasets directory"
+    )
     args = parser.parse_args(argv)
 
     base = Path(args.datasets_dir)
