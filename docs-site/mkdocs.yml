@@ -1,0 +1,31 @@
+markdown_extensions:
+- codehilite
+- admonition
+- toc
+- pymdownx.details
+- pymdownx.superfences
+- pymdownx.tabbed
+nav:
+- Home: index.md
+- Foundation:
+  - Module 1: foundation/module-1.md
+  - Module 2: foundation/module-2.md
+  - Module 3: foundation/module-3.md
+- Intermediate:
+  - Module 4: intermediate/module-4.md
+- Project Development:
+  - Module 10: project-dev/module-10.md
+site_description: ML Learning Series for Semiconductor Engineers
+site_name: Python for Semiconductors Documentation
+theme:
+  features:
+  - navigation.tabs
+  - navigation.sections
+  - navigation.expand
+  - navigation.top
+  - search.highlight
+  - search.suggest
+  name: material
+  palette:
+    accent: light-blue
+    primary: blue
