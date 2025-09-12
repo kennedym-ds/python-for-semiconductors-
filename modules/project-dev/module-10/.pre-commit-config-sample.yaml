@@ -1,0 +1,118 @@
+# Sample Pre-commit Hooks Configuration for Semiconductor ML Projects
+# Copy this to .pre-commit-config.yaml in your project root
+
+repos:
+  # Black code formatting
+  - repo: https://github.com/psf/black
+    rev: 23.7.0
+    hooks:
+      - id: black
+        language_version: python3
+        args: [--line-length=120]
+        
+  # Flake8 linting
+  - repo: https://github.com/pycqa/flake8
+    rev: 6.0.0
+    hooks:
+      - id: flake8
+        args: [--max-line-length=120, --max-complexity=12, --select=E9,F63,F7,F82]
+        
+  # Import sorting
+  - repo: https://github.com/pycqa/isort
+    rev: 5.12.0
+    hooks:
+      - id: isort
+        args: [--profile=black, --line-length=120]
+        
+  # Basic pre-commit hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+      - id: check-added-large-files
+        args: [--maxkb=10000]  # Prevent committing large datasets
+      - id: check-merge-conflict
+      - id: debug-statements
+        
+  # Local hooks for semiconductor-specific checks
+  - repo: local
+    hooks:
+      # Run our QA pipeline smoke tests
+      - id: qa-smoke-tests
+        name: QA Smoke Tests
+        entry: python modules/project-dev/module-10/10.2-testing-qa-pipeline.py
+        args: [train, --test-suite, smoke, --coverage-threshold, "75"]
+        language: system
+        pass_filenames: false
+        always_run: true
+        
+      # Validate dataset paths
+      - id: dataset-validation
+        name: Dataset Path Validation
+        entry: python modules/project-dev/module-10/10.2-testing-qa-pipeline.py
+        args: [evaluate, --check-type, paths]
+        language: system
+        pass_filenames: false
+        files: '^(modules/.*\.py|datasets/.*)$'
+        
+      # Performance regression check
+      - id: performance-check
+        name: Performance Regression Check
+        entry: python modules/project-dev/module-10/10.2-testing-qa-pipeline.py
+        args: [evaluate, --check-type, performance]
+        language: system
+        pass_filenames: false
+        files: '^modules/.*pipeline\.py$'
+        
+      # Jupyter notebook checks
+      - id: jupyter-nb-clear-output
+        name: Clear Jupyter Notebook Output
+        entry: jupyter nbconvert --clear-output --inplace
+        language: system
+        files: \.ipynb$
+        
+      # Manufacturing data validation
+      - id: manufacturing-data-check
+        name: Manufacturing Data Validation
+        entry: python -c "
+import sys
+from pathlib import Path
+# Check for accidental commits of large manufacturing datasets
+for file in sys.argv[1:]:
+    path = Path(file)
+    if path.suffix in ['.csv', '.data', '.parquet'] and path.stat().st_size > 50*1024*1024:
+        print(f'Large dataset file detected: {file} ({path.stat().st_size/(1024*1024):.1f}MB)')
+        print('Consider using download scripts instead of committing large datasets')
+        sys.exit(1)
+"
+        language: system
+        files: '\.(csv|data|parquet)$'
+
+# Installation instructions:
+# 1. Install pre-commit: pip install pre-commit
+# 2. Copy this file to .pre-commit-config.yaml in your project root
+# 3. Install hooks: pre-commit install
+# 4. (Optional) Run on all files: pre-commit run --all-files
+
+# Configuration options:
+# - Skip specific hooks: SKIP=flake8 git commit -m "message"
+# - Run specific hook: pre-commit run black
+# - Update hooks: pre-commit autoupdate
+# - Bypass all hooks: git commit --no-verify -m "emergency commit"
+
+# Semiconductor Manufacturing Specific Notes:
+# - Large dataset files (>50MB) are rejected to prevent repository bloat
+# - QA smoke tests run automatically on each commit
+# - Dataset path validation ensures data accessibility
+# - Performance regression checks prevent slow code commits
+# - Jupyter notebooks are automatically cleared of output to reduce diff noise
+
+# Customization for your environment:
+# - Adjust file size limits for your typical dataset sizes
+# - Modify performance thresholds based on your infrastructure
+# - Add company-specific validation rules
+# - Include additional tools like mypy for type checking
+# - Add custom semiconductor manufacturing compliance checks
