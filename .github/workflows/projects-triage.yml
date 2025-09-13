@@ -1,0 +1,88 @@
+name: Projects Auto-Triage
+
+on:
+  issues:
+    types: [opened, labeled, reopened]
+  pull_request:
+    types: [opened, labeled, reopened]
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+  projects: write
+
+jobs:
+  add-to-project:
+    runs-on: ubuntu-latest
+    if: >-
+      github.event_name == 'issues' || github.event_name == 'pull_request'
+    steps:
+      - name: Add item to Projects board
+        uses: actions/add-to-project@v1.0.1
+        with:
+          project-url: ${{ secrets.PROJECTS_BOARD_URL }}
+          github-token: ${{ secrets.PROJECTS_TOKEN }}
+
+      - name: Map labels to Project fields (optional)
+        if: ${{ github.event_name == 'issues' || github.event_name == 'pull_request' }}
+        uses: actions/github-script@v7
+        env:
+          PROJECT_URL: ${{ secrets.PROJECTS_BOARD_URL }}
+          GH_TOKEN: ${{ secrets.PROJECTS_TOKEN }}
+        with:
+          github-token: ${{ secrets.PROJECTS_TOKEN }}
+          script: |
+            const isIssue = context.eventName === 'issues';
+            const nodeId = isIssue ? context.payload.issue.node_id : context.payload.pull_request.node_id;
+            const labels = (isIssue ? context.payload.issue.labels : context.payload.pull_request.labels).map(l => l.name);
+
+            // Only proceed if PROJECT_URL is configured
+            if (!process.env.PROJECT_URL) {
+              core.info('PROJECT_URL not set; skipping field mapping.');
+              return;
+            }
+
+            // Helper: get project node id and fields
+            const projectNumberFromUrl = (url) => {
+              const match = url.match(/projects\/(\d+)/);
+              return match ? Number(match[1]) : null;
+            };
+
+            const owner = context.repo.owner;
+            const projectNumber = projectNumberFromUrl(process.env.PROJECT_URL);
+            if (!projectNumber) {
+              core.info('Could not parse project number from PROJECT_URL.');
+              return;
+            }
+
+            const qProject = `
+              query($owner: String!, $projectNumber: Int!) {
+                user(login: $owner) { projectV2(number: $projectNumber) { id fields(first: 50) { nodes { id name dataType } } } }
+                organization(login: $owner) { projectV2(number: $projectNumber) { id fields(first: 50) { nodes { id name dataType } } } }
+              }
+            `;
+
+            const res = await github.graphql(qProject, { owner, projectNumber });
+            const proj = (res.user && res.user.projectV2) || (res.organization && res.organization.projectV2);
+            if (!proj) { core.info('Project not found for owner.'); return; }
+            const projectId = proj.id;
+
+            // Add the content item to project (no-op if already added by previous step)
+            const addItem = `mutation($projectId: ID!, $contentId: ID!) { addProjectV2ItemById(input: {projectId: $projectId, contentId: $contentId}) { item { id } } }`;
+            const addRes = await github.graphql(addItem, { projectId, contentId: nodeId });
+            const itemId = addRes.addProjectV2ItemById.item.id;
+
+            // Optional mapping: set a "Category" field from labels if field exists
+            const categoryField = proj.fields.nodes.find(f => f.name === 'Category');
+            if (categoryField) {
+              const category = labels.find(l => ['starter','advanced','classification','regression','time-series','computer-vision','mlops'].includes(l));
+              if (category) {
+                const setField = `mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $val: String!) {
+                  updateProjectV2ItemFieldValue(input: { projectId: $projectId, itemId: $itemId, fieldId: $fieldId, value: { text: $val } }) { clientMutationId }
+                }`;
+                await github.graphql(setField, { projectId, itemId, fieldId: categoryField.id, val: category });
+              }
+            }
+
+            core.info('Project triage complete.');
