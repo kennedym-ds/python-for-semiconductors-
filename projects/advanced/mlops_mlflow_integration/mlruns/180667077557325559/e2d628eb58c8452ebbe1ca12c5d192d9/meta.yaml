@@ -1,0 +1,14 @@
+artifact_uri: file:///home/runner/work/python-for-semiconductors-/python-for-semiconductors-/projects/advanced/mlops_mlflow_integration/mlruns/180667077557325559/e2d628eb58c8452ebbe1ca12c5d192d9/artifacts
+end_time: 1757749400098
+entry_point_name: ''
+experiment_id: '180667077557325559'
+lifecycle_stage: active
+run_id: e2d628eb58c8452ebbe1ca12c5d192d9
+run_name: ridge_evaluation_synthetic_yield
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1757749399520
+status: 3
+tags: []
+user_id: runner

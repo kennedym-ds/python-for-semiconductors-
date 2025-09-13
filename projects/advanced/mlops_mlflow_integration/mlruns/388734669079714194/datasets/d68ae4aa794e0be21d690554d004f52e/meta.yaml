@@ -1,0 +1,10 @@
+digest: d3275d78
+name: dataset
+profile: '{"features_shape": [640, 8], "features_size": 5120, "features_nbytes": 40960,
+  "targets_shape": [640], "targets_size": 640, "targets_nbytes": 5120}'
+schema: '{"mlflow_tensorspec": {"features": "[{\"type\": \"tensor\", \"tensor-spec\":
+  {\"dtype\": \"float64\", \"shape\": [-1, 8]}}]", "targets": "[{\"type\": \"tensor\",
+  \"tensor-spec\": {\"dtype\": \"float64\", \"shape\": [-1]}}]"}}'
+source: '{"tags": {"mlflow.user": "runner", "mlflow.source.name": "/home/runner/work/python-for-semiconductors-/python-for-semiconductors-/projects/advanced/mlops_mlflow_integration/mlops_mlflow_pipeline.py",
+  "mlflow.source.type": "LOCAL", "mlflow.source.git.commit": "1b22d5b57d64f0eba0871d9f6d454089fb0c0ba6"}}'
+source_type: code

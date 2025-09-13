@@ -1,0 +1,14 @@
+artifact_uri: file:///home/runner/work/python-for-semiconductors-/python-for-semiconductors-/projects/advanced/mlops_mlflow_integration/mlruns/336971772700066949/51edb0f742fb44f9be4d2614b116242a/artifacts
+end_time: 1757749527313
+entry_point_name: ''
+experiment_id: '336971772700066949'
+lifecycle_stage: active
+run_id: 51edb0f742fb44f9be4d2614b116242a
+run_name: evaluation_synthetic_yield
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1757749526752
+status: 3
+tags: []
+user_id: runner
