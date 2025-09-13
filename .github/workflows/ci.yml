@@ -47,6 +47,10 @@ jobs:
         run: |
           python -m black --check .
 
+      - name: Verify dataset path conventions
+        run: |
+          python verify_dataset_paths.py --format json --fail-on error
+
       - name: Run targeted tests
         run: |
           python modules/intermediate/module-4/test_ensemble_pipeline.py

@@ -176,7 +176,7 @@ class TestDocumentationReproducibilityPipeline(unittest.TestCase):
                     "outputs": [],
                     "source": [
                         "# Bad pattern - flat dataset path\n",
-                        "data = pd.read_csv('datasets/secom.data')"
+                        "data = pd.read_csv('datasets/secom.FLAT')"
                     ]
                 }
             ],
@@ -416,7 +416,7 @@ class TestDataClasses(unittest.TestCase):
             module_path=Path("test/module"),
             notebook_files=[Path("test.ipynb")],
             valid_paths=["../../../datasets"],
-            invalid_paths=["datasets/flat.data"],
+            invalid_paths=["datasets/flat.FLAT"],
             warnings=["Warning message"]
         )
         

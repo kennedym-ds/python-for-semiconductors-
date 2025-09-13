@@ -200,7 +200,7 @@ class DocumentationReproducibilityPipeline:
         ]
         
         flat_path_antipatterns = [
-            r"datasets\/[^\/]+\.\w+",  # Flat paths like datasets/secom.data
+            r"datasets\/[^\/]+\.\w+",  # Flat paths like datasets/<name>.EXT
         ]
         
         for nb_file in notebook_files:
