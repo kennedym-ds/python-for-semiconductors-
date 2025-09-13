@@ -231,7 +231,23 @@ By completion, you'll be able to:
 
 ## 🤝 Contributing
 
-We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+We welcome contributions! This project maintains high code quality standards with synchronized CI and pre-commit workflows.
+
+### Code Quality Setup
+
+Both CI and local development use identical linting and formatting standards:
+
+- **Black** code formatting with 120-character line length
+- **Flake8** linting with complexity limits and critical error detection  
+- **Pre-commit hooks** that mirror CI exactly
+
+To set up local development:
+```bash
+pip install pre-commit
+pre-commit install
+```
+
+The `.pre-commit-config.yaml` and `.flake8` configurations ensure your local environment matches our CI standards exactly.
 
 ## 📄 License
 
