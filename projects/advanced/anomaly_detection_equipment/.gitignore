@@ -1,0 +1,14 @@
+# Anomaly Detection Project - Ignore temporary files
+*.joblib
+*.json
+*.csv
+demo_equipment_data.csv
+anomaly_report.json
+*.log
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+.DS_Store
