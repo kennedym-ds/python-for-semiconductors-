@@ -555,29 +555,29 @@ data:
   raw_dir: "data/raw"
   processed_dir: "data/processed"
   external_dir: "data/external"
-  
+
 model:
   save_dir: "models"
   format: "joblib"
-  
+
 training:
   random_seed: 42
   test_size: 0.2
   validation_size: 0.2
   cross_validation_folds: 5
-  
+
 manufacturing:
   tolerance: 2.0
   spec_limits:
     low: 60.0
     high: 100.0
   cost_per_unit: 1.0
-  
+
 logging:
   level: "INFO"
   format: "json"
   file: "logs/app.log"
-  
+
 features:
   engineering:
     enabled: true
@@ -612,46 +612,46 @@ class PipelineConfig:
     model_type: str = "default"
     random_seed: int = RANDOM_SEED
     test_size: float = 0.2
-    
+
 class {name.replace("_", "").title()}Pipeline:
     """Main ML pipeline for {project_type}."""
-    
+
     def __init__(self, config: Optional[PipelineConfig] = None):
         self.config = config or PipelineConfig()
         self.model = None
         self.is_fitted = False
-        
+
     def fit(self, X: pd.DataFrame, y: np.ndarray) -> "{"".join(name.split("_")).title()}Pipeline":
         """Train the model."""
         # TODO: Implement your training logic here
         self.is_fitted = True
         return self
-        
+
     def predict(self, X: pd.DataFrame) -> np.ndarray:
         """Make predictions."""
         if not self.is_fitted:
             raise ValueError("Pipeline must be fitted before prediction")
         # TODO: Implement your prediction logic here
         return np.zeros(len(X))
-        
+
     def evaluate(self, X: pd.DataFrame, y: np.ndarray) -> Dict[str, float]:
         """Evaluate model performance."""
         predictions = self.predict(X)
-        
+
         # Standard metrics
         metrics = {{
             "accuracy": accuracy_score(y, predictions),
             # TODO: Add semiconductor-specific metrics like PWS
         }}
-        
+
         return metrics
-        
+
     def save(self, path: Path) -> None:
         """Save the trained model."""
         if not self.is_fitted:
             raise ValueError("Cannot save unfitted pipeline")
         joblib.dump(self, path)
-        
+
     @staticmethod
     def load(path: Path) -> "{name.replace("_", "").title()}Pipeline":
         """Load a trained model."""
@@ -672,7 +672,7 @@ from src.models.pipeline import {name.replace("_", "").title()}Pipeline, Pipelin
 
 class Test{name.replace("_", "").title()}Pipeline:
     """Test cases for the main pipeline."""
-    
+
     @pytest.fixture
     def sample_data(self):
         """Create sample data for testing."""
@@ -683,20 +683,20 @@ class Test{name.replace("_", "").title()}Pipeline:
         }})
         y = np.random.randint(0, 2, 100)
         return X, y
-        
+
     def test_pipeline_initialization(self):
         """Test pipeline can be initialized."""
         pipeline = {name.replace("_", "").title()}Pipeline()
         assert pipeline.config.random_seed == 42
         assert not pipeline.is_fitted
-        
+
     def test_pipeline_fit(self, sample_data):
         """Test pipeline fitting."""
         X, y = sample_data
         pipeline = {name.replace("_", "").title()}Pipeline()
         fitted_pipeline = pipeline.fit(X, y)
         assert fitted_pipeline.is_fitted
-        
+
     def test_pipeline_predict(self, sample_data):
         """Test pipeline prediction."""
         X, y = sample_data
@@ -704,7 +704,7 @@ class Test{name.replace("_", "").title()}Pipeline:
         pipeline.fit(X, y)
         predictions = pipeline.predict(X)
         assert len(predictions) == len(X)
-        
+
     def test_pipeline_evaluate(self, sample_data):
         """Test pipeline evaluation."""
         X, y = sample_data
@@ -761,7 +761,7 @@ services:
       - LOG_LEVEL=INFO
     ports:
       - "8000:8000"
-      
+
   # Optional: Add database, monitoring, etc.
   # database:
   #   image: postgres:15

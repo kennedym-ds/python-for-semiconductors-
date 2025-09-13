@@ -38,7 +38,7 @@ def ensure_datadir_cell(nb_path: Path) -> bool:
             new_src = []
             inserted_import = any("from pathlib import Path" in s for s in src)
             for line in src:
-                if ("DATA_DIR" in line and "Path(" in line):
+                if "DATA_DIR" in line and "Path(" in line:
                     new_src.append(desired_lines[1])
                 else:
                     new_src.append(line)

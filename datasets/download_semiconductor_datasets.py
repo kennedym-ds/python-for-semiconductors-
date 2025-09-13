@@ -69,36 +69,36 @@ def download_secom(root: Path) -> None:
     readme_content = textwrap.dedent(
         """
     # SECOM Dataset
-    
-    **Source**: UCI Machine Learning Repository  
-    **Domain**: Semiconductor Manufacturing Process Control  
+
+    **Source**: UCI Machine Learning Repository
+    **Domain**: Semiconductor Manufacturing Process Control
     **Task**: Binary Classification (Pass/Fail prediction)
-    
+
     ## Description
-    
+
     The SECOM dataset contains semiconductor manufacturing data collected from a semi-conductor fabrication process. Each row represents a sensor measurement from the manufacturing process, with 590 features representing various process parameters and measurements.
-    
+
     ## Files
-    
+
     - `secom.data`: Feature matrix (1567 instances × 590 features)
-    - `secom_labels.data`: Binary target labels (-1 = Pass, +1 = Fail)  
+    - `secom_labels.data`: Binary target labels (-1 = Pass, +1 = Fail)
     - `secom.names`: Dataset description and attribute information
-    
+
     ## Usage Notes
-    
+
     - High dimensionality: 590 features for quality control sensors
     - Class imbalance: Most wafers pass (majority class -1)
     - Missing values: Some sensors may have null readings
     - Real semiconductor fab data with anonymized feature names
-    
+
     ## Citation
-    
+
     ```
     Dua, D. and Graff, C. (2019). UCI Machine Learning Repository
     [http://archive.ics.uci.edu/ml]. Irvine, CA: University of California,
     School of Information and Computer Science.
     ```
-    
+
     Original source: https://archive.ics.uci.edu/ml/datasets/SECOM
     """
     ).strip()
@@ -118,9 +118,7 @@ def download_secom(root: Path) -> None:
         if fname in SECOM_SHA256:
             digest = sha256sum(dest)
             if digest != SECOM_SHA256[fname]:
-                raise ValueError(
-                    f"Checksum mismatch for {fname} (expected {SECOM_SHA256[fname]}, got {digest})"
-                )
+                raise ValueError(f"Checksum mismatch for {fname} (expected {SECOM_SHA256[fname]}, got {digest})")
     print("SECOM download complete.")
 
 
@@ -134,46 +132,46 @@ def download_steel_plates(root: Path) -> None:
     readme_content = textwrap.dedent(
         """
     # Steel Plates Faults Dataset
-    
-    **Source**: UCI Machine Learning Repository (ID: 198)  
-    **Domain**: Manufacturing Quality Control  
+
+    **Source**: UCI Machine Learning Repository (ID: 198)
+    **Domain**: Manufacturing Quality Control
     **Task**: Multi-class Classification (7 fault types)
-    
+
     ## Description
-    
+
     A dataset of steel plates' faults, classified into 7 different types. The goal was to train machine learning for automatic pattern recognition in steel manufacturing.
-    
+
     ## Fault Types
-    
+
     1. **Pastry** - Surface texture defects
-    2. **Z_Scratch** - Longitudinal scratches  
+    2. **Z_Scratch** - Longitudinal scratches
     3. **K_Scratch** - Transverse scratches
     4. **Stains** - Discoloration defects
     5. **Dirtiness** - Contamination
     6. **Bumps** - Surface elevation defects
     7. **Other_Faults** - Miscellaneous defects
-    
+
     ## Dataset Characteristics
-    
+
     - **Instances**: 1,941 steel plates
     - **Features**: 27 geometric and luminosity measurements
     - **Missing Values**: None
     - **Feature Types**: Integer and Real
-    
+
     ## Key Features
-    
+
     - Geometric measurements (X/Y min/max, areas, perimeters)
     - Luminosity statistics (sum, min, max, luminosity index)
     - Steel properties (type, thickness)
     - Shape indices (edges, orientation, sigmoid transforms)
-    
+
     ## Citation
-    
+
     ```
-    Buscema, M., Terzi, S., & Tastle, W. (2010). Steel Plates Faults [Dataset]. 
+    Buscema, M., Terzi, S., & Tastle, W. (2010). Steel Plates Faults [Dataset].
     UCI Machine Learning Repository. https://doi.org/10.24432/C5J88N
     ```
-    
+
     Original source: https://archive.ics.uci.edu/dataset/198/steel+plates+faults
     """
     ).strip()
@@ -188,9 +186,7 @@ def download_steel_plates(root: Path) -> None:
         try:
             from ucimlrepo import fetch_ucirepo
 
-            print(
-                f"  [fetch] Using ucimlrepo package for dataset ID {STEEL_PLATES_UCI_ID}"
-            )
+            print(f"  [fetch] Using ucimlrepo package for dataset ID {STEEL_PLATES_UCI_ID}")
             dataset = fetch_ucirepo(id=STEEL_PLATES_UCI_ID)
 
             # Save as CSV files for easier use
@@ -256,24 +252,18 @@ def download_wm811k_placeholder(root: Path) -> None:
     """Create placeholder instructions for WM-811K Kaggle dataset."""
     root.mkdir(parents=True, exist_ok=True)
     print(kaggle_instructions("qingyi/wm811k-wafer-map"))
-    (root / "README_fetch.txt").write_text(
-        "See console instructions for Kaggle download process.\n", encoding="utf-8"
-    )
+    (root / "README_fetch.txt").write_text("See console instructions for Kaggle download process.\n", encoding="utf-8")
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(
-        description="Download semiconductor and manufacturing datasets"
-    )
+    parser = argparse.ArgumentParser(description="Download semiconductor and manufacturing datasets")
     parser.add_argument(
         "--dataset",
         required=True,
         choices=["secom", "steel-plates", "wm811k", "all"],
         help="Dataset key to download or scaffold",
     )
-    parser.add_argument(
-        "--datasets-dir", default="datasets", help="Base datasets directory"
-    )
+    parser.add_argument("--datasets-dir", default="datasets", help="Base datasets directory")
     args = parser.parse_args(argv)
 
     base = Path(args.datasets_dir)

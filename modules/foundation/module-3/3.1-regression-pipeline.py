@@ -138,9 +138,7 @@ class RegressionPipeline:
         if self.model_name == "linear":
             return LinearRegression()
         if self.model_name == "rf":
-            return RandomForestRegressor(
-                n_estimators=300, max_depth=8, random_state=RANDOM_SEED, n_jobs=-1
-            )
+            return RandomForestRegressor(n_estimators=300, max_depth=8, random_state=RANDOM_SEED, n_jobs=-1)
         raise ValueError(f"Unsupported model '{self.model_name}'")
 
     def build(self, n_features: int):
@@ -152,14 +150,10 @@ class RegressionPipeline:
             steps.append(
                 (
                     "select",
-                    SelectKBest(
-                        score_func=f_regression, k=min(self.k_best, n_features)
-                    ),
+                    SelectKBest(score_func=f_regression, k=min(self.k_best, n_features)),
                 )
             )
-        steps.append(
-            ("pca", PCA(n_components=self.pca_components, random_state=RANDOM_SEED))
-        )
+        steps.append(("pca", PCA(n_components=self.pca_components, random_state=RANDOM_SEED)))
         steps.append(("model", self._build_model()))
         self.pipeline = Pipeline(steps)
         return self
@@ -173,11 +167,7 @@ class RegressionPipeline:
         self.pipeline.fit(X, y_arr)
         # Determine n_components real value
         pca_step = self.pipeline.named_steps["pca"]  # type: ignore[assignment]
-        n_components_real = (
-            pca_step.n_components_
-            if hasattr(pca_step, "n_components_")
-            else self.pca_components
-        )
+        n_components_real = pca_step.n_components_ if hasattr(pca_step, "n_components_") else self.pca_components
         self.metadata = PipelineMetadata(
             trained_at=pd.Timestamp.utcnow().isoformat(),
             model_type=type(self.pipeline.named_steps["model"]).__name__,  # type: ignore[index]
@@ -239,9 +229,7 @@ class RegressionPipeline:
     def save(self, path: Path):
         if self.pipeline is None or self.metadata is None:
             raise RuntimeError("Nothing to save; fit the pipeline first")
-        joblib.dump(
-            {"pipeline": self.pipeline, "metadata": asdict(self.metadata)}, path
-        )
+        joblib.dump({"pipeline": self.pipeline, "metadata": asdict(self.metadata)}, path)
 
     @staticmethod
     def load(path: Path) -> "RegressionPipeline":
@@ -273,11 +261,7 @@ def action_train(args):
     if args.save:
         pipeline.save(Path(args.save))
     meta_dict = asdict(pipeline.metadata) if pipeline.metadata else None
-    print(
-        json.dumps(
-            {"status": "trained", "metrics": metrics, "metadata": meta_dict}, indent=2
-        )
-    )
+    print(json.dumps({"status": "trained", "metrics": metrics, "metadata": meta_dict}, indent=2))
 
 
 def action_evaluate(args):
@@ -287,11 +271,7 @@ def action_evaluate(args):
     X = df.drop(columns=[TARGET_COLUMN])
     metrics = pipeline.evaluate(X, y)
     meta_dict = asdict(pipeline.metadata) if pipeline.metadata else None
-    print(
-        json.dumps(
-            {"status": "evaluated", "metrics": metrics, "metadata": meta_dict}, indent=2
-        )
-    )
+    print(json.dumps({"status": "evaluated", "metrics": metrics, "metadata": meta_dict}, indent=2))
 
 
 def action_predict(args):
@@ -319,9 +299,7 @@ def action_predict(args):
 
 
 def build_parser():
-    parser = argparse.ArgumentParser(
-        description="Module 3.1 Regression Production Pipeline CLI"
-    )
+    parser = argparse.ArgumentParser(description="Module 3.1 Regression Production Pipeline CLI")
     sub = parser.add_subparsers(dest="command", required=True)
 
     p_train = sub.add_parser("train", help="Train a regression pipeline")
@@ -331,15 +309,9 @@ def build_parser():
         default="ridge",
         choices=["ridge", "lasso", "elasticnet", "linear", "rf"],
     )
-    p_train.add_argument(
-        "--alpha", type=float, default=1.0, help="Regularization strength"
-    )
-    p_train.add_argument(
-        "--l1-ratio", type=float, default=0.5, help="ElasticNet l1_ratio"
-    )
-    p_train.add_argument(
-        "--k-best", type=int, default=20, help="Number of K best features to select"
-    )
+    p_train.add_argument("--alpha", type=float, default=1.0, help="Regularization strength")
+    p_train.add_argument("--l1-ratio", type=float, default=0.5, help="ElasticNet l1_ratio")
+    p_train.add_argument("--k-best", type=int, default=20, help="Number of K best features to select")
     p_train.add_argument(
         "--pca-components",
         type=float,
@@ -362,9 +334,7 @@ def build_parser():
     p_pred = sub.add_parser("predict", help="Predict with an existing model")
     p_pred.add_argument("--model-path", required=True, help="Path to saved model")
     p_pred.add_argument("--input-json", help="Single JSON record string")
-    p_pred.add_argument(
-        "--input-file", help="Path to JSON file containing a single record"
-    )
+    p_pred.add_argument("--input-file", help="Path to JSON file containing a single record")
     p_pred.set_defaults(func=action_predict)
 
     return parser

@@ -192,9 +192,7 @@ class TimeSeriesPipeline:
             "is_stationary": result[1] < 0.05,
         }
 
-    def _prepare_data(
-        self, df: pd.DataFrame, target_col: str
-    ) -> Tuple[pd.Series, Optional[pd.DataFrame]]:
+    def _prepare_data(self, df: pd.DataFrame, target_col: str) -> Tuple[pd.Series, Optional[pd.DataFrame]]:
         """Prepare time series data for modeling."""
         if not isinstance(df.index, pd.DatetimeIndex):
             raise ValueError("DataFrame must have DatetimeIndex")
@@ -222,9 +220,7 @@ class TimeSeriesPipeline:
 
         return y, exog
 
-    def fit(
-        self, df: pd.DataFrame, target_col: str = TARGET_COLUMN
-    ) -> "TimeSeriesPipeline":
+    def fit(self, df: pd.DataFrame, target_col: str = TARGET_COLUMN) -> "TimeSeriesPipeline":
         """Fit the time series model."""
         y, exog = self._prepare_data(df, target_col)
 
@@ -234,9 +230,7 @@ class TimeSeriesPipeline:
         # Check stationarity
         stationarity = self._check_stationarity(y)
         if not stationarity["is_stationary"]:
-            warnings.warn(
-                f"Series may not be stationary (ADF p-value: {stationarity['p_value']:.4f})"
-            )
+            warnings.warn(f"Series may not be stationary (ADF p-value: {stationarity['p_value']:.4f})")
 
         try:
             if self.auto_arima and HAS_PMDARIMA:
@@ -305,9 +299,7 @@ class TimeSeriesPipeline:
             # Prepare future exogenous variables
             exog_fc = None
             if self.exog_features and exog_future is not None:
-                available_features = [
-                    f for f in self.exog_features if f in exog_future.columns
-                ]
+                available_features = [f for f in self.exog_features if f in exog_future.columns]
                 if available_features:
                     exog_fc = exog_future[available_features]
                     if self._exog_scaler:
@@ -327,58 +319,34 @@ class TimeSeriesPipeline:
 
                 # Create proper index for forecasts
                 freq = pd.infer_freq(self.fitted_model.arima_res_.data.dates)
-                forecast_index = pd.date_range(
-                    start=self._last_obs_index, periods=horizon + 1, freq=freq
-                )[
+                forecast_index = pd.date_range(start=self._last_obs_index, periods=horizon + 1, freq=freq)[
                     1:
                 ]  # Exclude the last observed point
 
                 forecasts = pd.Series(forecasts, index=forecast_index)
                 if return_conf_int:
-                    conf_int = pd.DataFrame(
-                        conf_int, index=forecast_index, columns=["lower", "upper"]
-                    )
+                    conf_int = pd.DataFrame(conf_int, index=forecast_index, columns=["lower", "upper"])
 
             else:
                 # statsmodels forecast
-                forecast_result = self.fitted_model.forecast(
-                    steps=horizon, exog=exog_fc
-                )
+                forecast_result = self.fitted_model.forecast(steps=horizon, exog=exog_fc)
                 forecasts = forecast_result
 
                 if return_conf_int:
-                    conf_int_result = self.fitted_model.get_forecast(
-                        steps=horizon, exog=exog_fc
-                    ).conf_int()
+                    conf_int_result = self.fitted_model.get_forecast(steps=horizon, exog=exog_fc).conf_int()
                     conf_int = conf_int_result
                 else:
                     conf_int = None
 
             result = {
-                "forecasts": (
-                    forecasts.tolist()
-                    if isinstance(forecasts, pd.Series)
-                    else forecasts
-                ),
-                "forecast_index": (
-                    [str(ts) for ts in forecasts.index]
-                    if isinstance(forecasts, pd.Series)
-                    else None
-                ),
+                "forecasts": (forecasts.tolist() if isinstance(forecasts, pd.Series) else forecasts),
+                "forecast_index": ([str(ts) for ts in forecasts.index] if isinstance(forecasts, pd.Series) else None),
             }
 
             if return_conf_int and conf_int is not None:
                 result["confidence_intervals"] = {
-                    "lower": (
-                        conf_int.iloc[:, 0].tolist()
-                        if hasattr(conf_int, "iloc")
-                        else conf_int[:, 0].tolist()
-                    ),
-                    "upper": (
-                        conf_int.iloc[:, 1].tolist()
-                        if hasattr(conf_int, "iloc")
-                        else conf_int[:, 1].tolist()
-                    ),
+                    "lower": (conf_int.iloc[:, 0].tolist() if hasattr(conf_int, "iloc") else conf_int[:, 0].tolist()),
+                    "upper": (conf_int.iloc[:, 1].tolist() if hasattr(conf_int, "iloc") else conf_int[:, 1].tolist()),
                 }
 
             return result
@@ -434,9 +402,7 @@ class TimeSeriesPipeline:
             if exog_test is not None:
                 exog_current = exog_test.iloc[[i]]
 
-            pred_result = temp_pipeline.predict(
-                horizon=1, exog_future=exog_current, return_conf_int=False
-            )
+            pred_result = temp_pipeline.predict(horizon=1, exog_future=exog_current, return_conf_int=False)
             predictions.append(pred_result["forecasts"][0])
 
         predictions = np.array(predictions)
@@ -448,10 +414,7 @@ class TimeSeriesPipeline:
         r2 = r2_score(y_true, predictions)
 
         # MAPE (handle zero values)
-        mape = (
-            np.mean(np.abs((y_true - predictions) / np.maximum(np.abs(y_true), 1e-8)))
-            * 100
-        )
+        mape = np.mean(np.abs((y_true - predictions) / np.maximum(np.abs(y_true), 1e-8))) * 100
 
         # Manufacturing-specific metrics
         # PWS: Prediction Within Spec
@@ -536,9 +499,7 @@ def load_time_series_dataset(dataset_name: str) -> pd.DataFrame:
     if dataset_path.exists():
         df = pd.read_csv(dataset_path)
         # Try to parse timestamp column
-        timestamp_cols = [
-            col for col in df.columns if "time" in col.lower() or "date" in col.lower()
-        ]
+        timestamp_cols = [col for col in df.columns if "time" in col.lower() or "date" in col.lower()]
         if timestamp_cols:
             df[timestamp_cols[0]] = pd.to_datetime(df[timestamp_cols[0]])
             df = df.set_index(timestamp_cols[0])
@@ -547,9 +508,7 @@ def load_time_series_dataset(dataset_name: str) -> pd.DataFrame:
             df = df.set_index("timestamp")
         return df
     else:
-        print(
-            f"Dataset {dataset_name} not found, using synthetic data", file=sys.stderr
-        )
+        print(f"Dataset {dataset_name} not found, using synthetic data", file=sys.stderr)
         return generate_semiconductor_time_series()
 
 
@@ -647,9 +606,7 @@ def action_predict(args):
             exog_future = df[pipeline.exog_features].tail(args.horizon)
 
         # Generate predictions
-        predictions = pipeline.predict(
-            horizon=args.horizon, exog_future=exog_future, return_conf_int=True
-        )
+        predictions = pipeline.predict(horizon=args.horizon, exog_future=exog_future, return_conf_int=True)
 
         result = {
             "status": "predicted",
@@ -676,16 +633,12 @@ def action_predict(args):
 
 
 def build_parser():
-    parser = argparse.ArgumentParser(
-        description="Module 5.1 Time Series Analysis Pipeline CLI"
-    )
+    parser = argparse.ArgumentParser(description="Module 5.1 Time Series Analysis Pipeline CLI")
     sub = parser.add_subparsers(dest="command", required=True)
 
     # train subcommand
     p_train = sub.add_parser("train", help="Train a time series model")
-    p_train.add_argument(
-        "--dataset", default="synthetic_semiconductor", help="Dataset name or path"
-    )
+    p_train.add_argument("--dataset", default="synthetic_semiconductor", help="Dataset name or path")
     p_train.add_argument("--target", default=TARGET_COLUMN, help="Target column name")
     p_train.add_argument(
         "--model",
@@ -694,12 +647,8 @@ def build_parser():
         help="Model type",
     )
     p_train.add_argument("--order", help="ARIMA order as p,d,q (e.g., 1,1,1)")
-    p_train.add_argument(
-        "--seasonal-order", help="Seasonal ARIMA order as P,D,Q,s (e.g., 1,1,1,24)"
-    )
-    p_train.add_argument(
-        "--exog-features", help="Comma-separated exogenous feature names"
-    )
+    p_train.add_argument("--seasonal-order", help="Seasonal ARIMA order as P,D,Q,s (e.g., 1,1,1,24)")
+    p_train.add_argument("--exog-features", help="Comma-separated exogenous feature names")
     p_train.add_argument(
         "--auto-arima",
         action="store_true",
@@ -718,16 +667,10 @@ def build_parser():
     # evaluate subcommand
     p_eval = sub.add_parser("evaluate", help="Evaluate a trained model")
     p_eval.add_argument("--model-path", required=True, help="Path to saved model")
-    p_eval.add_argument(
-        "--dataset", default="synthetic_semiconductor", help="Dataset name or path"
-    )
+    p_eval.add_argument("--dataset", default="synthetic_semiconductor", help="Dataset name or path")
     p_eval.add_argument("--target", default=TARGET_COLUMN, help="Target column name")
-    p_eval.add_argument(
-        "--test-size", type=int, default=20, help="Number of periods for evaluation"
-    )
-    p_eval.add_argument(
-        "--tolerance", type=float, default=2.0, help="Tolerance for PWS calculation"
-    )
+    p_eval.add_argument("--test-size", type=int, default=20, help="Number of periods for evaluation")
+    p_eval.add_argument("--tolerance", type=float, default=2.0, help="Tolerance for PWS calculation")
     p_eval.add_argument(
         "--cost-per-unit",
         type=float,

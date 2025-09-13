@@ -295,7 +295,7 @@ The module includes realistic synthetic data generators:
 ```
 Day Shift Report - Lithography Area
 
-All lithography tools operating within normal parameters. Completed 12 wafer lots 
+All lithography tools operating within normal parameters. Completed 12 wafer lots
 successfully. Tool A experienced minor alarm, resolved by technician. Overall yield: 96.2%
 ```
 

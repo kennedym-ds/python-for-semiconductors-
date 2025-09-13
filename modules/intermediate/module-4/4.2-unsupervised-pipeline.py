@@ -87,9 +87,7 @@ def generate_synthetic_process(
 
     # Mild nonlinear interaction: quadratic of first two latent factors
     if n_latent >= 2:
-        interaction = 0.1 * (latent[:, 0:1] ** 2) - 0.05 * (
-            latent[:, 1:2] * latent[:, 0:1]
-        )
+        interaction = 0.1 * (latent[:, 0:1] ** 2) - 0.05 * (latent[:, 1:2] * latent[:, 0:1])
         # Keep interaction as (n_samples, 1) to avoid broadcasting to (n_samples, n_samples)
         base[:, :1] += interaction
 
@@ -187,9 +185,7 @@ class UnsupervisedPipeline:
 
     def _build_model(self):
         if self.model_name == "kmeans":
-            return KMeans(
-                n_clusters=self.n_clusters, random_state=self.seed, n_init="auto"
-            )
+            return KMeans(n_clusters=self.n_clusters, random_state=self.seed, n_init="auto")
         if self.model_name == "gmm":
             return GaussianMixture(n_components=self.n_clusters, random_state=self.seed)
         if self.model_name == "dbscan":
@@ -201,9 +197,7 @@ class UnsupervisedPipeline:
                 contamination="auto",
             )
         if self.model_name == "kmeans_iso":  # hybrid pattern
-            return KMeans(
-                n_clusters=self.n_clusters, random_state=self.seed, n_init="auto"
-            )
+            return KMeans(n_clusters=self.n_clusters, random_state=self.seed, n_init="auto")
         raise ValueError(f"Unsupported model: {self.model_name}")
 
     # --------------- Core API --------------- #
@@ -323,13 +317,9 @@ class UnsupervisedPipeline:
 
         # Cluster size distribution (excluding noise = -1)
         if n_effective > 0:
-            counts = np.array(
-                [(labels == c).sum() for c in valid_cluster_labels], dtype=float
-            )
+            counts = np.array([(labels == c).sum() for c in valid_cluster_labels], dtype=float)
             p = counts / counts.sum()
-            entropy = -np.sum(p * np.log(p + 1e-12)) / math.log(
-                len(p)
-            )  # normalized 0..1
+            entropy = -np.sum(p * np.log(p + 1e-12)) / math.log(len(p))  # normalized 0..1
             metrics["cluster_size_entropy"] = float(entropy)
             metrics["largest_cluster_fraction"] = float(counts.max() / counts.sum())
         else:
@@ -516,9 +506,7 @@ def action_predict(args):
 
 def build_parser():
     """Build the CLI argument parser for the pipeline."""
-    parser = argparse.ArgumentParser(
-        description="Module 4.2 Unsupervised Learning Pipeline CLI"
-    )
+    parser = argparse.ArgumentParser(description="Module 4.2 Unsupervised Learning Pipeline CLI")
     sub = parser.add_subparsers(dest="command", required=True)
 
     p_train = sub.add_parser("train", help="Train unsupervised pipeline")
@@ -558,9 +546,7 @@ def build_parser():
     )
     p_pred.add_argument("--model-path", required=True)
     p_pred.add_argument("--input-json", help="Single JSON record string")
-    p_pred.add_argument(
-        "--input-file", help="Path to JSON file containing a single record"
-    )
+    p_pred.add_argument("--input-file", help="Path to JSON file containing a single record")
     p_pred.set_defaults(func=action_predict)
 
     return parser

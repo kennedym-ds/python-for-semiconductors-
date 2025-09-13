@@ -184,11 +184,7 @@ class EnsemblePipeline:
 # ---------------- CLI ---------------- #
 def action_train(args):
     if args.train:
-        df = (
-            pd.read_parquet(args.train)
-            if args.train.endswith(".parquet")
-            else pd.read_csv(args.train)
-        )
+        df = pd.read_parquet(args.train) if args.train.endswith(".parquet") else pd.read_csv(args.train)
     else:
         df = generate_regression_synthetic()
     if args.target not in df.columns:
@@ -218,11 +214,7 @@ def action_train(args):
 
 def action_evaluate(args):
     pipe = EnsemblePipeline.load(Path(args.model_path))
-    df = (
-        pd.read_parquet(args.data)
-        if args.data.endswith(".parquet")
-        else pd.read_csv(args.data)
-    )
+    df = pd.read_parquet(args.data) if args.data.endswith(".parquet") else pd.read_csv(args.data)
     if args.target not in df.columns:
         _msg = json.dumps({"error": f"target {args.target} missing"})
         raise SystemExit(_msg)

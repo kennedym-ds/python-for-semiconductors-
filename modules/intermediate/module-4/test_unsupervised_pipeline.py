@@ -8,9 +8,7 @@ SCRIPT = THIS_DIR / "4.2-unsupervised-pipeline.py"
 
 
 def run_cmd(args):
-    result = subprocess.run(
-        [sys.executable, str(SCRIPT)] + args, capture_output=True, text=True, check=True
-    )
+    result = subprocess.run([sys.executable, str(SCRIPT)] + args, capture_output=True, text=True, check=True)
     return json.loads(result.stdout)
 
 
@@ -29,9 +27,7 @@ def test_train_iso_forest():
 
 def test_train_and_evaluate_roundtrip(tmp_path):
     model_path = tmp_path / "model.joblib"
-    train_out = run_cmd(
-        ["train", "--model", "kmeans", "--k", "3", "--save", str(model_path)]
-    )
+    train_out = run_cmd(["train", "--model", "kmeans", "--k", "3", "--save", str(model_path)])
     assert model_path.exists()
     eval_out = run_cmd(["evaluate", "--model-path", str(model_path)])
     assert eval_out["status"] == "evaluated"
@@ -42,8 +38,6 @@ def test_predict_single_record(tmp_path):
     model_path = tmp_path / "model.joblib"
     run_cmd(["train", "--model", "kmeans", "--k", "3", "--save", str(model_path)])
     record = '{"f1":0.1,"f2":-0.2,"f3":0.05,"f4":0.3,"f5":-0.1}'
-    pred_out = run_cmd(
-        ["predict", "--model-path", str(model_path), "--input-json", record]
-    )
+    pred_out = run_cmd(["predict", "--model-path", str(model_path), "--input-json", record])
     assert pred_out["status"] == "predicted"
     assert pred_out["model"] == "kmeans"

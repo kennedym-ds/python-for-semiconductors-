@@ -1,45 +1,66 @@
 {
-  "version": "2.0.0",
   "tasks": [
     {
+      "args": [
+        "env_setup.py",
+        "--tier",
+        "basic"
+      ],
+      "command": "python",
+      "group": "none",
       "label": "Env: Setup Basic",
-      "type": "shell",
-      "command": "python",
-      "args": ["env_setup.py", "--tier", "basic"],
       "problemMatcher": [],
-      "group": "none"
+      "type": "shell"
     },
     {
+      "args": [
+        "env_setup.py",
+        "--tier",
+        "intermediate"
+      ],
+      "command": "python",
+      "group": "none",
       "label": "Env: Setup Intermediate",
-      "type": "shell",
-      "command": "python",
-      "args": ["env_setup.py", "--tier", "intermediate"],
       "problemMatcher": [],
-      "group": "none"
+      "type": "shell"
     },
     {
+      "args": [
+        "env_setup.py",
+        "--tier",
+        "advanced"
+      ],
+      "command": "python",
+      "group": "none",
       "label": "Env: Setup Advanced",
-      "type": "shell",
-      "command": "python",
-      "args": ["env_setup.py", "--tier", "advanced"],
       "problemMatcher": [],
-      "group": "none"
+      "type": "shell"
     },
     {
+      "args": [
+        "env_setup.py",
+        "--tier",
+        "full"
+      ],
+      "command": "python",
+      "group": "none",
       "label": "Env: Setup Full",
-      "type": "shell",
-      "command": "python",
-      "args": ["env_setup.py", "--tier", "full"],
       "problemMatcher": [],
-      "group": "none"
+      "type": "shell"
     },
     {
-      "label": "Env: Recreate Full (Force)",
-      "type": "shell",
+      "args": [
+        "env_setup.py",
+        "--tier",
+        "full",
+        "--force"
+      ],
       "command": "python",
-      "args": ["env_setup.py", "--tier", "full", "--force"],
+      "group": "none",
+      "label": "Env: Recreate Full (Force)",
       "problemMatcher": [],
-      "group": "none"
+      "type": "shell"
     }
-  ]
+  ],
+  "version": "2.0.0"
 }

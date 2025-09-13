@@ -387,7 +387,7 @@ Potential areas for extension:
 **Solution**: Install optional packages or use classical backend
 
 #### Low detection accuracy
-**Solutions**: 
+**Solutions**:
 - Increase training data (`--n-images`)
 - Tune IoU threshold (`--iou-threshold`)
 - Adjust classical parameters (`--blur-kernel`, `--threshold-value`)

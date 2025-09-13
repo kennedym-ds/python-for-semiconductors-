@@ -102,9 +102,7 @@ class DataQualityFramework:
 
         logger.info("Data Quality Framework initialized")
 
-    def load_data(
-        self, filepath: Union[str, Path], target_column: Optional[str] = None
-    ) -> None:
+    def load_data(self, filepath: Union[str, Path], target_column: Optional[str] = None) -> None:
         """
         Load dataset from file.
 
@@ -148,24 +146,18 @@ class DataQualityFramework:
         missing_cells = missing_data.sum().sum()
 
         completeness = {
-            "overall_completeness_pct": ((total_cells - missing_cells) / total_cells)
-            * 100,
+            "overall_completeness_pct": ((total_cells - missing_cells) / total_cells) * 100,
             "total_missing_values": int(missing_cells),
             "columns_with_missing": int((missing_data.sum() > 0).sum()),
             "rows_with_missing": int((missing_data.sum(axis=1) > 0).sum()),
-            "complete_rows_pct": ((missing_data.sum(axis=1) == 0).sum() / len(self.df))
-            * 100,
-            "column_completeness": (
-                (1 - missing_data.sum() / len(self.df)) * 100
-            ).to_dict(),
+            "complete_rows_pct": ((missing_data.sum(axis=1) == 0).sum() / len(self.df)) * 100,
+            "column_completeness": ((1 - missing_data.sum() / len(self.df)) * 100).to_dict(),
             "high_missing_columns": [],
         }
 
         # Identify columns with high missing rates
         missing_pct_by_col = (missing_data.sum() / len(self.df)) * 100
-        high_missing = missing_pct_by_col[
-            missing_pct_by_col > self.thresholds.missing_column_threshold
-        ]
+        high_missing = missing_pct_by_col[missing_pct_by_col > self.thresholds.missing_column_threshold]
         completeness["high_missing_columns"] = high_missing.to_dict()
 
         return completeness
@@ -219,22 +211,12 @@ class DataQualityFramework:
             "total_outliers_iqr": int(total_outliers_iqr),
             "total_outliers_zscore": int(total_outliers_zscore),
             "outlier_rate_iqr_pct": (
-                (total_outliers_iqr / total_numeric_values) * 100
-                if total_numeric_values > 0
-                else 0
+                (total_outliers_iqr / total_numeric_values) * 100 if total_numeric_values > 0 else 0
             ),
             "outlier_rate_zscore_pct": (
-                (total_outliers_zscore / total_numeric_values) * 100
-                if total_numeric_values > 0
-                else 0
+                (total_outliers_zscore / total_numeric_values) * 100 if total_numeric_values > 0 else 0
             ),
-            "columns_with_outliers": len(
-                [
-                    col
-                    for col, stats in column_outliers.items()
-                    if stats["iqr_outliers"] > 0
-                ]
-            ),
+            "columns_with_outliers": len([col for col, stats in column_outliers.items() if stats["iqr_outliers"] > 0]),
             "column_details": column_outliers,
         }
 
@@ -269,9 +251,7 @@ class DataQualityFramework:
         consistency["data_type_analysis"] = {
             "type_diversity": len(dtype_counts),
             "dominant_type": str(dtype_counts.index[0]),
-            "type_distribution": {
-                str(dtype): int(count) for dtype, count in dtype_counts.items()
-            },
+            "type_distribution": {str(dtype): int(count) for dtype, count in dtype_counts.items()},
         }
 
         # Scale analysis for numeric columns
@@ -293,21 +273,15 @@ class DataQualityFramework:
                     "min_range": float(min(range_values)),
                     "max_range": float(max(range_values)),
                     "range_ratio": (
-                        float(max(range_values) / min(range_values))
-                        if min(range_values) > 0
-                        else float("inf")
+                        float(max(range_values) / min(range_values)) if min(range_values) > 0 else float("inf")
                     ),
                     "min_scale": float(min(scale_values)),
                     "max_scale": float(max(scale_values)),
                     "scale_ratio": (
-                        float(max(scale_values) / min(scale_values))
-                        if min(scale_values) > 0
-                        else float("inf")
+                        float(max(scale_values) / min(scale_values)) if min(scale_values) > 0 else float("inf")
                     ),
                     "columns_needing_scaling": [
-                        col
-                        for col, range_val in ranges.items()
-                        if range_val > np.percentile(range_values, 90)
+                        col for col, range_val in ranges.items() if range_val > np.percentile(range_values, 90)
                     ],
                 }
 
@@ -353,31 +327,17 @@ class DataQualityFramework:
         # Format validity
         validity["format_validity"] = {
             "finite_values_pct": (
-                float(
-                    (
-                        np.isfinite(self.df[numeric_cols]).sum().sum()
-                        / self.df[numeric_cols].size
-                    )
-                    * 100
-                )
+                float((np.isfinite(self.df[numeric_cols]).sum().sum() / self.df[numeric_cols].size) * 100)
                 if len(numeric_cols) > 0
                 else 100
             ),
             "non_null_pct": (
-                float(
-                    (
-                        self.df[numeric_cols].notna().sum().sum()
-                        / self.df[numeric_cols].size
-                    )
-                    * 100
-                )
+                float((self.df[numeric_cols].notna().sum().sum() / self.df[numeric_cols].size) * 100)
                 if len(numeric_cols) > 0
                 else 100
             ),
             "numeric_columns": len(numeric_cols),
-            "categorical_columns": len(
-                self.df.select_dtypes(include=["object"]).columns
-            ),
+            "categorical_columns": len(self.df.select_dtypes(include=["object"]).columns),
         }
 
         # Domain-specific rules (semiconductor manufacturing)
@@ -446,11 +406,7 @@ class DataQualityFramework:
         # Look for timestamp columns
         timestamp_cols = []
         for col in self.df.columns:
-            if (
-                "time" in col.lower()
-                or "date" in col.lower()
-                or self.df[col].dtype == "datetime64[ns]"
-            ):
+            if "time" in col.lower() or "date" in col.lower() or self.df[col].dtype == "datetime64[ns]":
                 timestamp_cols.append(col)
 
         timeliness = {
@@ -469,12 +425,8 @@ class DataQualityFramework:
                     {
                         "earliest_timestamp": str(ts_data.min()),
                         "latest_timestamp": str(ts_data.max()),
-                        "temporal_span_days": float(
-                            (ts_data.max() - ts_data.min()).days
-                        ),
-                        "timestamp_completeness_pct": float(
-                            (ts_data.notna().sum() / len(ts_data)) * 100
-                        ),
+                        "temporal_span_days": float((ts_data.max() - ts_data.min()).days),
+                        "timestamp_completeness_pct": float((ts_data.notna().sum() / len(ts_data)) * 100),
                     }
                 )
             except Exception as e:
@@ -484,9 +436,7 @@ class DataQualityFramework:
 
     def _check_sensor_naming(self) -> bool:
         """Check if sensor columns follow expected naming convention."""
-        sensor_cols = [
-            col for col in self.df.columns if col.lower().startswith("sensor")
-        ]
+        sensor_cols = [col for col in self.df.columns if col.lower().startswith("sensor")]
         return len(sensor_cols) > len(self.df.columns) * 0.5
 
     def _check_value_ranges(self) -> Dict:
@@ -502,9 +452,7 @@ class DataQualityFramework:
                     range_check["reasonable_ranges"] += 1
 
         range_check["reasonable_range_pct"] = (
-            (range_check["reasonable_ranges"] / len(numeric_cols)) * 100
-            if len(numeric_cols) > 0
-            else 100
+            (range_check["reasonable_ranges"] / len(numeric_cols)) * 100 if len(numeric_cols) > 0 else 100
         )
         return range_check
 
@@ -538,10 +486,7 @@ class DataQualityFramework:
 
         # Completeness recommendations
         completeness = report_data["completeness"]
-        if (
-            completeness["overall_completeness_pct"]
-            < self.thresholds.completeness_critical
-        ):
+        if completeness["overall_completeness_pct"] < self.thresholds.completeness_critical:
             recommendations.append(
                 {
                     "category": "completeness",
@@ -584,8 +529,7 @@ class DataQualityFramework:
         consistency = report_data["consistency"]
         if (
             "scale_analysis" in consistency
-            and consistency["scale_analysis"]["scale_ratio"]
-            > self.thresholds.scale_ratio_warning
+            and consistency["scale_analysis"]["scale_ratio"] > self.thresholds.scale_ratio_warning
         ):
             recommendations.append(
                 {
@@ -600,10 +544,7 @@ class DataQualityFramework:
 
         # Uniqueness recommendations
         uniqueness = report_data["uniqueness"]
-        if (
-            uniqueness["duplicate_analysis"]["duplicate_rate_pct"]
-            > self.thresholds.duplicate_rate_warning
-        ):
+        if uniqueness["duplicate_analysis"]["duplicate_rate_pct"] > self.thresholds.duplicate_rate_warning:
             recommendations.append(
                 {
                     "category": "uniqueness",
@@ -629,13 +570,9 @@ class DataQualityFramework:
         """
         scores = {
             "completeness": report_data["completeness"]["overall_completeness_pct"],
-            "accuracy": 100
-            - min(
-                report_data["accuracy"]["outlier_analysis"]["outlier_rate_iqr_pct"], 100
-            ),
+            "accuracy": 100 - min(report_data["accuracy"]["outlier_analysis"]["outlier_rate_iqr_pct"], 100),
             "validity": report_data["validity"]["format_validity"]["finite_values_pct"],
-            "uniqueness": 100
-            - report_data["uniqueness"]["duplicate_analysis"]["duplicate_rate_pct"],
+            "uniqueness": 100 - report_data["uniqueness"]["duplicate_analysis"]["duplicate_rate_pct"],
         }
 
         # Weight the scores (can be customized)
@@ -668,9 +605,7 @@ class DataQualityFramework:
             "column_count": len(self.df.columns),
             "row_count": len(self.df),
             "numeric_columns": len(self.df.select_dtypes(include=[np.number]).columns),
-            "categorical_columns": len(
-                self.df.select_dtypes(include=["object"]).columns
-            ),
+            "categorical_columns": len(self.df.select_dtypes(include=["object"]).columns),
         }
 
         # Assess all dimensions
@@ -724,9 +659,7 @@ class DataQualityFramework:
             Dictionary containing figure objects
         """
         if self.report is None:
-            raise ValueError(
-                "No quality report available. Run assess_all_dimensions() first."
-            )
+            raise ValueError("No quality report available. Run assess_all_dimensions() first.")
 
         logger.info("Creating data quality visualizations...")
 
@@ -735,13 +668,9 @@ class DataQualityFramework:
         # 1. Quality Scores Overview
         scores = {
             "Completeness": self.report.completeness["overall_completeness_pct"],
-            "Accuracy": 100
-            - min(
-                self.report.accuracy["outlier_analysis"]["outlier_rate_iqr_pct"], 100
-            ),
+            "Accuracy": 100 - min(self.report.accuracy["outlier_analysis"]["outlier_rate_iqr_pct"], 100),
             "Validity": self.report.validity["format_validity"]["finite_values_pct"],
-            "Uniqueness": 100
-            - self.report.uniqueness["duplicate_analysis"]["duplicate_rate_pct"],
+            "Uniqueness": 100 - self.report.uniqueness["duplicate_analysis"]["duplicate_rate_pct"],
         }
 
         fig_scores = go.Figure(
@@ -750,10 +679,7 @@ class DataQualityFramework:
                     x=list(scores.values()),
                     y=list(scores.keys()),
                     orientation="h",
-                    marker_color=[
-                        "green" if v >= 80 else "orange" if v >= 60 else "red"
-                        for v in scores.values()
-                    ],
+                    marker_color=["green" if v >= 80 else "orange" if v >= 60 else "red" for v in scores.values()],
                     text=[f"{v:.1f}%" for v in scores.values()],
                     textposition="auto",
                 )
@@ -796,16 +722,12 @@ class DataQualityFramework:
             if self.df[col].notna().sum() > 0:
                 Q1, Q3 = self.df[col].quantile([0.25, 0.75])
                 IQR = Q3 - Q1
-                outliers = (
-                    (self.df[col] < Q1 - 1.5 * IQR) | (self.df[col] > Q3 + 1.5 * IQR)
-                ).sum()
+                outliers = ((self.df[col] < Q1 - 1.5 * IQR) | (self.df[col] > Q3 + 1.5 * IQR)).sum()
                 outlier_counts.append(outliers)
             else:
                 outlier_counts.append(0)
 
-        fig_outliers = go.Figure(
-            data=[go.Bar(x=list(numeric_cols), y=outlier_counts, marker_color="orange")]
-        )
+        fig_outliers = go.Figure(data=[go.Bar(x=list(numeric_cols), y=outlier_counts, marker_color="orange")])
         fig_outliers.update_layout(
             title="Outlier Count by Column (First 10 Numeric)",
             xaxis_title="Column",
@@ -834,9 +756,7 @@ class DataQualityFramework:
             format: Export format ('json', 'yaml', or 'html')
         """
         if self.report is None:
-            raise ValueError(
-                "No quality report available. Run assess_all_dimensions() first."
-            )
+            raise ValueError("No quality report available. Run assess_all_dimensions() first.")
 
         filepath = Path(filepath)
 
@@ -883,14 +803,14 @@ class DataQualityFramework:
                 <p>Generated: {self.report.generated_at}</p>
                 <p class="score">Overall Quality Score: {self.report.overall_score:.1f}/100</p>
             </div>
-            
+
             <div class="section">
                 <h2>Dataset Information</h2>
                 <div class="metric">Shape: {self.report.dataset_info['shape']}</div>
                 <div class="metric">Memory Usage: {self.report.dataset_info['memory_usage_mb']:.2f} MB</div>
                 <div class="metric">Numeric Columns: {self.report.dataset_info['numeric_columns']}</div>
             </div>
-            
+
             <div class="section">
                 <h2>Quality Dimensions</h2>
                 <div class="metric">Completeness: {self.report.completeness['overall_completeness_pct']:.1f}%</div>
@@ -898,7 +818,7 @@ class DataQualityFramework:
                 <div class="metric">Outlier Rate: {self.report.accuracy['outlier_analysis']['outlier_rate_iqr_pct']:.2f}%</div>
                 <div class="metric">Duplicate Rate: {self.report.uniqueness['duplicate_analysis']['duplicate_rate_pct']:.2f}%</div>
             </div>
-            
+
             <div class="section">
                 <h2>Recommendations</h2>
                 <table>
@@ -929,14 +849,10 @@ class DataQualityFramework:
 
 def main():
     """Main entry point for the command-line interface."""
-    parser = argparse.ArgumentParser(
-        description="Data Quality Framework for Semiconductor Manufacturing"
-    )
+    parser = argparse.ArgumentParser(description="Data Quality Framework for Semiconductor Manufacturing")
 
     parser.add_argument("--input", "-i", required=True, help="Input data file path")
-    parser.add_argument(
-        "--output", "-o", default="quality_report", help="Output file prefix"
-    )
+    parser.add_argument("--output", "-o", default="quality_report", help="Output file prefix")
     parser.add_argument(
         "--format",
         "-f",
@@ -946,9 +862,7 @@ def main():
     )
     parser.add_argument("--config", "-c", help="Configuration file path")
     parser.add_argument("--target", "-t", help="Target column name")
-    parser.add_argument(
-        "--visualize", "-v", action="store_true", help="Generate visualizations"
-    )
+    parser.add_argument("--visualize", "-v", action="store_true", help="Generate visualizations")
     parser.add_argument("--verbose", action="store_true", help="Enable verbose logging")
 
     args = parser.parse_args()

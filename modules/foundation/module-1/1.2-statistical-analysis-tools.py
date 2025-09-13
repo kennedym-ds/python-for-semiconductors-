@@ -24,9 +24,7 @@ from abc import ABC, abstractmethod
 import logging
 
 # Configure logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 # Suppress warnings for cleaner output
@@ -43,15 +41,11 @@ class SpecificationLimits:
 
     def __post_init__(self):
         if self.lsl >= self.usl:
-            raise ValueError(
-                "Lower specification limit must be less than upper specification limit"
-            )
+            raise ValueError("Lower specification limit must be less than upper specification limit")
         if self.target is None:
             self.target = (self.lsl + self.usl) / 2
         if not (self.lsl <= self.target <= self.usl):
-            logger.warning(
-                f"Target value {self.target} is outside specification limits [{self.lsl}, {self.usl}]"
-            )
+            logger.warning(f"Target value {self.target} is outside specification limits [{self.lsl}, {self.usl}]")
 
 
 @dataclass
@@ -91,9 +85,7 @@ class StatisticalAnalyzer(ABC):
         valid_mask = np.isfinite(data)
         if not np.all(valid_mask):
             invalid_count = np.sum(~valid_mask)
-            logger.warning(
-                f"Removing {invalid_count} invalid values (NaN, inf) from data"
-            )
+            logger.warning(f"Removing {invalid_count} invalid values (NaN, inf) from data")
             data = data[valid_mask]
 
         if data.size == 0:
@@ -132,9 +124,7 @@ class ProcessCapabilityAnalyzer(StatisticalAnalyzer):
         n = len(data)
 
         if n < 30:
-            logger.warning(
-                f"Sample size ({n}) is small. Capability estimates may be unreliable."
-            )
+            logger.warning(f"Sample size ({n}) is small. Capability estimates may be unreliable.")
 
         # Basic statistics
         mean = np.mean(data)
@@ -156,9 +146,7 @@ class ProcessCapabilityAnalyzer(StatisticalAnalyzer):
         # Process centering
         process_center = mean
         spec_center = specs.target
-        centering_ratio = abs(process_center - spec_center) / (
-            (specs.usl - specs.lsl) / 2
-        )
+        centering_ratio = abs(process_center - spec_center) / ((specs.usl - specs.lsl) / 2)
         is_centered = centering_ratio < 0.25  # Industry threshold
 
         # Yield prediction
@@ -204,9 +192,7 @@ class ProcessCapabilityAnalyzer(StatisticalAnalyzer):
 
         return results
 
-    def _calculate_cpk_confidence_interval(
-        self, cpk: float, n: int
-    ) -> Tuple[float, float]:
+    def _calculate_cpk_confidence_interval(self, cpk: float, n: int) -> Tuple[float, float]:
         """Calculate confidence interval for Cpk"""
         if cpk <= 0:
             return (0, 0)
@@ -220,16 +206,12 @@ class ProcessCapabilityAnalyzer(StatisticalAnalyzer):
 
         return (ci_lower, ci_upper)
 
-    def _calculate_predicted_yield(
-        self, data: np.ndarray, specs: SpecificationLimits
-    ) -> float:
+    def _calculate_predicted_yield(self, data: np.ndarray, specs: SpecificationLimits) -> float:
         """Calculate predicted yield based on normal distribution assumption"""
         mean = np.mean(data)
         std_dev = np.std(data, ddof=1)
 
-        yield_fraction = stats.norm.cdf(specs.usl, mean, std_dev) - stats.norm.cdf(
-            specs.lsl, mean, std_dev
-        )
+        yield_fraction = stats.norm.cdf(specs.usl, mean, std_dev) - stats.norm.cdf(specs.lsl, mean, std_dev)
 
         return yield_fraction * 100
 
@@ -279,21 +261,15 @@ class ProcessCapabilityAnalyzer(StatisticalAnalyzer):
 
         # Confidence interval
         ci_data = results["confidence_intervals"]
-        report.append(
-            f"\nCpk Confidence Interval ({ci_data['confidence_level']*100:.0f}%):"
-        )
+        report.append(f"\nCpk Confidence Interval ({ci_data['confidence_level']*100:.0f}%):")
         report.append(f"  [{ci_data['cpk_lower']:.4f}, {ci_data['cpk_upper']:.4f}]")
 
         # Assessment
         assess_data = results["process_assessment"]
         report.append(f"\nProcess Assessment:")
         report.append(f"  Classification: {assess_data['capability_class']}")
-        report.append(
-            f"  Process Centered: {'Yes' if assess_data['is_centered'] else 'No'}"
-        )
-        report.append(
-            f"  Predicted Yield: {assess_data['predicted_yield_percent']:.2f}%"
-        )
+        report.append(f"  Process Centered: {'Yes' if assess_data['is_centered'] else 'No'}")
+        report.append(f"  Predicted Yield: {assess_data['predicted_yield_percent']:.2f}%")
 
         report.append("\n" + "=" * 60)
 
@@ -328,15 +304,11 @@ class ControlChartAnalyzer(StatisticalAnalyzer):
         }
 
         if n not in constants_table:
-            raise ValueError(
-                f"Control chart constants not available for subgroup size {n}"
-            )
+            raise ValueError(f"Control chart constants not available for subgroup size {n}")
 
         return constants_table[n]
 
-    def calculate_control_limits(
-        self, subgroups: List[np.ndarray]
-    ) -> Dict[str, Dict[str, float]]:
+    def calculate_control_limits(self, subgroups: List[np.ndarray]) -> Dict[str, Dict[str, float]]:
         """
         Calculate control limits from Phase I data
 
@@ -350,15 +322,11 @@ class ControlChartAnalyzer(StatisticalAnalyzer):
         dict : Control limits for X-bar and R charts
         """
         if len(subgroups) < 20:
-            logger.warning(
-                "Fewer than 20 subgroups provided. Control limits may be unreliable."
-            )
+            logger.warning("Fewer than 20 subgroups provided. Control limits may be unreliable.")
 
         # Calculate subgroup statistics
         subgroup_means = [np.mean(subgroup) for subgroup in subgroups]
-        subgroup_ranges = [
-            np.max(subgroup) - np.min(subgroup) for subgroup in subgroups
-        ]
+        subgroup_ranges = [np.max(subgroup) - np.min(subgroup) for subgroup in subgroups]
 
         # Grand averages
         xbar_bar = np.mean(subgroup_means)
@@ -379,9 +347,7 @@ class ControlChartAnalyzer(StatisticalAnalyzer):
 
         return limits
 
-    def detect_out_of_control_signals(
-        self, values: np.ndarray, limits: Dict[str, float]
-    ) -> List[Tuple[int, str]]:
+    def detect_out_of_control_signals(self, values: np.ndarray, limits: Dict[str, float]) -> List[Tuple[int, str]]:
         """
         Detect out-of-control signals using Western Electric rules
 
@@ -454,9 +420,7 @@ class ControlChartAnalyzer(StatisticalAnalyzer):
 
         return signals
 
-    def analyze(
-        self, phase1_subgroups: List[np.ndarray], phase2_subgroups: List[np.ndarray]
-    ) -> Dict[str, Any]:
+    def analyze(self, phase1_subgroups: List[np.ndarray], phase2_subgroups: List[np.ndarray]) -> Dict[str, Any]:
         """
         Complete control chart analysis with Phase I and Phase II data
 
@@ -476,9 +440,7 @@ class ControlChartAnalyzer(StatisticalAnalyzer):
 
         # Calculate Phase II statistics
         phase2_means = [np.mean(subgroup) for subgroup in phase2_subgroups]
-        phase2_ranges = [
-            np.max(subgroup) - np.min(subgroup) for subgroup in phase2_subgroups
-        ]
+        phase2_ranges = [np.max(subgroup) - np.min(subgroup) for subgroup in phase2_subgroups]
 
         # Detect signals
         xbar_signals = self.detect_out_of_control_signals(phase2_means, limits["xbar"])
@@ -598,18 +560,13 @@ class HypothesisTestAnalyzer(StatisticalAnalyzer):
         group2 = self.validate_data(group2)
 
         # Perform t-test
-        t_stat, p_value = stats.ttest_ind(
-            group1, group2, equal_var=equal_var, alternative=alternative
-        )
+        t_stat, p_value = stats.ttest_ind(group1, group2, equal_var=equal_var, alternative=alternative)
 
         # Effect size (Cohen's d)
         mean1, mean2 = np.mean(group1), np.mean(group2)
         if equal_var:
             pooled_std = np.sqrt(
-                (
-                    (len(group1) - 1) * np.var(group1, ddof=1)
-                    + (len(group2) - 1) * np.var(group2, ddof=1)
-                )
+                ((len(group1) - 1) * np.var(group1, ddof=1) + (len(group2) - 1) * np.var(group2, ddof=1))
                 / (len(group1) + len(group2) - 2)
             )
         else:
@@ -664,12 +621,8 @@ class HypothesisTestAnalyzer(StatisticalAnalyzer):
         group_sizes = [len(group) for group in validated_groups]
         overall_mean = np.mean(np.concatenate(validated_groups))
 
-        ss_between = sum(
-            n * (mean - overall_mean) ** 2 for n, mean in zip(group_sizes, group_means)
-        )
-        ss_total = sum(
-            (x - overall_mean) ** 2 for group in validated_groups for x in group
-        )
+        ss_between = sum(n * (mean - overall_mean) ** 2 for n, mean in zip(group_sizes, group_means))
+        ss_total = sum((x - overall_mean) ** 2 for group in validated_groups for x in group)
         eta_squared = ss_between / ss_total if ss_total > 0 else 0
 
         # Interpretation
@@ -778,9 +731,7 @@ class DistributionAnalyzer(StatisticalAnalyzer):
 
         return results
 
-    def fit_distribution(
-        self, data: np.ndarray, distribution_name: str
-    ) -> Dict[str, Any]:
+    def fit_distribution(self, data: np.ndarray, distribution_name: str) -> Dict[str, Any]:
         """
         Fit a specific distribution to data and assess goodness of fit
 
@@ -907,9 +858,7 @@ class YieldAnalyzer:
         if random_seed is not None:
             np.random.seed(random_seed)
 
-    def calculate_current_yield(
-        self, data: np.ndarray, specs: SpecificationLimits
-    ) -> Dict[str, float]:
+    def calculate_current_yield(self, data: np.ndarray, specs: SpecificationLimits) -> Dict[str, float]:
         """
         Calculate current yield from measurement data
 
@@ -988,11 +937,7 @@ class YieldAnalyzer:
 
         denominator = 1 + z**2 / n_simulations
         center = (p + z**2 / (2 * n_simulations)) / denominator
-        half_width = (
-            z
-            * np.sqrt(p * (1 - p) / n_simulations + z**2 / (4 * n_simulations**2))
-            / denominator
-        )
+        half_width = z * np.sqrt(p * (1 - p) / n_simulations + z**2 / (4 * n_simulations**2)) / denominator
 
         ci_lower = max(0, (center - half_width) * 100)
         ci_upper = min(100, (center + half_width) * 100)
@@ -1020,8 +965,7 @@ class YieldAnalyzer:
             },
             "theoretical_yield": {
                 "normal_approximation": (
-                    stats.norm.cdf(specs.usl, mean, std_dev)
-                    - stats.norm.cdf(specs.lsl, mean, std_dev)
+                    stats.norm.cdf(specs.usl, mean, std_dev) - stats.norm.cdf(specs.lsl, mean, std_dev)
                 )
                 * 100
             },
@@ -1067,8 +1011,7 @@ class YieldAnalyzer:
         mean_sensitivity = []
         for mean_val in mean_values:
             yield_val = (
-                stats.norm.cdf(specs.usl, mean_val, base_std)
-                - stats.norm.cdf(specs.lsl, mean_val, base_std)
+                stats.norm.cdf(specs.usl, mean_val, base_std) - stats.norm.cdf(specs.lsl, mean_val, base_std)
             ) * 100
             mean_sensitivity.append(yield_val)
 
@@ -1076,8 +1019,7 @@ class YieldAnalyzer:
         std_sensitivity = []
         for std_val in std_values:
             yield_val = (
-                stats.norm.cdf(specs.usl, base_mean, std_val)
-                - stats.norm.cdf(specs.lsl, base_mean, std_val)
+                stats.norm.cdf(specs.usl, base_mean, std_val) - stats.norm.cdf(specs.lsl, base_mean, std_val)
             ) * 100
             std_sensitivity.append(yield_val)
 
@@ -1090,8 +1032,7 @@ class YieldAnalyzer:
                 "mean": base_mean,
                 "std_dev": base_std,
                 "yield_percent": (
-                    stats.norm.cdf(specs.usl, base_mean, base_std)
-                    - stats.norm.cdf(specs.lsl, base_mean, base_std)
+                    stats.norm.cdf(specs.usl, base_mean, base_std) - stats.norm.cdf(specs.lsl, base_mean, base_std)
                 )
                 * 100,
             },
@@ -1183,9 +1124,7 @@ def generate_sample_data(
     return data
 
 
-def create_comprehensive_report(
-    results_dict: Dict[str, Any], title: str = "Statistical Analysis Report"
-) -> str:
+def create_comprehensive_report(results_dict: Dict[str, Any], title: str = "Statistical Analysis Report") -> str:
     """
     Create a comprehensive analysis report from multiple analysis results
 
@@ -1222,9 +1161,7 @@ def create_comprehensive_report(
                 elif isinstance(value, str):
                     report.append(f"{key.replace('_', ' ').title()}: {value}")
                 elif isinstance(value, (list, tuple)) and len(value) == 2:
-                    report.append(
-                        f"{key.replace('_', ' ').title()}: [{value[0]:.4f}, {value[1]:.4f}]"
-                    )
+                    report.append(f"{key.replace('_', ' ').title()}: [{value[0]:.4f}, {value[1]:.4f}]")
 
         report.append("")
 
@@ -1239,9 +1176,7 @@ def demonstrate_statistical_tools():
 
     # Generate sample data
     np.random.seed(42)
-    threshold_data = generate_sample_data(
-        200, "threshold_voltage", mean=650, std_dev=15
-    )
+    threshold_data = generate_sample_data(200, "threshold_voltage", mean=650, std_dev=15)
     specs = SpecificationLimits(lsl=610, usl=690, target=650)
 
     # 1. Process Capability Analysis
@@ -1275,9 +1210,7 @@ def demonstrate_statistical_tools():
     print(f"X-bar Control Limits: {control_results['control_limits']['xbar']}")
     print(f"R Control Limits: {control_results['control_limits']['r']}")
     print(f"Total Signals Detected: {control_results['signals']['total_signals']}")
-    print(
-        f"Process Stable: {control_results['process_stability']['overall_in_control']}"
-    )
+    print(f"Process Stable: {control_results['process_stability']['overall_in_control']}")
 
     # 3. Hypothesis Testing
     print("\n3. Hypothesis Testing")
@@ -1316,9 +1249,7 @@ def demonstrate_statistical_tools():
         specs=specs,
         n_simulations=50000,
     )
-    print(
-        f"Predicted Yield: {mc_results['yield_results']['predicted_yield_percent']:.2f}%"
-    )
+    print(f"Predicted Yield: {mc_results['yield_results']['predicted_yield_percent']:.2f}%")
     print(f"95% CI: {mc_results['yield_results']['confidence_interval_95']}")
 
 

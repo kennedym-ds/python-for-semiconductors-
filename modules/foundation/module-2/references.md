@@ -213,7 +213,7 @@
   - Comprehensive statistical computing environment
   - Extensive packages for data quality and analysis
 
-- **Python Ecosystem**: 
+- **Python Ecosystem**:
   - pandas, NumPy, SciPy for data manipulation
   - scikit-learn for machine learning approaches
   - matplotlib, seaborn for visualization

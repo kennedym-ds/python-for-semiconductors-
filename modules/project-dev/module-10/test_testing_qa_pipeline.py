@@ -10,9 +10,7 @@ SCRIPT = THIS_DIR / "10.2-testing-qa-pipeline.py"
 
 def run_cmd(args):
     """Execute the QA pipeline CLI command and return JSON response."""
-    result = subprocess.run(
-        [sys.executable, str(SCRIPT)] + args, capture_output=True, text=True, check=True
-    )
+    result = subprocess.run([sys.executable, str(SCRIPT)] + args, capture_output=True, text=True, check=True)
     return json.loads(result.stdout)
 
 
@@ -26,9 +24,7 @@ def test_train_basic_qa_suite():
 
 def test_train_with_specific_modules():
     """Test QA suite with specific target modules."""
-    out = run_cmd(
-        ["train", "--test-suite", "smoke", "--target-modules", "modules/foundation"]
-    )
+    out = run_cmd(["train", "--test-suite", "smoke", "--target-modules", "modules/foundation"])
     assert out["status"] == "trained"
     assert out["metadata"]["target_modules"] == ["modules/foundation"]
 
@@ -174,9 +170,7 @@ def test_json_output_schema():
 def test_cli_help_commands():
     """Test that help commands work without errors."""
     # Test main help
-    result = subprocess.run(
-        [sys.executable, str(SCRIPT), "--help"], capture_output=True, text=True
-    )
+    result = subprocess.run([sys.executable, str(SCRIPT), "--help"], capture_output=True, text=True)
     assert result.returncode == 0
     assert "Testing & QA Pipeline CLI" in result.stdout
 
@@ -193,15 +187,11 @@ def test_cli_help_commands():
 def test_error_handling_and_exit_codes():
     """Test proper error handling and exit codes for invalid inputs."""
     # Test missing required arguments
-    result = subprocess.run(
-        [sys.executable, str(SCRIPT)], capture_output=True, text=True
-    )
+    result = subprocess.run([sys.executable, str(SCRIPT)], capture_output=True, text=True)
     assert result.returncode != 0
 
     # Test invalid command
-    result = subprocess.run(
-        [sys.executable, str(SCRIPT), "invalid_command"], capture_output=True, text=True
-    )
+    result = subprocess.run([sys.executable, str(SCRIPT), "invalid_command"], capture_output=True, text=True)
     assert result.returncode != 0
 
 
@@ -215,9 +205,7 @@ def test_train_evaluate_predict_roundtrip(tmp_path):
     assert qa_path.exists()
 
     # Step 2: Evaluate using saved pipeline
-    eval_out = run_cmd(
-        ["evaluate", "--qa-pipeline-path", str(qa_path), "--check-type", "smoke"]
-    )
+    eval_out = run_cmd(["evaluate", "--qa-pipeline-path", str(qa_path), "--check-type", "smoke"])
     assert eval_out["status"] == "evaluated"
 
     # Step 3: Predict system health

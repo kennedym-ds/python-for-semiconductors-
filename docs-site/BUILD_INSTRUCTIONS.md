@@ -200,31 +200,31 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
-          
+
       - name: Install dependencies
         run: |
           pip install -r requirements-advanced.txt
-          
+
       - name: Validate paths
         run: |
           python modules/project-dev/module-10/10.3-documentation-reproducibility-pipeline.py \
             validate-paths --modules-dir modules/
-            
+
       - name: Generate docs
         run: |
           python modules/project-dev/module-10/10.3-documentation-reproducibility-pipeline.py \
             generate-docs --input modules/ --output docs-site/docs/ --format markdown
-            
+
       - name: Build site
         run: |
           python modules/project-dev/module-10/10.3-documentation-reproducibility-pipeline.py \
             build-docs --project-dir docs-site/
-            
+
       - name: Deploy to GitHub Pages
         if: github.ref == 'refs/heads/main'
         run: |

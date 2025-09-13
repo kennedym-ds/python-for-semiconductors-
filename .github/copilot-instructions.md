@@ -49,15 +49,15 @@ Every pipeline script uses this exact argparse structure:
 def build_parser():
     parser = argparse.ArgumentParser(description='Module X.Y Description')
     sub = parser.add_subparsers(dest='command', required=True)
-    
+
     # train subcommand
     p_train = sub.add_parser('train', help='Train a model')
     p_train.set_defaults(func=action_train)
-    
+
     # evaluate subcommand  
     p_eval = sub.add_parser('evaluate', help='Evaluate model')
     p_eval.set_defaults(func=action_evaluate)
-    
+
     # predict subcommand
     p_pred = sub.add_parser('predict', help='Make predictions')  
     p_pred.set_defaults(func=action_predict)

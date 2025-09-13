@@ -1,4 +1,20 @@
 [flake8]
+# Keep in sync with pre-commit flake8 args
 max-line-length = 120
 max-complexity = 12
-extend-ignore = E203
+
+# Ignore rules that conflict with Black or are noisy for this repo
+extend-ignore = E203, W503
+
+# Exclude virtual envs, caches, build outputs, docs site, and large dataset artifacts
+exclude =
+    .git,
+    .venv,
+    **/.venv/**,
+    __pycache__,
+    .mypy_cache,
+    .pytest_cache,
+    build,
+    dist,
+    docs-site/site,
+    **/LSWMD.pkl/**

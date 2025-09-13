@@ -290,9 +290,7 @@ class IQRDetector(OutlierDetector):
 class MahalanobisDetector(OutlierDetector):
     """Mahalanobis distance based outlier detection."""
 
-    def __init__(
-        self, config: OutlierDetectionConfig, threshold_percentile: float = 95
-    ):
+    def __init__(self, config: OutlierDetectionConfig, threshold_percentile: float = 95):
         super().__init__("Mahalanobis", config)
         self.threshold_percentile = threshold_percentile
         self.mean_ = None
@@ -375,9 +373,7 @@ class IsolationForestDetector(OutlierDetector):
     def __init__(self, config: OutlierDetectionConfig, contamination: float = None):
         super().__init__("Isolation Forest", config)
         self.contamination = contamination or config.isolation_forest_contamination
-        self.model = IsolationForest(
-            contamination=self.contamination, random_state=42, n_estimators=100
-        )
+        self.model = IsolationForest(contamination=self.contamination, random_state=42, n_estimators=100)
 
     def fit(self, data: pd.DataFrame) -> "IsolationForestDetector":
         """Fit Isolation Forest model."""
@@ -513,9 +509,7 @@ class LOFDetector(OutlierDetector):
         super().__init__("LOF", config)
         self.n_neighbors = n_neighbors or config.lof_n_neighbors
         self.contamination = contamination or config.lof_contamination
-        self.model = LocalOutlierFactor(
-            n_neighbors=self.n_neighbors, contamination=self.contamination
-        )
+        self.model = LocalOutlierFactor(n_neighbors=self.n_neighbors, contamination=self.contamination)
 
     def fit(self, data: pd.DataFrame) -> "LOFDetector":
         """LOF doesn't require separate fitting - it's transductive."""
@@ -586,9 +580,7 @@ class OutlierDetectionPipeline:
             else:
                 logger.warning(f"Unknown detection method: {method}")
 
-    def fit(
-        self, data: pd.DataFrame, recipe_column: str = None
-    ) -> "OutlierDetectionPipeline":
+    def fit(self, data: pd.DataFrame, recipe_column: str = None) -> "OutlierDetectionPipeline":
         """Fit all detection algorithms."""
         logger.info(f"Fitting {len(self.detectors)} detection algorithms...")
 
@@ -617,14 +609,10 @@ class OutlierDetectionPipeline:
             if pd.isna(recipe):
                 continue
 
-            recipe_data = data[data[recipe_column] == recipe].drop(
-                columns=[recipe_column]
-            )
+            recipe_data = data[data[recipe_column] == recipe].drop(columns=[recipe_column])
 
             if len(recipe_data) < 10:  # Minimum samples for stable fitting
-                logger.warning(
-                    f"Insufficient data for recipe {recipe} ({len(recipe_data)} samples)"
-                )
+                logger.warning(f"Insufficient data for recipe {recipe} ({len(recipe_data)} samples)")
                 continue
 
             self.recipe_detectors[recipe] = {}
@@ -648,11 +636,7 @@ class OutlierDetectionPipeline:
 
         start_time = datetime.now()
 
-        if (
-            self.config.recipe_aware
-            and recipe_column
-            and hasattr(self, "recipe_detectors")
-        ):
+        if self.config.recipe_aware and recipe_column and hasattr(self, "recipe_detectors"):
             self._predict_recipe_aware(data, recipe_column)
         else:
             for name, detector in self.detectors.items():
@@ -668,9 +652,7 @@ class OutlierDetectionPipeline:
                         "predict_time": detector.predict_time,
                     }
 
-                    logger.info(
-                        f"✅ {name}: {outliers.sum()} outliers ({outliers.sum()/len(data)*100:.2f}%)"
-                    )
+                    logger.info(f"✅ {name}: {outliers.sum()} outliers ({outliers.sum()/len(data)*100:.2f}%)")
 
                 except Exception as e:
                     logger.error(f"❌ Failed to predict with {name}: {e}")
@@ -722,9 +704,7 @@ class OutlierDetectionPipeline:
         for method in self.results:
             outliers = self.results[method]["outliers"]
             self.results[method]["n_outliers"] = outliers.sum()
-            self.results[method]["outlier_percentage"] = (
-                outliers.sum() / len(data) * 100
-            )
+            self.results[method]["outlier_percentage"] = outliers.sum() / len(data) * 100
 
     def _calculate_consensus(self):
         """Calculate consensus outliers across all methods."""
@@ -778,9 +758,7 @@ class OutlierDetectionPipeline:
                 physics_outliers = rule_func(data)
                 if physics_outliers.sum() > 0:
                     validated_outliers = validated_outliers | physics_outliers
-                    logger.info(
-                        f"Physics rule '{rule_name}' identified {physics_outliers.sum()} additional outliers"
-                    )
+                    logger.info(f"Physics rule '{rule_name}' identified {physics_outliers.sum()} additional outliers")
             except Exception as e:
                 logger.warning(f"Failed to apply physics rule '{rule_name}': {e}")
 
@@ -805,9 +783,7 @@ class OutlierDetectionPipeline:
 
             if flow_cols and pressure_cols:
                 flow_high = data[flow_cols[0]] > data[flow_cols[0]].quantile(0.9)
-                pressure_low = data[pressure_cols[0]] < data[pressure_cols[0]].quantile(
-                    0.1
-                )
+                pressure_low = data[pressure_cols[0]] < data[pressure_cols[0]].quantile(0.1)
                 return flow_high & pressure_low
             return np.zeros(len(data), dtype=bool)
 
@@ -855,9 +831,7 @@ class OutlierDetectionPipeline:
         from datetime import datetime
 
         # Get consensus outliers
-        consensus_outliers = (
-            self.consensus_results["outliers"] if self.consensus_results else None
-        )
+        consensus_outliers = self.consensus_results["outliers"] if self.consensus_results else None
 
         html = f"""
         <!DOCTYPE html>
@@ -1018,9 +992,7 @@ class StreamingOutlierDetector:
             # Machine learning models
             if len(data) >= 200:  # Enough data for ML models
                 iso_forest = IsolationForest(contamination=0.1, random_state=42)
-                self.models["isolation_forest"] = iso_forest.fit(
-                    data.fillna(data.median())
-                )
+                self.models["isolation_forest"] = iso_forest.fit(data.fillna(data.median()))
 
         except Exception as e:
             logger.warning(f"Failed to retrain models: {e}")
@@ -1036,22 +1008,14 @@ class StreamingOutlierDetector:
             # Z-score detection
             if "zscore" in self.models:
                 stats_model = self.models["zscore"]
-                z_scores = np.abs(
-                    (current_data - stats_model["mean"]) / stats_model["std"]
-                )
-                outlier_flags["zscore"] = (
-                    z_scores > self.config.z_score_threshold
-                ).any()
+                z_scores = np.abs((current_data - stats_model["mean"]) / stats_model["std"])
+                outlier_flags["zscore"] = (z_scores > self.config.z_score_threshold).any()
 
             # Modified Z-score detection
             if "modified_zscore" in self.models:
                 stats_model = self.models["modified_zscore"]
-                mod_z_scores = 0.6745 * np.abs(
-                    (current_data - stats_model["median"]) / stats_model["mad"]
-                )
-                outlier_flags["modified_zscore"] = (
-                    mod_z_scores > self.config.modified_z_threshold
-                ).any()
+                mod_z_scores = 0.6745 * np.abs((current_data - stats_model["median"]) / stats_model["mad"])
+                outlier_flags["modified_zscore"] = (mod_z_scores > self.config.modified_z_threshold).any()
 
             # Isolation Forest detection
             if "isolation_forest" in self.models:
@@ -1065,9 +1029,7 @@ class StreamingOutlierDetector:
                 method_votes = list(outlier_flags.values())
                 consensus_score = sum(method_votes) / len(method_votes)
                 outlier_flags["consensus_score"] = consensus_score
-                outlier_flags["is_consensus_outlier"] = (
-                    consensus_score >= self.config.consensus_threshold
-                )
+                outlier_flags["is_consensus_outlier"] = consensus_score >= self.config.consensus_threshold
 
         except Exception as e:
             logger.error(f"Error in outlier detection: {e}")
@@ -1075,9 +1037,7 @@ class StreamingOutlierDetector:
 
         return outlier_flags
 
-    def process_stream(
-        self, data_point: pd.Series, timestamp: datetime = None, context: Dict = None
-    ) -> Optional[Dict]:
+    def process_stream(self, data_point: pd.Series, timestamp: datetime = None, context: Dict = None) -> Optional[Dict]:
         """Process a single streaming data point and generate alerts if needed."""
         if timestamp is None:
             timestamp = datetime.now()
@@ -1086,9 +1046,7 @@ class StreamingOutlierDetector:
         outlier_results = self.detect_outliers(data_point)
 
         # Generate alert if needed
-        alert = self.alert_system.process_outlier_detection(
-            outlier_results, timestamp, context
-        )
+        alert = self.alert_system.process_outlier_detection(outlier_results, timestamp, context)
 
         return {
             "timestamp": timestamp,
@@ -1128,31 +1086,21 @@ class OutlierAlertSystem:
                 "timestamp": timestamp,
                 "level": alert_level,
                 "consensus_score": consensus_score,
-                "outlier_methods": {
-                    k: v
-                    for k, v in outlier_results.items()
-                    if isinstance(v, bool) and v
-                },
+                "outlier_methods": {k: v for k, v in outlier_results.items() if isinstance(v, bool) and v},
                 "context": context or {},
-                "recommendation": self._generate_recommendation(
-                    alert_level, consensus_score
-                ),
+                "recommendation": self._generate_recommendation(alert_level, consensus_score),
             }
 
             self.alert_history.append(alert)
 
             # Log alert
-            logger.warning(
-                f"🚨 {alert_level} OUTLIER ALERT - Consensus: {consensus_score:.2f}"
-            )
+            logger.warning(f"🚨 {alert_level} OUTLIER ALERT - Consensus: {consensus_score:.2f}")
 
             return alert
 
         return None
 
-    def _generate_recommendation(
-        self, alert_level: str, consensus_score: float
-    ) -> Dict:
+    def _generate_recommendation(self, alert_level: str, consensus_score: float) -> Dict:
         """Generate action recommendations based on alert level."""
         if alert_level == "CRITICAL":
             return {
@@ -1221,9 +1169,7 @@ def create_synthetic_secom_data(
     for col in range(n_features):
         n_missing = int(np.random.poisson(missing_rate * n_samples))
         if n_missing > 0:
-            missing_indices = np.random.choice(
-                n_samples, min(n_missing, n_samples), replace=False
-            )
+            missing_indices = np.random.choice(n_samples, min(n_missing, n_samples), replace=False)
             data[missing_indices, col] = np.nan
 
     # Add outliers
@@ -1233,9 +1179,7 @@ def create_synthetic_secom_data(
     for idx in outlier_indices:
         # Add outliers to random subset of features
         n_features_affected = np.random.randint(1, min(10, n_features))
-        features_affected = np.random.choice(
-            n_features, n_features_affected, replace=False
-        )
+        features_affected = np.random.choice(n_features, n_features_affected, replace=False)
 
         for feat in features_affected:
             # Extreme values (5-10 standard deviations)
@@ -1262,9 +1206,7 @@ def create_synthetic_secom_data(
 
 def main():
     """Main function for command-line interface."""
-    parser = argparse.ArgumentParser(
-        description="Outlier Detection Pipeline for Semiconductor Manufacturing"
-    )
+    parser = argparse.ArgumentParser(description="Outlier Detection Pipeline for Semiconductor Manufacturing")
 
     parser.add_argument("--input", type=str, help="Input data file path")
     parser.add_argument("--output", type=str, help="Output report file path")
@@ -1288,15 +1230,9 @@ def main():
         default=0.5,
         help="Consensus threshold for combining methods",
     )
-    parser.add_argument(
-        "--recipe-column", type=str, help="Column name for recipe information"
-    )
-    parser.add_argument(
-        "--realtime", action="store_true", help="Enable real-time streaming mode"
-    )
-    parser.add_argument(
-        "--synthetic", action="store_true", help="Use synthetic data for testing"
-    )
+    parser.add_argument("--recipe-column", type=str, help="Column name for recipe information")
+    parser.add_argument("--realtime", action="store_true", help="Enable real-time streaming mode")
+    parser.add_argument("--synthetic", action="store_true", help="Use synthetic data for testing")
     parser.add_argument("--verbose", action="store_true", help="Enable verbose logging")
 
     args = parser.parse_args()
@@ -1347,9 +1283,7 @@ def main():
                     streaming_detector.update_baseline(baseline_data)
 
                 # Process current point
-                if (
-                    streaming_detector.baseline_stats
-                ):  # Only after baseline is established
+                if streaming_detector.baseline_stats:  # Only after baseline is established
                     result = streaming_detector.process_stream(current_point)
 
                     if result["alert"]:
@@ -1373,9 +1307,7 @@ def main():
         pipeline = OutlierDetectionPipeline(config)
 
         # Separate features from metadata columns
-        feature_columns = [
-            col for col in data.columns if col not in ["recipe", "timestamp", "target"]
-        ]
+        feature_columns = [col for col in data.columns if col not in ["recipe", "timestamp", "target"]]
         feature_data = data[feature_columns]
 
         # Fit and predict
@@ -1385,9 +1317,7 @@ def main():
         # Apply physics validation if enabled
         if config.physics_validation:
             validated_outliers = pipeline.apply_physics_validation(feature_data)
-            logger.info(
-                f"Physics validation: {validated_outliers.sum()} final outliers"
-            )
+            logger.info(f"Physics validation: {validated_outliers.sum()} final outliers")
 
         # Generate report
         report_path = pipeline.generate_report(feature_data, args.output)
@@ -1395,15 +1325,11 @@ def main():
         # Summary
         logger.info("📊 Detection Summary:")
         for method, result in results.items():
-            logger.info(
-                f"  {method}: {result['n_outliers']} outliers ({result['outlier_percentage']:.2f}%)"
-            )
+            logger.info(f"  {method}: {result['n_outliers']} outliers ({result['outlier_percentage']:.2f}%)")
 
         if pipeline.consensus_results:
             consensus = pipeline.consensus_results
-            logger.info(
-                f"  Consensus: {consensus['n_outliers']} outliers ({consensus['outlier_percentage']:.2f}%)"
-            )
+            logger.info(f"  Consensus: {consensus['n_outliers']} outliers ({consensus['outlier_percentage']:.2f}%)")
 
         logger.info(f"✅ Report saved to: {report_path}")
 

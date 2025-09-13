@@ -51,9 +51,7 @@ import logging
 from datetime import datetime
 
 # Configure logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 # Suppress warnings for cleaner output
@@ -121,9 +119,7 @@ class ANOVAAnalyzer:
                 raise ValueError(f"Unsupported file format: {file_path.suffix}")
 
             self.data = data
-            logger.info(
-                f"Data loaded successfully: {data.shape[0]} rows, {data.shape[1]} columns"
-            )
+            logger.info(f"Data loaded successfully: {data.shape[0]} rows, {data.shape[1]} columns")
             return data
 
         except Exception as e:
@@ -170,9 +166,7 @@ class ANOVAAnalyzer:
             if n_levels < 2:
                 raise ValueError(f"Factor '{factor}' must have at least 2 levels")
             if n_levels > 20:
-                logger.warning(
-                    f"Factor '{factor}' has {n_levels} levels (consider grouping)"
-                )
+                logger.warning(f"Factor '{factor}' has {n_levels} levels (consider grouping)")
 
         logger.info("Data validation passed")
         return True
@@ -227,8 +221,7 @@ class ANOVAAnalyzer:
 
             # 2. Homoscedasticity test (Levene's test)
             groups = [
-                self.data[self.data[factors[0]] == level][response].dropna()
-                for level in self.data[factors[0]].unique()
+                self.data[self.data[factors[0]] == level][response].dropna() for level in self.data[factors[0]].unique()
             ]
             levene_stat, levene_p = levene(*groups)
             assumption_results["homoscedasticity"] = {
@@ -244,11 +237,7 @@ class ANOVAAnalyzer:
                 assumption_results["independence"] = {
                     "test": "Durbin-Watson",
                     "statistic": dw_stat,
-                    "interpretation": (
-                        "No autocorrelation"
-                        if 1.5 < dw_stat < 2.5
-                        else "Possible autocorrelation"
-                    ),
+                    "interpretation": ("No autocorrelation" if 1.5 < dw_stat < 2.5 else "Possible autocorrelation"),
                 }
 
             logger.info("Assumption checking completed")
@@ -279,10 +268,7 @@ class ANOVAAnalyzer:
 
         try:
             # Basic ANOVA
-            groups = [
-                self.data[self.data[factor] == level][response].dropna()
-                for level in self.data[factor].unique()
-            ]
+            groups = [self.data[self.data[factor] == level][response].dropna() for level in self.data[factor].unique()]
 
             f_stat, p_value = f_oneway(*groups)
 
@@ -333,9 +319,7 @@ class ANOVAAnalyzer:
 
         return results
 
-    def multi_way_anova(
-        self, response: str, factors: List[str], include_interactions: bool = True
-    ) -> Dict:
+    def multi_way_anova(self, response: str, factors: List[str], include_interactions: bool = True) -> Dict:
         """
         Perform multi-way ANOVA analysis.
 
@@ -395,8 +379,7 @@ class ANOVAAnalyzer:
                         interaction_effects[idx] = {
                             "eta_squared": ss_interaction / ss_total,
                             "p_value": anova_table.loc[idx, "PR(>F)"],
-                            "significant": anova_table.loc[idx, "PR(>F)"]
-                            < self.config["alpha"],
+                            "significant": anova_table.loc[idx, "PR(>F)"] < self.config["alpha"],
                         }
 
             results = {
@@ -482,9 +465,7 @@ class ANOVAAnalyzer:
 
             # Sort effects by magnitude
             effect_magnitudes = {k: abs(v["coefficient"]) for k, v in effects.items()}
-            sorted_effects = dict(
-                sorted(effect_magnitudes.items(), key=lambda x: x[1], reverse=True)
-            )
+            sorted_effects = dict(sorted(effect_magnitudes.items(), key=lambda x: x[1], reverse=True))
 
             results = {
                 "type": "factorial_analysis",
@@ -576,9 +557,7 @@ class ANOVAAnalyzer:
                 },
             }
 
-            logger.info(
-                f"Power analysis completed: n={results['required_n_per_group']} per group"
-            )
+            logger.info(f"Power analysis completed: n={results['required_n_per_group']} per group")
             return results
 
         except Exception as e:
@@ -589,9 +568,7 @@ class ANOVAAnalyzer:
         """Perform post-hoc multiple comparisons."""
         try:
             if self.config["post_hoc"] == "tukey":
-                tukey_results = pairwise_tukeyhsd(
-                    self.data[response], self.data[factor]
-                )
+                tukey_results = pairwise_tukeyhsd(self.data[response], self.data[factor])
                 return {
                     "method": "tukey_hsd",
                     "results": str(tukey_results),
@@ -608,19 +585,14 @@ class ANOVAAnalyzer:
     def _robust_alternatives(self, response: str, factor: str) -> Dict:
         """Apply robust alternatives to ANOVA."""
         try:
-            groups = [
-                self.data[self.data[factor] == level][response].dropna()
-                for level in self.data[factor].unique()
-            ]
+            groups = [self.data[self.data[factor] == level][response].dropna() for level in self.data[factor].unique()]
 
             # Kruskal-Wallis test (non-parametric)
             kw_stat, kw_p = kruskal(*groups)
 
             # Welch's ANOVA (unequal variances)
             try:
-                welch_stat, welch_p = stats.f_oneway(
-                    *groups
-                )  # This is actually regular ANOVA
+                welch_stat, welch_p = stats.f_oneway(*groups)  # This is actually regular ANOVA
                 # For true Welch's test, we'd need additional implementation
             except:
                 welch_stat, welch_p = None, None
@@ -709,9 +681,7 @@ class ANOVAAnalyzer:
 
         # Effect size visualization
         eta_squared = results["eta_squared"]
-        axes[1, 1].bar(
-            ["Between Groups", "Within Groups"], [eta_squared, 1 - eta_squared]
-        )
+        axes[1, 1].bar(["Between Groups", "Within Groups"], [eta_squared, 1 - eta_squared])
         axes[1, 1].set_title(f"Variance Components (η² = {eta_squared:.3f})")
         axes[1, 1].set_ylabel("Proportion of Variance")
 
@@ -758,9 +728,7 @@ class ANOVAAnalyzer:
                 axes[1].tick_params(axis="x", rotation=45)
 
             plt.tight_layout()
-            plt.savefig(
-                output_path / "multi_way_anova.png", dpi=300, bbox_inches="tight"
-            )
+            plt.savefig(output_path / "multi_way_anova.png", dpi=300, bbox_inches="tight")
             plt.close()
 
     def _plot_factorial_analysis(self, output_path: Path):
@@ -778,14 +746,9 @@ class ANOVAAnalyzer:
 
             # Color code by significance
             effects_detail = results["effects"]
-            colors = [
-                "red" if effects_detail[name]["significant"] else "blue"
-                for name in effect_names
-            ]
+            colors = ["red" if effects_detail[name]["significant"] else "blue" for name in effect_names]
 
-            bars = ax.bar(
-                range(len(effect_names)), effect_values, color=colors, alpha=0.7
-            )
+            bars = ax.bar(range(len(effect_names)), effect_values, color=colors, alpha=0.7)
             ax.set_xticks(range(len(effect_names)))
             ax.set_xticklabels(effect_names, rotation=45, ha="right")
             ax.set_ylabel("|Effect Size|")
@@ -793,9 +756,7 @@ class ANOVAAnalyzer:
             ax.grid(True, alpha=0.3)
 
             plt.tight_layout()
-            plt.savefig(
-                output_path / "factorial_effects.png", dpi=300, bbox_inches="tight"
-            )
+            plt.savefig(output_path / "factorial_effects.png", dpi=300, bbox_inches="tight")
             plt.close()
 
     def generate_report(self, output_file: str = "anova_report.html"):
@@ -854,14 +815,10 @@ class ANOVAAnalyzer:
 
     def _format_results_html(self, analysis_type: str, results: Dict) -> str:
         """Format results section for HTML report."""
-        section_html = (
-            f'<div class="section"><h2>{analysis_type.replace("_", " ").title()}</h2>'
-        )
+        section_html = f'<div class="section"><h2>{analysis_type.replace("_", " ").title()}</h2>'
 
         if analysis_type == "one_way_anova":
-            significance_class = (
-                "significant" if results["significant"] else "not-significant"
-            )
+            significance_class = "significant" if results["significant"] else "not-significant"
             section_html += f"""
             <p>Factor: <strong>{results['factor']}</strong></p>
             <p>Response: <strong>{results['response']}</strong></p>
@@ -886,11 +843,7 @@ class ANOVAAnalyzer:
                 if key == "model":
                     # Extract key model information
                     clean_results[key] = {
-                        "rsquared": (
-                            float(value.rsquared)
-                            if hasattr(value, "rsquared")
-                            else None
-                        ),
+                        "rsquared": (float(value.rsquared) if hasattr(value, "rsquared") else None),
                         "aic": float(value.aic) if hasattr(value, "aic") else None,
                         "bic": float(value.bic) if hasattr(value, "bic") else None,
                     }
@@ -930,9 +883,7 @@ class ANOVAAnalyzer:
                         f.write(f"Response: {results['response']}\n")
                         f.write(f"F-statistic: {results['f_statistic']:.4f}\n")
                         f.write(f"p-value: {results['p_value']:.6f}\n")
-                        f.write(
-                            f"Significant: {'Yes' if results['significant'] else 'No'}\n"
-                        )
+                        f.write(f"Significant: {'Yes' if results['significant'] else 'No'}\n")
                         f.write(
                             f"Effect size: {results['eta_squared']:.4f} ({results['effect_size_interpretation']})\n"
                         )
@@ -940,9 +891,7 @@ class ANOVAAnalyzer:
 
 def main():
     """Main function for command-line interface."""
-    parser = argparse.ArgumentParser(
-        description="ANOVA Analysis Pipeline for Semiconductor Manufacturing"
-    )
+    parser = argparse.ArgumentParser(description="ANOVA Analysis Pipeline for Semiconductor Manufacturing")
 
     # Input/output arguments
     parser.add_argument(
@@ -962,9 +911,7 @@ def main():
     parser.add_argument("--config", "-c", type=str, help="Configuration file (YAML)")
 
     # Analysis arguments
-    parser.add_argument(
-        "--response", "-r", type=str, required=True, help="Response variable name"
-    )
+    parser.add_argument("--response", "-r", type=str, required=True, help="Response variable name")
     parser.add_argument(
         "--factors",
         "-f",
@@ -982,9 +929,7 @@ def main():
     )
 
     # Statistical parameters
-    parser.add_argument(
-        "--alpha", type=float, default=0.05, help="Significance level (default: 0.05)"
-    )
+    parser.add_argument("--alpha", type=float, default=0.05, help="Significance level (default: 0.05)")
     parser.add_argument(
         "--power",
         type=float,
@@ -993,18 +938,14 @@ def main():
     )
 
     # Power analysis arguments
-    parser.add_argument(
-        "--power-analysis", action="store_true", help="Perform power analysis"
-    )
+    parser.add_argument("--power-analysis", action="store_true", help="Perform power analysis")
     parser.add_argument(
         "--effect-size",
         type=float,
         default=0.25,
         help="Expected effect size for power analysis",
     )
-    parser.add_argument(
-        "--groups", type=int, help="Number of groups for power analysis"
-    )
+    parser.add_argument("--groups", type=int, help="Number of groups for power analysis")
 
     # Visualization and reporting
     parser.add_argument("--no-plots", action="store_true", help="Skip plot generation")
@@ -1048,9 +989,7 @@ def main():
             n_groups = args.groups or len(analyzer.data[factors[0]].unique())
             power_results = analyzer.power_analysis(args.effect_size, n_groups)
             print(f"Power Analysis Results:")
-            print(
-                f"Required sample size per group: {power_results['required_n_per_group']}"
-            )
+            print(f"Required sample size per group: {power_results['required_n_per_group']}")
             print(f"Total required sample size: {power_results['total_required_n']}")
 
         # Perform analyses

@@ -205,15 +205,15 @@ def validate_process_window(measurements):
 def compute_manufacturing_metrics(y_true, y_pred, spec_limits):
     """Compute semiconductor-specific metrics."""
     # Prediction Within Spec (PWS)
-    pws = np.mean((y_pred >= spec_limits['low']) & 
+    pws = np.mean((y_pred >= spec_limits['low']) &
                   (y_pred <= spec_limits['high']))
-    
+
     # Estimated financial loss from prediction errors
     tolerance = spec_limits.get('tolerance', 2.0)
     cost_per_unit = spec_limits.get('cost_per_unit', 1.0)
     loss_components = np.maximum(0, np.abs(y_true - y_pred) - tolerance)
     estimated_loss = np.sum(loss_components) * cost_per_unit
-    
+
     return {
         'PWS': pws,
         'Estimated_Loss': estimated_loss,

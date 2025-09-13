@@ -74,9 +74,7 @@ class TestTimeSeriesPipeline(unittest.TestCase):
 
     def test_fit_with_exogenous(self):
         """Test fitting with exogenous variables."""
-        pipeline = TimeSeriesPipeline(
-            exog_features=["temperature", "pressure"], auto_arima=False
-        )
+        pipeline = TimeSeriesPipeline(exog_features=["temperature", "pressure"], auto_arima=False)
         pipeline.fit(self.df, TARGET_COLUMN)
 
         self.assertIsNotNone(pipeline.fitted_model)
@@ -120,9 +118,7 @@ class TestTimeSeriesPipeline(unittest.TestCase):
         """Test model evaluation."""
         self.pipeline.fit(self.df, TARGET_COLUMN)
 
-        metrics = self.pipeline.evaluate(
-            self.df, TARGET_COLUMN, test_size=10, tolerance=1.0, cost_per_unit=2.0
-        )
+        metrics = self.pipeline.evaluate(self.df, TARGET_COLUMN, test_size=10, tolerance=1.0, cost_per_unit=2.0)
 
         # Check required metrics are present
         required_metrics = [
@@ -170,9 +166,7 @@ class TestTimeSeriesPipeline(unittest.TestCase):
             loaded_pred = loaded_pipeline.predict(horizon=3, return_conf_int=False)
 
             # Predictions should be very close
-            np.testing.assert_array_almost_equal(
-                original_pred["forecasts"], loaded_pred["forecasts"], decimal=5
-            )
+            np.testing.assert_array_almost_equal(original_pred["forecasts"], loaded_pred["forecasts"], decimal=5)
 
         finally:
             if temp_path.exists():

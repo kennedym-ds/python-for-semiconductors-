@@ -80,9 +80,7 @@ class TestingQAPipeline:
         self.metadata = None
         self.last_results = None
 
-    def run_tests(
-        self, test_suite: str = "all", target_modules: Optional[List[str]] = None
-    ) -> QAMetrics:
+    def run_tests(self, test_suite: str = "all", target_modules: Optional[List[str]] = None) -> QAMetrics:
         """Execute test suite with coverage measurement.
 
         Args:
@@ -126,18 +124,13 @@ class TestingQAPipeline:
 
             # Calculate metrics
             execution_time = time.time() - start_time
-            pass_rate = (
-                (test_results["total"] - test_results["failed"])
-                / max(test_results["total"], 1)
-            ) * 100
+            pass_rate = ((test_results["total"] - test_results["failed"]) / max(test_results["total"], 1)) * 100
 
             metrics = QAMetrics(
                 test_pass_rate=pass_rate,
                 coverage_percentage=test_results.get("coverage", 0.0),
                 lint_score=100.0,  # Will be updated by lint check
-                performance_score=max(
-                    0, 100 - (execution_time / self.performance_threshold) * 100
-                ),
+                performance_score=max(0, 100 - (execution_time / self.performance_threshold) * 100),
                 total_tests=test_results["total"],
                 failed_tests=test_results["failed"],
                 execution_time=execution_time,
@@ -161,9 +154,7 @@ class TestingQAPipeline:
                 timestamp=pd.Timestamp.now().isoformat(),
             )
 
-    def check_code_quality(
-        self, target_path: str = ".", fix_issues: bool = False
-    ) -> Dict[str, Any]:
+    def check_code_quality(self, target_path: str = ".", fix_issues: bool = False) -> Dict[str, Any]:
         """Run code quality checks using flake8 and black.
 
         Args:
@@ -308,12 +299,8 @@ class TestingQAPipeline:
             results["benchmarks"][operation] = timing
 
         # Calculate overall performance score
-        total_time = sum(
-            b.get("execution_time", 0) for b in results["benchmarks"].values()
-        )
-        results["overall_score"] = max(
-            0, 100 - (total_time / self.performance_threshold) * 100
-        )
+        total_time = sum(b.get("execution_time", 0) for b in results["benchmarks"].values())
+        results["overall_score"] = max(0, 100 - (total_time / self.performance_threshold) * 100)
 
         return results
 
@@ -357,9 +344,7 @@ class TestingQAPipeline:
             result = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
 
             # Parse results
-            return self._parse_pytest_output(
-                result.stdout, result.stderr, result.returncode
-            )
+            return self._parse_pytest_output(result.stdout, result.stderr, result.returncode)
 
         except subprocess.TimeoutExpired:
             return {
@@ -371,9 +356,7 @@ class TestingQAPipeline:
         except Exception as e:
             return {"total": 0, "failed": 1, "coverage": 0.0, "error": str(e)}
 
-    def _parse_pytest_output(
-        self, stdout: str, stderr: str, returncode: int
-    ) -> Dict[str, Any]:
+    def _parse_pytest_output(self, stdout: str, stderr: str, returncode: int) -> Dict[str, Any]:
         """Parse pytest output to extract test metrics."""
         results = {"total": 0, "failed": 0, "coverage": 0.0}
 
@@ -404,9 +387,7 @@ class TestingQAPipeline:
 
                 with open(coverage_file) as f:
                     coverage_data = json.load(f)
-                    results["coverage"] = coverage_data.get("totals", {}).get(
-                        "percent_covered", 0.0
-                    )
+                    results["coverage"] = coverage_data.get("totals", {}).get("percent_covered", 0.0)
         except Exception:
             pass  # Coverage data not available
 
@@ -511,9 +492,7 @@ class TestingQAPipeline:
             data = self._generate_test_data()
             X = data.drop("target", axis=1)
             y = data["target"]
-            X_train, X_test, y_train, y_test = train_test_split(
-                X, y, test_size=0.2, random_state=RANDOM_SEED
-            )
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=RANDOM_SEED)
 
             model = Ridge(random_state=RANDOM_SEED)
             model.fit(X_train, y_train)
@@ -648,9 +627,7 @@ def action_evaluate(args):
 
     # Code quality check
     if args.check_type in ["lint", "all"]:
-        results["code_quality"] = pipeline.check_code_quality(
-            target_path=args.target_path, fix_issues=args.fix_issues
-        )
+        results["code_quality"] = pipeline.check_code_quality(target_path=args.target_path, fix_issues=args.fix_issues)
 
     # Dataset path validation
     if args.check_type in ["paths", "all"]:
@@ -671,10 +648,7 @@ def action_evaluate(args):
         "checks": results,
         "summary": {
             "total_checks": len(results),
-            "all_passed": all(
-                r.get("all_passed", r.get("overall_score", 0) > 70)
-                for r in results.values()
-            ),
+            "all_passed": all(r.get("all_passed", r.get("overall_score", 0) > 70) for r in results.values()),
         },
     }
 
@@ -689,9 +663,7 @@ def action_predict(args):
         # Validate specific module
         try:
             module = importlib.import_module(args.target_module)
-            module_path = (
-                Path(module.__file__).parent if hasattr(module, "__file__") else None
-            )
+            module_path = Path(module.__file__).parent if hasattr(module, "__file__") else None
 
             validation_results = {
                 "module_import": {"status": "success", "module": args.target_module},
@@ -716,11 +688,7 @@ def action_predict(args):
         "status": "predicted",
         "target": args.target_module or "system",
         "health_check": validation_results,
-        "recommendation": (
-            "healthy"
-            if validation_results.get("all_passed", True)
-            else "needs_attention"
-        ),
+        "recommendation": ("healthy" if validation_results.get("all_passed", True) else "needs_attention"),
     }
 
     print(json.dumps(result, indent=2))
@@ -730,9 +698,7 @@ def action_predict(args):
 
 
 def build_parser():
-    parser = argparse.ArgumentParser(
-        description="Module 10.2 Testing & QA Pipeline CLI"
-    )
+    parser = argparse.ArgumentParser(description="Module 10.2 Testing & QA Pipeline CLI")
     sub = parser.add_subparsers(dest="command", required=True)
 
     # Train subcommand (setup and run tests)
@@ -750,9 +716,7 @@ def build_parser():
         default=80.0,
         help="Minimum coverage percentage required",
     )
-    p_train.add_argument(
-        "--lint-threshold", type=float, default=90.0, help="Minimum lint score required"
-    )
+    p_train.add_argument("--lint-threshold", type=float, default=90.0, help="Minimum lint score required")
     p_train.add_argument(
         "--performance-threshold",
         type=float,
@@ -771,19 +735,13 @@ def build_parser():
         choices=["lint", "paths", "smoke", "performance", "all"],
         help="Type of quality check to run",
     )
-    p_eval.add_argument(
-        "--target-path", default=".", help="Path to check for code quality"
-    )
+    p_eval.add_argument("--target-path", default=".", help="Path to check for code quality")
     p_eval.add_argument("--target-modules", nargs="+", help="Specific modules to check")
-    p_eval.add_argument(
-        "--fix-issues", action="store_true", help="Automatically fix formatting issues"
-    )
+    p_eval.add_argument("--fix-issues", action="store_true", help="Automatically fix formatting issues")
     p_eval.set_defaults(func=action_evaluate)
 
     # Predict subcommand (validate module health)
-    p_pred = sub.add_parser(
-        "predict", help="Validate health of specific module or system"
-    )
+    p_pred = sub.add_parser("predict", help="Validate health of specific module or system")
     p_pred.add_argument(
         "--target-module",
         help='Specific module to validate (e.g., "modules.foundation.module_3")',

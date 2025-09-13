@@ -67,9 +67,7 @@ class WaferAnalyzer:
         self.analysis_history = []
         logger.info("WaferAnalyzer initialized")
 
-    def load_wafer_data(
-        self, file_path: Union[str, Path], format_type: str = "auto"
-    ) -> np.ndarray:
+    def load_wafer_data(self, file_path: Union[str, Path], format_type: str = "auto") -> np.ndarray:
         """
         Load wafer map data from various file formats.
 
@@ -116,9 +114,7 @@ class WaferAnalyzer:
             logger.error(f"Failed to load wafer data: {e}")
             raise
 
-    def calculate_basic_metrics(
-        self, wafer_data: np.ndarray, wafer_id: str = "Unknown"
-    ) -> WaferMetrics:
+    def calculate_basic_metrics(self, wafer_data: np.ndarray, wafer_id: str = "Unknown") -> WaferMetrics:
         """
         Calculate basic wafer metrics.
 
@@ -170,9 +166,7 @@ class WaferAnalyzer:
 
         # Define center region (inner 40% of wafer)
         size = min(h, w) // 5
-        center_region = wafer_data[
-            center_h - size : center_h + size, center_w - size : center_w + size
-        ]
+        center_region = wafer_data[center_h - size : center_h + size, center_w - size : center_w + size]
 
         if center_region.size == 0:
             return 0.0
@@ -259,9 +253,7 @@ class WaferAnalyzer:
         max_radius = min(h, w) // 2
 
         for radius in range(5, max_radius, 5):
-            mask = self._create_ring_mask(
-                wafer_data.shape, center_h, center_w, radius - 2, radius + 2
-            )
+            mask = self._create_ring_mask(wafer_data.shape, center_h, center_w, radius - 2, radius + 2)
             if np.any(mask):
                 ring_yield = np.mean(wafer_data[mask])
                 radial_yields.append(ring_yield)
@@ -271,10 +263,7 @@ class WaferAnalyzer:
 
         # Look for significant dips in radial yield profile
         for i in range(1, len(radial_yields) - 1):
-            if (
-                radial_yields[i - 1] - radial_yields[i] > 0.2
-                and radial_yields[i + 1] - radial_yields[i] > 0.2
-            ):
+            if radial_yields[i - 1] - radial_yields[i] > 0.2 and radial_yields[i + 1] - radial_yields[i] > 0.2:
                 return True
 
         return False
@@ -356,13 +345,9 @@ class WaferAnalyzer:
 
         for radius in range(0, max_radius, 3):
             if radius == 0:
-                mask = (np.arange(h)[:, None] - center_h) ** 2 + (
-                    np.arange(w) - center_w
-                ) ** 2 <= 4
+                mask = (np.arange(h)[:, None] - center_h) ** 2 + (np.arange(w) - center_w) ** 2 <= 4
             else:
-                mask = self._create_ring_mask(
-                    wafer_data.shape, center_h, center_w, radius - 2, radius + 2
-                )
+                mask = self._create_ring_mask(wafer_data.shape, center_h, center_w, radius - 2, radius + 2)
 
             if np.any(mask):
                 radii.append(radius)
@@ -445,11 +430,7 @@ class WaferAnalyzer:
                     (
                         "red"
                         if "loss" in p.lower() or "low" in p.lower()
-                        else (
-                            "green"
-                            if "excellent" in p.lower() or "normal" in p.lower()
-                            else "orange"
-                        )
+                        else ("green" if "excellent" in p.lower() or "normal" in p.lower() else "orange")
                     )
                     for p in display_patterns
                 ],
@@ -505,9 +486,7 @@ Analysis Time: {metrics.timestamp.split('T')[1][:8]}
         ax.axis("off")
         ax.set_title("Statistics Summary")
 
-    def export_results(
-        self, metrics: WaferMetrics, output_path: str, format_type: str = "json"
-    ) -> None:
+    def export_results(self, metrics: WaferMetrics, output_path: str, format_type: str = "json") -> None:
         """
         Export analysis results to file.
 
@@ -571,9 +550,7 @@ Analysis Time: {metrics.timestamp.split('T')[1][:8]}
                     f.write(f"Quadrant Analysis:\n")
                     for quad, yield_val in metrics.quadrant_yields.items():
                         f.write(f"  {quad}: {yield_val:.2f}%\n")
-                    f.write(
-                        f"\nFailure Patterns: {', '.join(metrics.failure_patterns)}\n"
-                    )
+                    f.write(f"\nFailure Patterns: {', '.join(metrics.failure_patterns)}\n")
 
             logger.info(f"Results exported to {output_path}")
 
@@ -587,24 +564,14 @@ def create_sample_wafer_data(size: int = 50, yield_target: float = 0.85) -> np.n
     np.random.seed(42)
 
     # Base random data
-    wafer_data = np.random.choice(
-        [0, 1], size=(size, size), p=[1 - yield_target, yield_target]
-    )
+    wafer_data = np.random.choice([0, 1], size=(size, size), p=[1 - yield_target, yield_target])
 
     # Add some edge effects
     edge_width = 3
-    wafer_data[:edge_width, :] = np.random.choice(
-        [0, 1], size=(edge_width, size), p=[0.3, 0.7]
-    )
-    wafer_data[-edge_width:, :] = np.random.choice(
-        [0, 1], size=(edge_width, size), p=[0.3, 0.7]
-    )
-    wafer_data[:, :edge_width] = np.random.choice(
-        [0, 1], size=(size, edge_width), p=[0.3, 0.7]
-    )
-    wafer_data[:, -edge_width:] = np.random.choice(
-        [0, 1], size=(size, edge_width), p=[0.3, 0.7]
-    )
+    wafer_data[:edge_width, :] = np.random.choice([0, 1], size=(edge_width, size), p=[0.3, 0.7])
+    wafer_data[-edge_width:, :] = np.random.choice([0, 1], size=(edge_width, size), p=[0.3, 0.7])
+    wafer_data[:, :edge_width] = np.random.choice([0, 1], size=(size, edge_width), p=[0.3, 0.7])
+    wafer_data[:, -edge_width:] = np.random.choice([0, 1], size=(size, edge_width), p=[0.3, 0.7])
 
     return wafer_data
 
@@ -614,9 +581,7 @@ def main():
     parser = argparse.ArgumentParser(description="Wafer Analysis Tool")
 
     parser.add_argument("--input", "-i", type=str, help="Input wafer data file")
-    parser.add_argument(
-        "--wafer-id", "-w", type=str, default="Unknown", help="Wafer identifier"
-    )
+    parser.add_argument("--wafer-id", "-w", type=str, default="Unknown", help="Wafer identifier")
     parser.add_argument(
         "--format",
         "-f",
@@ -634,12 +599,8 @@ def main():
         help="Output format",
     )
     parser.add_argument("--plot", "-p", type=str, help="Save plot to file")
-    parser.add_argument(
-        "--sample", "-s", action="store_true", help="Use sample data for demonstration"
-    )
-    parser.add_argument(
-        "--edge-width", type=int, default=5, help="Edge region width for analysis"
-    )
+    parser.add_argument("--sample", "-s", action="store_true", help="Use sample data for demonstration")
+    parser.add_argument("--edge-width", type=int, default=5, help="Edge region width for analysis")
 
     args = parser.parse_args()
 

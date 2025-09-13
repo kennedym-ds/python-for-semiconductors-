@@ -129,9 +129,7 @@ def compute_expected_relative_datasets_path(from_dir: Path, repo_root: Path) -> 
     return Path(rel).as_posix()
 
 
-def scan_lines_for_issues(
-    file_path: Path, lines: List[str], repo_root: Path
-) -> List[Issue]:
+def scan_lines_for_issues(file_path: Path, lines: List[str], repo_root: Path) -> List[Issue]:
     issues: List[Issue] = []
 
     # Patterns
@@ -148,9 +146,7 @@ def scan_lines_for_issues(
         try:
             # Determine if it's under module-2 or module-3 foundation
             parts = [p.lower() for p in file_path.parts]
-            if "modules" in parts and "foundation" in parts and (
-                "module-2" in parts or "module-3" in parts
-            ):
+            if "modules" in parts and "foundation" in parts and ("module-2" in parts or "module-3" in parts):
                 requires_data_dir_rule = True
         except Exception:
             requires_data_dir_rule = False
@@ -171,11 +167,7 @@ def scan_lines_for_issues(
                 severity = "warning"
             # Tests and documentation reproducibility modules may intentionally include anti-patterns
             fp = str(file_path.as_posix())
-            if (
-                "test_" in file_path.name
-                or "/tests/" in fp
-                or "modules/project-dev/module-10/" in fp
-            ):
+            if "test_" in file_path.name or "/tests/" in fp or "modules/project-dev/module-10/" in fp:
                 severity = "warning"
             # Regex definition lines (indicative of validators) should not be treated as errors
             if re.search(r"r\"datasets\\/", text) or ".*\\.\\w+" in text:
@@ -201,11 +193,7 @@ def scan_lines_for_issues(
             if file_path.suffix.lower() == ".md":
                 severity = "warning"
             fp = str(file_path.as_posix())
-            if (
-                "test_" in file_path.name
-                or "/tests/" in fp
-                or "modules/project-dev/module-10/" in fp
-            ):
+            if "test_" in file_path.name or "/tests/" in fp or "modules/project-dev/module-10/" in fp:
                 severity = "warning"
             issues.append(
                 Issue(
@@ -224,11 +212,7 @@ def scan_lines_for_issues(
     # Notebook-specific rule validation
     if requires_data_dir_rule:
         # Search for DATA_DIR assignment and .resolve()
-        data_dir_lines = [
-            (i, l)
-            for i, l in enumerate(lines, start=1)
-            if "DATA_DIR" in l and "Path(" in l
-        ]
+        data_dir_lines = [(i, l) for i, l in enumerate(lines, start=1) if "DATA_DIR" in l and "Path(" in l]
         if not data_dir_lines:
             issues.append(
                 Issue(
@@ -236,10 +220,7 @@ def scan_lines_for_issues(
                     line=1,
                     kind="warning",
                     rule="notebook/data-dir-missing",
-                    message=(
-                        "Expected DATA_DIR = Path('../../../datasets').resolve() "
-                        "in Module 2/3 notebooks."
-                    ),
+                    message=("Expected DATA_DIR = Path('../../../datasets').resolve() " "in Module 2/3 notebooks."),
                     snippet="",
                 )
             )
@@ -256,9 +237,7 @@ def scan_lines_for_issues(
                             line=ln,
                             kind="warning",
                             rule="notebook/data-dir-no-resolve",
-                            message=(
-                                "DATA_DIR should use Path(...).resolve() to form an absolute path."
-                            ),
+                            message=("DATA_DIR should use Path(...).resolve() to form an absolute path."),
                             snippet=l.strip()[:240],
                         )
                     )
@@ -272,10 +251,7 @@ def scan_lines_for_issues(
                         line=data_dir_lines[0][0],
                         kind="warning",
                         rule="notebook/data-dir-relative-incorrect",
-                        message=(
-                            "DATA_DIR relative path does not match expected: "
-                            f"'{expected_rel}'."
-                        ),
+                        message=("DATA_DIR relative path does not match expected: " f"'{expected_rel}'."),
                         snippet=data_dir_lines[0][1].strip()[:240],
                     )
                 )
@@ -283,9 +259,7 @@ def scan_lines_for_issues(
     return issues
 
 
-def scan_repository(
-    repo_root: Path, include_dirs: Sequence[str], exts: Sequence[str]
-) -> Report:
+def scan_repository(repo_root: Path, include_dirs: Sequence[str], exts: Sequence[str]) -> Report:
     issues: List[Issue] = []
     scanned = 0
 
@@ -357,9 +331,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         print(f"Scanned files: {report.scanned_files}")
         print(f"Issues: {len(report.issues)}\n")
         for i in report.issues:
-            print(
-                f"[{i.kind.upper()}] {i.rule} - {i.file}:{i.line}\n  {i.message}\n  > {i.snippet}\n"
-            )
+            print(f"[{i.kind.upper()}] {i.rule} - {i.file}:{i.line}\n  {i.message}\n  > {i.snippet}\n")
 
     # Determine exit code
     if args.fail_on == "never":

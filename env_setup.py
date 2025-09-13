@@ -43,9 +43,7 @@ def parse_args() -> argparse.Namespace:
         argparse.Namespace: Parsed arguments including tier, python version,
             force flag, and whether to skip installation.
     """
-    parser = argparse.ArgumentParser(
-        description="Create and install a tiered virtual environment"
-    )
+    parser = argparse.ArgumentParser(description="Create and install a tiered virtual environment")
     parser.add_argument(
         "--tier",
         required=True,
@@ -96,9 +94,7 @@ def resolve_python_executable(version: str | None) -> str:
                 return cand
         except Exception:
             continue
-    raise RuntimeError(
-        f"Could not find a working python for version {version}. Ensure it is installed and on PATH."
-    )
+    raise RuntimeError(f"Could not find a working python for version {version}. Ensure it is installed and on PATH.")
 
 
 def create_virtualenv(python_exec: str, venv_dir: Path, force: bool) -> None:

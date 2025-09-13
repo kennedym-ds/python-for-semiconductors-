@@ -35,7 +35,7 @@ A dataset of steel plates' faults, classified into 7 different types. The goal w
 ## Citation
 
 ```
-Buscema, M., Terzi, S., & Tastle, W. (2010). Steel Plates Faults [Dataset]. 
+Buscema, M., Terzi, S., & Tastle, W. (2010). Steel Plates Faults [Dataset].
 UCI Machine Learning Repository. https://doi.org/10.24432/C5J88N
 ```
 

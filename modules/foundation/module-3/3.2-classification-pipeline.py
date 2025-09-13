@@ -86,22 +86,14 @@ except Exception:  # pragma: no cover
 # ---------------- Synthetic Data Generator ---------------- #
 
 
-def generate_synthetic_events(
-    n: int = 1200, minority_frac: float = 0.08, seed: int = RANDOM_SEED
-) -> pd.DataFrame:
+def generate_synthetic_events(n: int = 1200, minority_frac: float = 0.08, seed: int = RANDOM_SEED) -> pd.DataFrame:
     rng = np.random.default_rng(seed)
     temp = rng.normal(450, 15, n)
     pressure = rng.normal(2.5, 0.3, n)
     flow = rng.normal(120, 10, n)
     time = rng.normal(60, 5, n)
     interaction = 0.001 * (temp - 450) * (flow - 120)
-    score = (
-        0.04 * (temp - 450)
-        - 1.2 * (pressure - 2.5) ** 2
-        + 0.03 * flow
-        + 0.15 * time
-        + interaction
-    )
+    score = 0.04 * (temp - 450) - 1.2 * (pressure - 2.5) ** 2 + 0.03 * flow + 0.15 * time + interaction
     cutoff = np.quantile(score, 1 - minority_frac)
     y = (score >= cutoff).astype(int)
     df = pd.DataFrame(
@@ -162,9 +154,7 @@ class ClassificationPipeline:
         self.smote_k_neighbors = smote_k_neighbors
         # Accept only allowed literals to satisfy static typing complaints
         if class_weight_mode not in ("balanced", "balanced_subsample", None):
-            raise ValueError(
-                "class_weight_mode must be 'balanced', 'balanced_subsample', or None"
-            )
+            raise ValueError("class_weight_mode must be 'balanced', 'balanced_subsample', or None")
         self.class_weight_mode = class_weight_mode
         self.min_precision = min_precision
         self.min_recall = min_recall
@@ -185,9 +175,7 @@ class ClassificationPipeline:
             )
         if self.model_name == "linear_svm":
             # LinearSVC does not output probability; we will map decision_function through sigmoid-like scaling if needed
-            return LinearSVC(
-                class_weight=self.class_weight_mode, C=self.C, random_state=RANDOM_SEED
-            )
+            return LinearSVC(class_weight=self.class_weight_mode, C=self.C, random_state=RANDOM_SEED)
         if self.model_name == "tree":
             return DecisionTreeClassifier(
                 max_depth=self.max_depth,
@@ -203,9 +191,7 @@ class ClassificationPipeline:
                 n_jobs=-1,
             )
         if self.model_name == "gb":
-            return HistGradientBoostingClassifier(
-                max_depth=self.max_depth, learning_rate=0.1, random_state=RANDOM_SEED
-            )
+            return HistGradientBoostingClassifier(max_depth=self.max_depth, learning_rate=0.1, random_state=RANDOM_SEED)
         raise ValueError(f"Unsupported model '{self.model_name}'")
 
     def build(self):
@@ -289,9 +275,7 @@ class ClassificationPipeline:
         return (probs >= self.fitted_threshold).astype(int)
 
     @staticmethod
-    def compute_metrics(
-        y_true: np.ndarray, probs: np.ndarray, preds: np.ndarray
-    ) -> Dict[str, float]:
+    def compute_metrics(y_true: np.ndarray, probs: np.ndarray, preds: np.ndarray) -> Dict[str, float]:
         return {
             "roc_auc": float(roc_auc_score(y_true, probs)),
             "pr_auc": float(average_precision_score(y_true, probs)),
@@ -313,9 +297,7 @@ class ClassificationPipeline:
     def save(self, path: Path):
         if self.pipeline is None or self.metadata is None:
             raise RuntimeError("Nothing to save")
-        joblib.dump(
-            {"pipeline": self.pipeline, "metadata": asdict(self.metadata)}, path
-        )
+        joblib.dump({"pipeline": self.pipeline, "metadata": asdict(self.metadata)}, path)
 
     @staticmethod
     def load(path: Path) -> "ClassificationPipeline":
@@ -350,11 +332,7 @@ def action_train(args):
     if args.save:
         pipe.save(Path(args.save))
     meta_dict = asdict(pipe.metadata) if pipe.metadata else None
-    print(
-        json.dumps(
-            {"status": "trained", "metrics": metrics, "metadata": meta_dict}, indent=2
-        )
-    )
+    print(json.dumps({"status": "trained", "metrics": metrics, "metadata": meta_dict}, indent=2))
 
 
 def action_evaluate(args):
@@ -364,11 +342,7 @@ def action_evaluate(args):
     X = df.drop(columns=[TARGET_COLUMN])
     metrics = pipe.evaluate(X, y)
     meta_dict = asdict(pipe.metadata) if pipe.metadata else None
-    print(
-        json.dumps(
-            {"status": "evaluated", "metrics": metrics, "metadata": meta_dict}, indent=2
-        )
-    )
+    print(json.dumps({"status": "evaluated", "metrics": metrics, "metadata": meta_dict}, indent=2))
 
 
 def action_predict(args):
@@ -396,9 +370,7 @@ def action_predict(args):
 
 
 def build_parser():
-    p = argparse.ArgumentParser(
-        description="Module 3.2 Classification Production Pipeline CLI"
-    )
+    p = argparse.ArgumentParser(description="Module 3.2 Classification Production Pipeline CLI")
     sub = p.add_subparsers(dest="command", required=True)
 
     p_train = sub.add_parser("train", help="Train a classification pipeline")
@@ -414,9 +386,7 @@ def build_parser():
         help="Apply SMOTE oversampling (requires imbalanced-learn)",
     )
     p_train.add_argument("--smote-k-neighbors", type=int, default=5)
-    p_train.add_argument(
-        "--no-class-weight", action="store_true", help="Disable class_weight balancing"
-    )
+    p_train.add_argument("--no-class-weight", action="store_true", help="Disable class_weight balancing")
     p_train.add_argument(
         "--min-precision",
         type=float,

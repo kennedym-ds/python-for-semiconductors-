@@ -250,3 +250,28 @@ for chunk in pd.read_csv('large_file.csv', chunksize=1000):
 ```
 
 Ready to start your journey? Head to Module 1 and begin transforming your semiconductor engineering career with ML! 🚀
+
+## Pre-commit Hooks
+
+Pre-commit enforces formatting and linting locally and matches our CI.
+
+### Install and Enable
+
+```powershell
+# From repo root (Windows PowerShell)
+pip install -r requirements-basic.txt
+pre-commit install
+```
+
+### Run On All Files
+
+```powershell
+python -m pre_commit run --all-files --show-diff-on-failure
+```
+
+### Common Tips
+
+- If hooks modify files, re-run until all hooks pass.
+- Black/Flake8 run via pre-commit; avoid running different versions locally.
+- To update hook environments: `pre-commit autoupdate` then open a PR.
+- CI caches pre-commit; local cache lives under `~/.cache/pre-commit`.
