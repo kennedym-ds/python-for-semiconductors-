@@ -1,0 +1,16 @@
+# MLflow artifacts and database files
+mlruns/
+mlflow_artifacts/
+mlflow.db
+mlflow.db-wal
+mlflow.db-shm
+
+# Temporary model files
+*.joblib
+demo_model.joblib
+ridge_model.joblib
+rf_model.joblib
+ridge_drift_model.joblib
+
+# Test artifacts
+test_*.joblib
