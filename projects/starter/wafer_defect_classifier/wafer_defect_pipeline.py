@@ -98,7 +98,6 @@ def generate_synthetic_wafer_defects(
                 # Center cluster defect
                 defect_radius = np.random.uniform(3, 8)
                 defect_mask = (x - center) ** 2 + (y - center) ** 2 <= defect_radius**2
-                defect_density = np.random.uniform(0.6, 0.9)
 
             elif pattern == "edge":
                 # Edge ring defect
