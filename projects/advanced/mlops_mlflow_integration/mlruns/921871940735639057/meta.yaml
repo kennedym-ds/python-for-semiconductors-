@@ -1,6 +1,0 @@
-artifact_location: file:///home/runner/work/python-for-semiconductors-/python-for-semiconductors-/projects/advanced/mlops_mlflow_integration/mlruns/921871940735639057
-creation_time: 1757749093236
-experiment_id: '921871940735639057'
-last_update_time: 1757749093236
-lifecycle_stage: active
-name: test_cli_experiment
