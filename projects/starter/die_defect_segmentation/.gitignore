@@ -1,0 +1,34 @@
+# Trained models
+*.joblib
+*.pkl
+*.pth
+
+# Generated data and results  
+demo_results/
+results/
+*.npy
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+.pytest_cache/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Logs
+*.log
