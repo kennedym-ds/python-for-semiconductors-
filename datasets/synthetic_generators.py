@@ -87,7 +87,10 @@ class TimeSensorDataGenerator:
             
             # Determine if this sequence has an anomaly
             has_anomaly = self.rng.random() < anomaly_rate
-            anomaly_start = self.rng.randint(20, sequence_length - 20) if has_anomaly else None
+            # Ensure we have enough sequence length for anomaly placement
+            min_start = max(5, sequence_length // 10)
+            max_start = max(min_start + 1, sequence_length - max(5, sequence_length // 10))
+            anomaly_start = self.rng.randint(min_start, max_start) if has_anomaly and max_start > min_start else None
             
             sequence_data = np.zeros((sequence_length, n_sensors))
             
@@ -103,7 +106,7 @@ class TimeSensorDataGenerator:
                 
                 # Add anomaly if applicable
                 if has_anomaly and anomaly_start is not None:
-                    anomaly_length = self.rng.randint(5, 20)
+                    anomaly_length = min(self.rng.randint(2, 10), sequence_length - anomaly_start - 1)
                     anomaly_end = min(anomaly_start + anomaly_length, sequence_length)
                     
                     # Different anomaly types

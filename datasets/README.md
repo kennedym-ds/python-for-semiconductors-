@@ -50,7 +50,11 @@ python datasets/download_semiconductor_datasets.py --dataset all
 ```text
 datasets/
 ├── README.md                           # This file
-├── download_semiconductor_datasets.py  # Download utility script
+├── download_semiconductor_datasets.py  # Enhanced download utility script
+├── synthetic_generators.py            # Synthetic data generators
+├── data_validation.py                 # Data integrity validation tools
+├── wm811k_preprocessing.py            # WM-811K preprocessing pipeline
+├── test_dataset_enhancements.py       # Comprehensive test suite
 ├── secom/                             # SECOM dataset folder
 │   ├── README.md                      # Dataset description
 │   ├── secom.data                     # Feature matrix (1567×590)
@@ -61,13 +65,28 @@ datasets/
 │   ├── steel_plates_features.csv     # Feature matrix (1941×27)
 │   ├── steel_plates_targets.csv      # Target labels (7 fault types)
 │   └── metadata.txt                   # UCI ML repo metadata
-├── wm811k/                           # WM-811K dataset (user download)
-│   ├── README.md                     # Download instructions
-│   └── README_fetch.txt              # Kaggle setup guide
-├── time_series/                      # Time series datasets
-│   └── README.md                     # Instructions for sensor data
-└── vision_defects/                   # Computer vision datasets
-    └── README.md                     # Instructions for defect images
+├── wm811k/                           # WM-811K dataset
+│   ├── README.md                     # Dataset description & download instructions
+│   ├── raw/                          # Raw downloaded data (Kaggle format)
+│   ├── data/                         # Processed wafer maps ready for ML
+│   ├── class_distribution.png        # Visualization of defect patterns
+│   ├── defect_samples.png            # Sample wafer maps by defect type
+│   └── analysis_report.json          # Statistical analysis of patterns
+├── synthetic/                        # Synthetic datasets
+│   ├── time_series_sensors/          # Equipment sensor data with anomalies
+│   │   ├── sensor_data.npz           # Time series data (n_samples, seq_len, n_sensors)
+│   │   └── metadata.json             # Dataset metadata and description
+│   ├── process_recipes/              # Manufacturing process parameters
+│   │   ├── recipes.csv               # Process parameter combinations
+│   │   ├── outcomes.csv              # Process outcomes (yield, defects, etc.)
+│   │   └── metadata.json             # Parameter descriptions
+│   └── wafer_defect_patterns/        # Synthetic wafer maps
+│       ├── wafer_maps.npz            # Wafer pattern arrays
+│       └── metadata.json             # Defect type descriptions
+├── time_series/                      # Additional time series datasets
+│   └── README.md                     # Instructions for custom sensor data
+└── vision_defects/                   # Additional computer vision datasets
+    └── README.md                     # Instructions for custom defect images
 ```
 
 ## Data Handling Guidelines
@@ -126,9 +145,27 @@ pip install kaggle
 # Set up API credentials per Kaggle documentation
 ```
 
-## Future Enhancements
+## Enhanced Features
 
-- Add checksum validation for downloaded files
-- Include sample notebooks demonstrating each dataset
-- Automated preprocessing scripts for common transformations
-- Integration with MLflow for dataset versioning
+### Data Version Control (DVC)
+- Automated dataset versioning with DVC integration
+- Support for cloud storage backends (AWS S3, Azure Blob)
+- Reproducible dataset snapshots for ML experiments
+
+### Dataset Validation & Quality Assurance
+- Comprehensive integrity checking with SHA256 checksums
+- Data quality metrics (completeness, consistency, validity)
+- Automated validation reports in JSON format
+- Cross-platform compatibility testing
+
+### WM-811K Integration
+- Automated Kaggle API download with error handling
+- Advanced preprocessing pipeline with data augmentation
+- Wafer map visualization and defect pattern analysis
+- Support for various wafer map formats (pickle, CSV)
+
+### Synthetic Data Generation
+- Privacy-preserving synthetic datasets for all scenarios
+- Realistic data distributions based on domain knowledge
+- Configurable parameters for different use cases
+- Comprehensive metadata and documentation
