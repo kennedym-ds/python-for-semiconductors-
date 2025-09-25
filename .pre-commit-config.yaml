@@ -23,6 +23,23 @@ repos:
         name: flake8-full
         args: [--exit-zero, --max-complexity=12, --max-line-length=120, --statistics]
 
+  # MyPy type checking
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.5.1
+    hooks:
+      - id: mypy
+        args: [--config-file=mypy.ini]
+        additional_dependencies: [types-requests, types-PyYAML]
+        exclude: ^(test_.*\.py|.*_test\.py|datasets/.*\.py)$
+
+  # Security scanning with bandit
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.7.5
+    hooks:
+      - id: bandit
+        args: [-c, bandit.yaml]
+        exclude: ^(test_.*\.py|.*_test\.py)$
+
   # Core hygiene hooks
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
@@ -39,3 +56,27 @@ repos:
       - id: pretty-format-json
         args: [--autofix]
       - id: detect-private-key
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: [--maxkb=10240]  # 10MB limit
+      - id: check-case-conflict
+      - id: check-executables-have-shebangs
+
+  # Local hooks for dataset path validation and docstring coverage
+  - repo: local
+    hooks:
+      - id: validate-dataset-paths
+        name: Validate dataset paths
+        entry: python verify_dataset_paths.py --format json --fail-on error
+        language: python
+        pass_filenames: false
+        always_run: true
+        additional_dependencies: []
+
+      - id: docstring-coverage
+        name: Docstring coverage check
+        entry: interrogate
+        language: python
+        args: [--ignore-init-method, --ignore-module, --quiet, --fail-under=70]
+        files: ^(modules|projects)/.*\.py$
+        additional_dependencies: [interrogate]

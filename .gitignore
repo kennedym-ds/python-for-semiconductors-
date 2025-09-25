@@ -55,3 +55,12 @@ resources/processed/
 
 # Documentation build artifacts
 docs-site/site/
+
+# Testing and quality tools cache
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.hypothesis/
+bandit-report.json
+safety-report.json
