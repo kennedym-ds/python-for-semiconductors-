@@ -1,0 +1,87 @@
+###############################################
+# 2025 AI Industry Trends Requirements
+# Extends: Advanced (+ cutting-edge AI frameworks)
+# Modules: Enhanced 7.x (vision), 8.x (generative AI, LLM)
+###############################################
+
+-r requirements-advanced.txt
+
+# 2025 Generative AI Enhancements
+# Enhanced GANs and StyleGAN
+diffusers>=0.21.0
+accelerate>=0.21.0
+
+# LLM Integration for Manufacturing Intelligence  
+openai>=1.0.0
+anthropic>=0.7.0
+transformers>=4.30.0
+tokenizers>=0.13.0
+
+# Advanced Computer Vision (2025)
+ultralytics>=8.0.0  # YOLO v8/v9
+segment-anything>=1.0.0  # Meta's SAM
+timm>=0.9.0  # Vision transformer models
+
+# Explainable AI
+lime>=0.2.0
+shap>=0.42.0
+captum>=0.6.0  # PyTorch interpretability
+
+# Enhanced MLOps and Monitoring
+wandb>=0.15.0
+neptune-client>=1.0.0
+clearml>=1.10.0
+
+# Advanced Uncertainty Quantification
+uncertainty-toolbox>=0.1.0
+gpytorch>=1.9.0  # Gaussian processes
+
+# High-Performance Computing
+numba>=0.57.0
+cupy-cuda11x>=12.0.0  # GPU acceleration (optional)
+
+# Manufacturing-Specific Extensions
+pydantic>=2.0.0  # Enhanced data validation
+fastapi>=0.100.0  # API framework for real-time systems
+websockets>=11.0.0  # Real-time communication
+asyncio-mqtt>=0.13.0  # MQTT for manufacturing systems
+
+# Advanced Visualization for AI Explanations
+plotly>=5.15.0
+bokeh>=3.2.0
+gradio>=3.35.0  # Interactive ML interfaces
+
+# Research and Development Tools
+jupyter-lab>=4.0.0
+jupyter-widgets>=8.0.0
+ipywidgets>=8.0.0
+papermill>=2.4.0  # Notebook automation
+
+# Quality Assurance and Testing
+pytest-asyncio>=0.21.0
+pytest-benchmark>=4.0.0
+hypothesis>=6.80.0  # Property-based testing
+
+# Documentation for Advanced Features
+sphinx-autodoc-typehints>=1.24.0
+myst-parser>=2.0.0  # Markdown in Sphinx
+sphinx-copybutton>=0.5.0
+
+# Optional High-Performance Dependencies
+# Uncomment based on deployment environment
+
+# # GPU Support
+# nvidia-ml-py>=11.525.0
+# pynvml>=11.5.0
+
+# # Distributed Computing
+# ray[tune]>=2.5.0
+# dask[complete]>=2023.6.0
+
+# # Advanced Database Support
+# sqlalchemy[asyncio]>=2.0.0
+# asyncpg>=0.28.0
+
+# Note: Some dependencies may require specific CUDA versions
+# or hardware acceleration support. Install selectively based
+# on your deployment environment and requirements.
