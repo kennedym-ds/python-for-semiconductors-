@@ -245,7 +245,33 @@ def download_all_datasets(root: Path) -> None:
     download_steel_plates(root)
     print()  # spacing
     download_wm811k_placeholder(root / "wm811k")
+    print()  # spacing
+    generate_synthetic_datasets(root)
     print("All dataset downloads completed.")
+
+
+def generate_synthetic_datasets(root: Path) -> None:
+    """Generate synthetic datasets for missing data types."""
+    print(f"Generating synthetic datasets in {root}/synthetic ...")
+    
+    try:
+        from .synthetic_generators import generate_all_synthetic_datasets
+        generate_all_synthetic_datasets(root / "synthetic")
+        print("Synthetic datasets generated successfully.")
+    except ImportError:
+        try:
+            # Try direct import if running as script
+            import sys
+            sys.path.append(str(root))
+            from synthetic_generators import generate_all_synthetic_datasets
+            generate_all_synthetic_datasets(root / "synthetic")
+            print("Synthetic datasets generated successfully.")
+        except ImportError as e:
+            print(f"  [error] Could not import synthetic generators: {e}")
+            print("  [skip] Synthetic datasets not generated")
+    except Exception as e:
+        print(f"  [error] Failed to generate synthetic datasets: {e}")
+        print("  [skip] Continuing with other datasets")
 
 
 def download_wm811k_placeholder(root: Path) -> None:
@@ -255,12 +281,66 @@ def download_wm811k_placeholder(root: Path) -> None:
     (root / "README_fetch.txt").write_text("See console instructions for Kaggle download process.\n", encoding="utf-8")
 
 
+def download_wm811k_kaggle(root: Path) -> None:
+    """Download WM-811K dataset using Kaggle API with enhanced error handling."""
+    wm811k_dir = root / "wm811k"
+    wm811k_dir.mkdir(parents=True, exist_ok=True)
+    
+    print(f"Downloading WM-811K Wafer Map dataset into {wm811k_dir} ...")
+    
+    # Check if kaggle is available
+    try:
+        import kaggle
+        print("  [info] Kaggle API available")
+    except ImportError:
+        print("  [error] Kaggle package not available. Install with: pip install kaggle")
+        print("  [fallback] Creating manual instructions instead")
+        download_wm811k_placeholder(root)
+        return
+    
+    # Check for existing data
+    data_dir = wm811k_dir / "data"
+    if data_dir.exists() and list(data_dir.iterdir()):
+        print(f"  [skip] WM-811K data already exists in {data_dir}")
+        return
+    
+    try:
+        # Create raw data directory
+        raw_dir = wm811k_dir / "raw"
+        raw_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Download using Kaggle API
+        print("  [fetch] Downloading from Kaggle (this may take several minutes)...")
+        kaggle.api.dataset_download_files('qingyi/wm811k-wafer-map', path=str(raw_dir), unzip=True)
+        
+        # Verify download
+        downloaded_files = list(raw_dir.rglob("*"))
+        if not downloaded_files:
+            raise ValueError("No files were downloaded")
+        
+        print(f"  [success] Downloaded {len(downloaded_files)} files")
+        
+        # Create processing structure
+        data_dir.mkdir(exist_ok=True)
+        (data_dir / "wafer_maps").mkdir(exist_ok=True)
+        (data_dir / "labels").mkdir(exist_ok=True)
+        
+        print(f"  [info] Raw data in: {raw_dir}")
+        print(f"  [info] Processing structure created in: {data_dir}")
+        print("  [info] Use preprocessing pipeline to organize data for training")
+        
+    except Exception as e:
+        print(f"  [error] Kaggle download failed: {e}")
+        print("  [fallback] Creating manual instructions")
+        download_wm811k_placeholder(root)
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Download semiconductor and manufacturing datasets")
     parser.add_argument(
         "--dataset",
         required=True,
-        choices=["secom", "steel-plates", "wm811k", "all"],
+        choices=["secom", "steel-plates", "wm811k", "wm811k-kaggle", "synthetic", "all"],
         help="Dataset key to download or scaffold",
     )
     parser.add_argument("--datasets-dir", default="datasets", help="Base datasets directory")
@@ -274,6 +354,10 @@ def main(argv: list[str] | None = None) -> int:
         download_steel_plates(base)
     elif args.dataset == "wm811k":
         download_wm811k_placeholder(base / "wm811k")
+    elif args.dataset == "wm811k-kaggle":
+        download_wm811k_kaggle(base)
+    elif args.dataset == "synthetic":
+        generate_synthetic_datasets(base)
     elif args.dataset == "all":
         download_all_datasets(base)
     else:
