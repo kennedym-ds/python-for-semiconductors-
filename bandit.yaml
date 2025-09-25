@@ -1,0 +1,32 @@
+# Bandit security configuration for Python for Semiconductors
+# Focuses on ML pipeline security and educational code safety
+
+# Files and directories to exclude
+exclude_dirs:
+  - tests
+  - test_*
+  - docs
+  - docs-site
+  - build
+  - dist
+  - .git
+  - .venv
+  - __pycache__
+  - datasets  # Raw datasets may contain binary files
+
+# Skip certain test IDs that are not applicable to our educational ML context
+skips:
+  - B101  # assert_used - common in educational/test code
+  - B602  # subprocess_popen_with_shell_equals_true - may be needed for system integration
+  - B603  # subprocess_without_shell_equals_true - may be needed for dataset processing
+
+# Confidence levels to report
+confidence: 
+  - HIGH
+  - MEDIUM
+
+# Severity levels to report  
+severity:
+  - HIGH
+  - MEDIUM
+  - LOW

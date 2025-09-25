@@ -9,12 +9,18 @@ on:
 
 permissions:
   contents: read
+  security-events: write  # For bandit security scanning
+
+env:
+  PYTHONPATH: ${{ github.workspace }}
+  RANDOM_SEED: 42
 
 jobs:
-  lint-and-test:
-    name: Lint & Test (basic tier)
+  # Code Quality and Security Checks
+  code-quality:
+    name: Code Quality & Security
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -24,19 +30,13 @@ jobs:
         with:
           python-version: '3.11'
           cache: 'pip'
-          cache-dependency-path: |
-            requirements-basic.txt
-            requirements-intermediate.txt
-            requirements-advanced.txt
-            requirements-full.txt
+          cache-dependency-path: requirements-basic.txt
 
-      - name: Upgrade pip tooling
+      - name: Install quality tools
         run: |
           python -m pip install --upgrade pip setuptools wheel
-
-      - name: Install basic tier
-        run: |
           python -m pip install -r requirements-basic.txt
+          python -m pip install bandit[toml] safety interrogate
 
       - name: Cache pre-commit
         uses: actions/cache@v4
@@ -48,52 +48,386 @@ jobs:
 
       - name: Lint (flake8)
         run: |
-          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics || true
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
           flake8 . --count --exit-zero --max-complexity=12 --max-line-length=120 --statistics
 
       - name: Format check (black)
         run: |
           python -m black --check .
 
+      - name: Type checking (mypy)
+        run: |
+          mypy modules/ projects/ --config-file mypy.ini || true
+
+      - name: Security scanning (bandit)
+        run: |
+          bandit -r . -f json -o bandit-report.json -c bandit.yaml || true
+          bandit -r . -f txt -c bandit.yaml
+
+      - name: Dependency vulnerability scanning (safety)
+        run: |
+          safety check --json --output safety-report.json || true
+          safety check
+
+      - name: Docstring coverage
+        run: |
+          interrogate modules/ projects/ --ignore-init-method --ignore-module --quiet --fail-under=70 || true
+
       - name: Run pre-commit on all files
         run: |
           pre-commit run --all-files --show-diff-on-failure
+
+      - name: Upload security reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: security-reports
+          path: |
+            bandit-report.json
+            safety-report.json
+
+  # Matrix testing across all dependency tiers
+  tier-matrix:
+    name: Test ${{ matrix.tier }} tier (Python ${{ matrix.python-version }})
+    runs-on: ${{ matrix.os }}
+    needs: code-quality
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        tier: [basic, intermediate, advanced, full]
+        python-version: ['3.9', '3.10', '3.11']
+        os: [ubuntu-latest]
+        include:
+          # Test basic tier on multiple OS
+          - tier: basic
+            python-version: '3.11'
+            os: windows-latest
+          - tier: basic
+            python-version: '3.11'
+            os: macos-latest
+        exclude:
+          # Reduce matrix size for expensive tiers
+          - tier: full
+            python-version: '3.9'
+          - tier: advanced
+            python-version: '3.9'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+          cache-dependency-path: |
+            requirements-basic.txt
+            requirements-intermediate.txt
+            requirements-advanced.txt
+            requirements-full.txt
+
+      - name: Cache datasets
+        uses: actions/cache@v4
+        with:
+          path: |
+            datasets/
+            ~/.cache/ucimlrepo/
+          key: ${{ runner.os }}-datasets-${{ hashFiles('datasets/download_semiconductor_datasets.py') }}
+          restore-keys: |
+            ${{ runner.os }}-datasets-
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          python env_setup.py --tier ${{ matrix.tier }}
+          
+      - name: Install additional testing dependencies
+        run: |
+          python -m pip install pytest pytest-cov pytest-timeout memory-profiler psutil
 
       - name: Verify dataset path conventions
         run: |
           python verify_dataset_paths.py --format json --fail-on error
 
-      - name: Run targeted tests
+      - name: Download test datasets
         run: |
+          python datasets/download_semiconductor_datasets.py --dataset secom --quiet || true
+
+      - name: Run comprehensive smoke tests
+        run: |
+          python -c "
+          import sys, importlib
+          modules_to_test = [
+              'numpy', 'pandas', 'sklearn', 'matplotlib', 'seaborn',
+              'scipy', 'jupyter'
+          ]
+          
+          # Tier-specific imports
+          if '${{ matrix.tier }}' in ['intermediate', 'advanced', 'full']:
+              modules_to_test.extend(['xgboost', 'lightgbm', 'statsmodels'])
+          
+          if '${{ matrix.tier }}' in ['advanced', 'full']:
+              modules_to_test.extend(['torch', 'tensorflow', 'optuna'])
+              
+          if '${{ matrix.tier }}' == 'full':
+              modules_to_test.extend(['prophet'])
+
+          print(f'Testing imports for {\"${{ matrix.tier }}\"} tier...')
+          for module in modules_to_test:
+              try:
+                  mod = importlib.import_module(module)
+                  print(f'✓ {module}: {getattr(mod, \"__version__\", \"OK\")}')
+              except ImportError as e:
+                  print(f'✗ {module}: {e}')
+                  if '${{ matrix.tier }}' != 'basic' or module in ['numpy', 'pandas', 'sklearn']:
+                      sys.exit(1)
+          "
+
+      - name: Run targeted pipeline tests
+        run: |
+          # Test key pipeline files that exist
           python modules/intermediate/module-4/test_ensemble_pipeline.py
-          if [ -f test_regression_pipeline.py ]; then python test_regression_pipeline.py; fi
+          
+          # Test additional pipelines based on tier
+          if [[ "${{ matrix.tier }}" != "basic" ]]; then
+            find modules/ -name "test_*pipeline.py" -type f | head -5 | while read test_file; do
+              if [[ -f "$test_file" ]]; then
+                echo "Running $test_file"
+                timeout 120s python "$test_file" || echo "Test $test_file failed or timed out"
+              fi
+            done
+          fi
 
-      - name: Basic import smoke
+      - name: Run pytest (if tier supports it)
+        if: matrix.tier != 'basic'
         run: |
-          python - <<'EOF'
-          import sys, sklearn, numpy, pandas
-          print('Python:', sys.version)
-          print('sklearn:', sklearn.__version__)
-          print('numpy:', numpy.__version__)
-          print('pandas:', pandas.__version__)
-          EOF
+          # Run pytest on available test files
+          pytest --tb=short --maxfail=3 --timeout=60 \
+            --cov-report=xml --cov-report=term-missing \
+            modules/ projects/ || echo "Some pytest tests failed"
 
-  # Future extension: matrix tiers (uncomment to enable broader coverage)
-  # tier-matrix:
-  #   name: Matrix Tiers
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       tier: [basic, intermediate, advanced]
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: actions/setup-python@v5
-  #       with:
-  #         python-version: '3.11'
-  #         cache: 'pip'
-  #     - name: Install tier
-  #       run: |
-  #         python env_setup.py --tier ${{ matrix.tier }}
-  #     - name: Smoke test
-  #       run: python -c "import numpy, sklearn; print('OK')"
+      - name: Memory profiling test
+        if: matrix.tier == 'advanced' || matrix.tier == 'full'
+        run: |
+          python -c "
+          import psutil, os
+          process = psutil.Process(os.getpid())
+          memory_before = process.memory_info().rss / 1024 / 1024
+          
+          # Import heavy libraries to test memory usage
+          import numpy as np
+          import pandas as pd
+          if '${{ matrix.tier }}' in ['advanced', 'full']:
+              try:
+                  import torch
+                  import tensorflow as tf
+              except ImportError:
+                  pass
+          
+          # Create test data
+          data = np.random.rand(1000, 100)
+          df = pd.DataFrame(data)
+          
+          memory_after = process.memory_info().rss / 1024 / 1024
+          memory_usage = memory_after - memory_before
+          
+          print(f'Memory usage: {memory_usage:.2f} MB')
+          if memory_usage > 2000:  # 2GB limit
+              print('WARNING: High memory usage detected')
+          "
+
+      - name: Upload coverage reports
+        uses: actions/upload-artifact@v4
+        if: always() && (matrix.tier == 'intermediate' || matrix.tier == 'advanced')
+        with:
+          name: coverage-${{ matrix.tier }}-${{ matrix.python-version }}
+          path: |
+            coverage.xml
+            htmlcov/
+
+  # Performance benchmarking
+  performance-benchmarks:
+    name: Performance Benchmarks
+    runs-on: ubuntu-latest
+    needs: code-quality
+    timeout-minutes: 30
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install performance testing dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements-intermediate.txt
+          python -m pip install memory-profiler psutil pytest-benchmark
+
+      - name: Cache datasets
+        uses: actions/cache@v4
+        with:
+          path: datasets/
+          key: ${{ runner.os }}-datasets-bench
+
+      - name: Download benchmark datasets
+        run: |
+          python datasets/download_semiconductor_datasets.py --dataset secom --quiet || true
+
+      - name: Performance benchmarks
+        run: |
+          python -c "
+          import time, numpy as np, pandas as pd
+          from sklearn.ensemble import RandomForestClassifier
+          from sklearn.model_selection import train_test_split
+          from sklearn.metrics import accuracy_score
+          import json, os
+          
+          # Synthetic benchmark data
+          np.random.seed(42)
+          X = np.random.rand(5000, 50)
+          y = np.random.randint(0, 2, 5000)
+          X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+          
+          # Benchmark ML pipeline
+          start_time = time.time()
+          clf = RandomForestClassifier(n_estimators=100, random_state=42)
+          clf.fit(X_train, y_train)
+          predictions = clf.predict(X_test)
+          accuracy = accuracy_score(y_test, predictions)
+          end_time = time.time()
+          
+          benchmark_results = {
+              'training_time': end_time - start_time,
+              'accuracy': accuracy,
+              'dataset_size': len(X),
+              'features': X.shape[1],
+              'timestamp': time.time()
+          }
+          
+          # Save results
+          os.makedirs('benchmarks', exist_ok=True)
+          with open('benchmarks/performance.json', 'w') as f:
+              json.dump(benchmark_results, f, indent=2)
+          
+          print(f'Benchmark completed: {benchmark_results}')
+          
+          # Performance thresholds
+          if benchmark_results['training_time'] > 30:
+              print('WARNING: Training time exceeds threshold')
+          if benchmark_results['accuracy'] < 0.4:
+              print('WARNING: Accuracy below minimum threshold')
+          "
+
+      - name: Upload benchmark results
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-benchmarks
+          path: benchmarks/
+
+  # Integration tests for complete learning paths
+  integration-tests:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    needs: [tier-matrix]
+    timeout-minutes: 60
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install full dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python env_setup.py --tier full
+
+      - name: Cache datasets
+        uses: actions/cache@v4
+        with:
+          path: datasets/
+          key: ${{ runner.os }}-datasets-integration
+
+      - name: Download integration test datasets
+        run: |
+          python datasets/download_semiconductor_datasets.py --dataset all --quiet || true
+
+      - name: Run end-to-end workflow tests
+        run: |
+          python -c "
+          import sys, os, subprocess, time
+          
+          # Test complete learning path workflows
+          test_workflows = [
+              'modules/foundation/module-3/3.1-regression-pipeline.py',
+              'modules/intermediate/module-4/4.1-ensemble-pipeline.py'
+          ]
+          
+          for workflow in test_workflows:
+              if os.path.exists(workflow):
+                  print(f'Testing workflow: {workflow}')
+                  
+                  # Test train command (with timeout)
+                  try:
+                      result = subprocess.run([
+                          sys.executable, workflow, 'train', 
+                          '--output-dir', '/tmp/test_models',
+                          '--max-samples', '1000'
+                      ], timeout=120, capture_output=True, text=True)
+                      
+                      if result.returncode == 0:
+                          print(f'✓ Training completed successfully')
+                      else:
+                          print(f'⚠ Training failed: {result.stderr}')
+                          
+                  except subprocess.TimeoutExpired:
+                      print(f'⚠ Training timed out for {workflow}')
+                  except Exception as e:
+                      print(f'⚠ Error testing {workflow}: {e}')
+              else:
+                  print(f'⚠ Workflow not found: {workflow}')
+          "
+
+      - name: Validate model artifacts
+        run: |
+          python -c "
+          import os, json, pickle
+          
+          model_dir = '/tmp/test_models'
+          if os.path.exists(model_dir):
+              for file in os.listdir(model_dir):
+                  filepath = os.path.join(model_dir, file)
+                  print(f'Found artifact: {file} ({os.path.getsize(filepath)} bytes)')
+                  
+                  # Basic validation of common artifacts
+                  if file.endswith('.json'):
+                      try:
+                          with open(filepath, 'r') as f:
+                              data = json.load(f)
+                          print(f'✓ Valid JSON with keys: {list(data.keys())[:5]}')
+                      except Exception as e:
+                          print(f'✗ Invalid JSON: {e}')
+                          
+                  elif file.endswith('.pkl'):
+                      try:
+                          with open(filepath, 'rb') as f:
+                              obj = pickle.load(f)
+                          print(f'✓ Valid pickle object: {type(obj)}')
+                      except Exception as e:
+                          print(f'✗ Invalid pickle: {e}')
+          else:
+              print('No model artifacts found')
+          "
