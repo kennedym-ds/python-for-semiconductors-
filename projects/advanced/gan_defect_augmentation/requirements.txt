@@ -1,0 +1,31 @@
+# GAN Defect Augmentation Requirements
+
+# Core dependencies (always required)
+numpy>=1.21.0
+pandas>=1.3.0
+Pillow>=8.3.0
+matplotlib>=3.5.0
+
+# Optional dependencies (with graceful fallback)
+# Deep learning (for GAN training)
+# torch>=1.9.0
+# torchvision>=0.10.0
+
+# Model persistence
+# joblib>=1.1.0
+
+# Baseline evaluation
+# scikit-learn>=1.0.0
+
+# Development and testing
+# pytest>=6.2.0
+# pytest-cov>=2.12.0
+
+# Note: Install dependencies using:
+# pip install -r requirements.txt
+# 
+# For full functionality, install advanced tier:
+# python env_setup.py --tier advanced
+#
+# Or install optional dependencies manually:
+# pip install torch torchvision joblib scikit-learn pytest

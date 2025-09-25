@@ -1,0 +1,54 @@
+# GAN Defect Augmentation Configuration
+
+# Model Parameters
+model:
+  image_size: 64
+  latent_dim: 100
+  batch_size: 64
+  learning_rate_g: 0.0002
+  learning_rate_d: 0.0002
+  epochs: 100
+  
+# Data Parameters
+data:
+  augmentation_ratio: 0.5
+  defect_types:
+    - edge
+    - center
+    - ring
+    - random
+    - scratch
+  
+# Device Configuration
+device:
+  # Options: 'auto', 'cpu', 'cuda'
+  type: 'auto'
+  # Force CPU-only mode (useful for testing)
+  force_cpu: false
+  
+# Generation Parameters
+generation:
+  num_samples: 1000
+  grid_size: 8  # For sample visualization grids
+  
+# Evaluation Parameters
+evaluation:
+  metrics:
+    - accuracy
+    - precision
+    - recall
+    - f1_score
+  
+# Output Directories
+output:
+  models: 'models/'
+  generated: 'data/generated/'
+  visualizations: 'outputs/visualizations/'
+  
+# Logging Configuration
+logging:
+  level: 'INFO'
+  format: '%(asctime)s - %(levelname)s - %(message)s'
+  
+# Reproducibility
+random_seed: 42

@@ -1,0 +1,33 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+
+# Pytest cache
+.pytest_cache/
+
+# Trained models
+*.joblib
+*.pkl
+*.pickle
+
+# Logs
+*.log
+logs/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Data files (if any real datasets are added)
+data/
+*.csv
+*.data
+*.txt
