@@ -28,6 +28,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+import warnings
 from dataclasses import dataclass, asdict
 from pathlib import Path
 from typing import Optional, Dict, Any, List
@@ -52,6 +53,18 @@ from sklearn.metrics import (
     precision_recall_curve,
 )
 import joblib
+
+# Optional MLflow import with graceful fallback
+HAS_MLFLOW = True
+try:
+    import mlflow
+    import mlflow.sklearn
+    from mlflow.tracking import MlflowClient
+except ImportError:
+    HAS_MLFLOW = False
+    mlflow = None
+    MlflowClient = None
+    warnings.warn("MLflow not available. Install with: pip install mlflow")
 
 # Constants
 RANDOM_SEED = 42
@@ -247,6 +260,8 @@ class WaferDefectPipeline:
         C: float = 1.0,
         max_depth: int = 6,
         n_estimators: int = 300,
+        enable_mlflow: bool = False,
+        experiment_name: str = "wafer_defect_classification",
     ) -> None:
         self.model_name = model.lower()
         self.use_smote = use_smote and IMB_AVAILABLE
@@ -266,6 +281,74 @@ class WaferDefectPipeline:
         self.pipeline: Optional[Pipeline] = None
         self.metadata: Optional[WaferDefectMetadata] = None
         self.fitted_threshold: float = 0.5
+        
+        # MLflow configuration
+        self.enable_mlflow = enable_mlflow and HAS_MLFLOW
+        self.experiment_name = experiment_name
+        self.run_id: Optional[str] = None
+        
+        if self.enable_mlflow:
+            self._setup_mlflow()
+
+    def _setup_mlflow(self) -> None:
+        """Setup MLflow experiment and tracking."""
+        if not HAS_MLFLOW:
+            return
+            
+        try:
+            # Set or create experiment
+            experiment = mlflow.set_experiment(self.experiment_name)
+            print(f"✅ MLflow tracking enabled for experiment: {self.experiment_name}")
+            print(f"   Experiment ID: {experiment.experiment_id}")
+            
+            # Enable autolog for sklearn
+            mlflow.sklearn.autolog(log_input_examples=False, log_model_signatures=False)
+            
+        except Exception as e:
+            print(f"⚠️  Warning: Failed to setup MLflow: {e}")
+            self.enable_mlflow = False
+
+    def _log_mlflow_params(self) -> None:
+        """Log model parameters to MLflow."""
+        if not self.enable_mlflow or not HAS_MLFLOW:
+            return
+            
+        try:
+            mlflow.log_params({
+                "model": self.model_name,
+                "use_smote": self.use_smote,
+                "class_weight_mode": self.class_weight_mode,
+                "C": self.C,
+                "max_depth": self.max_depth,
+                "n_estimators": self.n_estimators,
+                "min_precision": self.min_precision,
+                "min_recall": self.min_recall,
+                "threshold": self.fitted_threshold
+            })
+        except Exception as e:
+            print(f"⚠️  Warning: Failed to log MLflow params: {e}")
+
+    def _log_mlflow_metrics(self, metrics: Dict[str, float]) -> None:
+        """Log performance metrics to MLflow."""
+        if not self.enable_mlflow or not HAS_MLFLOW:
+            return
+            
+        try:
+            # Log standard metrics
+            mlflow.log_metrics({
+                "roc_auc": metrics.get("ROC_AUC", 0.0),
+                "pr_auc": metrics.get("PR_AUC", 0.0),
+                "precision": metrics.get("Precision", 0.0),
+                "recall": metrics.get("Recall", 0.0),
+                "f1_score": metrics.get("F1", 0.0),
+                "balanced_accuracy": metrics.get("Balanced_Accuracy", 0.0),
+                "matthews_cc": metrics.get("Matthews_CC", 0.0),
+                # Manufacturing metrics
+                "pws": metrics.get("PWS", 0.0),
+                "estimated_loss": metrics.get("Estimated_Loss", 0.0)
+            })
+        except Exception as e:
+            print(f"⚠️  Warning: Failed to log MLflow metrics: {e}")
 
     def _build_estimator(self):
         """Build the ML estimator based on model name."""
@@ -304,6 +387,12 @@ class WaferDefectPipeline:
 
     def fit(self, X: pd.DataFrame, y: np.ndarray) -> "WaferDefectPipeline":
         """Fit the pipeline to training data."""
+        # Start MLflow run if enabled
+        if self.enable_mlflow and HAS_MLFLOW:
+            mlflow.start_run()
+            self.run_id = mlflow.active_run().info.run_id
+            self._log_mlflow_params()
+        
         steps = [
             ("imputer", SimpleImputer(strategy="median")),
             ("scaler", StandardScaler()),
@@ -342,6 +431,19 @@ class WaferDefectPipeline:
             },
             threshold=self.fitted_threshold,
         )
+        
+        # Log model to MLflow if enabled
+        if self.enable_mlflow and HAS_MLFLOW:
+            try:
+                mlflow.sklearn.log_model(
+                    self.pipeline, 
+                    "model",
+                    registered_model_name=f"wafer_defect_{self.model_name}"
+                )
+                mlflow.log_param("threshold_optimized", self.fitted_threshold)
+            except Exception as e:
+                print(f"⚠️  Warning: Failed to log model to MLflow: {e}")
+        
         return self
 
     def _optimize_threshold(self, X: pd.DataFrame, y: np.ndarray):
@@ -432,6 +534,11 @@ class WaferDefectPipeline:
         probs = self.predict_proba(X)[:, 1]
         preds = (probs >= self.fitted_threshold).astype(int)
         metrics = self.compute_metrics(y, probs, preds)
+        
+        # Log metrics to MLflow if enabled
+        if self.enable_mlflow and HAS_MLFLOW:
+            self._log_mlflow_metrics(metrics)
+        
         if self.metadata:
             self.metadata.metrics = metrics
         return metrics
@@ -475,6 +582,8 @@ def action_train(args):
             C=args.C,
             max_depth=args.max_depth,
             n_estimators=args.n_estimators,
+            enable_mlflow=args.enable_mlflow,
+            experiment_name=args.experiment_name,
         )
         pipe.fit(X, y)
         metrics = pipe.evaluate(X, y)  # train metrics
@@ -482,13 +591,23 @@ def action_train(args):
         if args.save:
             pipe.save(Path(args.save))
 
+        # End MLflow run if it was started
+        if pipe.enable_mlflow and HAS_MLFLOW and mlflow.active_run():
+            mlflow.end_run()
+
         meta_dict = asdict(pipe.metadata) if pipe.metadata else None
-        print(
-            json.dumps(
-                {"status": "trained", "metrics": metrics, "metadata": meta_dict},
-                indent=2,
-            )
-        )
+        result = {
+            "status": "trained", 
+            "metrics": metrics, 
+            "metadata": meta_dict
+        }
+        
+        # Add MLflow info if enabled
+        if pipe.enable_mlflow and pipe.run_id:
+            result["mlflow_run_id"] = pipe.run_id
+            result["mlflow_experiment"] = pipe.experiment_name
+        
+        print(json.dumps(result, indent=2))
     except Exception as e:
         error_result = {
             "status": "error",
@@ -606,6 +725,9 @@ def build_parser():
     p_train.add_argument("--max-depth", type=int, default=6)
     p_train.add_argument("--n-estimators", type=int, default=300)
     p_train.add_argument("--save", help="Path to save trained model")
+    # MLflow options
+    p_train.add_argument("--enable-mlflow", action="store_true", help="Enable MLflow experiment tracking")
+    p_train.add_argument("--experiment-name", default="wafer_defect_classification", help="MLflow experiment name")
     p_train.set_defaults(func=action_train)
 
     # Evaluate subcommand
