@@ -109,6 +109,16 @@ This project provides **tiered dependency sets** so you only install what you ne
 | advanced | `requirements-advanced.txt` | + deep learning, CV, optimization, MLOps | Vision, Deployment prep |
 | full | `requirements-full.txt` | + Prophet, simulation (PySpice), RF, typing tools | All modules & experiments |
 
+> These `requirements-*.txt` files are pinned lockfiles generated from the
+> project dependency groups. Regenerate them after dependency changes with:
+>
+> ```powershell
+> python tools/compile_tier_lockfiles.py --upgrade
+> ```
+>
+> Prefer `env_setup.py` for day-to-day use; add `--use-groups` if you want to
+> install directly from the pyproject groups on pip ≥ 25.1.
+
 Use the automation script (recommended):
 
 ```powershell
@@ -124,9 +134,22 @@ python env_setup.py --tier intermediate
 python env_setup.py --tier advanced
 python env_setup.py --tier full
 
+# Install docs/dev tooling on top of a tier (pip ≥ 25.1)
+python env_setup.py --tier advanced --extras docs dev
+
 # Recreate from scratch (danger: deletes .venv)
 python env_setup.py --tier full --force
 ```
+
+> **Tip:** If your pip version is older than 25.1, generate combined lockfiles so `env_setup.py` can
+> install extras without dependency groups. For example:
+>
+> ```powershell
+> python tools/compile_tier_lockfiles.py --tiers advanced full --extras docs dev
+> ```
+>
+> This produces lockfiles such as `requirements-advanced+docs.txt` that `env_setup.py` will use
+> automatically when `--group` installs are unavailable.
 
 Manual (not recommended) full install:
 
@@ -242,6 +265,7 @@ Both CI and local development use identical linting and formatting standards:
 - **Pre-commit hooks** that mirror CI exactly
 
 To set up local development:
+
 ```bash
 pip install pre-commit
 pre-commit install

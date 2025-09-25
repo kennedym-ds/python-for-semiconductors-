@@ -1,0 +1,219 @@
+[build-system]
+requires = ["hatchling>=1.25.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "python-for-semiconductors"
+version = "0.1.0"
+description = "Machine Learning for Semiconductor Engineers: a 20-week learning and production pipeline series."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+authors = [
+  { name = "Michael Kennedy" },
+]
+keywords = [
+  "semiconductors",
+  "machine-learning",
+  "manufacturing",
+  "mlops",
+  "education",
+]
+classifiers = [
+  "Intended Audience :: Education",
+  "Intended Audience :: Manufacturing",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+  "Topic :: Scientific/Engineering :: Electronic Design Automation (EDA)",
+]
+dependencies = [
+  "numpy>=1.24.0",
+  "pandas>=2.0.0",
+  "scipy>=1.11.0",
+  "scikit-learn>=1.3.0",
+  "joblib>=1.3.0",
+  "matplotlib>=3.7.0",
+  "seaborn>=0.12.0",
+  "jupyter>=1.0.0",
+  "jupyterlab>=4.0.0",
+  "ipykernel>=6.25.0",
+  "ipywidgets>=8.0.0",
+  "tqdm>=4.65.0",
+  "requests>=2.31.0",
+  "python-dotenv>=1.0.0",
+  "PyYAML>=6.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=7.4.0",
+  "pytest-cov>=4.1.0",
+  "black>=23.7.0",
+  "flake8>=6.0.0",
+  "pre-commit>=4.3.0",
+  "mypy>=1.5.0",
+  "pip-tools>=7.5.0",
+  "tomli>=2.0.1",
+  "hatch>=1.9.5",
+]
+docs = [
+  "sphinx>=7.1.0",
+  "mkdocs>=1.5.0",
+  "mkdocs-material>=9.1.0",
+]
+intermediate = [
+  "imbalanced-learn>=0.11.0",
+  "statsmodels>=0.14.0",
+  "pmdarima>=2.0.0",
+  "xgboost>=1.7.0",
+  "lightgbm>=4.0.0",
+  "catboost>=1.2.0",
+  "plotly>=5.15.0",
+  "pandera>=0.15.0",
+]
+advanced = [
+  "imbalanced-learn>=0.11.0",
+  "statsmodels>=0.14.0",
+  "pmdarima>=2.0.0",
+  "xgboost>=1.7.0",
+  "lightgbm>=4.0.0",
+  "catboost>=1.2.0",
+  "plotly>=5.15.0",
+  "pandera>=0.15.0",
+  "sphinx>=7.1.0",
+  "mkdocs>=1.5.0",
+  "mkdocs-material>=9.1.0",
+  "torch>=2.0.0",
+  "torchvision>=0.15.0",
+  "tensorflow>=2.13.0",
+  "keras>=2.13.0",
+  "optuna>=3.2.0",
+  "opencv-python>=4.8.0",
+  "Pillow>=10.0.0",
+  "scikit-image>=0.21.0",
+  "mlflow>=2.5.0",
+  "fastapi>=0.100.0",
+  "uvicorn>=0.23.0",
+  "pydantic>=2.0.0",
+  "dash>=2.11.0",
+  "streamlit>=1.25.0",
+  "bokeh>=3.2.0",
+]
+full = [
+  "imbalanced-learn>=0.11.0",
+  "statsmodels>=0.14.0",
+  "pmdarima>=2.0.0",
+  "xgboost>=1.7.0",
+  "lightgbm>=4.0.0",
+  "catboost>=1.2.0",
+  "plotly>=5.15.0",
+  "pandera>=0.15.0",
+  "sphinx>=7.1.0",
+  "mkdocs>=1.5.0",
+  "mkdocs-material>=9.1.0",
+  "torch>=2.0.0",
+  "torchvision>=0.15.0",
+  "tensorflow>=2.13.0",
+  "keras>=2.13.0",
+  "optuna>=3.2.0",
+  "opencv-python>=4.8.0",
+  "Pillow>=10.0.0",
+  "scikit-image>=0.21.0",
+  "mlflow>=2.5.0",
+  "fastapi>=0.100.0",
+  "uvicorn>=0.23.0",
+  "pydantic>=2.0.0",
+  "dash>=2.11.0",
+  "streamlit>=1.25.0",
+  "bokeh>=3.2.0",
+  "prophet>=1.1.0",
+  "PySpice>=1.5.0",
+  "scikit-rf>=0.24.0",
+  "pytest-cov>=4.1.0",
+  "mypy>=1.5.0",
+]
+
+[dependency-groups]
+basic = [
+  "numpy>=1.24.0",
+  "pandas>=2.0.0",
+  "scipy>=1.11.0",
+  "scikit-learn>=1.3.0",
+  "joblib>=1.3.0",
+  "matplotlib>=3.7.0",
+  "seaborn>=0.12.0",
+  "jupyter>=1.0.0",
+  "jupyterlab>=4.0.0",
+  "ipykernel>=6.25.0",
+  "ipywidgets>=8.0.0",
+  "tqdm>=4.65.0",
+  "requests>=2.31.0",
+  "python-dotenv>=1.0.0",
+  "PyYAML>=6.0.0",
+  "pytest>=7.4.0",
+  "black>=23.7.0",
+  "flake8>=6.0.0",
+  "pre-commit>=4.3.0",
+]
+intermediate = [
+  { include-group = "basic" },
+  "imbalanced-learn>=0.11.0",
+  "statsmodels>=0.14.0",
+  "pmdarima>=2.0.0",
+  "xgboost>=1.7.0",
+  "lightgbm>=4.0.0",
+  "catboost>=1.2.0",
+  "plotly>=5.15.0",
+  "pandera>=0.15.0",
+]
+advanced = [
+  { include-group = "intermediate" },
+  { include-group = "docs" },
+  "torch>=2.0.0",
+  "torchvision>=0.15.0",
+  "tensorflow>=2.13.0",
+  "keras>=2.13.0",
+  "optuna>=3.2.0",
+  "opencv-python>=4.8.0",
+  "Pillow>=10.0.0",
+  "scikit-image>=0.21.0",
+  "mlflow>=2.5.0",
+  "fastapi>=0.100.0",
+  "uvicorn>=0.23.0",
+  "pydantic>=2.0.0",
+  "dash>=2.11.0",
+  "streamlit>=1.25.0",
+  "bokeh>=3.2.0",
+]
+full = [
+  { include-group = "advanced" },
+  "prophet>=1.1.0",
+  "PySpice>=1.5.0",
+  "scikit-rf>=0.24.0",
+  "pytest-cov>=4.1.0",
+  "mypy>=1.5.0",
+]
+docs = [
+  "sphinx>=7.1.0",
+  "mkdocs>=1.5.0",
+  "mkdocs-material>=9.1.0",
+]
+dev = [
+  { include-group = "basic" },
+  "pytest-cov>=4.1.0",
+  "mypy>=1.5.0",
+  "pip-tools>=7.5.0",
+  "tomli>=2.0.1",
+  "hatch>=1.9.5",
+]
+
+[tool.pip-tools]
+resolver = "backtracking"
+
+[tool.pip-tools.compile]
+generate-hashes = false
+strip-extras = true
