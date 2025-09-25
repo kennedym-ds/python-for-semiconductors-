@@ -256,6 +256,151 @@ Optional dependencies:
 - Module 6: Computer vision for wafer maps
 - Module 10.1: Project architecture best practices
 
+## Docker Deployment
+
+### Quick Start with Docker
+
+The easiest way to run this project is using Docker:
+
+```bash
+# Build and run the main service
+docker-compose up wafer-defect-classifier
+
+# Run with MLflow tracking
+docker-compose up wafer-defect-classifier mlflow-server
+
+# Development with Jupyter notebooks
+docker-compose up jupyter
+
+# Run all services
+docker-compose up
+```
+
+### Service URLs
+
+When running with docker-compose:
+- **Main application**: http://localhost:8001
+- **MLflow UI**: http://localhost:5001
+- **Jupyter notebooks**: http://localhost:8888
+
+### Docker Commands
+
+```bash
+# Train a model in Docker
+docker-compose run wafer-defect-classifier python wafer_defect_pipeline.py train --dataset synthetic_wafer --model rf --enable-mlflow
+
+# Evaluate model
+docker-compose run wafer-defect-classifier python wafer_defect_pipeline.py evaluate --model-path model.joblib --dataset synthetic_wafer
+
+# Interactive shell
+docker-compose exec wafer-defect-classifier bash
+```
+
+## MLflow Experiment Tracking
+
+### Enable MLflow Tracking
+
+Add `--enable-mlflow` to any command to enable experiment tracking:
+
+```bash
+# Train with MLflow tracking
+python wafer_defect_pipeline.py train --dataset synthetic_wafer --model rf --enable-mlflow --experiment-name "production_wafer_defects"
+
+# Custom experiment name
+python wafer_defect_pipeline.py train --enable-mlflow --experiment-name "fab_west_line_1"
+```
+
+### MLflow Features
+
+- **Automatic Experiment Creation**: Experiments are created automatically
+- **Parameter Tracking**: All hyperparameters logged automatically
+- **Manufacturing Metrics**: PWS, Estimated Loss, and standard ML metrics
+- **Model Registry**: Models automatically registered with versioning
+- **Comparison**: Compare runs in the MLflow UI
+
+### MLflow UI
+
+Access the MLflow tracking UI at http://localhost:5001 to:
+- Compare experiment runs
+- View parameter and metric trends
+- Download trained models
+- Promote models to production
+
+### Manufacturing Metrics in MLflow
+
+This pipeline logs semiconductor-specific metrics:
+
+- **PWS (Prediction Within Spec)**: Manufacturing quality metric
+- **Estimated Loss**: Cost impact of prediction errors
+- **Defect Detection Rate**: Percentage of defective wafers caught
+- **False Positive Cost**: Impact of scrapping good wafers
+- **False Negative Cost**: Impact of shipping defective wafers
+
+## Notebook Tutorial
+
+Explore the interactive tutorial:
+
+```bash
+# Run locally
+jupyter notebook wafer_defect_tutorial.ipynb
+
+# Run in Docker
+docker-compose up jupyter
+# Then navigate to http://localhost:8888
+```
+
+The tutorial covers:
+- Data generation and exploration
+- Model comparison and selection
+- Manufacturing threshold optimization
+- Production deployment examples
+
+## Production Deployment
+
+### Environment Setup
+
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Optional: Install MLflow
+pip install mlflow
+
+# Optional: Install SMOTE support
+pip install imbalanced-learn
+```
+
+### Kubernetes Deployment
+
+Example Kubernetes deployment:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wafer-defect-classifier
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: wafer-defect-classifier
+  template:
+    metadata:
+      labels:
+        app: wafer-defect-classifier
+    spec:
+      containers:
+      - name: classifier
+        image: wafer-defect-classifier:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: ENVIRONMENT
+          value: "production"
+        - name: MLFLOW_TRACKING_URI
+          value: "http://mlflow-server:5000"
+```
+
 ## Next Steps
 
 This baseline classifier can be extended with:
@@ -265,6 +410,8 @@ This baseline classifier can be extended with:
 4. **Model Ensemble**: Combine multiple model predictions
 5. **Real-time Deployment**: API wrapper for production use
 6. **Drift Monitoring**: Track model performance over time
+7. **A/B Testing**: MLflow integration for production experiments
+8. **Automated Retraining**: CI/CD pipelines with MLflow model registry
 
 ## Support
 
