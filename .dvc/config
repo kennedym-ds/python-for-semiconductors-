@@ -1,0 +1,19 @@
+[core]
+    no_scm = True
+    analytics = false
+    autostage = true
+    
+# Remote storage configuration (uncomment and configure as needed)
+# For AWS S3:
+# ['remote "s3remote"']
+#     url = s3://my-bucket/dvc-storage
+#     region = us-east-1
+
+# For Azure Blob:
+# ['remote "azureremote"']
+#     url = azure://my-container/dvc-storage
+#     connection_string = <connection_string>
+
+# For local development (default)
+['remote "localremote"']
+    url = .dvc/cache

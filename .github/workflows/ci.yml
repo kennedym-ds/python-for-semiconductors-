@@ -63,6 +63,15 @@ jobs:
         run: |
           python verify_dataset_paths.py --format json --fail-on error
 
+      - name: Test dataset enhancements
+        run: |
+          python datasets/test_dataset_enhancements.py
+
+      - name: Validate synthetic dataset generation
+        run: |
+          python datasets/download_semiconductor_datasets.py --dataset synthetic --datasets-dir /tmp/ci_datasets
+          python datasets/data_validation.py --datasets-root /tmp/ci_datasets --dataset synthetic
+
       - name: Run targeted tests
         run: |
           python modules/intermediate/module-4/test_ensemble_pipeline.py
