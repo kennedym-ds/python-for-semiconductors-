@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  die-segmentation:
+    build: .
+    container_name: die_defect_segmentation
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./logs:/app/logs
+      - ../../../datasets:/app/datasets:ro
+    environment:
+      - ENVIRONMENT=production
+      - LOG_LEVEL=INFO
+      - PYTHONPATH=/app
+    ports:
+      - "8004:8000"
+    restart: unless-stopped
+    
+  mlflow-server:
+    image: python:3.11-slim
+    container_name: die_segmentation_mlflow
+    working_dir: /mlflow
+    volumes:
+      - ./mlflow_data:/mlflow
+    environment:
+      - MLFLOW_BACKEND_STORE_URI=sqlite:///mlflow.db
+      - MLFLOW_DEFAULT_ARTIFACT_ROOT=/mlflow/artifacts
+    ports:
+      - "5004:5000"
+    command: >
+      sh -c "pip install mlflow && 
+             mlflow server 
+             --backend-store-uri sqlite:///mlflow.db 
+             --default-artifact-root /mlflow/artifacts 
+             --host 0.0.0.0 
+             --port 5000"
+    restart: unless-stopped
+
+  jupyter:
+    build: .
+    container_name: die_segmentation_jupyter
+    volumes:
+      - .:/app
+      - ../../../datasets:/app/datasets:ro
+    environment:
+      - ENVIRONMENT=development
+      - PYTHONPATH=/app
+    ports:
+      - "8891:8888"
+    command: >
+      sh -c "pip install jupyter && 
+             jupyter notebook 
+             --ip=0.0.0.0 
+             --port=8888 
+             --no-browser 
+             --allow-root 
+             --NotebookApp.token=''"
+    restart: unless-stopped
+
+networks:
+  default:
+    name: die_segmentation_network
