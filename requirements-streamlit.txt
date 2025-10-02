@@ -1,0 +1,3 @@
+# Additional requirements for Streamlit Assessment App
+streamlit>=1.28.0
+plotly>=5.17.0

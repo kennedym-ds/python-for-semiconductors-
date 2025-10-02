@@ -2,6 +2,48 @@
 
 This directory contains the assessment infrastructure for the Python for Semiconductors learning series.
 
+### 🎓 Taking Assessments
+
+#### Interactive Streamlit App (Recommended)
+
+The easiest way to take assessments is through our interactive web application:
+
+```powershell
+# Install dependencies
+pip install -r requirements-streamlit.txt
+
+# Launch the app
+streamlit run assessments/assessment_app.py
+```
+
+**Features:**
+- ✅ User-friendly quiz interface
+- ✅ Automatic grading and instant feedback
+- ✅ Progress tracking with visualizations
+- ✅ Score history and performance analytics
+- ✅ Support for all question types (multiple choice, coding, conceptual)
+
+See [STREAMLIT_APP_README.md](STREAMLIT_APP_README.md) for detailed usage instructions.
+
+#### Programmatic Assessment (Python API)
+
+For automated testing or custom integrations:
+
+```python
+from modules.foundation.assessment_system import ModuleAssessment
+
+# Load assessment
+assessment = ModuleAssessment.load_from_json("assessments/module-1/1.1-questions.json")
+
+# Run assessment
+result = assessment.run_knowledge_check(student_id="user123")
+
+# View results
+print(f"Score: {result.percentage:.1f}%")
+```
+
+See `modules/foundation/assessment_system.py` for full API documentation.
+
 ### Directory Structure
 
 ```text

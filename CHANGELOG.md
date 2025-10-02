@@ -7,6 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added - Interactive Streamlit Assessment Application
+
+- **Created Streamlit web app** (`assessments/assessment_app.py`) for taking assessments
+  * User authentication with unique IDs
+  * Interactive quiz interface for all question types (multiple choice, coding, conceptual)
+  * Real-time answer saving and navigation (Previous/Next buttons)
+  * Automatic grading with instant feedback
+  * SQLite database for persistent storage
+- **Progress tracking and visualization**
+  * Summary dashboard with key metrics (total assessments, average score, study time, modules completed)
+  * Score progression line chart over time with passing thresholds
+  * Performance comparison bar chart across modules
+  * Recent assessment history table
+- **Database schema** with three tables:
+  * Users table (user profiles)
+  * Assessment attempts table (completion records)
+  * Question responses table (detailed answer tracking)
+- **Added requirements** (`requirements-streamlit.txt`)
+  * Streamlit >=1.28.0
+  * Plotly >=5.17.0
+- **Comprehensive documentation** (`assessments/STREAMLIT_APP_README.md`)
+  * Installation and usage instructions
+  * Feature descriptions and screenshots
+  * Database schema documentation
+  * Troubleshooting guide
+  * Future enhancement roadmap
+- **Updated main README** with quick start guide for Streamlit app
+
 ### Changed - Assessment Validation Organization
 
 - **Removed 21 redundant validation scripts** from `assessments/` root directory
