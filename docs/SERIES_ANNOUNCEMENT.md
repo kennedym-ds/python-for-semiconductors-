@@ -37,12 +37,14 @@ We're excited to announce the **production release (v1.0.0)** of the most compre
 ## Get Started in 5 Minutes
 
 1. **Clone the repository**:
+
    ```bash
    git clone https://github.com/kennedym-ds/python-for-semiconductors-.git
    cd python-for-semiconductors-
    ```
 
 2. **Setup your environment**:
+
    ```bash
    python env_setup.py --tier basic
    ```
@@ -62,18 +64,23 @@ No ML experience required—just curiosity and Python basics!
 ## Learning Path Overview
 
 ### 🔧 Foundation Series (Weeks 1-5)
+
 Master Python fundamentals, data quality analysis, and basic ML with semiconductor datasets.
 
 ### ⚙️ Intermediate Series (Weeks 6-8)
+
 Advanced ML techniques including ensemble methods, clustering, and time series forecasting.
 
 ### 🧠 Advanced Series (Weeks 9-14)
+
 Deep learning for defect detection, CNNs, LSTMs, and advanced computer vision.
 
 ### 🚀 Cutting-Edge Series (Weeks 15-20)
+
 Transformers, GANs, LLMs, and modern MLOps with deployment strategies.
 
 ### 🎯 Project Development (Weeks 21-22)
+
 Build production-ready ML systems with full documentation and reproducibility.
 
 ## What's Included
