@@ -217,3 +217,8 @@ resolver = "backtracking"
 [tool.pip-tools.compile]
 generate-hashes = false
 strip-extras = true
+
+[tool.pytest.ini_options]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+]
