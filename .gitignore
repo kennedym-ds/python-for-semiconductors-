@@ -23,6 +23,11 @@
 models/
 temp_models/
 
+# Assessment database files
+assessments/assessment_results.db
+assessments/assessment_results_backup_*.db
+*.db
+
 # Python
 __pycache__/
 *.pyc
