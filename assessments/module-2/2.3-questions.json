@@ -1,0 +1,580 @@
+{
+  "description": "Comprehensive assessment covering multivariate analysis, principal component analysis (PCA), correlation analysis, dimensionality reduction, and advanced statistical testing techniques for high-dimensional semiconductor manufacturing data.",
+  "estimated_time_minutes": 90,
+  "module_id": "module-2.3",
+  "passing_score": 75,
+  "questions": [
+    {
+      "correct_answer": 0,
+      "difficulty": "medium",
+      "explanation": "The cumulative variance explained is 78% (45% + 22% + 11%), which often provides a good balance between dimensionality reduction and information retention. This suggests substantial redundancy in the original 150 features, and 3 components may be sufficient depending on the modeling task.",
+      "id": "m2.3_q001",
+      "options": [
+        "The first 3 components capture 78% of the information and may be sufficient for modeling",
+        "You need to use all 150 features because 22% variance loss is too high",
+        "The features are uncorrelated and PCA provides no benefit",
+        "The first component alone is sufficient since it captures the most variance"
+      ],
+      "points": 3,
+      "question": "You have a semiconductor process dataset with 150 features (temperatures, pressures, flow rates) and 5000 wafers. After standardizing the data, you perform PCA. The first 3 principal components explain 45%, 22%, and 11% of the variance respectively. What does this tell you?",
+      "topic": "pca_fundamentals",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "Hotelling's T\u00b2 test is the multivariate extension of the t-test, designed to compare mean vectors between two groups when multiple correlated variables are measured. Multiple t-tests would inflate Type I error rate, while chi-square tests independence and correlation doesn't test group differences.",
+      "id": "m2.3_q002",
+      "options": [
+        "Multiple independent t-tests on each parameter",
+        "Hotelling's T\u00b2 test for multivariate mean comparison",
+        "Chi-square test for independence",
+        "Pearson correlation coefficient"
+      ],
+      "points": 4,
+      "question": "You want to determine if two different process chambers produce wafers with statistically different multivariate characteristics (10 measured parameters per wafer). Which test is most appropriate?",
+      "topic": "multivariate_testing",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "easy",
+      "explanation": "High correlations (> 0.85) indicate strong multicollinearity, meaning parameters are providing redundant information. This can cause instability in regression coefficients, inflated standard errors, and difficulty interpreting individual parameter effects.",
+      "id": "m2.3_q003",
+      "options": [
+        "Strong multicollinearity exists, which may cause problems in regression modeling",
+        "The data is perfectly clean and ready for modeling",
+        "The parameters are independent and uncorrelated",
+        "You need to collect more data to reduce correlations"
+      ],
+      "points": 2,
+      "question": "In a correlation matrix of 50 process parameters, you observe that many pairs have correlations > 0.85. What does this indicate?",
+      "topic": "correlation_analysis",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Without standardization, features with larger numerical ranges (e.g., pressure in mbar: 100-1000 vs temperature ratio: 0.5-1.5) will artificially dominate the principal components due to their larger variance, not because they're more important. Standardizing ensures each feature contributes equally based on its correlation structure.",
+      "id": "m2.3_q004",
+      "options": [
+        "Standardization is not necessary; PCA works on any scale",
+        "Features measured in different units (e.g., temperature \u00b0C vs pressure mbar) would dominate based on scale rather than importance",
+        "Standardization removes outliers from the dataset",
+        "PCA requires all values to be between 0 and 1"
+      ],
+      "points": 3,
+      "question": "When performing PCA on semiconductor process data, why is it critical to standardize (z-score) the features before computing the covariance matrix?",
+      "topic": "covariance_matrices",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "hard",
+      "explanation": "PCA aims to explain total variance (including unique variance in each variable), while Factor Analysis seeks to identify latent factors that explain the common variance (correlations) among observed variables. In manufacturing, Factor Analysis might identify underlying process factors (e.g., 'thermal control', 'gas flow stability') that drive correlations among measured parameters.",
+      "id": "m2.3_q005",
+      "options": [
+        "PCA explains total variance while Factor Analysis explains only common variance among features",
+        "PCA is supervised while Factor Analysis is unsupervised",
+        "Factor Analysis requires fewer samples than PCA",
+        "There is no difference; they are the same technique"
+      ],
+      "points": 4,
+      "question": "What is the key conceptual difference between PCA and Factor Analysis when applied to semiconductor manufacturing data?",
+      "topic": "factor_analysis",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "medium",
+      "hints": [
+        "Use StandardScaler to standardize features before PCA",
+        "fit() PCA first, then check cumulative explained variance",
+        "Use np.argmax() to find first index where cumulative variance >= threshold",
+        "Refit PCA with the selected number of components for the final transformation"
+      ],
+      "id": "m2.3_q006",
+      "points": 8,
+      "question": "Implement PCA to reduce a semiconductor dataset from 100 features to the number of components needed to explain 95% of the variance. Return the transformed data and the number of components selected.",
+      "solution": "import numpy as np\nimport pandas as pd\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.decomposition import PCA\n\ndef apply_pca_variance_threshold(X: pd.DataFrame, variance_threshold: float = 0.95) -> tuple:\n    \"\"\"\n    Apply PCA to reduce dimensionality while retaining specified variance.\n    \n    Args:\n        X: DataFrame with features (samples x features)\n        variance_threshold: Cumulative variance to retain (default 0.95)\n    \n    Returns:\n        tuple: (X_transformed as DataFrame, n_components selected as int)\n    \"\"\"\n    # Standardize features\n    scaler = StandardScaler()\n    X_scaled = scaler.fit_transform(X)\n    \n    # Apply PCA with all components initially\n    pca = PCA()\n    pca.fit(X_scaled)\n    \n    # Determine number of components for variance threshold\n    cumulative_variance = np.cumsum(pca.explained_variance_ratio_)\n    n_components = np.argmax(cumulative_variance >= variance_threshold) + 1\n    \n    # Apply PCA with selected number of components\n    pca_final = PCA(n_components=n_components)\n    X_transformed = pca_final.fit_transform(X_scaled)\n    \n    # Convert to DataFrame with component names\n    X_transformed_df = pd.DataFrame(\n        X_transformed,\n        columns=[f'PC{i+1}' for i in range(n_components)],\n        index=X.index\n    )\n    \n    return X_transformed_df, n_components",
+      "starter_code": "import numpy as np\nimport pandas as pd\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.decomposition import PCA\n\ndef apply_pca_variance_threshold(X: pd.DataFrame, variance_threshold: float = 0.95) -> tuple:\n    \"\"\"\n    Apply PCA to reduce dimensionality while retaining specified variance.\n    \n    Args:\n        X: DataFrame with features (samples x features)\n        variance_threshold: Cumulative variance to retain (default 0.95)\n    \n    Returns:\n        tuple: (X_transformed as DataFrame, n_components selected as int)\n    \"\"\"\n    # Your code here\n    pass",
+      "test_cases": [
+        {
+          "description": "Returns DataFrame with correct samples and valid component count",
+          "expected_output": "isinstance(result[0], pd.DataFrame) and result[0].shape[0] == 100 and result[1] > 0 and result[1] <= 50",
+          "input": "X = pd.DataFrame(np.random.randn(100, 50)); result = apply_pca_variance_threshold(X, 0.95)"
+        },
+        {
+          "description": "Number of columns matches returned n_components",
+          "expected_output": "df.shape[1] == n",
+          "input": "X = pd.DataFrame(np.random.randn(100, 50)); df, n = apply_pca_variance_threshold(X, 0.95)"
+        },
+        {
+          "description": "Components named correctly (PC1, PC2, ...)",
+          "expected_output": "all(df.columns == [f'PC{i+1}' for i in range(n)])",
+          "input": "X = pd.DataFrame(np.random.randn(100, 50)); df, n = apply_pca_variance_threshold(X, 0.95)"
+        }
+      ],
+      "topic": "pca_implementation",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "hints": [
+        "Use X.corr() to compute the correlation matrix",
+        "Iterate through the upper triangle only to avoid duplicates",
+        "Use abs() to check correlation magnitude regardless of sign",
+        "Sort using a lambda function with abs() as the key"
+      ],
+      "id": "m2.3_q007",
+      "points": 7,
+      "question": "Create a function that generates a correlation matrix, identifies highly correlated feature pairs (|correlation| > threshold), and returns a list of feature pairs to investigate for redundancy.",
+      "solution": "import numpy as np\nimport pandas as pd\n\ndef find_highly_correlated_pairs(X: pd.DataFrame, threshold: float = 0.85) -> list:\n    \"\"\"\n    Find pairs of features with high correlation.\n    \n    Args:\n        X: DataFrame with features\n        threshold: Absolute correlation threshold (default 0.85)\n    \n    Returns:\n        list of tuples: [(feature1, feature2, correlation), ...]\n        Sorted by absolute correlation descending\n    \"\"\"\n    # Compute correlation matrix\n    corr_matrix = X.corr()\n    \n    # Find pairs with high correlation\n    high_corr_pairs = []\n    \n    # Iterate through upper triangle only (avoid duplicates and diagonal)\n    for i in range(len(corr_matrix.columns)):\n        for j in range(i + 1, len(corr_matrix.columns)):\n            corr_value = corr_matrix.iloc[i, j]\n            \n            # Check if absolute correlation exceeds threshold\n            if abs(corr_value) > threshold:\n                feature1 = corr_matrix.columns[i]\n                feature2 = corr_matrix.columns[j]\n                high_corr_pairs.append((feature1, feature2, corr_value))\n    \n    # Sort by absolute correlation descending\n    high_corr_pairs.sort(key=lambda x: abs(x[2]), reverse=True)\n    \n    return high_corr_pairs",
+      "starter_code": "import numpy as np\nimport pandas as pd\n\ndef find_highly_correlated_pairs(X: pd.DataFrame, threshold: float = 0.85) -> list:\n    \"\"\"\n    Find pairs of features with high correlation.\n    \n    Args:\n        X: DataFrame with features\n        threshold: Absolute correlation threshold (default 0.85)\n    \n    Returns:\n        list of tuples: [(feature1, feature2, correlation), ...]\n        Sorted by absolute correlation descending\n    \"\"\"\n    # Your code here\n    pass",
+      "test_cases": [
+        {
+          "description": "Finds perfect and near-perfect correlations",
+          "expected_output": "len(result) == 2 and abs(result[0][2]) > 0.9",
+          "input": "X = pd.DataFrame({'A': [1,2,3,4], 'B': [1,2,3,4], 'C': [4,3,2,1]}); result = find_highly_correlated_pairs(X, 0.9)"
+        },
+        {
+          "description": "Identifies perfect positive correlation",
+          "expected_output": "len(result) == 1 and result[0][2] == 1.0",
+          "input": "X = pd.DataFrame({'A': [1,2,3], 'B': [2,4,6]}); result = find_highly_correlated_pairs(X, 0.5)"
+        },
+        {
+          "description": "All returned pairs meet threshold requirement",
+          "expected_output": "all(abs(pair[2]) > 0.99 for pair in result)",
+          "input": "X = pd.DataFrame(np.random.randn(100, 10)); result = find_highly_correlated_pairs(X, 0.99)"
+        }
+      ],
+      "topic": "correlation_heatmap",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "hints": [
+        "Standardize features before PCA",
+        "Use np.cumsum() for cumulative variance",
+        "Detect elbow by finding where variance drop becomes small",
+        "Consider fallback strategy using 90% cumulative variance threshold"
+      ],
+      "id": "m2.3_q008",
+      "points": 10,
+      "question": "Create a function that performs PCA and generates data for a scree plot (variance explained by each component) and an elbow detection to suggest the optimal number of components.",
+      "solution": "import numpy as np\nimport pandas as pd\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.decomposition import PCA\n\ndef pca_scree_analysis(X: pd.DataFrame, max_components: int = 20) -> dict:\n    \"\"\"\n    Perform PCA and return scree plot data with elbow suggestion.\n    \n    Args:\n        X: DataFrame with features\n        max_components: Maximum components to analyze\n    \n    Returns:\n        dict with keys:\n        - 'explained_variance_ratio': array of variance explained by each PC\n        - 'cumulative_variance': array of cumulative variance\n        - 'suggested_components': int, elbow point suggestion\n    \"\"\"\n    # Limit max_components to feature count\n    max_components = min(max_components, X.shape[1], X.shape[0])\n    \n    # Standardize features\n    scaler = StandardScaler()\n    X_scaled = scaler.fit_transform(X)\n    \n    # Apply PCA\n    pca = PCA(n_components=max_components)\n    pca.fit(X_scaled)\n    \n    # Get variance explained\n    explained_variance = pca.explained_variance_ratio_\n    cumulative_variance = np.cumsum(explained_variance)\n    \n    # Simple elbow detection: find where variance drop becomes < threshold\n    # Or where cumulative variance reaches 90%\n    variance_drops = np.diff(explained_variance)\n    \n    # Find first component where drop is less than 2% of first component's variance\n    threshold = 0.02 * explained_variance[0]\n    elbow_candidates = np.where(np.abs(variance_drops) < threshold)[0]\n    \n    if len(elbow_candidates) > 0:\n        suggested_components = elbow_candidates[0] + 1  # +1 because diff reduces length\n    else:\n        # Fallback: use 90% cumulative variance\n        suggested_components = np.argmax(cumulative_variance >= 0.90) + 1\n    \n    # Ensure at least 1 component\n    suggested_components = max(1, suggested_components)\n    \n    return {\n        'explained_variance_ratio': explained_variance,\n        'cumulative_variance': cumulative_variance,\n        'suggested_components': int(suggested_components)\n    }",
+      "starter_code": "import numpy as np\nimport pandas as pd\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.decomposition import PCA\n\ndef pca_scree_analysis(X: pd.DataFrame, max_components: int = 20) -> dict:\n    \"\"\"\n    Perform PCA and return scree plot data with elbow suggestion.\n    \n    Args:\n        X: DataFrame with features\n        max_components: Maximum components to analyze\n    \n    Returns:\n        dict with keys:\n        - 'explained_variance_ratio': array of variance explained by each PC\n        - 'cumulative_variance': array of cumulative variance\n        - 'suggested_components': int, elbow point suggestion\n    \"\"\"\n    # Your code here\n    pass",
+      "test_cases": [
+        {
+          "description": "Returns arrays with correct maximum length",
+          "expected_output": "len(result['explained_variance_ratio']) <= 20 and len(result['cumulative_variance']) <= 20",
+          "input": "X = pd.DataFrame(np.random.randn(100, 30)); result = pca_scree_analysis(X, 20)"
+        },
+        {
+          "description": "Suggested components is within valid range",
+          "expected_output": "result['suggested_components'] >= 1 and result['suggested_components'] <= 20",
+          "input": "X = pd.DataFrame(np.random.randn(100, 30)); result = pca_scree_analysis(X, 20)"
+        },
+        {
+          "description": "Cumulative variance approaches 1.0",
+          "expected_output": "abs(result['cumulative_variance'][-1] - 1.0) < 0.1",
+          "input": "X = pd.DataFrame(np.random.randn(100, 30)); result = pca_scree_analysis(X, 20)"
+        }
+      ],
+      "topic": "scree_plot",
+      "type": "coding_exercise"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Mahalanobis distance accounts for correlations between variables and can detect multivariate outliers that might not be outliers in any single dimension. It measures distance from the mean in the context of the covariance structure, making it ideal for detecting unusual combinations of normal-looking individual values.",
+      "id": "m2.3_q009",
+      "options": [
+        "Z-score on each parameter individually",
+        "Mahalanobis distance considering the full covariance structure",
+        "IQR method on each parameter separately",
+        "Visual inspection of histograms"
+      ],
+      "points": 3,
+      "question": "You have a multivariate dataset with 20 correlated process parameters. A wafer has normal values for each individual parameter (within 3\u03c3) but appears as an outlier when considering all parameters together. What technique is best for detecting this type of outlier?",
+      "topic": "multivariate_outliers",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "This is a classic case of overfitting due to high dimensionality (curse of dimensionality). With 500 features and 10,000 samples (ratio of 20:1), the model has learned noise in the training data. Since 50 PCA components capture 95% of variance, reducing to these components would eliminate redundant/noisy features and likely improve generalization.",
+      "id": "m2.3_q010",
+      "options": [
+        "The model is underfitting; you need more features",
+        "The model is overfitting due to the curse of dimensionality; consider using the 50 PCA components instead",
+        "The test data is corrupted; ignore these results",
+        "You need to collect more than 10,000 wafers"
+      ],
+      "points": 4,
+      "question": "Your semiconductor dataset has 10,000 wafers and 500 features. After training a complex model, you achieve 99% accuracy on training data but only 65% on test data. PCA shows the first 50 components explain 95% of variance. What is the most likely issue?",
+      "topic": "dimensionality_curse",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "medium",
+      "hints": [
+        "Compute sample mean and covariance matrix",
+        "Use np.linalg.inv() for inverse covariance (handle singularity with pinv)",
+        "Mahalanobis distance: sqrt((x - \u03bc)\u1d40 \u03a3\u207b\u00b9 (x - \u03bc))",
+        "Compare squared distances to chi-square threshold with df = n_features"
+      ],
+      "id": "m2.3_q011",
+      "points": 9,
+      "question": "Implement a function to compute Mahalanobis distances for all samples in a dataset and identify multivariate outliers using a chi-square threshold.",
+      "solution": "import numpy as np\nimport pandas as pd\nfrom scipy.stats import chi2\n\ndef detect_multivariate_outliers(X: pd.DataFrame, significance_level: float = 0.01) -> pd.Series:\n    \"\"\"\n    Detect multivariate outliers using Mahalanobis distance.\n    \n    Args:\n        X: DataFrame with features (samples x features)\n        significance_level: Significance level for chi-square threshold\n    \n    Returns:\n        Boolean Series indicating outliers (True = outlier)\n    \"\"\"\n    # Compute mean and covariance\n    mean = X.mean(axis=0)\n    cov_matrix = X.cov()\n    \n    # Compute inverse covariance (precision matrix)\n    try:\n        inv_cov = np.linalg.inv(cov_matrix)\n    except np.linalg.LinAlgError:\n        # If singular, use pseudo-inverse\n        inv_cov = np.linalg.pinv(cov_matrix)\n    \n    # Compute Mahalanobis distance for each sample\n    mahal_distances = []\n    for idx in range(len(X)):\n        diff = X.iloc[idx] - mean\n        mahal_dist = np.sqrt(diff @ inv_cov @ diff.T)\n        mahal_distances.append(mahal_dist)\n    \n    mahal_distances = np.array(mahal_distances)\n    \n    # Chi-square threshold (degrees of freedom = number of features)\n    threshold = chi2.ppf(1 - significance_level, df=X.shape[1])\n    \n    # Mahalanobis distance squared follows chi-square distribution\n    outliers = (mahal_distances ** 2) > threshold\n    \n    return pd.Series(outliers, index=X.index, name='is_outlier')",
+      "starter_code": "import numpy as np\nimport pandas as pd\nfrom scipy.stats import chi2\n\ndef detect_multivariate_outliers(X: pd.DataFrame, significance_level: float = 0.01) -> pd.Series:\n    \"\"\"\n    Detect multivariate outliers using Mahalanobis distance.\n    \n    Args:\n        X: DataFrame with features (samples x features)\n        significance_level: Significance level for chi-square threshold\n    \n    Returns:\n        Boolean Series indicating outliers (True = outlier)\n    \"\"\"\n    # Your code here\n    pass",
+      "test_cases": [
+        {
+          "description": "Returns boolean Series with correct length",
+          "expected_output": "len(result) == 100 and result.dtype == bool",
+          "input": "X = pd.DataFrame(np.random.randn(100, 5)); result = detect_multivariate_outliers(X, 0.01)"
+        },
+        {
+          "description": "With significance 0.01, expects roughly 1% outliers in random data",
+          "expected_output": "result.sum() < 10",
+          "input": "X = pd.DataFrame(np.random.randn(100, 5)); result = detect_multivariate_outliers(X, 0.01)"
+        },
+        {
+          "description": "Detects obvious multivariate outliers",
+          "expected_output": "result.iloc[-5:].sum() >= 3",
+          "input": "X = pd.DataFrame(np.vstack([np.random.randn(95, 3), np.array([[10, 10, 10]] * 5)])); result = detect_multivariate_outliers(X, 0.01)"
+        }
+      ],
+      "topic": "mahalanobis_distance",
+      "type": "coding_exercise"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "easy",
+      "explanation": "Eigenvalues represent the amount of variance explained by each corresponding eigenvector (principal component). Larger eigenvalues indicate directions of maximum variance in the data. The eigenvectors define the directions, while eigenvalues quantify the importance of those directions.",
+      "id": "m2.3_q012",
+      "options": [
+        "The variance explained by each principal component",
+        "The correlation between features",
+        "The number of samples in the dataset",
+        "The mean of each feature"
+      ],
+      "points": 2,
+      "question": "In PCA, what do the eigenvalues of the covariance matrix represent?",
+      "topic": "eigenvalues",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "medium",
+      "id": "m2.3_q013",
+      "keywords": [
+        "trade-off",
+        "balance",
+        "thermal",
+        "chemical",
+        "etch",
+        "mechanism",
+        "process"
+      ],
+      "points": 6,
+      "question": "You performed PCA on 80 process parameters from an etch tool. The first principal component (PC1) has high positive loadings (weights) for all gas flow rates and high negative loadings for all temperatures. How would you interpret PC1 in the context of semiconductor manufacturing?",
+      "rubric": {
+        "criteria": [
+          "Identifies PC1 as representing a process trade-off or balance (2 points)",
+          "Correctly interprets positive vs negative loadings (2 points)",
+          "Connects interpretation to physical manufacturing mechanism (1 point)",
+          "Explains practical utility for process monitoring or troubleshooting (1 point)"
+        ],
+        "max_points": 6
+      },
+      "sample_answer": "PC1 represents a 'thermal-chemical balance' axis in the etch process. High PC1 values indicate recipes with high gas flows and low temperatures (chemical-dominated etching), while low PC1 values indicate high temperatures with low flows (thermal-dominated etching). This component captures the fundamental trade-off between chemical and thermal activation in the etch mechanism. Understanding this axis helps engineers identify whether process drift or defects are related to shifts in this thermal-chemical balance rather than specific individual parameters.",
+      "topic": "pca_interpretation",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "id": "m2.3_q014",
+      "keywords": [
+        "correlation",
+        "multicollinearity",
+        "multiple comparison",
+        "Type I error",
+        "joint behavior",
+        "omnibus test",
+        "CVD",
+        "chamber"
+      ],
+      "points": 8,
+      "question": "Explain why multivariate statistical methods (like PCA or MANOVA) are often more appropriate than multiple univariate tests when analyzing semiconductor process data with many correlated parameters. Provide a specific manufacturing example where univariate analysis might miss important patterns that multivariate analysis would detect.",
+      "rubric": {
+        "criteria": [
+          "Explains correlation consideration advantage (2 points)",
+          "Mentions multiple comparison/Type I error problem (2 points)",
+          "Provides relevant manufacturing example with specific parameters (2 points)",
+          "Describes how multivariate detects patterns univariate misses (2 points)"
+        ],
+        "max_points": 8
+      },
+      "sample_answer": "Multivariate methods are superior because they account for correlations between variables and can detect patterns in the joint behavior of parameters that univariate tests miss. For example, in a CVD deposition process, individually analyzing pressure, temperature, and gas flow might show each is within specification. However, multivariate analysis (like Hotelling's T\u00b2 or PCA) could reveal that the combination of these parameters has shifted to an abnormal state (e.g., high pressure combined with low temperature and high flow), indicating an underlying chamber condition issue like a leak or contamination. Additionally, univariate tests suffer from multiple comparison problems\u2014testing 50 parameters individually at \u03b1=0.05 would expect 2-3 false positives by chance. Multivariate methods provide a single omnibus test controlling overall Type I error rate while simultaneously considering the correlation structure, making them more powerful and appropriate for high-dimensional process data.",
+      "topic": "multivariate_vs_univariate",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "hints": [
+        "Standardize features before PCA",
+        "Loadings = eigenvectors * sqrt(eigenvalues)",
+        "pca.components_ has shape (n_components, n_features), so transpose",
+        "Create DataFrame with feature names as index and PC names as columns"
+      ],
+      "id": "m2.3_q015",
+      "points": 9,
+      "question": "Create a function that performs PCA and returns a loading matrix (feature contributions to each PC) formatted as a DataFrame, sorted by absolute loading magnitude for easy interpretation.",
+      "solution": "import numpy as np\nimport pandas as pd\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.decomposition import PCA\n\ndef get_pca_loadings(X: pd.DataFrame, n_components: int = 5) -> pd.DataFrame:\n    \"\"\"\n    Compute PCA loadings matrix showing feature contributions.\n    \n    Args:\n        X: DataFrame with features\n        n_components: Number of principal components to compute\n    \n    Returns:\n        DataFrame with features as rows, PCs as columns, values are loadings\n    \"\"\"\n    # Limit n_components to valid range\n    n_components = min(n_components, X.shape[1], X.shape[0])\n    \n    # Standardize features\n    scaler = StandardScaler()\n    X_scaled = scaler.fit_transform(X)\n    \n    # Apply PCA\n    pca = PCA(n_components=n_components)\n    pca.fit(X_scaled)\n    \n    # Get loadings (components_ is eigenvectors transposed)\n    # Shape: (n_components, n_features)\n    # Loadings = eigenvectors * sqrt(eigenvalues)\n    loadings = pca.components_.T * np.sqrt(pca.explained_variance_)\n    \n    # Create DataFrame\n    loadings_df = pd.DataFrame(\n        loadings,\n        columns=[f'PC{i+1}' for i in range(n_components)],\n        index=X.columns\n    )\n    \n    return loadings_df",
+      "starter_code": "import numpy as np\nimport pandas as pd\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.decomposition import PCA\n\ndef get_pca_loadings(X: pd.DataFrame, n_components: int = 5) -> pd.DataFrame:\n    \"\"\"\n    Compute PCA loadings matrix showing feature contributions.\n    \n    Args:\n        X: DataFrame with features\n        n_components: Number of principal components to compute\n    \n    Returns:\n        DataFrame with features as rows, PCs as columns, values are loadings\n    \"\"\"\n    # Your code here\n    pass",
+      "test_cases": [
+        {
+          "description": "Returns DataFrame with correct shape and column names",
+          "expected_output": "result.shape == (10, 3) and list(result.columns) == ['PC1', 'PC2', 'PC3']",
+          "input": "X = pd.DataFrame(np.random.randn(100, 10), columns=[f'F{i}' for i in range(10)]); result = get_pca_loadings(X, 3)"
+        },
+        {
+          "description": "Index contains original feature names",
+          "expected_output": "list(result.index) == [f'F{i}' for i in range(10)]",
+          "input": "X = pd.DataFrame(np.random.randn(100, 10), columns=[f'F{i}' for i in range(10)]); result = get_pca_loadings(X, 3)"
+        },
+        {
+          "description": "Loadings have reasonable magnitude",
+          "expected_output": "np.isclose(np.sum(result['PC1']**2), 1.0, atol=0.5)",
+          "input": "X = pd.DataFrame(np.random.randn(100, 10), columns=[f'F{i}' for i in range(10)]); result = get_pca_loadings(X, 3)"
+        }
+      ],
+      "topic": "pca_loading_analysis",
+      "type": "coding_exercise"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "medium",
+      "explanation": "PCA is a linear dimensionality reduction technique that identifies directions of maximum variance through linear combinations of features. It cannot capture nonlinear relationships or manifolds in the data. For semiconductor data with complex nonlinear process dynamics, techniques like kernel PCA, autoencoders, or manifold learning might be more appropriate.",
+      "id": "m2.3_q016",
+      "options": [
+        "PCA only captures linear relationships; nonlinear patterns may be missed",
+        "PCA requires data to be categorical rather than continuous",
+        "PCA can only be used with exactly 10 features",
+        "PCA improves model interpretability by keeping all original features"
+      ],
+      "points": 3,
+      "question": "Which of the following is a key limitation of PCA when applied to semiconductor manufacturing data?",
+      "topic": "pca_limitations",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 2,
+      "difficulty": "hard",
+      "explanation": "For multivariate tests with many variables (p=15), detecting small effects (d=0.3) requires substantially larger samples than univariate tests due to increased dimensionality. The required sample size increases roughly with the number of variables. For Hotelling's T\u00b2 with p=15 variables, d=0.3, power=0.80, and \u03b1=0.05, approximately 200 samples per group are needed. This illustrates the curse of dimensionality in hypothesis testing.",
+      "id": "m2.3_q017",
+      "options": [
+        "n \u2248 30 per group",
+        "n \u2248 100 per group",
+        "n \u2248 200 per group",
+        "n \u2248 500 per group"
+      ],
+      "points": 4,
+      "question": "You want to detect a subtle multivariate shift in process parameters (effect size Cohen's d \u2248 0.3) with 80% power at \u03b1=0.05 using Hotelling's T\u00b2 test on 15 correlated variables. Approximately how many wafers do you need per group?",
+      "topic": "statistical_power",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "medium",
+      "hints": [
+        "Use X.corr().abs() for absolute correlation values",
+        "Compute feature variances with X.var()",
+        "Iterate through upper triangle to avoid duplicates",
+        "Keep feature with higher variance when pair is correlated"
+      ],
+      "id": "m2.3_q018",
+      "points": 7,
+      "question": "Implement a function that removes redundant features based on correlation threshold, keeping the feature with highest variance from each correlated group.",
+      "solution": "import numpy as np\nimport pandas as pd\n\ndef remove_correlated_features(X: pd.DataFrame, threshold: float = 0.90) -> pd.DataFrame:\n    \"\"\"\n    Remove redundant highly correlated features.\n    \n    Args:\n        X: DataFrame with features\n        threshold: Correlation threshold for removal\n    \n    Returns:\n        DataFrame with reduced feature set\n    \"\"\"\n    # Compute correlation matrix\n    corr_matrix = X.corr().abs()\n    \n    # Compute feature variances for tie-breaking\n    feature_variances = X.var()\n    \n    # Track features to keep\n    features_to_keep = set(X.columns)\n    \n    # Iterate through upper triangle\n    for i in range(len(corr_matrix.columns)):\n        for j in range(i + 1, len(corr_matrix.columns)):\n            feature_i = corr_matrix.columns[i]\n            feature_j = corr_matrix.columns[j]\n            \n            # Skip if either already removed\n            if feature_i not in features_to_keep or feature_j not in features_to_keep:\n                continue\n            \n            # Check correlation\n            if corr_matrix.iloc[i, j] > threshold:\n                # Remove feature with lower variance\n                if feature_variances[feature_i] >= feature_variances[feature_j]:\n                    features_to_keep.discard(feature_j)\n                else:\n                    features_to_keep.discard(feature_i)\n    \n    # Return filtered DataFrame\n    return X[sorted(list(features_to_keep))]",
+      "starter_code": "import numpy as np\nimport pandas as pd\n\ndef remove_correlated_features(X: pd.DataFrame, threshold: float = 0.90) -> pd.DataFrame:\n    \"\"\"\n    Remove redundant highly correlated features.\n    \n    Args:\n        X: DataFrame with features\n        threshold: Correlation threshold for removal\n    \n    Returns:\n        DataFrame with reduced feature set\n    \"\"\"\n    # Your code here\n    pass",
+      "test_cases": [
+        {
+          "description": "Removes at least one highly correlated feature",
+          "expected_output": "result.shape[1] < 3",
+          "input": "X = pd.DataFrame({'A': [1,2,3], 'B': [1,2,3], 'C': [3,2,1]}); result = remove_correlated_features(X, 0.95)"
+        },
+        {
+          "description": "Preserves all samples",
+          "expected_output": "result.shape[0] == 100",
+          "input": "X = pd.DataFrame(np.random.randn(100, 10)); result = remove_correlated_features(X, 0.99)"
+        },
+        {
+          "description": "Keeps feature with higher variance when correlated",
+          "expected_output": "'C' in result.columns",
+          "input": "X = pd.DataFrame({'A': [1,2,3,4], 'B': [1,2,3,4], 'C': [1,2,3,5]}); result = remove_correlated_features(X, 0.95)"
+        }
+      ],
+      "topic": "correlation_filtering",
+      "type": "coding_exercise"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "medium",
+      "explanation": "Covariance magnitude depends on the scales of both variables, making it difficult to interpret in isolation. To meaningfully assess the relationship strength, you need the standard deviations to compute the correlation coefficient: \u03c1 = Cov(X,Y) / (\u03c3_X \u00d7 \u03c3_Y). Correlation is scale-invariant and ranges from -1 to 1, providing interpretable relationship strength.",
+      "id": "m2.3_q019",
+      "options": [
+        "The standard deviations of both variables to calculate correlation",
+        "The mean values of both variables",
+        "The sample size used for calculation",
+        "The units of measurement only"
+      ],
+      "points": 3,
+      "question": "In a semiconductor dataset, the covariance between chamber temperature (\u00b0C) and etch rate (nm/min) is 25. What additional information do you need to meaningfully interpret this covariance value?",
+      "topic": "covariance_interpretation",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "hard",
+      "id": "m2.3_q020",
+      "keywords": [
+        "interpretability",
+        "variance",
+        "multicollinearity",
+        "orthogonal",
+        "latent",
+        "process control",
+        "troubleshooting",
+        "hybrid"
+      ],
+      "points": 10,
+      "question": "Compare PCA dimensionality reduction with feature selection methods (e.g., selecting top k features by variance or mutual information) for semiconductor manufacturing applications. Discuss the advantages and disadvantages of each approach, and provide guidance on when to use each method.",
+      "rubric": {
+        "criteria": [
+          "Lists key advantages of PCA (2 points)",
+          "Lists key disadvantages of PCA, especially interpretability (2 points)",
+          "Lists key advantages of feature selection (2 points)",
+          "Lists key disadvantages of feature selection (1 point)",
+          "Provides clear guidance on when to use each method (2 points)",
+          "Discusses manufacturing-specific context and examples (1 point)"
+        ],
+        "max_points": 10
+      },
+      "sample_answer": "PCA and feature selection serve different purposes with distinct trade-offs:\n\nPCA Advantages:\n- Captures maximum variance in fewest components\n- Reduces multicollinearity by creating orthogonal components\n- Can uncover latent process factors not obvious from individual features\n- Often improves model performance by reducing noise\n\nPCA Disadvantages:\n- Loses interpretability\u2014components are linear combinations of features\n- Engineers cannot directly adjust 'PC2' on equipment\n- May mix physical domains (e.g., thermal + chemical in one PC)\n- Requires keeping transform information for new data\n\nFeature Selection Advantages:\n- Maintains interpretability\u2014retained features are original measurements\n- Engineers can directly act on selected features for process control\n- Simpler to implement in production monitoring systems\n- Physical meaning preserved for troubleshooting\n\nFeature Selection Disadvantages:\n- May discard correlated features with useful complementary information\n- Doesn't address multicollinearity among selected features\n- Can be unstable\u2014small data changes may alter selected features\n\nRecommendations:\n- Use PCA for: Exploratory analysis, modeling with highly correlated features (sensor data, spectroscopy), when prediction accuracy is paramount\n- Use Feature Selection for: Real-time monitoring dashboards, root cause analysis, regulatory compliance (traceable to physical measurements), when interpretability is critical\n- Hybrid approach: Use PCA to identify important variable groups, then select representative features from each group\n\nFor semiconductor manufacturing, feature selection often preferred for process control and troubleshooting, while PCA valuable for predictive modeling and advanced process understanding.",
+      "topic": "pca_vs_feature_selection",
+      "type": "conceptual"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "easy",
+      "explanation": "Standardization is unnecessary when all features are already on the same scale (same units, comparable ranges), and you want PCA to focus on absolute variance rather than correlation. However, this is rare in semiconductor data. In most cases, with mixed units (temperatures, pressures, flows, etc.), standardization is essential to prevent scale-driven bias in the principal components.",
+      "id": "m2.3_q021",
+      "options": [
+        "When all features are measured in the same units and have comparable scales",
+        "When features have different units (e.g., temperature vs pressure)",
+        "When you want to focus on variance rather than correlation structure",
+        "When features have highly skewed distributions"
+      ],
+      "points": 2,
+      "question": "When should you NOT standardize features before applying PCA?",
+      "topic": "standardization_necessity",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "easy",
+      "hints": [
+        "Fit PCA with all components first",
+        "Use np.cumsum() on explained_variance_ratio_",
+        "Find first index where cumulative >= target with np.argmax()",
+        "Add 1 to convert index to count"
+      ],
+      "id": "m2.3_q022",
+      "points": 5,
+      "question": "Create a function that computes the cumulative variance explained by principal components and returns the minimum number of components needed to reach a target variance threshold.",
+      "solution": "import numpy as np\nfrom sklearn.decomposition import PCA\n\ndef components_for_variance(X: np.ndarray, target_variance: float = 0.95) -> int:\n    \"\"\"\n    Find minimum components to explain target variance.\n    \n    Args:\n        X: Standardized feature matrix (numpy array)\n        target_variance: Target cumulative variance (default 0.95)\n    \n    Returns:\n        int: Minimum number of components needed\n    \"\"\"\n    # Fit PCA with all possible components\n    pca = PCA()\n    pca.fit(X)\n    \n    # Calculate cumulative variance\n    cumulative_variance = np.cumsum(pca.explained_variance_ratio_)\n    \n    # Find first index where cumulative variance >= target\n    n_components = np.argmax(cumulative_variance >= target_variance) + 1\n    \n    return int(n_components)",
+      "starter_code": "import numpy as np\nfrom sklearn.decomposition import PCA\n\ndef components_for_variance(X: np.ndarray, target_variance: float = 0.95) -> int:\n    \"\"\"\n    Find minimum components to explain target variance.\n    \n    Args:\n        X: Standardized feature matrix (numpy array)\n        target_variance: Target cumulative variance (default 0.95)\n    \n    Returns:\n        int: Minimum number of components needed\n    \"\"\"\n    # Your code here\n    pass",
+      "test_cases": [
+        {
+          "description": "Returns valid component count",
+          "expected_output": "1 <= result <= 20",
+          "input": "X = np.random.randn(100, 20); result = components_for_variance(X, 0.95)"
+        },
+        {
+          "description": "For 100% variance, returns min(n_features, n_samples)",
+          "expected_output": "result == 20 or result == 100",
+          "input": "X = np.random.randn(100, 20); result = components_for_variance(X, 1.0)"
+        },
+        {
+          "description": "Higher variance target requires more components",
+          "expected_output": "n1 <= n2",
+          "input": "X = np.random.randn(100, 20); n1 = components_for_variance(X, 0.80); n2 = components_for_variance(X, 0.95)"
+        }
+      ],
+      "topic": "variance_explained",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "id": "m2.3_q023",
+      "keywords": [
+        "standardization",
+        "outlier",
+        "scale",
+        "normalization",
+        "z-score",
+        "RobustScaler",
+        "preprocessing",
+        "order"
+      ],
+      "points": 7,
+      "question": "A semiconductor dataset contains features with vastly different scales: chamber pressure (0.1-10 mbar), temperature (200-800\u00b0C), gas flow (10-1000 sccm), and RF power (100-5000 W). Additionally, some features have extreme outliers. Describe a complete preprocessing pipeline for this data before applying PCA, justifying each step.",
+      "rubric": {
+        "criteria": [
+          "Mentions outlier treatment first (1 point)",
+          "Includes missing value handling (1 point)",
+          "Emphasizes standardization as critical step (2 points)",
+          "Correctly justifies standardization due to scale differences (2 points)",
+          "Discusses order of operations (1 point)"
+        ],
+        "max_points": 7
+      },
+      "sample_answer": "Recommended preprocessing pipeline:\n\n1. **Outlier Treatment** (First):\n   - Apply robust outlier detection (IQR or Mahalanobis distance)\n   - Decide on removal vs. winsorization based on domain knowledge\n   - Justification: Extreme outliers disproportionately affect variance calculations and would dominate the first principal components, obscuring true patterns\n\n2. **Missing Value Imputation**:\n   - Use appropriate method (mean for MCAR, median for outlier-prone features, or domain-specific)\n   - Justification: PCA requires complete data; imputation preserves sample size\n\n3. **Standardization** (Critical):\n   - Apply z-score normalization: (X - \u03bc) / \u03c3\n   - Justification: With features on vastly different scales (0.1-10 vs 100-5000), unstandardized PCA would be dominated by RF power and gas flow purely due to their large numerical ranges, not because they explain more variance in a meaningful sense\n\n4. **Alternative: Robust Scaling**:\n   - If outliers remain, use RobustScaler: (X - median) / IQR\n   - Justification: Less sensitive to extreme values than standard scaling\n\n5. **Verification**:\n   - Check that all features have mean \u2248 0 and std \u2248 1 after standardization\n   - Verify covariance matrix is well-conditioned\n\nOrder matters: outliers \u2192 imputation \u2192 scaling. This ensures PCA captures correlation structure rather than scale artifacts.",
+      "topic": "pca_preprocessing",
+      "type": "conceptual"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "PCA's core assumption is that directions of high variance correspond to important patterns/signals in the data. If the true structure lies in low-variance directions (e.g., signal is small but consistent while noise is large but random), PCA may fail. PCA does NOT require normality, actually benefits from correlations (that's what it exploits), and sample size requirements depend on dimensionality but not a fixed threshold.",
+      "id": "m2.3_q024",
+      "options": [
+        "Features must be normally distributed",
+        "The important patterns in the data are characterized by directions of high variance",
+        "Features must be independent and uncorrelated",
+        "The dataset must contain at least 1000 samples"
+      ],
+      "points": 4,
+      "question": "Which assumption is most critical for PCA to work effectively on semiconductor process data?",
+      "topic": "pca_assumptions",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Sparse PCA adds a sparsity constraint (e.g., L1 regularization) that forces many feature loadings to be exactly zero in each component. This creates components that depend on fewer features, making them easier to interpret physically (e.g., 'PC1 depends only on gas flows and pressure, not temperature'). Standard PCA typically has small non-zero loadings on all features, making interpretation difficult. However, Sparse PCA explains slightly less variance than standard PCA as a trade-off for interpretability.",
+      "id": "m2.3_q025",
+      "options": [
+        "It runs faster than standard PCA on large datasets",
+        "It produces principal components with many zero loadings, improving interpretability",
+        "It can handle missing data without imputation",
+        "It explains more variance than standard PCA"
+      ],
+      "points": 3,
+      "question": "Sparse PCA is sometimes used as an alternative to standard PCA for high-dimensional manufacturing data. What is the main advantage of Sparse PCA?",
+      "topic": "sparse_pca",
+      "type": "multiple_choice"
+    }
+  ],
+  "sub_module": "advanced_statistical_analysis",
+  "title": "Advanced Statistical Analysis for Semiconductor Data",
+  "week": 4
+}

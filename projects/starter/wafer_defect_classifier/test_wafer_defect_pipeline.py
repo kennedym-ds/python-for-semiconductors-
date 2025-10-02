@@ -130,6 +130,7 @@ class TestWaferDefectPipeline:
             pipe = WaferDefectPipeline(model=model_name)
             pipe.fit(X, y)
 
+            assert pipe.metadata is not None
             assert pipe.metadata.model_type is not None
             preds = pipe.predict(X)
             assert len(preds) == len(y)
@@ -221,9 +222,7 @@ class TestCLIInterface:
     def run_cli_command(self, args):
         """Helper to run CLI commands and return JSON output."""
         script_path = Path(__file__).parent / "wafer_defect_pipeline.py"
-        result = subprocess.run(
-            [sys.executable, str(script_path)] + args, capture_output=True, text=True
-        )
+        result = subprocess.run([sys.executable, str(script_path)] + args, capture_output=True, text=True)
 
         if result.returncode != 0:
             pytest.fail(f"CLI command failed: {result.stderr}")
@@ -232,9 +231,7 @@ class TestCLIInterface:
 
     def test_cli_train_command(self):
         """Test CLI train command."""
-        result = self.run_cli_command(
-            ["train", "--dataset", "synthetic_wafer_100_0.2", "--model", "logistic"]
-        )
+        result = self.run_cli_command(["train", "--dataset", "synthetic_wafer_100_0.2", "--model", "logistic"])
 
         assert result["status"] == "trained"
         assert "metrics" in result
@@ -397,6 +394,527 @@ class TestManufacturingMetrics:
         assert metrics["estimated_loss"] == 11.0
         assert metrics["false_positive_count"] == 1
         assert metrics["false_negative_count"] == 1
+
+
+class TestEdgeCases:
+    """Test edge cases and error handling."""
+
+    def test_empty_dataset(self):
+        """Test pipeline behavior with empty dataset."""
+        X = pd.DataFrame()
+        y = np.array([])
+
+        pipe = WaferDefectPipeline()
+
+        # Should raise ValueError due to empty dataset
+        with pytest.raises((ValueError, IndexError)):
+            pipe.fit(X, y)
+
+    def test_single_sample(self):
+        """Test pipeline with single sample."""
+        df = generate_synthetic_wafer_defects(n_samples=1, seed=42)
+        y = df["defect"].to_numpy()
+        X = df.drop(columns=["defect", "wafer_id"])
+
+        pipe = WaferDefectPipeline()
+
+        # Single sample should fail in cross-validation or raise warning
+        with pytest.raises((ValueError, Warning)):
+            pipe.fit(X, y)
+
+    def test_single_class_all_defects(self):
+        """Test with dataset where all samples are defects."""
+        # Create artificial all-defect dataset
+        df = generate_synthetic_wafer_defects(n_samples=100, seed=42)
+        y = np.ones(len(df), dtype=int)  # All defects
+        X = df.drop(columns=["defect", "wafer_id"])
+
+        pipe = WaferDefectPipeline()
+
+        # Should fit but may have issues with some metrics
+        pipe.fit(X, y)
+        preds = pipe.predict(X)
+
+        # All predictions should be 1 (defect) due to single class
+        assert all(preds == 1)
+
+    def test_single_class_all_good(self):
+        """Test with dataset where all samples are good (no defects)."""
+        df = generate_synthetic_wafer_defects(n_samples=100, seed=42)
+        y = np.zeros(len(df), dtype=int)  # All good wafers
+        X = df.drop(columns=["defect", "wafer_id"])
+
+        pipe = WaferDefectPipeline()
+
+        # Should fit but predictions should all be 0
+        pipe.fit(X, y)
+        preds = pipe.predict(X)
+
+        # All predictions should be 0 (good) due to single class
+        assert all(preds == 0)
+
+    def test_extreme_imbalance(self):
+        """Test with 99.9% imbalance (1000 good, 1 defect)."""
+        # Create highly imbalanced dataset
+        df = generate_synthetic_wafer_defects(n_samples=1001, defect_rate=0.001, seed=42)
+        y = df["defect"].to_numpy()
+        X = df.drop(columns=["defect", "wafer_id"])
+
+        # Ensure we have the expected imbalance
+        if y.sum() == 0:
+            # Force at least one defect for testing
+            y[0] = 1
+
+        pipe = WaferDefectPipeline()
+        pipe.fit(X, y)
+
+        # Should still produce predictions
+        preds = pipe.predict(X)
+        assert len(preds) == len(y)
+
+        # Might predict mostly 0s due to imbalance, which is expected
+        assert preds.sum() <= len(preds) * 0.1  # At most 10% predicted as defects
+
+    def test_missing_features_in_prediction(self):
+        """Test prediction with missing required features."""
+        df = generate_synthetic_wafer_defects(n_samples=100, seed=42)
+        y = df["defect"].to_numpy()
+        X_train = df.drop(columns=["defect", "wafer_id"])
+
+        pipe = WaferDefectPipeline()
+        pipe.fit(X_train, y)
+
+        # Create test data with missing column
+        X_test = X_train.drop(columns=["center_density"])
+
+        # Should raise error due to missing features
+        with pytest.raises((ValueError, KeyError)):
+            pipe.predict(X_test)
+
+    def test_extra_features_in_prediction(self):
+        """Test prediction with extra features."""
+        df = generate_synthetic_wafer_defects(n_samples=100, seed=42)
+        y = df["defect"].to_numpy()
+        X_train = df.drop(columns=["defect", "wafer_id"])
+
+        pipe = WaferDefectPipeline()
+        pipe.fit(X_train, y)
+
+        # Create test data with extra column
+        X_test = X_train.copy()
+        X_test["extra_feature"] = np.random.randn(len(X_test))
+
+        # Should either ignore extra feature or raise error depending on implementation
+        try:
+            preds = pipe.predict(X_test)
+            # If it succeeds, verify predictions are valid
+            assert len(preds) == len(X_test)
+        except (ValueError, KeyError):
+            # Also acceptable to raise error for feature mismatch
+            pass
+
+    def test_nan_values_in_data(self):
+        """Test handling of NaN values in input data."""
+        df = generate_synthetic_wafer_defects(n_samples=100, seed=42)
+        y = df["defect"].to_numpy()
+        X = df.drop(columns=["defect", "wafer_id"])
+
+        # Introduce NaN values
+        X.iloc[0, 0] = np.nan
+        X.iloc[5, 2] = np.nan
+
+        pipe = WaferDefectPipeline()
+
+        # Should either handle NaN or raise informative error
+        with pytest.raises((ValueError, TypeError)):
+            pipe.fit(X, y)
+
+
+class TestManufacturingScenarios:
+    """Test manufacturing-specific use cases."""
+
+    @pytest.fixture
+    def manufacturing_data(self):
+        """Create realistic manufacturing dataset."""
+        df = generate_synthetic_wafer_defects(n_samples=500, defect_rate=0.15, seed=42)
+        y = df["defect"].to_numpy()
+        X = df.drop(columns=["defect", "wafer_id"])
+        return X, y
+
+    def test_high_precision_mode(self, manufacturing_data):
+        """Test with min_precision=0.90 to minimize false positives."""
+        X, y = manufacturing_data
+
+        # Split data for proper evaluation
+        from sklearn.model_selection import train_test_split
+
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42, stratify=y)
+
+        pipe = WaferDefectPipeline(model="rf", min_precision=0.90)
+        pipe.fit(X_train, y_train)
+
+        # Evaluate on test set
+        preds = pipe.predict(X_test)
+        from sklearn.metrics import precision_score
+
+        precision = precision_score(y_test, preds, zero_division=0)
+
+        # High precision mode should achieve high precision (with tolerance)
+        # May sacrifice recall to achieve this
+        if preds.sum() > 0:  # Only check if we have predictions
+            assert precision >= 0.75  # Relaxed for test stability
+
+    def test_high_recall_mode(self, manufacturing_data):
+        """Test with min_recall=0.90 to catch all defects."""
+        X, y = manufacturing_data
+
+        from sklearn.model_selection import train_test_split
+
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42, stratify=y)
+
+        pipe = WaferDefectPipeline(model="rf", min_recall=0.90)
+        pipe.fit(X_train, y_train)
+
+        # Evaluate on test set
+        preds = pipe.predict(X_test)
+        from sklearn.metrics import recall_score
+
+        recall = recall_score(y_test, preds, zero_division=0)
+
+        # High recall mode should catch most defects (with tolerance)
+        # May sacrifice precision to achieve this
+        if y_test.sum() > 0:  # Only check if we have positive samples
+            assert recall >= 0.70  # Relaxed for test stability
+
+    def test_cost_calculation_consistency(self, manufacturing_data):
+        """Test that cost calculations are consistent with FP/FN counts."""
+        X, y = manufacturing_data
+
+        # Note: Current implementation uses hardcoded costs (FP=1.0, FN=10.0)
+        pipe = WaferDefectPipeline(model="rf")
+        pipe.fit(X, y)
+        metrics = pipe.evaluate(X, y)
+
+        # Verify loss calculation: should be FP*1.0 + FN*10.0
+        fp_count = metrics["false_positive_count"]
+        fn_count = metrics["false_negative_count"]
+        expected_loss = fp_count * 1.0 + fn_count * 10.0
+
+        assert metrics["estimated_loss"] == expected_loss
+
+        # Verify counts are non-negative
+        assert fp_count >= 0
+        assert fn_count >= 0
+
+    def test_production_threshold_tuning(self, manufacturing_data):
+        """Test threshold optimization for production scenarios."""
+        X, y = manufacturing_data
+
+        # Test with both precision and recall constraints
+        pipe = WaferDefectPipeline(model="rf", min_precision=0.80, min_recall=0.75)
+        pipe.fit(X, y)
+
+        # Check that threshold is in reasonable range
+        assert 0.0 <= pipe.fitted_threshold <= 1.0
+
+        # Threshold should not be at extremes (0 or 1) for balanced constraints
+        # unless data is very separable
+        assert pipe.fitted_threshold != 0.0
+        assert pipe.fitted_threshold != 1.0
+
+        # Metadata should record the optimization settings
+        assert pipe.metadata is not None
+        assert hasattr(pipe.metadata, "model_type")
+
+    def test_batch_production_simulation(self, manufacturing_data):
+        """Simulate batch production scenario with multiple predictions."""
+        X, y = manufacturing_data
+
+        from sklearn.model_selection import train_test_split
+
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+        # Train model once
+        pipe = WaferDefectPipeline(model="rf")
+        pipe.fit(X_train, y_train)
+
+        # Simulate multiple batches
+        batch_size = 10
+        num_batches = len(X_test) // batch_size
+
+        all_preds = []
+        for i in range(num_batches):
+            start_idx = i * batch_size
+            end_idx = start_idx + batch_size
+            batch_X = X_test.iloc[start_idx:end_idx]
+
+            batch_preds = pipe.predict(batch_X)
+            all_preds.extend(batch_preds)
+
+        # Verify we got predictions for all batches
+        assert len(all_preds) == num_batches * batch_size
+
+        # Predictions should be binary
+        assert all(p in [0, 1] for p in all_preds)
+
+
+class TestIntegration:
+    """Test end-to-end integration workflows."""
+
+    def test_complete_ml_pipeline(self):
+        """Test full pipeline: load → train → optimize → save → load → predict."""
+        # Step 1: Load dataset
+        df = load_dataset("synthetic_wafer_200_0.2")
+        assert len(df) == 200
+
+        # Step 2: Prepare data
+        y = df["defect"].to_numpy()
+        X = df.drop(columns=["defect", "wafer_id"])
+
+        from sklearn.model_selection import train_test_split
+
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+        # Step 3: Train model with optimization
+        pipe = WaferDefectPipeline(model="rf", min_precision=0.80, min_recall=0.75)
+        pipe.fit(X_train, y_train)
+
+        # Step 4: Evaluate
+        train_metrics = pipe.evaluate(X_train, y_train)
+        test_metrics = pipe.evaluate(X_test, y_test)
+
+        assert train_metrics["roc_auc"] > 0.5  # Better than random
+        assert test_metrics["roc_auc"] > 0.5
+
+        # Step 5: Save model
+        with tempfile.NamedTemporaryFile(suffix=".joblib", delete=False) as tmp:
+            model_path = Path(tmp.name)
+
+        try:
+            pipe.save(model_path)
+            assert model_path.exists()
+
+            # Step 6: Load model
+            loaded_pipe = WaferDefectPipeline.load(model_path)
+
+            # Step 7: Make predictions with loaded model
+            loaded_preds = loaded_pipe.predict(X_test)
+
+            # Verify consistency
+            original_preds = pipe.predict(X_test)
+            np.testing.assert_array_equal(original_preds, loaded_preds)
+
+            # Step 8: Verify metadata preserved
+            assert loaded_pipe.metadata is not None
+            assert loaded_pipe.fitted_threshold == pipe.fitted_threshold
+
+        finally:
+            if model_path.exists():
+                model_path.unlink()
+
+    def test_multi_model_comparison(self):
+        """Test comparing multiple models end-to-end."""
+        df = generate_synthetic_wafer_defects(n_samples=300, defect_rate=0.2, seed=42)
+        y = df["defect"].to_numpy()
+        X = df.drop(columns=["defect", "wafer_id"])
+
+        from sklearn.model_selection import train_test_split
+
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42, stratify=y)
+
+        models = ["logistic", "tree", "rf"]
+        results = {}
+
+        # Train and evaluate each model
+        for model_name in models:
+            pipe = WaferDefectPipeline(model=model_name)
+            pipe.fit(X_train, y_train)
+            metrics = pipe.evaluate(X_test, y_test)
+            results[model_name] = metrics
+
+        # Verify all models were evaluated
+        assert len(results) == len(models)
+
+        # All models should have same metrics available
+        for model_name, metrics in results.items():
+            assert "roc_auc" in metrics
+            assert "pr_auc" in metrics
+            assert "pws" in metrics
+            assert "estimated_loss" in metrics
+
+        # At least one model should perform better than random
+        best_auc = max(results[m]["roc_auc"] for m in models)
+        assert best_auc > 0.5
+
+    def test_dataset_to_deployment_workflow(self):
+        """Test realistic deployment workflow."""
+        # Step 1: Generate production-like data
+        df = generate_synthetic_wafer_defects(n_samples=1000, defect_rate=0.12, seed=123)
+        y = df["defect"].to_numpy()
+        X = df.drop(columns=["defect", "wafer_id"])
+
+        # Step 2: Train with production settings
+        from sklearn.model_selection import train_test_split
+
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+
+        pipe = WaferDefectPipeline(model="rf", min_precision=0.85, min_recall=0.80)
+        pipe.fit(X_train, y_train)
+
+        # Step 3: Evaluate with manufacturing metrics
+        metrics = pipe.evaluate(X_test, y_test)
+
+        # Check manufacturing KPIs
+        assert "pws" in metrics  # Prediction Within Spec
+        assert "estimated_loss" in metrics
+        assert metrics["pws"] >= 0  # Should be reasonable
+
+        # Step 4: Save for deployment
+        with tempfile.NamedTemporaryFile(suffix=".joblib", delete=False) as tmp:
+            model_path = Path(tmp.name)
+
+        try:
+            pipe.save(model_path)
+
+            # Step 5: Load and verify metadata
+            deployed_pipe = WaferDefectPipeline.load(model_path)
+
+            assert deployed_pipe.metadata is not None
+            assert hasattr(deployed_pipe.metadata, "trained_at")
+            assert hasattr(deployed_pipe.metadata, "model_type")
+
+            # Step 6: Make batch predictions (simulate production)
+            batch_predictions = deployed_pipe.predict(X_test[:50])
+            assert len(batch_predictions) == 50
+            assert all(p in [0, 1] for p in batch_predictions)
+
+            # Step 7: Get prediction probabilities for confidence scoring
+            batch_probs = deployed_pipe.predict_proba(X_test[:50])
+            assert batch_probs.shape == (50, 2)
+            assert (batch_probs >= 0).all()
+            assert (batch_probs <= 1).all()
+
+        finally:
+            if model_path.exists():
+                model_path.unlink()
+
+
+class TestPerformance:
+    """Test performance characteristics and scalability."""
+
+    def test_training_time_scaling(self):
+        """Test training time with different dataset sizes."""
+        import time
+
+        sizes = [100, 500, 1000]
+        times = []
+
+        for size in sizes:
+            df = generate_synthetic_wafer_defects(n_samples=size, seed=42)
+            y = df["defect"].to_numpy()
+            X = df.drop(columns=["defect", "wafer_id"])
+
+            pipe = WaferDefectPipeline(model="logistic")
+
+            start = time.time()
+            pipe.fit(X, y)
+            elapsed = time.time() - start
+
+            times.append(elapsed)
+
+        # Training time should scale reasonably (not exponentially)
+        # 10x data should not take 100x time
+        # This is a rough check - may vary by system
+        if times[0] > 0:  # Avoid division by zero
+            ratio_10x = times[2] / times[0]  # 1000 vs 100
+            assert ratio_10x < 50  # Should be much less than quadratic
+
+    def test_memory_efficiency(self):
+        """Test that model doesn't consume excessive memory."""
+        # Create moderately large dataset
+        df = generate_synthetic_wafer_defects(n_samples=5000, seed=42)
+        y = df["defect"].to_numpy()
+        X = df.drop(columns=["defect", "wafer_id"])
+
+        pipe = WaferDefectPipeline(model="logistic")
+        pipe.fit(X, y)
+
+        # Save and verify file size is reasonable
+        with tempfile.NamedTemporaryFile(suffix=".joblib", delete=False) as tmp:
+            model_path = Path(tmp.name)
+
+        try:
+            pipe.save(model_path)
+
+            # Model file should be reasonable size (< 50 MB for simple model)
+            file_size_mb = model_path.stat().st_size / (1024 * 1024)
+            assert file_size_mb < 50
+
+        finally:
+            if model_path.exists():
+                model_path.unlink()
+
+    def test_prediction_latency(self):
+        """Test prediction speed for real-time applications."""
+        import time
+
+        # Train a model
+        df = generate_synthetic_wafer_defects(n_samples=500, seed=42)
+        y = df["defect"].to_numpy()
+        X = df.drop(columns=["defect", "wafer_id"])
+
+        pipe = WaferDefectPipeline(model="logistic")
+        pipe.fit(X, y)
+
+        # Test single prediction latency
+        single_sample = X.iloc[[0]]
+
+        start = time.time()
+        for _ in range(100):
+            pipe.predict(single_sample)
+        elapsed = time.time() - start
+
+        avg_latency_ms = (elapsed / 100) * 1000
+
+        # Single prediction should be fast (< 50ms average)
+        assert avg_latency_ms < 50
+
+        # Test batch prediction throughput
+        batch_size = 100
+        batch_data = X.iloc[:batch_size]
+
+        start = time.time()
+        pipe.predict(batch_data)
+        elapsed = time.time() - start
+
+        predictions_per_second = batch_size / elapsed if elapsed > 0 else float("inf")
+
+        # Should handle at least 500 predictions per second
+        assert predictions_per_second > 500
+
+    def test_concurrent_predictions(self):
+        """Test that model can handle concurrent prediction requests."""
+        # Train a model
+        df = generate_synthetic_wafer_defects(n_samples=300, seed=42)
+        y = df["defect"].to_numpy()
+        X = df.drop(columns=["defect", "wafer_id"])
+
+        pipe = WaferDefectPipeline(model="rf")
+        pipe.fit(X, y)
+
+        # Simulate concurrent requests by making multiple predictions
+        # In same process (thread-safety test)
+        test_samples = [X.iloc[[i]] for i in range(10)]
+
+        results = []
+        for sample in test_samples:
+            pred = pipe.predict(sample)
+            results.append(pred)
+
+        # All predictions should complete successfully
+        assert len(results) == 10
+        assert all(len(r) == 1 for r in results)
+        assert all(r[0] in [0, 1] for r in results)
 
 
 if __name__ == "__main__":

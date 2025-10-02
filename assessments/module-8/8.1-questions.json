@@ -1,0 +1,811 @@
+{
+  "description": "Assessment covering generative adversarial networks (GANs), variational autoencoders (VAEs), diffusion models, and their applications in synthetic defect generation, data augmentation, and anomaly detection for semiconductor manufacturing.",
+  "estimated_time_minutes": 105,
+  "module_id": "module-8.1",
+  "passing_score": 70,
+  "questions": [
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "A GAN consists of two neural networks: (1) Generator: Creates synthetic data from random noise, trying to fool the discriminator. (2) Discriminator: Distinguishes between real and fake data, acting as a critic. They train adversarially in a minimax game: generator improves at creating realistic data, discriminator improves at detecting fakes. This adversarial training produces high-quality synthetic samples. For semiconductor manufacturing, GANs can generate synthetic wafer defect images for data augmentation when real defects are rare.",
+      "id": "m8.1_q001",
+      "options": [
+        "Encoder and Decoder",
+        "Generator and Discriminator",
+        "Encoder and Classifier",
+        "Predictor and Validator"
+      ],
+      "points": 2,
+      "question": "What are the two main components of a Generative Adversarial Network (GAN)?",
+      "topic": "gan_basics",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "The original GAN loss can suffer from: (1) Vanishing gradients: When discriminator is too good, generator gradients vanish, halting learning. (2) Mode collapse: Generator produces limited variety, ignoring parts of data distribution. WGAN addresses this by using Wasserstein distance (Earth Mover's Distance) instead of Jensen-Shannon divergence. Benefits: smoother gradients, more stable training, better convergence. For semiconductor defect generation, WGAN helps generate diverse defect patterns without mode collapse, ensuring all defect types are represented.",
+      "id": "m8.1_q002",
+      "options": [
+        "Training too slowly",
+        "Mode collapse and vanishing gradients when discriminator becomes too strong",
+        "Generating low-resolution images",
+        "Requiring too much memory"
+      ],
+      "points": 3,
+      "question": "What is the primary challenge with the original GAN loss function that led to the development of Wasserstein GAN (WGAN)?",
+      "topic": "gan_loss_function",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "Conditional GANs extend GANs by conditioning both generator and discriminator on additional information (class labels, text, images). Generator receives: G(z, c) where z is noise, c is condition. Discriminator evaluates: D(x, c) where x is image, c is condition. Benefits for semiconductors: (1) Generate specific defect types on demand (center, edge, scratch). (2) Control defect severity. (3) Generate defects for specific tools/processes. (4) Balance datasets by generating underrepresented classes. This targeted generation is crucial for training robust classifiers when some defect types are rare.",
+      "id": "m8.1_q003",
+      "options": [
+        "They train faster",
+        "They condition generation on class labels, enabling controlled synthesis of specific defect types",
+        "They require less data",
+        "They only work with images"
+      ],
+      "points": 3,
+      "question": "How do Conditional GANs (cGANs) differ from standard GANs, and why are they useful for semiconductor defect generation?",
+      "topic": "conditional_gan",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Mode collapse occurs when the generator finds a few samples that fool the discriminator and keeps producing only those, ignoring other modes of the data distribution. Signs: (1) Generated samples look similar. (2) Low diversity in outputs. (3) Missing defect pattern types. For wafer defects: generator might produce only edge defects while ignoring center, radial, or scratch patterns. Solutions: (1) Wasserstein GAN. (2) Minibatch discrimination. (3) Feature matching. (4) Unrolled GAN. (5) Monitoring diversity metrics during training. Mode collapse defeats the purpose of data augmentation.",
+      "id": "m8.1_q004",
+      "options": [
+        "The model stops training",
+        "Generator produces limited variety of outputs, missing parts of the data distribution",
+        "Discriminator always wins",
+        "Training becomes too expensive"
+      ],
+      "points": 3,
+      "question": "What is mode collapse in GANs and how does it manifest in semiconductor defect generation?",
+      "topic": "mode_collapse",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "Standard autoencoder: Encoder maps input x to latent vector z deterministically. VAE: Encoder maps x to probability distribution (mean \u03bc and variance \u03c3\u00b2) in latent space. Decoder samples from this distribution: z ~ N(\u03bc, \u03c3\u00b2). This probabilistic encoding enables: (1) Smooth latent space interpolation. (2) Generation by sampling from learned distribution. (3) Uncertainty quantification. For semiconductor applications: VAEs can generate variations of defect patterns by sampling from latent space, useful for data augmentation and understanding defect pattern variations.",
+      "id": "m8.1_q005",
+      "options": [
+        "VAEs are faster to train",
+        "VAEs encode inputs into a probabilistic latent space (distribution) rather than deterministic vectors",
+        "VAEs require more layers",
+        "VAEs only work with images"
+      ],
+      "points": 2,
+      "question": "What is the key difference between a standard autoencoder and a Variational Autoencoder (VAE)?",
+      "topic": "vae_basics",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "VAE loss = Reconstruction Loss + \u03b2 * KL Divergence. Reconstruction loss: Ensures decoded samples match inputs (MSE or binary cross-entropy). KL divergence: KL(q(z|x) || p(z)) measures how much learned distribution q(z|x) differs from prior p(z) (usually N(0,I)). Role: (1) Regularizes latent space to be continuous and smooth. (2) Prevents overfitting to training data. (3) Enables sampling: draw z ~ N(0,I) and decode to generate new samples. (4) Allows interpolation between points in latent space. \u03b2 parameter controls tradeoff: high \u03b2 = more regularized latent space, lower reconstruction quality. For wafer defects: smooth latent space means similar defect patterns are close together, enabling controlled generation.",
+      "id": "m8.1_q006",
+      "options": [
+        "It measures image quality",
+        "It regularizes the latent space to follow a prior distribution (typically standard normal), enabling sampling and interpolation",
+        "It speeds up training",
+        "It reduces model size"
+      ],
+      "points": 3,
+      "question": "The VAE loss function consists of two terms: reconstruction loss and KL divergence. What role does the KL divergence term play?",
+      "topic": "vae_loss_function",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "medium",
+      "explanation": "VAE advantages: (1) Stable training (no adversarial dynamics). (2) Structured latent space enables interpolation and latent space arithmetic. (3) Can quantify uncertainty. (4) Direct optimization (no minimax game). (5) Works well with limited data. GAN advantages: (1) Sharper, higher-quality images. (2) Better for complex patterns. Choose VAE when: (1) Training stability is critical. (2) Need interpretable latent space. (3) Want to interpolate between defect types. (4) Limited computational resources. (5) Need anomaly detection (reconstruction error). For semiconductors: VAE is good for understanding defect space structure and detecting novel defects; GAN better for realistic synthetic images for classifier training.",
+      "id": "m8.1_q007",
+      "options": [
+        "When you need slightly blurrier but more stable training with better latent space structure",
+        "When you need the absolute highest image quality",
+        "When training time is unlimited",
+        "VAEs are never preferable"
+      ],
+      "points": 3,
+      "question": "When would you choose a VAE over a GAN for generating synthetic semiconductor defect images?",
+      "topic": "vae_vs_gan",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "Diffusion models have two processes: (1) Forward diffusion: Gradually add Gaussian noise to data over T steps until it becomes pure noise. q(x_t | x_{t-1}) = N(sqrt(1-\u03b2_t)*x_{t-1}, \u03b2_t*I). (2) Reverse diffusion: Learn to denoise step-by-step from x_T (pure noise) back to x_0 (data). Neural network predicts noise at each step. Generation: Sample x_T ~ N(0,I), iteratively denoise through learned reverse process. Advantages: (1) Very high quality images. (2) Stable training. (3) Flexible conditioning. (4) No mode collapse. Drawback: Slow sampling (T steps, typically 1000). For semiconductor defects: Excellent for generating high-fidelity synthetic defect images, though slower than GANs.",
+      "id": "m8.1_q008",
+      "options": [
+        "By compressing and decompressing images",
+        "By gradually denoising pure random noise through a learned reverse diffusion process",
+        "By using adversarial training",
+        "By optimizing a reconstruction loss"
+      ],
+      "points": 3,
+      "question": "How do denoising diffusion probabilistic models (DDPMs) generate images?",
+      "topic": "diffusion_models",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "FID (Fr\u00e9chet Inception Distance) measures similarity between real and generated image distributions using Inception network features. Lower FID = better quality and diversity. Calculation: Extract features from real and fake images using Inception-v3, fit Gaussian to each set, compute Fr\u00e9chet distance between Gaussians. FID captures: (1) Image quality. (2) Diversity. (3) Distribution match. Other metrics: Inception Score (IS) measures quality and diversity but doesn't compare to real data. Precision/Recall for generative models: Precision = quality, Recall = diversity. For semiconductor defects: FID validates that synthetic defects match real defect distribution in feature space.",
+      "id": "m8.1_q009",
+      "options": [
+        "Accuracy",
+        "Fr\u00e9chet Inception Distance (FID)",
+        "F1 Score",
+        "R-squared"
+      ],
+      "points": 2,
+      "question": "Which metric is commonly used to evaluate the quality and diversity of GAN-generated images?",
+      "topic": "synthetic_data_quality",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "Latent space interpolation: Given two latent vectors z1 and z2 (representing different samples), interpolate: z_t = (1-t)*z1 + t*z2 for t \u2208 [0,1]. Generate intermediate samples by decoding z_t. Applications in semiconductors: (1) Morphing between defect types (edge \u2192 center) to understand transition patterns. (2) Generating defects at intermediate severity levels. (3) Data augmentation with controlled variations. (4) Understanding defect space structure. (5) Creating training examples in underexplored regions. Works best with VAEs and diffusion models (smooth latent spaces). GANs may have discontinuous latent spaces requiring special interpolation (spherical interpolation in StyleGAN).",
+      "id": "m8.1_q010",
+      "options": [
+        "Training models faster",
+        "Smoothly transitioning between different samples by interpolating in latent space to generate intermediate patterns",
+        "Reducing model size",
+        "Improving classification accuracy directly"
+      ],
+      "points": 3,
+      "question": "What is latent space interpolation in generative models, and how can it be used in semiconductor applications?",
+      "topic": "latent_space_manipulation",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Class imbalance problem: Rare defect types (edge defects: 5%) vs common types (normal: 90%). Generative model solution: (1) Train conditional GAN/VAE on all classes. (2) Generate synthetic samples for minority classes. (3) Balance dataset: oversample rare classes to match majority. (4) Train classifier on balanced dataset. Benefits: (1) Improved recall on rare but critical defects. (2) Reduces bias toward majority class. (3) More robust classifiers. Considerations: (1) Ensure generated samples are realistic (high FID). (2) Validate that synthetic data improves downstream performance. (3) Consider mixing real and synthetic data carefully. (4) Monitor for distribution shift. For semiconductor fabs, missing rare critical defects is costly - synthetic data helps.",
+      "id": "m8.1_q011",
+      "options": [
+        "By removing majority class samples",
+        "By generating synthetic samples for minority classes to balance the dataset",
+        "By changing the loss function only",
+        "Generative models cannot help with imbalance"
+      ],
+      "points": 3,
+      "question": "How can generative models address class imbalance in wafer defect datasets?",
+      "topic": "class_imbalance_augmentation",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "Privacy-preserving synthetic data: Train generative model on real proprietary data, generate synthetic dataset with similar statistical properties but no real wafers. Benefits: (1) Share data with partners/researchers without exposing proprietary processes. (2) Publish benchmark datasets. (3) Enable collaboration without IP concerns. (4) Train models for vendors without data leakage. Challenges: (1) Ensure no memorization (model doesn't reproduce exact training samples). (2) Validate synthetic data utility. (3) Balance privacy and utility. Implementation: Use differential privacy during GAN training to provide formal privacy guarantees. For semiconductor industry with highly proprietary processes, synthetic data enables knowledge sharing while protecting IP.",
+      "id": "m8.1_q012",
+      "options": [
+        "By encrypting data",
+        "By generating synthetic datasets that preserve statistical properties without exposing real proprietary data",
+        "By deleting original data",
+        "By using smaller models"
+      ],
+      "points": 2,
+      "question": "How can generative models enable privacy-preserving data sharing in semiconductor manufacturing?",
+      "topic": "privacy_preservation",
+      "type": "multiple_choice"
+    },
+    {
+      "code_template": "import torch\nimport torch.nn as nn\nimport torch.optim as optim\nimport numpy as np\n\nclass Generator(nn.Module):\n    def __init__(self, latent_dim=10, output_dim=50):\n        super().__init__()\n        # Your implementation here:\n        # Build generator network: latent_dim -> hidden layers -> output_dim\n        # Use ReLU for hidden layers, Tanh for output to get values in [-1, 1]\n        pass\n    \n    def forward(self, z):\n        # Your implementation here\n        pass\n\nclass Discriminator(nn.Module):\n    def __init__(self, input_dim=50):\n        super().__init__()\n        # Your implementation here:\n        # Build discriminator network: input_dim -> hidden layers -> 1\n        # Use LeakyReLU for hidden layers, Sigmoid for output (probability)\n        pass\n    \n    def forward(self, x):\n        # Your implementation here\n        pass\n\ndef train_gan(generator, discriminator, real_data, \n             epochs=1000, batch_size=32, lr=0.0002):\n    \"\"\"\n    Train GAN on real sensor degradation data.\n    \n    Args:\n        real_data: Real sensor time series (n_samples, sequence_length)\n    \"\"\"\n    # Your implementation here:\n    # 1. Setup optimizers (Adam for both G and D)\n    # 2. Training loop:\n    #    - Train discriminator on real and fake samples\n    #    - Train generator to fool discriminator\n    # 3. Return trained models\n    pass",
+      "difficulty": "medium",
+      "explanation": "This simple GAN generates 1D time series sensor data. Generator creates synthetic degradation patterns from random noise. Discriminator learns to distinguish real vs fake patterns. Through adversarial training, generator improves until discriminator cannot tell real from fake. For semiconductor equipment monitoring: Generate synthetic degradation curves for rare failure modes to augment training data for predictive maintenance models. This enables better RUL prediction even with limited failure examples.",
+      "hints": [
+        "Generator architecture: Linear(latent_dim, 128) -> ReLU -> Linear(128, output_dim) -> Tanh",
+        "Discriminator architecture: Linear(input_dim, 128) -> LeakyReLU(0.2) -> Linear(128, 1) -> Sigmoid",
+        "Loss: Binary Cross Entropy (BCELoss)",
+        "Train discriminator: loss_D = -[log(D(real)) + log(1-D(fake))]",
+        "Train generator: loss_G = -log(D(G(z)))",
+        "Use label smoothing: real labels = 0.9 instead of 1.0 for stability"
+      ],
+      "id": "m8.1_q013",
+      "points": 4,
+      "question": "Implement a simple GAN for generating synthetic 1D sensor data representing equipment degradation patterns.",
+      "test_cases": [
+        {
+          "description": "GAN training on time series data",
+          "expected_output": "Trained GAN that generates realistic degradation patterns",
+          "input": "real_data with shape (1000, 50) representing sensor degradation"
+        }
+      ],
+      "topic": "simple_gan_implementation",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import torch\nimport torch.nn as nn\nimport torch.nn.functional as F\n\nclass ConditionalGenerator(nn.Module):\n    def __init__(self, latent_dim=100, num_classes=8, img_size=64):\n        \"\"\"\n        Generator conditioned on class labels.\n        \n        Args:\n            latent_dim: Dimension of random noise\n            num_classes: Number of defect types\n            img_size: Output image dimension (img_size x img_size)\n        \"\"\"\n        super().__init__()\n        # Your implementation here:\n        # 1. Embedding for class labels\n        # 2. Network that takes [z, embedded_label] as input\n        # 3. Transposed convolutions to upsample to img_size x img_size\n        pass\n    \n    def forward(self, z, labels):\n        # Your implementation here:\n        # Concatenate noise z and embedded labels, pass through network\n        pass\n\nclass ConditionalDiscriminator(nn.Module):\n    def __init__(self, num_classes=8, img_size=64):\n        super().__init__()\n        # Your implementation here:\n        # 1. Embedding for class labels\n        # 2. Network that takes [image, embedded_label] as input\n        # 3. Convolutions to downsample and classify real/fake\n        pass\n    \n    def forward(self, images, labels):\n        # Your implementation here\n        pass\n\ndef generate_specific_defect(generator, defect_type, num_samples=10):\n    \"\"\"\n    Generate synthetic wafer maps for specific defect type.\n    \n    Args:\n        generator: Trained conditional generator\n        defect_type: Integer label (0-7 for 8 defect types)\n        num_samples: Number of samples to generate\n    \"\"\"\n    # Your implementation here\n    pass",
+      "difficulty": "hard",
+      "explanation": "Conditional GAN enables controlled generation of specific defect types. This is crucial for semiconductor manufacturing where: (1) Some defect types are rare but critical (edge defects). (2) Need to generate specific patterns for testing classifiers. (3) Want to balance datasets by generating underrepresented classes. (4) Can generate defects for different tools or process conditions by conditioning on additional metadata. The ability to generate on-demand synthetic defects for any class greatly enhances data augmentation flexibility.",
+      "hints": [
+        "Use nn.Embedding(num_classes, embedding_dim) for label embedding",
+        "Concatenate z and embedded label: torch.cat([z, label_embedding], dim=1)",
+        "Generator: Use ConvTranspose2d layers to upsample from small spatial size",
+        "Discriminator: Use Conv2d layers to downsample, concatenate label info early",
+        "For image conditioning: broadcast label to image dimensions and concatenate as additional channel",
+        "Training similar to regular GAN but pass labels to both G and D"
+      ],
+      "id": "m8.1_q014",
+      "points": 5,
+      "question": "Implement a Conditional GAN (cGAN) for generating wafer defect images conditioned on defect type labels.",
+      "test_cases": [
+        {
+          "description": "Conditional generation of specific defect type",
+          "expected_output": "5 synthetic wafer images with edge defect patterns",
+          "input": "defect_type=2 (edge defects), num_samples=5"
+        }
+      ],
+      "topic": "conditional_gan_implementation",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import torch\nimport torch.nn as nn\nimport torch.nn.functional as F\n\nclass VAE(nn.Module):\n    def __init__(self, input_dim=64*64, latent_dim=20):\n        super().__init__()\n        self.latent_dim = latent_dim\n        \n        # Encoder\n        # Your implementation here:\n        # Build encoder network: input_dim -> hidden layers -> (mu, log_var)\n        \n        # Decoder  \n        # Your implementation here:\n        # Build decoder network: latent_dim -> hidden layers -> input_dim\n        pass\n    \n    def encode(self, x):\n        \"\"\"\n        Encode input to latent distribution parameters.\n        Returns: mu, log_var\n        \"\"\"\n        # Your implementation here\n        pass\n    \n    def reparameterize(self, mu, log_var):\n        \"\"\"\n        Reparameterization trick: z = mu + sigma * epsilon\n        where epsilon ~ N(0,1)\n        \"\"\"\n        # Your implementation here\n        pass\n    \n    def decode(self, z):\n        \"\"\"\n        Decode latent vector to reconstruction.\n        \"\"\"\n        # Your implementation here\n        pass\n    \n    def forward(self, x):\n        mu, log_var = self.encode(x)\n        z = self.reparameterize(mu, log_var)\n        reconstruction = self.decode(z)\n        return reconstruction, mu, log_var\n\ndef vae_loss(reconstruction, x, mu, log_var):\n    \"\"\"\n    VAE loss = Reconstruction Loss + KL Divergence\n    \"\"\"\n    # Your implementation here:\n    # 1. Reconstruction loss (BCE or MSE)\n    # 2. KL divergence: -0.5 * sum(1 + log_var - mu^2 - exp(log_var))\n    pass\n\ndef generate_samples(vae, num_samples=10):\n    \"\"\"\n    Generate new samples by sampling from N(0,I) and decoding.\n    \"\"\"\n    # Your implementation here\n    pass\n\ndef interpolate_defects(vae, defect1, defect2, steps=10):\n    \"\"\"\n    Interpolate between two defect patterns in latent space.\n    \"\"\"\n    # Your implementation here:\n    # 1. Encode both defects to get mu1, mu2\n    # 2. Linearly interpolate in latent space\n    # 3. Decode interpolated points\n    pass",
+      "difficulty": "hard",
+      "explanation": "VAE learns a structured latent space where similar defect patterns are close together. Key advantages for semiconductors: (1) Smooth interpolation between defect types to understand transitions. (2) Anomaly detection: high reconstruction error indicates novel defects. (3) Dimensionality reduction: visualize defect patterns in 2D latent space. (4) Controlled generation: sample from specific regions of latent space. (5) Data augmentation: generate variations by sampling around encoded real samples. The probabilistic nature provides uncertainty estimates, valuable for critical manufacturing decisions.",
+      "hints": [
+        "Encoder: Linear layers followed by two separate Linear layers for mu and log_var",
+        "Reparameterization: std = exp(0.5 * log_var); z = mu + std * epsilon",
+        "Decoder: Mirror of encoder, ending with Sigmoid for normalized outputs",
+        "Reconstruction loss: F.binary_cross_entropy(reconstruction, x, reduction='sum')",
+        "KL divergence: -0.5 * torch.sum(1 + log_var - mu.pow(2) - log_var.exp())",
+        "For generation: z = torch.randn(num_samples, latent_dim); samples = vae.decode(z)"
+      ],
+      "id": "m8.1_q015",
+      "points": 5,
+      "question": "Implement a Variational Autoencoder (VAE) for learning latent representations of wafer defect patterns and generating synthetic defects.",
+      "test_cases": [
+        {
+          "description": "VAE for defect pattern learning",
+          "expected_output": "Trained VAE with smooth latent space for generation and interpolation",
+          "input": "Wafer defect images (n, 64, 64)"
+        }
+      ],
+      "topic": "vae_implementation",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import numpy as np\nimport torch\nfrom scipy import linalg\nfrom torchvision.models import inception_v3\n\ndef get_inception_features(images, model):\n    \"\"\"\n    Extract features from Inception-v3 for FID calculation.\n    \n    Args:\n        images: Batch of images (N, C, H, W)\n        model: Inception v3 model\n        \n    Returns:\n        Features (N, 2048)\n    \"\"\"\n    # Your implementation here:\n    # 1. Resize images to 299x299 (Inception input size)\n    # 2. Forward pass through model\n    # 3. Extract features before final classification layer\n    pass\n\ndef calculate_fid(real_images, fake_images, model):\n    \"\"\"\n    Calculate Fr\u00e9chet Inception Distance between real and fake images.\n    \n    Args:\n        real_images: Real wafer defect images (N, C, H, W)\n        fake_images: Generated wafer defect images (N, C, H, W)\n        model: Inception v3 model\n        \n    Returns:\n        FID score (lower is better)\n    \"\"\"\n    # Your implementation here:\n    # 1. Extract features for real and fake images\n    # 2. Calculate mean and covariance for both distributions\n    # 3. Compute Fr\u00e9chet distance between the two Gaussians\n    #    FID = ||mu1 - mu2||^2 + Tr(C1 + C2 - 2*sqrt(C1*C2))\n    pass\n\ndef calculate_statistics(features):\n    \"\"\"\n    Calculate mean and covariance of features.\n    \"\"\"\n    # Your implementation here\n    mu = np.mean(features, axis=0)\n    sigma = np.cov(features, rowvar=False)\n    return mu, sigma\n\ndef frechet_distance(mu1, sigma1, mu2, sigma2, eps=1e-6):\n    \"\"\"\n    Calculate Fr\u00e9chet distance between two Gaussians.\n    \"\"\"\n    # Your implementation here\n    pass",
+      "difficulty": "medium",
+      "explanation": "FID measures how similar generated images are to real images in Inception feature space. Unlike pixel-level metrics, FID captures perceptual similarity and diversity. For semiconductor defect generation: (1) Validate GAN quality before using synthetic data. (2) Compare different GAN architectures. (3) Monitor training progress (FID should decrease). (4) Set acceptance threshold (e.g., FID < 50 for production use). FID combines quality (are images realistic?) and diversity (do they cover the distribution?) making it ideal for evaluating generative models for data augmentation.",
+      "hints": [
+        "Load Inception: model = inception_v3(pretrained=True, transform_input=False)",
+        "Resize: F.interpolate(images, size=(299, 299), mode='bilinear')",
+        "Extract features: Use model output before final FC layer",
+        "Matrix square root: use scipy.linalg.sqrtm for sqrt(C1*C2)",
+        "Add small epsilon to diagonal of covariance for numerical stability",
+        "Lower FID = generated distribution closer to real distribution"
+      ],
+      "id": "m8.1_q016",
+      "points": 4,
+      "question": "Implement Fr\u00e9chet Inception Distance (FID) calculation to evaluate the quality of GAN-generated wafer defect images.",
+      "test_cases": [
+        {
+          "description": "FID evaluation of GAN",
+          "expected_output": "FID score (e.g., 45.2) - lower indicates better GAN quality",
+          "input": "real_images (1000 real wafer maps), fake_images (1000 GAN-generated)"
+        }
+      ],
+      "topic": "fid_score_calculation",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import torch\nfrom torch.utils.data import Dataset, DataLoader\nimport numpy as np\nfrom typing import Tuple\n\nclass AugmentedWaferDataset(Dataset):\n    \"\"\"\n    Dataset that combines real and synthetic wafer defect images.\n    \"\"\"\n    def __init__(self, real_images, real_labels, generator=None,\n                 synthetic_ratio=0.5, balance_classes=True):\n        \"\"\"\n        Args:\n            real_images: Real wafer defect images\n            real_labels: Labels for real images\n            generator: Trained conditional GAN generator (optional)\n            synthetic_ratio: Fraction of dataset that should be synthetic\n            balance_classes: Whether to balance minority classes with synthetic data\n        \"\"\"\n        # Your implementation here:\n        # 1. Store real data\n        # 2. Analyze class distribution\n        # 3. Generate synthetic samples for minority classes if balance_classes=True\n        # 4. Combine real and synthetic data\n        pass\n    \n    def generate_synthetic_samples(self, class_label, num_samples):\n        \"\"\"\n        Generate synthetic samples for specific class.\n        \"\"\"\n        # Your implementation here\n        pass\n    \n    def __len__(self):\n        # Return total dataset size (real + synthetic)\n        pass\n    \n    def __getitem__(self, idx):\n        # Return image, label, is_synthetic flag\n        pass\n\ndef evaluate_augmentation_effectiveness(model, \n                                       real_only_dataset,\n                                       augmented_dataset,\n                                       test_dataset):\n    \"\"\"\n    Compare model performance trained on real-only vs augmented data.\n    \n    Returns:\n        Dict with metrics for both approaches\n    \"\"\"\n    # Your implementation here:\n    # 1. Train model on real_only_dataset, evaluate on test\n    # 2. Train model on augmented_dataset, evaluate on test\n    # 3. Compare accuracy, F1, per-class recall (especially minority classes)\n    pass\n\ndef validate_synthetic_quality(real_images, synthetic_images):\n    \"\"\"\n    Validate that synthetic images match real distribution.\n    \n    Returns:\n        Dict with quality metrics (FID, IS, diversity)\n    \"\"\"\n    # Your implementation here\n    pass",
+      "difficulty": "hard",
+      "explanation": "Effective data augmentation pipeline for semiconductor defect detection: (1) Analyze class imbalance in real data. (2) Generate synthetic samples for minority classes using trained cGAN. (3) Validate synthetic quality (FID, visual inspection). (4) Mix real and synthetic data with appropriate ratio. (5) Train classifier on augmented dataset. (6) Verify improved performance on minority classes without degrading majority class accuracy. This approach is crucial when critical defects (edge, scratch) are rare but have high business impact. Synthetic augmentation enables robust classifiers even with limited real examples.",
+      "hints": [
+        "Count class distribution: use np.bincount(real_labels)",
+        "Calculate samples needed per class for balance: max_count - count_per_class",
+        "Generate synthetic: generator.generate_specific_defect(class_label, n)",
+        "Track synthetic samples with boolean flag for analysis",
+        "Use stratified train/test split to ensure minority classes in both sets",
+        "Calculate per-class recall to verify minority class improvement"
+      ],
+      "id": "m8.1_q017",
+      "points": 5,
+      "question": "Implement a comprehensive data augmentation pipeline that combines real wafer defect data with GAN-generated synthetic data for training a classifier.",
+      "test_cases": [
+        {
+          "description": "Data augmentation with synthetic generation",
+          "expected_output": "Balanced augmented dataset with improved minority class performance",
+          "input": "Imbalanced wafer dataset (90% normal, 10% defects), trained cGAN"
+        }
+      ],
+      "topic": "data_augmentation_pipeline",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import torch\nimport numpy as np\nfrom typing import Tuple\n\nclass VAEAnomalyDetector:\n    \"\"\"\n    Anomaly detection using reconstruction error from VAE.\n    \"\"\"\n    def __init__(self, vae, threshold_percentile=95):\n        \"\"\"\n        Args:\n            vae: Trained VAE model\n            threshold_percentile: Percentile of reconstruction errors for threshold\n        \"\"\"\n        self.vae = vae\n        self.threshold = None\n        self.threshold_percentile = threshold_percentile\n    \n    def fit(self, normal_data):\n        \"\"\"\n        Fit anomaly detector on normal wafer maps.\n        Calculate reconstruction error threshold.\n        \"\"\"\n        # Your implementation here:\n        # 1. Get reconstructions for normal data\n        # 2. Calculate reconstruction errors\n        # 3. Set threshold at specified percentile\n        pass\n    \n    def reconstruction_error(self, x):\n        \"\"\"\n        Calculate reconstruction error for input.\n        \"\"\"\n        # Your implementation here:\n        # Reconstruct x and return MSE or BCE\n        pass\n    \n    def predict(self, x):\n        \"\"\"\n        Predict whether input is anomalous.\n        \n        Returns:\n            is_anomaly (bool), reconstruction_error (float)\n        \"\"\"\n        # Your implementation here\n        pass\n    \n    def get_anomaly_score(self, x):\n        \"\"\"\n        Get anomaly score (normalized reconstruction error).\n        Higher score = more anomalous.\n        \"\"\"\n        # Your implementation here\n        pass\n\ndef evaluate_anomaly_detection(detector, normal_test, anomaly_test):\n    \"\"\"\n    Evaluate anomaly detector performance.\n    \n    Returns:\n        Dict with precision, recall, F1, ROC-AUC\n    \"\"\"\n    # Your implementation here\n    pass",
+      "difficulty": "medium",
+      "explanation": "VAE anomaly detection leverages the principle that the VAE learned to reconstruct normal patterns seen during training. Novel defect types will have high reconstruction error because the VAE hasn't seen them. For semiconductor manufacturing: (1) Train VAE on known defect types. (2) Monitor production wafers in real-time. (3) Flag wafers with high reconstruction error as potential novel defects. (4) Route flagged wafers for expert inspection. (5) Discover new failure modes early before they cause major yield loss. This unsupervised approach catches unknown-unknowns that supervised classifiers miss.",
+      "hints": [
+        "Reconstruction error: torch.nn.functional.mse_loss(reconstruction, original)",
+        "Threshold: np.percentile(errors, threshold_percentile)",
+        "Anomaly if: reconstruction_error > threshold",
+        "ROC-AUC: from sklearn.metrics import roc_auc_score",
+        "Consider both reconstruction error and KL divergence for anomaly score",
+        "Visualize reconstructions of anomalies to understand what VAE struggles with"
+      ],
+      "id": "m8.1_q018",
+      "points": 4,
+      "question": "Implement VAE-based anomaly detection to identify novel defect patterns not seen during training.",
+      "test_cases": [
+        {
+          "description": "VAE-based anomaly detection",
+          "expected_output": "High recall on novel defects (e.g., 0.85+) for early detection",
+          "input": "normal_data (known defect types), anomaly_test (novel defect patterns)"
+        }
+      ],
+      "topic": "vae_anomaly_detection",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import numpy as np\nimport matplotlib.pyplot as plt\nfrom sklearn.decomposition import PCA\nfrom sklearn.manifold import TSNE\nimport torch\n\nclass LatentSpaceExplorer:\n    \"\"\"\n    Tools for exploring and visualizing VAE latent space.\n    \"\"\"\n    def __init__(self, vae):\n        self.vae = vae\n        self.latent_codes = None\n        self.labels = None\n    \n    def encode_dataset(self, images, labels):\n        \"\"\"\n        Encode entire dataset to latent space.\n        \"\"\"\n        # Your implementation here:\n        # Get mu (mean of latent distribution) for all images\n        pass\n    \n    def visualize_latent_space(self, method='tsne'):\n        \"\"\"\n        Visualize latent space in 2D using PCA or t-SNE.\n        \n        Args:\n            method: 'pca' or 'tsne'\n        \"\"\"\n        # Your implementation here:\n        # 1. Reduce latent codes to 2D\n        # 2. Create scatter plot colored by defect type\n        # 3. Add legend and labels\n        pass\n    \n    def interpolate_between_samples(self, idx1, idx2, steps=10):\n        \"\"\"\n        Generate interpolation between two samples.\n        \n        Returns:\n            Interpolated images\n        \"\"\"\n        # Your implementation here\n        pass\n    \n    def explore_latent_dimensions(self, num_dims=5):\n        \"\"\"\n        Visualize what each latent dimension encodes.\n        \n        For top num_dims dimensions by variance:\n        - Fix all other dimensions\n        - Vary this dimension from -3 to +3\n        - Decode and visualize\n        \"\"\"\n        # Your implementation here\n        pass\n    \n    def find_similar_defects(self, query_image, k=5):\n        \"\"\"\n        Find k most similar defects in latent space.\n        \"\"\"\n        # Your implementation here:\n        # 1. Encode query image\n        # 2. Calculate distances to all latent codes\n        # 3. Return k nearest neighbors\n        pass\n    \n    def sample_from_class_region(self, class_label, num_samples=10):\n        \"\"\"\n        Sample from region of latent space corresponding to specific class.\n        \"\"\"\n        # Your implementation here:\n        # 1. Find latent codes for samples of this class\n        # 2. Calculate mean and covariance\n        # 3. Sample from Gaussian in that region\n        # 4. Decode samples\n        pass",
+      "difficulty": "hard",
+      "explanation": "Latent space exploration provides insights into what the VAE learned about defect patterns: (1) Visualization reveals if similar defects cluster together (good representation). (2) Interpolation shows smooth transitions between defect types. (3) Dimension analysis reveals what features each latent dimension captures (severity, location, type). (4) Similarity search enables finding historical examples of current defects. For semiconductor process engineers: (1) Understand defect relationships. (2) Identify which process parameters map to which latent dimensions. (3) Generate targeted synthetic data in sparse regions. (4) Discover unexpected pattern relationships.",
+      "hints": [
+        "Encode: with torch.no_grad(): mu, _ = vae.encode(images); return mu",
+        "t-SNE: from sklearn.manifold import TSNE; tsne = TSNE(n_components=2, perplexity=30)",
+        "Interpolation: z_t = (1-t)*z1 + t*z2 for t in np.linspace(0, 1, steps)",
+        "Distance: Use Euclidean distance in latent space",
+        "Sampling: z = torch.randn(num_samples, latent_dim) * std + mean",
+        "For dimension exploration: Create grid of z values varying one dimension"
+      ],
+      "id": "m8.1_q019",
+      "points": 5,
+      "question": "Implement latent space visualization and exploration tools for understanding the structure of learned defect representations in a VAE.",
+      "test_cases": [
+        {
+          "description": "Latent space exploration",
+          "expected_output": "2D visualization showing clusters by defect type, interpolations, dimension analysis",
+          "input": "Trained VAE, wafer defect dataset with 8 classes"
+        }
+      ],
+      "topic": "latent_space_visualization",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Comprehensive validation strategy: **Quantitative Metrics**: (1) FID score < threshold (e.g., 50) indicates distribution match. (2) Inception Score measures quality and diversity. (3) Precision (quality) and Recall (diversity) for generative models. (4) Per-class FID to ensure all defect types well-represented. **Diversity Analysis**: (1) Calculate feature diversity (variance in feature space). (2) Check for mode collapse (samples too similar). (3) Ensure coverage of data manifold. (4) Verify all defect sub-types present (edge-left, edge-right, etc.). **Visual Inspection**: (1) Domain experts review sample synthetic images. (2) Check for artifacts or unrealistic patterns. (3) Verify defect characteristics match real physics. (4) Compare synthetic to real side-by-side. **Downstream Validation**: (1) Train classifier on real-only data, measure test performance. (2) Train on augmented (real + synthetic) data, compare. (3) Key metric: Minority class recall improvement without majority class degradation. (4) Test on held-out real data only. (5) Verify model generalizes to production data. **Failure Mode Detection**: (1) Check for memorization (GAN reproducing training samples). (2) Test for distribution shift between synthetic and real. (3) Ensure synthetic data doesn't introduce biases. **When NOT to Use**: (1) FID > 100 (poor quality). (2) Mode collapse detected (low diversity). (3) Domain experts identify unrealistic patterns. (4) Downstream performance degrades. (5) Synthetic ratio > 50% of training data. For production deployment in semiconductor fabs, validation must be rigorous as defect detection errors are costly.",
+      "hints": [
+        "Think about both statistical and perceptual quality",
+        "Consider diversity within each class",
+        "Think about domain expert involvement",
+        "Validate impact on final application"
+      ],
+      "id": "m8.1_q020",
+      "points": 5,
+      "question": "You've trained a GAN to generate synthetic wafer defect images for data augmentation. Describe a comprehensive validation strategy to ensure the synthetic data is suitable for training production classifiers. Address quality, diversity, and practical validation.",
+      "rubric": [
+        "Discusses quantitative quality metrics (FID, IS, precision/recall) (2 points)",
+        "Addresses diversity and mode collapse detection (2 points)",
+        "Describes visual inspection and domain expert validation (2 points)",
+        "Explains downstream task validation (does synthetic data improve classifier?) (2 points)",
+        "Considers failure modes and when NOT to use synthetic data (2 points)"
+      ],
+      "topic": "synthetic_data_validation",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "GAN training challenges: **Training Instability**: GANs optimize minimax objective - no guarantee of convergence. If discriminator too strong: generator gradients vanish. If generator too strong: discriminator can't learn. Solutions: (1) Separate learning rates (lower for D than G). (2) Train D more steps per G step (e.g., 5:1). (3) Label smoothing (real=0.9 instead of 1.0). (4) Use batch normalization. (5) Monitor training curves for oscillation. **Mode Collapse**: Generator finds limited samples that fool D, ignores rest of distribution. Detection: Generated samples lack diversity. Solutions: (1) Minibatch discrimination: discriminator sees multiple samples at once. (2) Feature matching: match statistics of real and fake in discriminator features. (3) Unrolled GAN: update G considering future D updates. (4) Use multiple generators. **Vanishing Gradients**: When D perfect, log(1-D(G(z))) saturates. Solutions: (1) Non-saturating loss: maximize log(D(G(z))) instead of minimize log(1-D(G(z))). (2) Wasserstein loss (WGAN): uses Wasserstein distance, provides meaningful gradient everywhere. (3) Spectral normalization: constrains discriminator Lipschitz constant. **Modern Solutions**: (1) Wasserstein GAN (WGAN-GP): stable training, meaningful loss. (2) StyleGAN: progressive growing, style-based architecture. (3) Self-Attention GAN: captures long-range dependencies. (4) BigGAN: large-scale training techniques. For semiconductor applications, WGAN-GP recommended for stable training with limited data.",
+      "hints": [
+        "Think about the adversarial training dynamics",
+        "Consider what happens when one network dominates",
+        "Think about architectural and algorithmic solutions",
+        "Recall modern GAN architectures"
+      ],
+      "id": "m8.1_q021",
+      "points": 5,
+      "question": "Discuss the main challenges in training GANs (training instability, mode collapse, vanishing gradients) and practical strategies to address each challenge.",
+      "rubric": [
+        "Explains training instability and Nash equilibrium issues (2 points)",
+        "Describes mode collapse with examples (2 points)",
+        "Discusses vanishing gradients problem (2 points)",
+        "Provides practical solutions for each challenge (2 points)",
+        "Mentions modern GAN variants that address these issues (2 points)"
+      ],
+      "topic": "gan_training_challenges",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Generative vs Discriminative Models: **What They Learn**: Discriminative: Learn P(y|x) - direct mapping from input to label. Optimized for classification task. Generative: Learn P(x|y) or P(x) - model data distribution. Can generate new samples. **Discriminative Models (CNN Classifiers)**: Pros: (1) Highly accurate for known classes. (2) Efficient inference. (3) Straightforward training. (4) Clear decision boundaries. Cons: (1) Require labeled data for all classes. (2) Struggle with novel defects (closed-set). (3) Class imbalance issues. (4) No data augmentation capability. **Generative Models (GANs/VAEs)**: Pros: (1) Generate synthetic training data. (2) Anomaly detection (novel defects). (3) Data augmentation for rare classes. (4) Can learn with less labeled data. (5) Interpretable latent space (VAE). Cons: (1) More complex training. (2) Higher computational cost. (3) Quality validation needed. (4) May not directly optimize classification. **When to Use Each**: Discriminative: (1) Large labeled dataset available. (2) Known defect types. (3) Real-time inference required. (4) High accuracy on known classes critical. Generative: (1) Severe class imbalance. (2) Limited labeled data. (3) Need anomaly detection. (4) Novel defect discovery important. (5) Data privacy concerns (synthetic data sharing). **Hybrid Approaches**: (1) Use GAN for data augmentation, then train discriminative classifier. (2) VAE for anomaly detection + CNN for classification. (3) Feature extraction with VAE encoder + classifier on latent codes. (4) Ensemble: CNN for known defects, VAE anomaly detector for novel patterns. For semiconductor fabs: Start with discriminative models if sufficient labeled data. Add generative models for: (1) Rare critical defects. (2) Continuous monitoring for novel failures. (3) Reducing labeling costs. (4) Privacy-preserving data sharing.",
+      "hints": [
+        "Think about what each type of model learns",
+        "Consider labeled data availability",
+        "Think about anomaly detection capabilities",
+        "Consider explainability requirements"
+      ],
+      "id": "m8.1_q022",
+      "points": 5,
+      "question": "Compare generative models (GANs, VAEs) with discriminative models (CNNs for classification) for semiconductor defect detection. When would you use each approach, and what are the tradeoffs?",
+      "rubric": [
+        "Explains difference between generative and discriminative modeling (2 points)",
+        "Discusses data requirements for each approach (2 points)",
+        "Compares computational costs and complexity (2 points)",
+        "Provides use cases for each in semiconductor manufacturing (2 points)",
+        "Discusses hybrid approaches combining both (2 points)"
+      ],
+      "topic": "generative_vs_discriminative",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Conditional Generation Applications: **1. Tool-Specific Defect Simulation**: Conditioning: Tool ID or chamber number. Application: Generate synthetic defects characteristic of specific tools/chambers for tool-specific classifier training. Benefit: Each tool has unique signature defects. Conditional generation creates tool-specific training data without running expensive experiments on each tool. Implementation: Train cGAN on historical data labeled with tool ID. Generate synthetic defects conditioned on target tool. **2. Process Parameter-Conditioned Generation**: Conditioning: Process parameters (temperature, pressure, gas flow, etc.). Application: Simulate how defects change with process variations without running wafers. Benefit: Predict impact of process recipe changes before implementation. Enables virtual DOE (Design of Experiments). Generate training data for process parameter space not yet explored. Implementation: Train cVAE mapping parameters \u2192 defects. Explore latent space conditioned on different parameter combinations. **3. Temporal Defect Progression**: Conditioning: Time or equipment usage hours. Application: Generate defect patterns at different stages of equipment degradation for predictive maintenance. Benefit: Model how defect patterns evolve as equipment ages. Predict future defect states. Train maintenance schedules. Identify early warning signs of degradation. Implementation: Sequence-conditioned GAN on time-series defect data. Generate future states for RUL prediction. **Additional Applications**: (4) Cross-fab translation: Condition on fab ID to translate defect patterns between facilities. (5) Resolution enhancement: Condition on imaging modality (optical \u2192 SEM) to generate high-resolution predictions. (6) Severity control: Condition on defect severity level to generate examples across severity spectrum. **Benefits of Conditioning**: (1) Targeted generation: Create exactly what you need. (2) Reduced training data: One conditional model vs many unconditional models. (3) Controllable exploration: Sample from specific scenarios. (4) Metadata utilization: Leverage available manufacturing data. **Implementation Challenges**: (1) Collecting and cleaning conditioning metadata. (2) Ensuring conditioning variables are truly informative. (3) Avoiding confounding variables. (4) Validating condition-specific quality. For semiconductor manufacturing, conditional generation enables data-efficient modeling of complex, multi-factor defect generation processes.",
+      "hints": [
+        "Think about what metadata is available in manufacturing",
+        "Consider different conditioning variables (tool ID, process parameters, time)",
+        "Think about process control and optimization",
+        "Consider cross-domain applications"
+      ],
+      "id": "m8.1_q023",
+      "points": 5,
+      "question": "Describe three specific applications of conditional generation (cGANs or conditional VAEs) in semiconductor manufacturing beyond basic data augmentation. Explain how conditioning improves each application.",
+      "rubric": [
+        "Provides three distinct, realistic applications (3 points)",
+        "Explains the conditioning variable for each application (2 points)",
+        "Describes how conditioning enables the application (2 points)",
+        "Discusses benefits over unconditional generation (2 points)",
+        "Considers practical implementation challenges (1 point)"
+      ],
+      "topic": "conditional_generation_applications",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Differential Privacy for Generative Models: **Differential Privacy (DP)**: Formal privacy guarantee: Including or removing any single data point doesn't significantly change output distribution. Defined by privacy budget \u03b5 (epsilon): Smaller \u03b5 = stronger privacy, more noise added. DP-GAN ensures no single wafer can be reconstructed from synthetic dataset. **Implementation (DP-GAN)**: (1) Clip gradients during training to bound sensitivity. (2) Add calibrated Gaussian noise to gradients. (3) Privacy accountant tracks cumulative privacy loss. (4) Stop training when privacy budget exhausted. Key parameters: Clipping threshold C, noise scale \u03c3, privacy budget \u03b5. Algorithm: \u2207\u03b8 = clip(\u2207\u03b8, C) + N(0, \u03c3\u00b2C\u00b2I). Moments accountant computes effective \u03b5 over training. **Privacy-Utility Tradeoff**: Stronger privacy (low \u03b5) \u2192 more noise \u2192 lower quality synthetic data. Weaker privacy (high \u03b5) \u2192 less noise \u2192 higher quality but less privacy guarantee. Typical values: \u03b5=1.0 (strong privacy), \u03b5=10.0 (moderate privacy). Must balance privacy needs with synthetic data usefulness for downstream tasks. **Semiconductor Industry Use Cases**: (1) **Consortium Data Sharing**: Multiple fabs contribute data to train shared model without revealing proprietary processes. (2) **Vendor Collaboration**: Share defect patterns with equipment vendors for tool improvement without exposing process details. (3) **Benchmark Datasets**: Publish public datasets for algorithm development while protecting IP. (4) **Competitive Intelligence**: Prevent reverse-engineering of process parameters from defect patterns. (5) **Regulatory Compliance**: Meet data protection requirements when data contains sensitive information. **When DP is Necessary**: (1) Sharing data outside organization. (2) Proprietary processes with competitive advantage. (3) Compliance with data protection regulations. (4) Preventing membership inference attacks. (5) Long-term privacy guarantees needed (can't revoke shared synthetic data). **Validation & Trust**: (1) Verify \u03b5 calculation with privacy accountant. (2) Test for membership inference (can you tell if sample was in training?). (3) Validate utility: Does DP-synthetic data work for intended application? (4) Audit by trusted third party. (5) Document privacy parameters clearly. **Practical Challenges**: (1) Calibrating privacy-utility tradeoff. (2) Higher computational cost (more training iterations). (3) Potential quality degradation. (4) Explaining DP guarantees to stakeholders. For semiconductor industry with highly proprietary processes, DP-GANs enable safe data sharing for collaborative research while protecting competitive IP.",
+      "hints": [
+        "Think about privacy guarantees and epsilon parameter",
+        "Consider gradient clipping and noise addition",
+        "Think about proprietary process information",
+        "Consider consortium and vendor relationships"
+      ],
+      "id": "m8.1_q024",
+      "points": 5,
+      "question": "Explain how differential privacy can be incorporated into GAN training to create privacy-preserving synthetic semiconductor datasets. Discuss the privacy-utility tradeoff and when this approach is necessary.",
+      "rubric": [
+        "Explains differential privacy concept and formal guarantees (2 points)",
+        "Describes how to implement DP in GAN training (DPGAN) (2 points)",
+        "Discusses privacy-utility tradeoff (epsilon parameter) (2 points)",
+        "Provides semiconductor industry use cases for privacy-preserving synthesis (2 points)",
+        "Addresses validation and trust considerations (2 points)"
+      ],
+      "topic": "privacy_differential_privacy",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Generative Model Evaluation Metrics: **Fr\u00e9chet Inception Distance (FID)**: Calculation: Extract Inception-v3 features for real and generated images. Fit Gaussians to each distribution. Compute Fr\u00e9chet distance between Gaussians. Interpretation: Lower = better. Measures both quality and diversity. Pros: Captures perceptual similarity. Sensitive to quality and diversity. Widely used benchmark. Cons: Requires large sample size (>1000). Sensitive to Inception network biases. Expensive to compute. Semiconductor relevance: Good overall metric. Recommended for comparing GAN architectures. **Inception Score (IS)**: Calculation: Forward pass through Inception network. Entropy of predictions should be low per-image (confident) and high overall (diverse). IS = exp(E[KL(p(y|x) || p(y))]). Interpretation: Higher = better. Pros: Simple to compute. No reference data needed. Cons: Doesn't compare to real distribution. Can be gamed (adversarial examples). Sensitive to Inception network biases. Semiconductor relevance: Less useful. IS can be high even if images unrealistic for defects. **Precision and Recall for Generative Models**: Precision: What fraction of generated samples are realistic? (Quality) Recall: What fraction of real distribution is covered by generator? (Diversity) Calculation: Use hypersphere in feature space. Precision = fraction of generated samples near real samples. Recall = fraction of real samples near generated samples. Interpretation: High precision = quality. High recall = diversity. Trade-off between them. Pros: Separates quality and diversity. Interpretable. Cons: Depends on feature space and distance threshold. Semiconductor relevance: Very useful. Precision ensures realistic defects. Recall ensures all defect types covered. **Human/Domain Expert Evaluation**: Process: Experts review sample synthetic images. Rate realism, defect characteristics, physics validity. Compare to real samples (can they distinguish?). Pros: Catches domain-specific issues metrics miss. Validates practical usefulness. Identifies artifacts. Cons: Expensive. Subjective. Doesn't scale. Semiconductor relevance: Essential. Defect patterns must match physical failure modes. Experts validate before production use. **Recommended Metrics for Semiconductor**: (1) **Primary: FID** - Overall quality/diversity for comparing approaches. Target: FID < 50 for production use. (2) **Precision/Recall** - Separate quality (precision) and coverage (recall). Ensure both high before deployment. (3) **Per-Class FID** - Calculate FID for each defect type separately. Ensures all classes well-modeled. (4) **Domain Expert Review** - Essential final validation. 10-20 experts review samples. Majority vote on acceptability. (5) **Downstream Task Performance** - Ultimate metric: Does synthetic data improve classifier accuracy? Measure on held-out real test set. **Evaluation Pipeline**: (1) Training: Monitor FID during training (should decrease). (2) Model Selection: Compare architectures on FID and Precision/Recall. (3) Validation: Expert review of best models. (4) Deployment Criteria: FID < threshold, expert approval, downstream improvement. (5) Monitoring: Continuous quality checks in production. For critical semiconductor applications, multi-metric evaluation with expert validation is essential before using synthetic data for classifier training.",
+      "hints": [
+        "Think about what each metric captures (quality, diversity, both)",
+        "Consider reference-based vs reference-free metrics",
+        "Think about domain-specific requirements",
+        "Consider practical evaluation workflows"
+      ],
+      "id": "m8.1_q025",
+      "points": 5,
+      "question": "Compare and contrast different evaluation metrics for generative models (FID, IS, Precision/Recall, human evaluation) in the context of semiconductor defect image generation. Which metrics are most relevant and why?",
+      "rubric": [
+        "Explains FID (Fr\u00e9chet Inception Distance) calculation and interpretation (2 points)",
+        "Describes Inception Score and its limitations (2 points)",
+        "Discusses Precision/Recall for generative models (2 points)",
+        "Addresses role of human/domain expert evaluation (2 points)",
+        "Recommends appropriate metrics for semiconductor applications (2 points)"
+      ],
+      "topic": "evaluation_metrics_comparison",
+      "type": "conceptual"
+    },
+    {
+      "code_template": "import torch\nimport numpy as np\nfrom sklearn.cluster import KMeans\nfrom sklearn.metrics import silhouette_score\nfrom scipy.spatial.distance import pdist, squareform\nfrom typing import Dict, List\n\nclass ModeCollapseDetector:\n    \"\"\"\n    Detect mode collapse in GAN-generated samples.\n    \"\"\"\n    def __init__(self, feature_extractor=None):\n        \"\"\"\n        Args:\n            feature_extractor: Model to extract features (e.g., Inception)\n        \"\"\"\n        self.feature_extractor = feature_extractor\n        self.real_features = None\n    \n    def fit(self, real_samples):\n        \"\"\"\n        Fit on real samples to learn expected diversity.\n        \"\"\"\n        # Your implementation here:\n        # Extract features from real samples\n        pass\n    \n    def calculate_diversity_metrics(self, generated_samples) -> Dict:\n        \"\"\"\n        Calculate multiple diversity metrics.\n        \n        Returns:\n            Dict with diversity scores\n        \"\"\"\n        # Your implementation here:\n        # 1. Intra-class diversity (avg pairwise distance)\n        # 2. Number of modes (cluster count)\n        # 3. Coverage (fraction of real modes covered)\n        # 4. Silhouette score\n        pass\n    \n    def intra_diversity(self, features):\n        \"\"\"\n        Calculate average pairwise distance (diversity within generated set).\n        \"\"\"\n        # Your implementation here\n        pass\n    \n    def mode_coverage(self, generated_features, k=8):\n        \"\"\"\n        Estimate how many modes of real distribution are covered.\n        \"\"\"\n        # Your implementation here:\n        # 1. Cluster real samples into k modes\n        # 2. Assign generated samples to clusters\n        # 3. Calculate fraction of clusters with generated samples\n        pass\n    \n    def detect_mode_collapse(self, generated_samples, threshold=0.7):\n        \"\"\"\n        Detect if mode collapse has occurred.\n        \n        Returns:\n            is_collapsed (bool), metrics (Dict)\n        \"\"\"\n        # Your implementation here:\n        # Mode collapse if:\n        # - Low diversity compared to real\n        # - Poor mode coverage (<threshold)\n        # - High silhouette (samples very clustered)\n        pass\n\ndef visualize_mode_collapse(real_samples, generated_samples, epoch_list):\n    \"\"\"\n    Visualize mode collapse progression across training.\n    \n    Args:\n        epoch_list: List of (epoch, generated_samples) tuples\n    \"\"\"\n    # Your implementation here:\n    # Plot diversity metrics over training epochs\n    pass",
+      "difficulty": "hard",
+      "explanation": "Mode collapse detection is crucial for ensuring GAN generates diverse defect patterns. Metrics: (1) Intra-diversity: Average pairwise distance within generated samples. Low = samples too similar. (2) Mode coverage: Fraction of real data clusters covered by generated samples. Low = missing defect types. (3) Silhouette score: How tightly generated samples cluster. High = potential collapse. (4) Comparison to real: Generated diversity should match real diversity. For semiconductor applications: Mode collapse means some critical defect types missing from synthetic data. Augmented classifier will perform poorly on those missing types. Early detection during training allows intervention (adjust hyperparameters, use WGAN, add regularization). Monitor metrics throughout training to catch collapse before wasting computational resources.",
+      "hints": [
+        "Pairwise distance: pdist(features, metric='euclidean').mean()",
+        "KMeans clustering: kmeans = KMeans(n_clusters=k); labels = kmeans.fit_predict(features)",
+        "Coverage: len(np.unique(generated_cluster_labels)) / k",
+        "Silhouette: silhouette_score(features, labels) - higher = more clustered",
+        "Compare diversity to real baseline: generated_diversity / real_diversity",
+        "Mode collapse if ratio < 0.5 or coverage < 0.7"
+      ],
+      "id": "m8.1_q026",
+      "points": 5,
+      "question": "Implement tools to detect and quantify mode collapse in GAN training for wafer defect generation.",
+      "test_cases": [
+        {
+          "description": "Mode collapse detection",
+          "expected_output": "Detection of mode collapse with low coverage score",
+          "input": "real_samples (diverse defect types), generated_samples (mode collapsed)"
+        }
+      ],
+      "topic": "mode_collapse_detection",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import torch\nimport torch.nn as nn\nimport torch.nn.functional as F\n\nclass BetaVAE(nn.Module):\n    \"\"\"\n    \u03b2-VAE with adjustable disentanglement strength.\n    \"\"\"\n    def __init__(self, input_dim=64*64, latent_dim=20, beta=4.0):\n        \"\"\"\n        Args:\n            beta: Weight on KL divergence term. Higher = more disentangled\n        \"\"\"\n        super().__init__()\n        self.latent_dim = latent_dim\n        self.beta = beta\n        \n        # Your implementation here:\n        # Similar architecture to standard VAE\n        pass\n    \n    def forward(self, x):\n        # Your implementation here\n        pass\n    \n    def loss_function(self, reconstruction, x, mu, log_var):\n        \"\"\"\n        \u03b2-VAE loss = Reconstruction Loss + \u03b2 * KL Divergence\n        \"\"\"\n        # Your implementation here:\n        # Recon loss\n        recon_loss = F.binary_cross_entropy(reconstruction, x, reduction='sum')\n        # KL divergence\n        kl_loss = -0.5 * torch.sum(1 + log_var - mu.pow(2) - log_var.exp())\n        # Total loss with beta weight\n        total_loss = recon_loss + self.beta * kl_loss\n        return total_loss, recon_loss, kl_loss\n\ndef analyze_disentanglement(vae, test_images, test_labels):\n    \"\"\"\n    Analyze how well latent dimensions disentangle defect attributes.\n    \n    For each latent dimension:\n    - Calculate correlation with known attributes\n    - Measure mutual information\n    \"\"\"\n    # Your implementation here:\n    # 1. Encode test images\n    # 2. For each latent dimension:\n    #    - Vary it while keeping others fixed\n    #    - Decode and observe changes\n    #    - Correlate with attributes (defect type, severity, location)\n    pass\n\ndef traverse_latent_dimension(vae, base_image, dim_idx, steps=10):\n    \"\"\"\n    Traverse a specific latent dimension to see what it encodes.\n    \n    Args:\n        base_image: Starting image\n        dim_idx: Which latent dimension to vary\n        steps: Number of steps from -3\u03c3 to +3\u03c3\n    \"\"\"\n    # Your implementation here\n    pass",
+      "difficulty": "medium",
+      "explanation": "\u03b2-VAE encourages disentanglement by increasing weight on KL divergence term. This forces model to use latent dimensions efficiently - each dimension encodes one independent factor of variation. For semiconductor defects: (1) Separate dimensions for defect type, severity, location, size. (2) Enables controlled generation: Change severity without changing type. (3) Interpretable latent space: Process engineers understand what each dimension means. (4) Causal analysis: Identify which process parameters affect which defect attributes by correlating latent dimensions with process data. (5) Targeted augmentation: Vary specific attributes while keeping others fixed. Trade-off: Higher \u03b2 improves disentanglement but reduces reconstruction quality. Need to tune \u03b2 for application. For process control applications, interpretable latent space is valuable even at cost of some reconstruction quality.",
+      "hints": [
+        "\u03b2 parameter: Typical values 2-10. Higher \u03b2 = more disentangled, lower reconstruction quality",
+        "Loss: Same as VAE but multiply KL term by \u03b2",
+        "Disentanglement: Each latent dimension should correspond to one attribute",
+        "Traversal: Fix z except one dimension, vary that dimension, decode",
+        "Evaluation: Variance in latent dimension should correlate with variance in one attribute",
+        "For defect analysis: z[0] = defect type, z[1] = severity, z[2] = x-location, etc."
+      ],
+      "id": "m8.1_q027",
+      "points": 4,
+      "question": "Implement a \u03b2-VAE (beta-VAE) with controllable disentanglement for learning interpretable defect representations where different latent dimensions correspond to different defect attributes.",
+      "test_cases": [
+        {
+          "description": "Disentangled representation learning",
+          "expected_output": "\u03b2-VAE where different dimensions encode different attributes",
+          "input": "Wafer defects with known attributes (type, severity, location)"
+        }
+      ],
+      "topic": "disentangled_vae",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import torch\nimport numpy as np\nfrom sklearn.metrics import classification_report, f1_score\nfrom typing import Dict, Tuple\n\nclass AdaptiveSyntheticMixer:\n    \"\"\"\n    Dynamically adjust real/synthetic mixing ratio based on performance.\n    \"\"\"\n    def __init__(self, generator, real_data, real_labels, \n                 val_data, val_labels, initial_synthetic_ratio=0.3):\n        self.generator = generator\n        self.real_data = real_data\n        self.real_labels = real_labels\n        self.val_data = val_data\n        self.val_labels = val_labels\n        self.synthetic_ratio = initial_synthetic_ratio\n        self.ratio_history = []\n        self.performance_history = []\n    \n    def evaluate_mixing_ratio(self, classifier, ratio) -> Dict:\n        \"\"\"\n        Train classifier with given real/synthetic ratio, evaluate performance.\n        \n        Returns:\n            Performance metrics on validation set\n        \"\"\"\n        # Your implementation here:\n        # 1. Create mixed dataset with specified ratio\n        # 2. Train classifier\n        # 3. Evaluate on validation set\n        # 4. Return per-class metrics\n        pass\n    \n    def find_optimal_ratio(self, classifier, ratio_candidates):\n        \"\"\"\n        Search over candidate ratios to find optimal.\n        \n        Args:\n            ratio_candidates: List of ratios to test (e.g., [0.0, 0.2, 0.4, 0.6])\n        \"\"\"\n        # Your implementation here:\n        # 1. For each ratio:\n        #    - Evaluate performance\n        #    - Track metrics\n        # 2. Select ratio with best minority class performance\n        # 3. Ensure majority class performance not degraded\n        pass\n    \n    def adaptive_class_specific_mixing(self, classifier) -> Dict[int, float]:\n        \"\"\"\n        Determine per-class synthetic ratios.\n        \n        Returns:\n            Dict mapping class_id -> synthetic_ratio for that class\n        \"\"\"\n        # Your implementation here:\n        # 1. Evaluate classifier per-class performance\n        # 2. For classes with low recall: increase synthetic ratio\n        # 3. For classes with high performance: use mostly real data\n        pass\n    \n    def monitor_synthetic_quality(self) -> Dict:\n        \"\"\"\n        Continuously monitor synthetic data quality.\n        \n        Returns:\n            Quality metrics (FID, diversity, etc.)\n        \"\"\"\n        # Your implementation here\n        pass\n    \n    def get_mixed_dataset(self, class_synthetic_ratios=None):\n        \"\"\"\n        Create mixed dataset with optimal ratios.\n        \n        Args:\n            class_synthetic_ratios: Per-class mixing ratios (optional)\n        \"\"\"\n        # Your implementation here\n        pass",
+      "difficulty": "hard",
+      "explanation": "Intelligent mixing strategy is crucial for effective data augmentation with synthetic data. Key principles: (1) **Class-specific ratios**: Minority classes need more augmentation than majority classes. (2) **Performance-driven**: Adjust ratios based on validation metrics, not fixed rules. (3) **Quality-aware**: Monitor synthetic quality; reduce ratio if quality degrades. (4) **Conservative for critical classes**: Use more real data for high-stakes defect types. (5) **Validation-based optimization**: Search for ratios that maximize target metrics. Algorithm: (1) Start with conservative ratio (30% synthetic). (2) Evaluate performance. (3) For classes with low recall, generate more synthetic samples. (4) For classes with high performance, reduce synthetic ratio. (5) Re-evaluate and iterate. (6) Select ratios that maximize weighted F1 score. For semiconductor manufacturing: (1) Critical defects (safety/yield): Use mostly real data (10-20% synthetic). (2) Rare but less critical: Use more synthetic (50-70%). (3) Common defects: Minimal augmentation needed (0-10% synthetic). Continuous monitoring ensures synthetic data helps rather than hurts classifier performance.",
+      "hints": [
+        "Grid search over ratios: [0.0, 0.2, 0.4, 0.6, 0.8]",
+        "Objective: Maximize minority class F1 while maintaining majority class accuracy",
+        "Per-class ratio: If class has recall < 0.7, increase its synthetic ratio",
+        "Quality threshold: Only use synthetic if FID < 50",
+        "Early stopping: If adding synthetic hurts performance, use less",
+        "Cross-validation: Use k-fold CV for robust ratio selection"
+      ],
+      "id": "m8.1_q028",
+      "points": 5,
+      "question": "Implement an intelligent mixing strategy that dynamically adjusts the ratio of real to synthetic training samples based on validation performance and synthetic data quality.",
+      "test_cases": [
+        {
+          "description": "Adaptive synthetic data mixing",
+          "expected_output": "Optimal per-class mixing ratios maximizing validation performance",
+          "input": "Imbalanced dataset, trained generator, validation set"
+        }
+      ],
+      "topic": "synthetic_real_mixing_strategy",
+      "type": "coding_exercise"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Transfer learning for GANs: Pre-train both generator and discriminator on large related dataset, then fine-tune on target semiconductor data. Strategies: (1) **Pre-training datasets**: General textures (DTD dataset), industrial defects (MVTec AD), medical images (similar patterns). (2) **Progressive fine-tuning**: Start with frozen early layers, gradually unfreeze. (3) **Domain adaptation**: Use techniques like CycleGAN to adapt pre-trained model to new domain. Benefits with limited data: (1) Better initial weights than random. (2) Faster convergence. (3) Better quality with limited target data. (4) Reduced overfitting. Example: Pre-train StyleGAN on MVTec industrial defect dataset (multiple object types, various defect patterns), fine-tune on semiconductor wafer maps. The generator learns general defect pattern generation, then specializes to semiconductor-specific patterns. Practical approach: (1) Use pre-trained StyleGAN or BigGAN weights. (2) Replace final layers to match target resolution. (3) Fine-tune with lower learning rate. (4) Monitor for catastrophic forgetting. For semiconductor fabs with limited historical defect data, transfer learning can be the difference between poor and excellent synthetic data quality.",
+      "id": "m8.1_q029",
+      "options": [
+        "GANs cannot use transfer learning",
+        "Pre-train on a large related dataset (e.g., general textures or other industrial defects), then fine-tune on semiconductor data",
+        "Only use pre-trained discriminators",
+        "Transfer learning makes GANs worse"
+      ],
+      "points": 3,
+      "question": "How can transfer learning be applied to train GANs for semiconductor defect generation when training data is limited?",
+      "topic": "transfer_learning_gan",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "Diffusion models advantages: (1) **Training Stability**: No adversarial training - simple denoising objective. No mode collapse, vanishing gradients, or oscillation. Consistent convergence. (2) **Mode Coverage**: Excellent diversity - naturally covers all modes. No missing defect types. Better than GANs on multi-modal distributions. (3) **Sample Quality**: State-of-art image quality. Sharper details than VAEs. Competitive with or better than best GANs. (4) **Flexible Conditioning**: Easy to condition on class labels, text, or other images. Enables controlled generation. (5) **Theoretical Foundation**: Well-understood mathematical framework. Predictable behavior. (6) **Likelihood Estimation**: Can compute likelihood of samples (unlike GANs). Enables anomaly detection. Disadvantages: (1) **Slow Sampling**: Requires 1000+ denoising steps (GANs: 1 step). Can be accelerated with DDIM, but still slower. (2) **Computational Cost**: Higher inference cost for generation. (3) **Model Size**: Larger models than GANs typically. For semiconductor applications: **Use Diffusion Models when**: (1) Quality is paramount. (2) Training stability critical (limited resources). (3) Complete mode coverage essential (all defect types). (4) Offline generation acceptable (pre-generate synthetic datasets). **Use GANs when**: (1) Real-time generation needed. (2) Inference speed critical. (3) Computational budget limited. (4) Fast iteration during development. Recommendation for semiconductors: Use diffusion models for generating high-quality synthetic datasets for classifier training (offline generation). Use GANs for real-time applications like data augmentation during training or interactive exploration.",
+      "id": "m8.1_q030",
+      "options": [
+        "Diffusion models are always faster",
+        "More stable training without adversarial dynamics, better mode coverage, and higher quality samples",
+        "Diffusion models require less data",
+        "Diffusion models are simpler to implement"
+      ],
+      "points": 3,
+      "question": "What are the main advantages of diffusion models over GANs for generating semiconductor defect images, despite slower sampling?",
+      "topic": "diffusion_vs_gan",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "StyleGAN advantages for high-resolution generation: (1) **Progressive Growing**: Train at increasing resolutions (4x4 \u2192 8x8 \u2192 ... \u2192 1024x1024). Stable training at high resolutions. Faster convergence. (2) **Style-Based Generator**: Separates high-level attributes (defect type) from stochastic variation (fine details). Control generation at multiple scales. Better diversity without mode collapse. (3) **Adaptive Instance Normalization (AdaIN)**: Style injection at each resolution level. Enables fine-grained control. (4) **Mapping Network**: Maps latent code to intermediate space W. More disentangled representations. (5) **Noise Injection**: Adds stochastic detail at each layer. Creates realistic texture variations. Architecture: Latent z \u2192 Mapping Network \u2192 w \u2192 Style blocks (AdaIN + noise) at each resolution. Results: State-of-art quality for high-resolution images. Excellent control over generation. DCGAN limitations: Struggles beyond 256x256. Less control over features. Mode collapse at high resolution. For semiconductor wafer maps: StyleGAN2 or StyleGAN3 for best quality. Can generate multiple scales: (1) Full wafer maps (1024x1024). (2) Die-level defects (256x256). (3) Micro-defects (64x64). Style mixing enables combining characteristics from different defects (e.g., location from defect A, pattern from defect B).",
+      "id": "m8.1_q031",
+      "options": [
+        "Standard DCGAN",
+        "StyleGAN with progressive growing and style-based generator",
+        "Vanilla GAN with fully connected layers",
+        "Simple autoencoder"
+      ],
+      "points": 3,
+      "question": "Which GAN architecture would be most appropriate for generating high-resolution (1024x1024) wafer maps with fine defect details?",
+      "topic": "gan_architecture_choices",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Production Generative Model Pipeline: **1. Data Collection & Preparation**: (1) Automated ingestion from inspection systems. (2) Data validation and quality checks. (3) Labeling pipeline (automated + expert review). (4) Data versioning (DVC, Git LFS). (5) Privacy and security controls. **2. Training Pipeline**: (1) **Scheduled Retraining**: Weekly or monthly retraining on accumulated new data. Keeps model current with process drift. (2) **Hyperparameter Optimization**: Automated tuning (Optuna, Ray Tune). (3) **Multi-Model Training**: Train multiple architectures (GAN, VAE, Diffusion) in parallel. (4) **Distributed Training**: Use multiple GPUs for faster training. (5) **Experiment Tracking**: MLflow, Weights & Biases for tracking metrics, hyperparameters, artifacts. **3. Quality Monitoring & Validation**: (1) **Automated Quality Checks**: FID score calculation. Precision/Recall metrics. Per-class diversity analysis. Mode collapse detection. (2) **Visual Inspection Dashboard**: Random sample review. Side-by-side real vs synthetic comparison. (3) **Domain Expert Review**: Weekly review of samples. Approval required for deployment. (4) **Quality Thresholds**: FID < 50 (configurable). Diversity score > 0.7. Expert approval rate > 80%. **4. Model Versioning & Deployment**: (1) **Semantic Versioning**: Major.Minor.Patch (e.g., v2.3.1). Track model architecture, training data version, hyperparameters. (2) **Model Registry**: Central repository (MLflow Model Registry). Stores models, metadata, performance metrics. (3) **Staged Rollout**: Development \u2192 Staging \u2192 Production. Canary deployment (10% traffic initially). (4) **A/B Testing**: Compare new vs old model. Train classifiers with synthetic data from each. Deploy winner based on downstream performance. (5) **Rollback Mechanism**: Instant rollback if quality degrades. Automated alerts for anomalies. **5. Synthetic Data Generation Service**: (1) **API Endpoints**: Generate samples for specific defect type. Generate balanced dataset. Generate N samples with parameters. (2) **Batch Generation**: Scheduled batch jobs for dataset creation. Pre-generate common datasets for quick access. (3) **Caching**: Cache frequently requested synthetic datasets. (4) **Resource Management**: GPU allocation and scheduling. Queue management for requests. **6. Integration with ML Training Pipelines**: (1) **Automatic Dataset Creation**: Daily generation of balanced training sets. Combine real + synthetic per configured ratios. (2) **Pipeline Triggers**: New synthetic data triggers classifier retraining. (3) **Feedback Loop**: Classifier performance metrics fed back to generative model training. Poor classification on certain classes \u2192 generate more of those. (4) **Data Versioning**: Track which synthetic data version used for each classifier. Reproducibility of results. **7. Monitoring & Alerting**: (1) **Quality Drift Detection**: Monitor FID over time. Alert if degradation. (2) **Usage Tracking**: How much synthetic data being used. Which classes most requested. (3) **Performance Tracking**: Downstream classifier performance with synthetic data. (4) **Resource Monitoring**: GPU utilization. Storage usage. API latency. **8. Compliance & Governance**: (1) **Audit Trail**: Log all generation requests. Track data lineage. (2) **Privacy Controls**: Ensure no training data leakage in synthetic samples. (3) **Quality Documentation**: Document quality checks performed. Store expert review results. (4) **Compliance Reports**: Regular reports on synthetic data usage and quality. **9. Cost Optimization**: (1) **Compute**: Use spot instances for training. Auto-scaling for generation service. (2) **Storage**: Compress and archive old synthetic datasets. Tiered storage (hot/cold). (3) **Generation Strategy**: Pre-generate common datasets during off-peak hours. On-demand generation for custom requests. **10. Disaster Recovery**: (1) **Backup**: Regular backups of trained models. Backup of training data and configurations. (2) **Geographic Redundancy**: Multi-region model deployment. (3) **Failover**: Automatic failover to backup model if primary fails. Architecture: Training: Data Lake \u2192 Training Pipeline (Kubeflow) \u2192 Model Registry (MLflow). Serving: Model Registry \u2192 Kubernetes Deployment \u2192 API Gateway \u2192 Clients. Monitoring: Prometheus + Grafana dashboards. For semiconductor fabs, this production pipeline ensures: (1) Always-available high-quality synthetic data. (2) Models stay current with process changes. (3) Quality guarantees before production use. (4) Seamless integration with existing ML workflows. (5) Operational reliability and cost efficiency.",
+      "hints": [
+        "Think about MLOps best practices",
+        "Consider continuous training on new real data",
+        "Think about quality gates before deploying new models",
+        "Consider integration with existing defect classification systems"
+      ],
+      "id": "m8.1_q032",
+      "points": 5,
+      "question": "Design a complete production pipeline for deploying generative models in a semiconductor fab for continuous synthetic data generation. Address training, quality monitoring, versioning, and integration with existing ML systems.",
+      "rubric": [
+        "Describes automated training pipeline with data collection and model updates (2 points)",
+        "Includes comprehensive quality monitoring and validation (2 points)",
+        "Addresses model versioning, rollback, and A/B testing (2 points)",
+        "Discusses integration with downstream ML training pipelines (2 points)",
+        "Considers operational concerns (compute resources, storage, latency) (2 points)"
+      ],
+      "topic": "generative_pipeline_production",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Strategies for Rare Defect Synthesis: **1. Few-Shot GAN Approaches**: (1) **Meta-Learning**: Train GAN on many defect types to learn how to quickly adapt to new types. Use MAML (Model-Agnostic Meta-Learning) or Reptile. Fine-tune on few rare defect examples. (2) **Few-Shot GAN**: Match statistics between support set (few real examples) and generated samples. Use matching networks or prototypical networks. (3) **Data2Data Translation**: Learn mapping from abundant defect type to rare type with few examples. CycleGAN-style approach. **2. Bootstrapping with Traditional Augmentation**: (1) **Augment Rare Examples**: Geometric: rotation, flip, translation, scaling. Intensity: brightness, contrast adjustments. Noise injection. Elastic deformations. (2) **Create Pseudo-Training Set**: Start with 10 real rare defects. Apply augmentations \u2192 100 variations. (3) **Train GAN on Augmented Set**: GAN learns to generate beyond simple augmentations. Explores interpolations and variations. **3. Transfer Learning Strategies**: (1) **Related Defect Transfer**: Train GAN on similar but more common defect type. Fine-tune on rare defect. Example: Train on common edge defects (1000 samples), fine-tune on rare corner defects (10 samples). (2) **Multi-Domain GAN**: Train on multiple defect types jointly. Shared generator backbone + defect-specific layers. Transfer knowledge from common to rare types. (3) **Pre-training on External Data**: Pre-train on large industrial defect datasets (MVTec AD). Fine-tune on semiconductor data including rare types. **4. Physics-Based Simulation**: (1) **Process Simulation**: If defect formation mechanism known, simulate the process. Generate synthetic defects from first principles. Combine with GAN for realism enhancement. (2) **Hybrid Approach**: Simulate basic defect structure. Use GAN to add realistic texture and noise. **5. Semi-Supervised and Self-Supervised Learning**: (1) **VAE on All Defects**: Train VAE on all defect types (including common ones). VAE learns general defect representation. Generate rare defects by sampling from appropriate region of latent space. (2) **Contrastive Learning**: Learn defect representations with self-supervised learning on all data. Use learned representations to guide generation of rare defects. **6. Expert-in-the-Loop Generation**: (1) **Interactive Generation**: Expert guides generator through latent space exploration. Expert provides feedback on realism. Reinforcement learning with human feedback. (2) **Constraint-Based Generation**: Expert defines constraints (defect must be in corner, size range X-Y). Generate within constraints. (3) **Sketch-to-Image**: Expert provides rough sketch of rare defect. GAN converts sketch to realistic image. **7. Ensemble and Mixture Approaches**: (1) **Mixture Models**: Combine multiple common defect patterns to create rare patterns. Learn mixture weights from few examples. (2) **Compositional Generation**: Rare defect = combination of simpler components. Generate components separately, compose them. **8. Validation with Limited Data**: (1) **Leave-One-Out Validation**: With 10 rare examples, train on 9, validate on 1. Repeat for all combinations. (2) **Expert Validation Critical**: Visual inspection by multiple experts. Compare to real examples. Check physical plausibility. (3) **Nearest Neighbor Test**: Ensure generated samples not memorizing rare examples. Calculate distance to nearest training sample. (4) **Downstream Performance**: Ultimate test: Does synthetic data improve classifier recall on rare defects? Test on held-out real rare defect examples (if any available). **9. Conservative Deployment**: (1) **Lower Synthetic Ratio**: For critical rare defects, use lower synthetic ratio (10-20%). (2) **Quality Threshold**: Higher quality bar for rare defects. (3) **Continuous Monitoring**: Closely monitor classifier performance on rare defects in production. (4) **Collect More Real Data**: Invest in getting more real examples over time. **10. Alternative: Anomaly Detection**: If synthesis too risky: (1) Train anomaly detector on common defects only. (2) Flag rare defects as anomalies. (3) Avoid dependence on potentially low-quality synthetic rare defects. Recommended Approach for Semiconductor Fabs: (1) Start with traditional augmentation to bootstrap. (2) Use transfer learning from similar defects. (3) Train with few-shot learning techniques. (4) Rigorous expert validation before any use. (5) Conservative synthetic ratios (10-20%). (6) Continuous monitoring and validation. (7) Parallel effort to collect more real rare defect examples. (8) Consider anomaly detection as backup strategy. For critical rare defects (safety-critical, high yield impact): Use extra caution, potentially avoid synthetic data until sufficient real examples available.",
+      "hints": [
+        "Think about few-shot GANs and meta-learning",
+        "Consider bootstrapping with traditional augmentation",
+        "Think about similar defect types that could transfer",
+        "Consider semi-supervised or self-supervised approaches"
+      ],
+      "id": "m8.1_q033",
+      "points": 5,
+      "question": "Explain strategies for generating high-quality synthetic samples for extremely rare but critical defect types (< 0.1% of data) where standard GAN training would fail due to insufficient examples.",
+      "rubric": [
+        "Discusses few-shot learning approaches (2 points)",
+        "Explains data augmentation techniques before GAN training (2 points)",
+        "Describes transfer learning from related defects (2 points)",
+        "Addresses validation challenges with rare defects (2 points)",
+        "Suggests alternative approaches if GAN fails (2 points)"
+      ],
+      "topic": "rare_defect_synthesis",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Temporal Consistency in Generative Models: **Why Temporal Consistency Matters**: (1) **Process Drift Detection**: Defect patterns evolve gradually as process drifts. Synthetic sequences should reflect realistic drift rates. (2) **Equipment Degradation**: Defects worsen predictably as equipment ages. Need realistic progression for predictive maintenance. (3) **Lot-to-Lot Variation**: Consecutive wafers in a lot have correlated defects. Training on temporally inconsistent data hurts time-series models. (4) **Root Cause Analysis**: Temporal patterns provide causality clues. Synthetic sequences must preserve causal relationships. **Techniques for Temporal Consistency**: **1. Video Generation Approaches**: (1) **VideoGAN**: Extends GAN to generate video sequences. Generator: (z, t) \u2192 frame at time t. Discriminator: Evaluates temporal consistency. (2) **TGAN (Temporal GAN)**: Separate generators for content (what) and motion (how it changes). Combines spatial and temporal discriminators. (3) **Progressive Generation**: Generate frame t conditioned on frames t-1, t-2, .... Autoregressive approach ensures consistency. **2. Recurrent Architectures**: (1) **RNN/LSTM-based Generator**: Hidden state carries information across time steps. Generates sequence frame-by-frame. (2) **Temporal Convolutional Networks**: 3D convolutions for spatiotemporal generation. (3) **Transformer-based Sequence Generation**: Self-attention over temporal dimension. Captures long-range dependencies. **3. Physics-Informed Generation**: (1) **Process Model Integration**: Incorporate known process drift models. Constrain generation to follow realistic physics. (2) **Equipment Degradation Curves**: Model equipment degradation explicitly. Generate defects conditioned on equipment age/state. (3) **Causal Models**: Use causal graph of process parameters \u2192 defects. Generate temporally consistent parameter sequences \u2192 defects. **4. Conditional Generation on Time**: (1) **Time as Conditioning Variable**: Generator G(z, t) where t is timestamp or sequence position. (2) **Interpolation in Latent Space**: Smooth interpolation between latent codes for consecutive timepoints. Ensures gradual changes. (3) **Delta Generation**: Generate changes (deltas) rather than full frames. Guarantees consistency: frame_t = frame_{t-1} + delta_t. **Validation of Temporal Realism**: (1) **Temporal Correlation Metrics**: Measure autocorrelation in synthetic sequences. Compare to real sequences. (2) **Temporal Frechet Distance**: Extend FID to sequences using 3D CNN features. (3) **Expert Review**: Process engineers evaluate whether drift patterns realistic. (4) **Downstream Task Performance**: Train time-series models on synthetic sequences. Test on real sequences. (5) **Physical Plausibility**: Check if generated progression matches known physics. Degradation rates realistic? **Applications in Semiconductor Manufacturing**: **1. Process Drift Simulation**: (1) Generate wafer sequences showing gradual process drift. (2) Train drift detection models on synthetic data. (3) Test different drift rates without running experiments. (4) Example: Chamber cleaning cycle - generate defect progression between cleanings. **2. Equipment Degradation Modeling**: (1) Generate sequences showing equipment aging. (2) Train RUL (Remaining Useful Life) models. (3) Predict maintenance needs. (4) Example: Plasma etch chamber - generate defect evolution over 10,000 wafer equivalents. **3. Rare Event Sequence Generation**: (1) Generate sequences leading to rare critical defects. (2) Understand early warning signals. (3) Train early detection systems. (4) Example: Generate sequences showing progression from minor to major defects. **4. Lot-to-Lot Consistency**: (1) Generate correlated wafer maps within a lot. (2) Train models for spatial yield analysis. (3) Realistic lot-level statistics. **Computational Challenges**: (1) **Memory**: Generating sequences more memory intensive than single images. (2) **Training Time**: Video generation slower than image generation. (3) **Sequence Length**: Long sequences challenging. Consider hierarchical generation. (4) **Solution**: (a) Generate shorter subsequences (10-20 timepoints). (b) Use efficient architectures (temporal separable convolutions). (c) Progressive training - start with short sequences, increase length. **Implementation Strategy**: (1) **Start Simple**: Condition on time step, generate independent frames. (2) **Add Temporal Consistency**: Condition each frame on previous frame(s). (3) **Add Physics Constraints**: Incorporate known drift/degradation models. (4) **Validate Rigorously**: Temporal metrics + expert review + downstream performance. (5) **Deploy Conservatively**: Start with short sequences for well-understood phenomena. For semiconductor fabs: Temporally consistent synthetic sequences enable training advanced time-series models for proactive process control and predictive maintenance without waiting months/years to collect real temporal data.",
+      "hints": [
+        "Think about video generation techniques (VideoGAN, etc.)",
+        "Consider recurrent architectures for temporal modeling",
+        "Think about process drift scenarios",
+        "Consider equipment degradation patterns"
+      ],
+      "id": "m8.1_q034",
+      "points": 5,
+      "question": "When generating sequences of wafer maps (e.g., from consecutive wafers in a lot or over time), how can you ensure temporal consistency and realistic progression of defect patterns? Why is this important for time-series analysis?",
+      "rubric": [
+        "Explains temporal consistency requirements (2 points)",
+        "Describes video/sequence generation techniques (2 points)",
+        "Discusses applications in process drift and equipment degradation (2 points)",
+        "Addresses validation of temporal realism (2 points)",
+        "Considers computational challenges (2 points)"
+      ],
+      "topic": "synthetic_temporal_consistency",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Federated Learning for GANs Across Fabs: **Motivation for Federated GAN**: Semiconductor fabs have: (1) Proprietary processes they won't share. (2) Limited defect data individually. (3) Benefit from collective knowledge. (4) Similar defect types despite process differences. Federated learning enables training shared GAN without sharing raw data. **Federated Learning Architecture**: **Setup**: (1) Central server coordinates training (could be neutral third party). (2) Multiple fabs as clients with local data. (3) Communication channel for model weights only. **Training Process**: (1) Server initializes Generator and Discriminator. (2) Sends model weights to all fabs. (3) Each fab trains locally on their data for E epochs. (4) Fabs send updated weights (gradients or full model) to server. (5) Server aggregates updates (FedAvg: weighted average). (6) Server sends aggregated model to fabs. (7) Repeat until convergence. **Challenges for GAN Federated Learning**: **1. Adversarial Training Dynamics**: Standard federated learning designed for single model (supervised learning). GANs have two models in adversarial relationship. Challenge: Generator and Discriminator must stay balanced across fabs. Solution: (1) **Federated Training of Both G and D**: Each fab trains both G and D locally. Aggregate both separately. (2) **Synchronized Updates**: Ensure G and D update synchronously across fabs. (3) **Balance Monitoring**: Central server monitors G/D balance, adjusts learning rates if needed. **2. Non-IID Data Across Fabs**: Each fab has different: (1) Tool vendors/configurations. (2) Process recipes. (3) Defect distributions. Challenge: Model trained on heterogeneous data may not generalize. Solution: (1) **Personalized Federated Learning**: Shared base model + fab-specific fine-tuning layers. (2) **Clustered Federated Learning**: Group similar fabs, train separate models per cluster. (3) **Meta-Learning**: Learn model that can quickly adapt to each fab's data. **3. Privacy Preservation**: Even model weights can leak information about training data. Techniques: (1) **Differential Privacy**: Add calibrated noise to gradients before sharing. Provides formal privacy guarantees. Tradeoff: Privacy (low \u03b5) vs model quality. (2) **Secure Aggregation**: Cryptographic protocols ensure server only sees aggregate, not individual updates. No single party sees others' updates. (3) **Homomorphic Encryption**: Encrypt model updates, aggregate encrypted values. Server cannot see individual updates. (4) **Trusted Execution Environments (TEE)**: Aggregation in secure hardware enclave. **4. Communication Efficiency**: Sending full GAN weights (millions of parameters) every round is expensive. Solutions: (1) **Gradient Compression**: Sparsification: Send only top-k gradients. Quantization: Reduce precision (8-bit instead of 32-bit). (2) **Model Compression**: Train smaller model. Knowledge distillation. (3) **Federated Dropout**: Different fabs train different subnetworks. (4) **Less Frequent Communication**: Train more epochs locally between communication rounds. **5. Convergence Challenges**: Federated training converges slower than centralized. Reasons: Non-IID data, partial participation, communication delays. Solutions: (1) **Adaptive Learning Rates**: Server adjusts learning rate based on convergence. (2) **Momentum**: Server maintains momentum for stable updates. (3) **Client Selection**: Select representative subset of fabs per round. **Implementation Strategy**: **Phase 1: Foundation** (1) Establish consortium of interested fabs. (2) Define shared defect taxonomy (common labels). (3) Deploy secure federated learning infrastructure. (4) Start with simple model (DCGAN). **Phase 2: Federated Training** (1) Initialize model at central server. (2) Distribute to fabs. (3) Each fab trains 10-20 epochs locally. (4) Secure aggregation of updates. (5) Iterate for 100-500 rounds. (6) Monitor convergence, balance, quality metrics. **Phase 3: Validation** (1) Each fab validates on their local test data. (2) Compare to locally trained model. (3) Calculate FID, diversity metrics. (4) Expert review at each fab. **Phase 4: Personalization** (1) Each fab fine-tunes shared model on local data. (2) Creates fab-specific generator. (3) Benefits from shared knowledge + local adaptation. **Practical Considerations**: **Governance**: (1) Consortium agreement on: Data requirements, training schedule, quality standards. (2) Neutral third-party as central server. (3) Audit and compliance framework. **Technical Infrastructure**: (1) Standardized federated learning framework (TensorFlow Federated, PySyft). (2) Secure communication channels. (3) Compute resources at each fab. (4) Central coordination server. **Quality Assurance**: (1) Each fab validates model quality locally. (2) Decline to deploy if quality below threshold. (3) Right to exit federation if not beneficial. (4) Regular consortium reviews. **Benefits for Semiconductor Industry**: (1) **Better Models**: More diverse training data \u2192 better generalization. (2) **Privacy Preserved**: No raw data sharing \u2192 IP protected. (3) **Cost Sharing**: Shared compute and development costs. (4) **Industry Standards**: Common defect definitions and models. (5) **Faster Innovation**: Collective progress faster than individual efforts. **Challenges**: (1) Coordination overhead. (2) Technical complexity. (3) Trust in consortium members and infrastructure. (4) Heterogeneous tools and processes across fabs. **Alternative: Federated Transfer Learning**: Simpler approach: (1) One fab trains GAN, releases pre-trained model. (2) Other fabs fine-tune on local data. (3) No ongoing coordination needed. (4) Still provides transfer learning benefits. Use Case: Industry consortium (e.g., SEMI) could coordinate federated GAN training to create industry-standard synthetic defect generation models, benefiting entire semiconductor ecosystem while protecting individual fab IP.",
+      "hints": [
+        "Think about model weights aggregation without data sharing",
+        "Consider specific challenges of federating adversarial training",
+        "Think about secure aggregation protocols",
+        "Consider non-IID data across fabs"
+      ],
+      "id": "m8.1_q035",
+      "points": 5,
+      "question": "Describe how federated learning can be used to train a shared GAN across multiple semiconductor fabs without sharing proprietary wafer data. Address privacy, communication efficiency, and model quality challenges.",
+      "rubric": [
+        "Explains federated learning concept and architecture (2 points)",
+        "Describes how to federate GAN training (technical challenges) (2 points)",
+        "Discusses privacy preservation techniques (2 points)",
+        "Addresses communication efficiency and convergence (2 points)",
+        "Provides practical implementation strategy for semiconductor industry (2 points)"
+      ],
+      "topic": "federated_learning_gan",
+      "type": "conceptual"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "VAE samples from latent distribution during training: z ~ N(\u03bc, \u03c3\u00b2). Problem: Sampling is stochastic - cannot backpropagate gradients through random sampling operation. Reparameterization trick makes sampling differentiable: Instead of z ~ N(\u03bc, \u03c3\u00b2), use: z = \u03bc + \u03c3 * \u03b5 where \u03b5 ~ N(0,1). Now \u03bc and \u03c3 are deterministic functions of input, \u03b5 is independent random noise. Gradients can flow through \u03bc and \u03c3 while \u03b5 remains fixed for a forward pass. This enables end-to-end training with standard backpropagation. Without reparameterization trick, VAE training would be impossible using gradient-based optimization. The trick is essential, not optional. For semiconductor applications: Enables learning smooth latent space where similar defects are close together, essential for interpolation and controlled generation.",
+      "id": "m8.1_q036",
+      "options": [
+        "To make the model faster",
+        "To enable backpropagation through the stochastic sampling operation",
+        "To reduce model size",
+        "To improve image quality"
+      ],
+      "points": 2,
+      "question": "Why is the reparameterization trick necessary in VAE training?",
+      "topic": "vae_reparameterization_trick",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Inception Score measures quality and diversity of generated images using Inception network predictions. Calculation: IS = exp(E_x[KL(p(y|x) || p(y))]) where p(y|x) is prediction distribution for image x, p(y) is marginal class distribution. High IS means: (1) **Quality**: p(y|x) has low entropy - Inception confidently classifies each image. Not blurry or ambiguous. (2) **Diversity**: p(y) has high entropy - Generated images span multiple classes. Not mode collapsed. Example: Low IS (bad): All images ambiguous blobs OR all images same class. High IS (good): Each image clearly belongs to a class AND diverse classes represented. Limitations: (1) Only uses Inception network (biased toward ImageNet classes). (2) Doesn't compare to real distribution. (3) Can be gamed with adversarial examples. (4) May not correlate well with human judgment. For semiconductor defects: IS less useful than FID because defect patterns may not match ImageNet classes well. Better to use FID (compares to real distribution) or domain-specific quality metrics.",
+      "id": "m8.1_q037",
+      "options": [
+        "Low quality",
+        "Images are confidently classified (low entropy per-image) and diverse across samples (high entropy overall)",
+        "Images are blurry",
+        "Model is overfitting"
+      ],
+      "points": 3,
+      "question": "What does a high Inception Score (IS) indicate about generated images?",
+      "topic": "inception_score",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "Nash Equilibrium in GAN: Theoretical optimal point where neither generator nor discriminator can improve by unilateral change. At equilibrium: (1) Generator produces samples indistinguishable from real data: G(z) ~ p_data. (2) Discriminator predicts 0.5 (maximum uncertainty) for all samples: D(x) = 0.5 for all x. (3) Neither can improve without the other changing. Why difficult to reach: (1) **Non-convex optimization**: Loss landscapes for G and D are non-convex with many local minima. No guarantee of finding global optimum. (2) **Interdependent objectives**: G and D are coupled - optimizing one changes loss landscape for the other. Not independent optimization problems. (3) **Moving target**: As G improves, D's task changes. As D improves, G's gradients change. Chasing moving targets. (4) **Oscillation**: Can oscillate around equilibrium without converging. Training dynamics may not settle. (5) **Mode collapse**: G may find local optimum (fooling D with limited samples) rather than global equilibrium. (6) **Vanishing gradients**: If D becomes too good early, G gradients vanish, preventing convergence. Practical implications for semiconductor defect generation: (1) Training never perfectly converges - need early stopping criteria. (2) Monitor quality metrics (FID) rather than loss values. (3) Use techniques to stabilize: WGAN, spectral normalization, self-attention. (4) Expect some trial and error with hyperparameters. (5) May need to restart training if it diverges. Understanding Nash equilibrium helps explain why GAN training is more art than science, requiring careful tuning and monitoring.",
+      "id": "m8.1_q038",
+      "options": [
+        "The point where discriminator is always correct",
+        "The point where generator produces perfect samples and discriminator predicts 0.5 (cannot distinguish real from fake), but difficult due to non-convex optimization and lack of convergence guarantees",
+        "The point where training loss is zero",
+        "GANs don't have equilibrium"
+      ],
+      "points": 3,
+      "question": "What is the Nash equilibrium in GAN training, and why is it difficult to reach in practice?",
+      "topic": "gan_equilibrium",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Spectral Normalization: Technique to stabilize GAN training by constraining discriminator Lipschitz constant. Lipschitz constant K: Measures how much function output can change relative to input change. For discriminator: ||D(x1) - D(x2)|| \u2264 K ||x1 - x2||. Constraint prevents discriminator from having arbitrarily large gradients. Implementation: Divide each layer's weight matrix W by its spectral norm \u03c3(W) (largest singular value). W_normalized = W / \u03c3(W). Spectral norm calculated efficiently using power iteration method. Why it improves stability: (1) **Prevents gradient explosion**: Discriminator gradients bounded, generator gets stable gradients. (2) **Enables WGAN-like training**: Enforces Lipschitz constraint without weight clipping (problematic in original WGAN). (3) **Reduces need for careful tuning**: More robust to hyperparameter choices. (4) **Better conditioning**: Improves optimization landscape. (5) **Prevents discriminator from becoming too strong**: Balanced G/D training. Benefits for semiconductor defect generation: (1) More stable training with less hyperparameter tuning. (2) Better convergence to high-quality generators. (3) Recommended for StyleGAN and modern architectures. (4) Reduces training failures and restarts. Implementation: In PyTorch: torch.nn.utils.spectral_norm(layer). Apply to all discriminator convolutional and linear layers. Minimal computational overhead. Widely adopted in modern GANs (StyleGAN2, BigGAN) as standard practice.",
+      "id": "m8.1_q039",
+      "options": [
+        "A data preprocessing technique",
+        "A weight regularization technique that constrains the Lipschitz constant of the discriminator by normalizing weights by their spectral norm, preventing gradient explosion",
+        "A way to speed up training",
+        "A loss function modification"
+      ],
+      "points": 3,
+      "question": "What is spectral normalization in GANs and why does it improve training stability?",
+      "topic": "spectral_normalization",
+      "type": "multiple_choice"
+    },
+    {
+      "code_template": "import numpy as np\nimport torch\nfrom sklearn.model_selection import StratifiedKFold\nfrom sklearn.metrics import classification_report, f1_score, recall_score\nimport pandas as pd\nfrom typing import Dict, List\n\nclass SyntheticDataAblationStudy:\n    \"\"\"\n    Systematic evaluation of synthetic data contribution.\n    \"\"\"\n    def __init__(self, real_train_data, real_train_labels,\n                 real_test_data, real_test_labels,\n                 synthetic_data, synthetic_labels,\n                 classifier_class):\n        self.real_train_data = real_train_data\n        self.real_train_labels = real_train_labels\n        self.real_test_data = real_test_data\n        self.real_test_labels = real_test_labels\n        self.synthetic_data = synthetic_data\n        self.synthetic_labels = synthetic_labels\n        self.classifier_class = classifier_class\n        self.results = []\n    \n    def run_ablation_study(self) -> pd.DataFrame:\n        \"\"\"\n        Run comprehensive ablation study.\n        \n        Test scenarios:\n        1. Real only (baseline)\n        2. Real + 20% synthetic\n        3. Real + 50% synthetic\n        4. Real + 100% synthetic\n        5. Per-class synthetic (only minority classes)\n        6. Quality-filtered synthetic (FID < threshold)\n        \n        Returns:\n            DataFrame with results for all scenarios\n        \"\"\"\n        # Your implementation here:\n        # For each scenario:\n        #   - Create training dataset\n        #   - Train classifier with k-fold CV\n        #   - Evaluate on test set\n        #   - Record metrics (overall F1, per-class recall, accuracy)\n        pass\n    \n    def evaluate_scenario(self, train_data, train_labels, \n                         scenario_name, k_folds=5) -> Dict:\n        \"\"\"\n        Evaluate one scenario with cross-validation.\n        \"\"\"\n        # Your implementation here\n        pass\n    \n    def analyze_per_class_contribution(self) -> pd.DataFrame:\n        \"\"\"\n        Analyze synthetic data contribution per defect class.\n        \n        For each class:\n        - Train with/without synthetic for that class\n        - Measure recall improvement\n        \"\"\"\n        # Your implementation here\n        pass\n    \n    def analyze_synthetic_ratio_curve(self, ratios=[0.0, 0.1, 0.2, 0.3, 0.5, 0.7, 1.0]):\n        \"\"\"\n        Plot performance vs synthetic data ratio.\n        \"\"\"\n        # Your implementation here\n        pass\n    \n    def statistical_significance_test(self, scenario1, scenario2, alpha=0.05):\n        \"\"\"\n        Test if performance difference between scenarios is statistically significant.\n        Use paired t-test on k-fold CV results.\n        \"\"\"\n        # Your implementation here\n        pass\n    \n    def generate_report(self) -> str:\n        \"\"\"\n        Generate comprehensive report with recommendations.\n        \"\"\"\n        # Your implementation here:\n        # Summarize findings\n        # Recommend optimal synthetic ratio\n        # Identify which classes benefit most\n        # Provide confidence intervals\n        pass",
+      "difficulty": "medium",
+      "explanation": "Ablation study systematically evaluates if and how much synthetic data helps. Key analyses: (1) **Baseline**: Real data only performance establishes floor. (2) **Ratio Sweep**: Test multiple synthetic ratios to find optimum. Often 30-50% synthetic is sweet spot. (3) **Per-Class Analysis**: Identify which classes benefit (usually minority classes with recall < 0.7). (4) **Statistical Testing**: Ensure improvements not due to random variation. Use paired t-test on CV folds. (5) **Quality Filtering**: Test if using only high-quality synthetic (FID < threshold) helps. (6) **Targeted Augmentation**: Compare uniform augmentation vs augmenting only classes that need it. Results inform deployment: (1) If no improvement: Don't use synthetic or improve GAN quality. (2) If minority class improvement without majority degradation: Deploy with optimal ratio. (3) If quality-sensitive: Set FID threshold and filter synthetic data. For semiconductor manufacturing: Ablation study provides evidence-based justification for using synthetic data in production, critical for getting stakeholder buy-in and ensuring ROI on generative model development.",
+      "hints": [
+        "Use StratifiedKFold for consistent class distributions across folds",
+        "Track both overall metrics and per-class recall (key for minority classes)",
+        "Use scipy.stats.ttest_rel for paired t-test on CV fold results",
+        "Plot learning curves showing performance vs synthetic ratio",
+        "Calculate confidence intervals using bootstrap or CV standard deviation",
+        "Recommendation: Use synthetic if: (1) Significant improvement (p < 0.05), (2) Minority class recall boost > 5%, (3) No majority class degradation"
+      ],
+      "id": "m8.1_q040",
+      "points": 4,
+      "question": "Implement an ablation study framework to systematically evaluate the contribution of synthetic data to classifier performance on wafer defect detection.",
+      "test_cases": [
+        {
+          "description": "Ablation study on synthetic data",
+          "expected_output": "Comprehensive report showing optimal synthetic ratio and per-class benefits",
+          "input": "Real training data (imbalanced), synthetic data from trained GAN, test set"
+        }
+      ],
+      "topic": "synthetic_data_ablation",
+      "type": "coding_exercise"
+    }
+  ],
+  "sub_module": "8.1",
+  "title": "Generative Models for Semiconductor Manufacturing",
+  "version": "1.0",
+  "week": 15
+}

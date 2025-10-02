@@ -165,17 +165,93 @@ def generate_synthetic_wafer_maps(
 
 
 def load_dataset(name: str) -> Dict[str, Any]:
-    """Load dataset by name."""
+    """Load dataset by name.
+
+    Supports:
+    - synthetic_wafer: 1000 synthetic wafer maps (64x64)
+    - synthetic_wafer_small: 200 synthetic wafer maps (32x32, for testing)
+    - wm811k: Real WM-811K dataset (falls back to synthetic if unavailable)
+    - wm811k_small: Subset of WM-811K (first 1000 samples)
+    """
     if name == "synthetic_wafer":
         return generate_synthetic_wafer_maps()
     elif name == "synthetic_wafer_small":
         # Small dataset for fast testing
         return generate_synthetic_wafer_maps(n_samples=200, map_size=32)
     elif name.startswith("wm811k"):
-        # Future: implement real WM-811K loading
-        raise NotImplementedError("WM-811K dataset loading not yet implemented")
+        try:
+            # Attempt to load actual WM-811K dataset
+            from pathlib import Path
+            import warnings
+            import logging
+
+            data_root = Path(__file__).parent.parent.parent.parent / "datasets" / "wm811k"
+
+            # Import WM811K preprocessing utilities
+            import sys
+
+            datasets_path = Path(__file__).parent.parent.parent.parent / "datasets"
+            if str(datasets_path) not in sys.path:
+                sys.path.insert(0, str(datasets_path))
+
+            from wm811k_preprocessing import WM811KPreprocessor
+
+            preprocessor = WM811KPreprocessor(data_root)
+            processed_data = preprocessor.load_processed_data()
+
+            if processed_data is None:
+                print("Processed WM-811K data not found. Attempting to load raw data...")
+                raw_data = preprocessor.load_raw_data()
+
+                if raw_data is not None:
+                    print("Preprocessing raw WM-811K data...")
+                    processed_data = preprocessor.preprocess_data(
+                        raw_data, target_size=(64, 64), normalize=True, augment=False
+                    )
+
+                    # Save for future use
+                    preprocessor.save_processed_data(processed_data)
+                else:
+                    raise FileNotFoundError("WM-811K raw data not found")
+
+            # Convert to expected format
+            wafer_maps = processed_data.wafer_maps
+            labels = processed_data.labels
+            defect_types = processed_data.defect_types
+
+            # If wm811k_small requested, take subset
+            if name == "wm811k_small":
+                n_samples = min(1000, len(wafer_maps))
+                indices = np.random.RandomState(RANDOM_SEED).choice(len(wafer_maps), n_samples, replace=False)
+                wafer_maps = wafer_maps[indices]
+                labels = labels[indices]
+
+            # Generate wafer IDs
+            wafer_ids = np.array([f"WM811K_{i:06d}" for i in range(len(wafer_maps))])
+
+            print(f"Loaded {len(wafer_maps)} wafer maps from WM-811K dataset")
+            print(f"Defect types: {defect_types}")
+
+            # Squeeze extra dimensions if present
+            if len(wafer_maps.shape) == 4:
+                wafer_maps = wafer_maps.squeeze(-1)
+
+            return {
+                "wafer_maps": wafer_maps,
+                "labels": labels,
+                "wafer_ids": wafer_ids,
+                "pattern_names": defect_types,
+                "map_size": wafer_maps.shape[1],
+            }
+
+        except (ImportError, FileNotFoundError, Exception) as e:
+            warnings.warn(f"WM-811K dataset loading failed: {e}. Falling back to synthetic data.")
+            print(f"Warning: WM-811K dataset not available ({e}). Using synthetic data instead.")
+            return generate_synthetic_wafer_maps()
     else:
-        raise ValueError(f"Unknown dataset '{name}'. Supported: synthetic_wafer, synthetic_wafer_small")
+        raise ValueError(
+            f"Unknown dataset '{name}'. Supported: synthetic_wafer, synthetic_wafer_small, wm811k, wm811k_small"
+        )
 
 
 # ---------------- Classical Feature Extraction ---------------- #

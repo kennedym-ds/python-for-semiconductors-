@@ -1,0 +1,460 @@
+{
+  "description": "Assessment covering real-time inference systems, latency optimization, throughput maximization, model serving frameworks, caching strategies, async processing, and semiconductor manufacturing real-time applications including inline defect detection and process control.",
+  "estimated_time_minutes": 75,
+  "module_id": "module-9.3",
+  "passing_score": 70,
+  "questions": [
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "Real-time inference requires predictions within strict latency constraints (typically <100ms to <1s) for individual or small batches of samples. Batch inference processes large datasets offline without tight latency requirements. Real-time is needed for inline inspection, process control, and interactive applications.",
+      "id": "m9.3_q001",
+      "options": [
+        "Real-time uses larger models",
+        "Real-time requires predictions with strict latency constraints (milliseconds to seconds)",
+        "Real-time is always more accurate",
+        "Real-time doesn't use neural networks"
+      ],
+      "points": 2,
+      "question": "What distinguishes real-time inference from batch inference?",
+      "topic": "realtime_basics",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Latency is the time to generate a single prediction (e.g., 50ms). Throughput is the number of predictions per unit time (e.g., 1000 requests/second). They can be optimized differently: batching increases throughput but may increase latency per individual request. Real-time applications prioritize latency; batch systems prioritize throughput.",
+      "id": "m9.3_q002",
+      "options": [
+        "They are the same thing",
+        "Latency is time per prediction, throughput is predictions per second",
+        "Latency only matters for batch processing",
+        "Throughput is always more important"
+      ],
+      "points": 2,
+      "question": "What is the key difference between latency and throughput in model serving?",
+      "topic": "latency_vs_throughput",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 2,
+      "difficulty": "easy",
+      "explanation": "FastAPI (Python web framework) and TensorFlow Serving (Google's serving system) are designed for ML model serving. They handle HTTP requests, model loading, batching, and monitoring. FastAPI is flexible for any model, TensorFlow Serving is optimized for TensorFlow models. Flask is also used but FastAPI is faster.",
+      "id": "m9.3_q003",
+      "options": [
+        "Pandas",
+        "NumPy",
+        "FastAPI or TensorFlow Serving",
+        "Matplotlib"
+      ],
+      "points": 2,
+      "question": "Which framework is specifically designed for serving machine learning models with REST APIs?",
+      "topic": "model_serving_frameworks",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Caching stores results of expensive computations for reuse. Effective when: (1) identical inputs recur (exact cache hits), (2) similar inputs can use approximate results, (3) lookups are much faster than recomputation. For semiconductor monitoring, equipment states often repeat, making caching valuable. Use TTL (time-to-live) to handle data drift.",
+      "id": "m9.3_q004",
+      "options": [
+        "When every request is unique",
+        "When there are repeated identical or similar inputs",
+        "Caching never helps with ML models",
+        "Only for training, not inference"
+      ],
+      "points": 2,
+      "question": "When is result caching most effective for model serving?",
+      "topic": "caching",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "Async processing (async/await in Python) allows a server to handle multiple requests concurrently. While waiting for I/O (loading data, database queries), the server can process other requests instead of blocking. This dramatically increases throughput for I/O-bound workloads. For CPU-bound inference, use multiprocessing or GPU batching instead.",
+      "id": "m9.3_q005",
+      "options": [
+        "It makes models more accurate",
+        "It allows handling multiple requests concurrently without blocking on I/O",
+        "It trains models faster",
+        "It's only needed for batch processing"
+      ],
+      "points": 3,
+      "question": "Why is asynchronous (async) processing important for high-throughput model serving?",
+      "topic": "async_processing",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Quantization converts model weights and activations from high precision (float32) to lower precision (int8, int16). This reduces model size by ~4x, speeds up inference by 2-4x, and enables deployment on resource-constrained devices. Minimal accuracy loss with proper calibration. Essential for edge deployment and real-time systems.",
+      "id": "m9.3_q006",
+      "options": [
+        "Dropout",
+        "Quantization (e.g., float32 to int8)",
+        "Data augmentation",
+        "Batch normalization"
+      ],
+      "points": 2,
+      "question": "Which technique reduces model inference latency by using lower-precision arithmetic?",
+      "topic": "model_optimization",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "This requires real-time inference with <100ms latency. The system must process images as wafers pass, making immediate decisions. Batch inference would create bottlenecks. Real-time requirements drive model choice (simpler models), optimization (quantization), and infrastructure (edge GPUs).",
+      "id": "m9.3_q007",
+      "options": [
+        "Batch inference (offline)",
+        "Real-time inference with strict latency requirements",
+        "Manual inspection only",
+        "Cloud-based batch processing"
+      ],
+      "points": 2,
+      "question": "An inline wafer inspection system must classify defects within 100ms to keep up with production line speed. What type of inference is required?",
+      "topic": "semiconductor_applications",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Dynamic batching accumulates incoming requests for a short time (e.g., 10ms) into a batch, then processes them together. This improves GPU utilization and throughput but adds latency (wait time + inference time). Trade-off: larger batches = better throughput but higher latency. Common in high-volume serving systems.",
+      "id": "m9.3_q008",
+      "options": [
+        "Training models in batches",
+        "Accumulating multiple requests into a batch before inference to improve throughput",
+        "Only processing data in the morning",
+        "Using different batch sizes during training"
+      ],
+      "points": 2,
+      "question": "Dynamic batching in model serving refers to:",
+      "topic": "batching",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "Load balancing distributes incoming requests across multiple model server instances. Benefits: (1) Higher throughput - handle more requests/sec, (2) Fault tolerance - if one instance fails, others handle load, (3) Lower latency - avoid overloading single instance. Use round-robin, least-connections, or weighted strategies. Essential for production ML systems.",
+      "id": "m9.3_q009",
+      "options": [
+        "To make models more accurate",
+        "To distribute requests across instances, improving throughput and fault tolerance",
+        "To reduce model size",
+        "To automatically retrain models"
+      ],
+      "points": 3,
+      "question": "In a high-availability model serving system, what is the purpose of load balancing across multiple model instances?",
+      "topic": "load_balancing",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Comprehensive monitoring includes: (1) Latency (p50, p95, p99 percentiles), (2) Throughput (requests/sec), (3) Error rate (failed requests), (4) Model metrics (accuracy, F1 tracked over time), (5) Infrastructure (CPU, memory, GPU utilization), (6) Data quality (input distribution shifts). Use tools like Prometheus, Grafana, or cloud monitoring.",
+      "id": "m9.3_q010",
+      "options": [
+        "Only model accuracy",
+        "Request latency, throughput, error rate, and model performance metrics",
+        "Only server CPU usage",
+        "Training loss only"
+      ],
+      "points": 2,
+      "question": "What metrics should you monitor for a production model serving system?",
+      "topic": "monitoring",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "FastAPI provides async endpoint support for high-performance serving. Track latency for every request to monitor p95/p99. Use Pydantic models for request/response validation. For production, add: error handling, logging, authentication, rate limiting. FastAPI automatically generates OpenAPI docs.",
+      "hints": [
+        "Use time.time() or time.perf_counter() for timing",
+        "Convert features list to numpy array: np.array([request.features])",
+        "Use model.predict() and model.predict_proba()",
+        "Calculate latency_ms = (end_time - start_time) * 1000",
+        "Return PredictionResponse object"
+      ],
+      "id": "m9.3_q011",
+      "points": 4,
+      "question": "Implement a FastAPI endpoint for real-time defect detection that accepts wafer image features and returns predictions with latency tracking.",
+      "starter_code": "from fastapi import FastAPI\nfrom pydantic import BaseModel\nimport numpy as np\nimport time\nimport pickle\n\napp = FastAPI()\n\n# Assume model is loaded globally\n# model = pickle.load(open('defect_model.pkl', 'rb'))\n\nclass PredictionRequest(BaseModel):\n    features: list  # List of feature values\n    \nclass PredictionResponse(BaseModel):\n    prediction: int\n    probability: float\n    latency_ms: float\n\n@app.post(\"/predict\", response_model=PredictionResponse)\nasync def predict_defect(request: PredictionRequest):\n    \"\"\"\n    Real-time defect prediction endpoint.\n    \n    Args:\n        request: PredictionRequest with features\n        \n    Returns:\n        PredictionResponse with prediction, probability, latency\n    \"\"\"\n    # Your implementation here\n    # Track start time\n    # Convert features to numpy array\n    # Make prediction\n    # Track end time and calculate latency\n    # Return response\n    pass",
+      "test_cases": [
+        {
+          "description": "Real-time prediction with latency tracking",
+          "expected_output": "{\"prediction\": 1, \"probability\": 0.85, \"latency_ms\": 12.5}",
+          "input": "POST /predict with {\"features\": [0.5, 0.3, 0.8, ...]}"
+        }
+      ],
+      "topic": "fastapi_serving",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Caching dramatically reduces latency for repeated inputs. TTL prevents serving stale predictions as models/data drift. Hash features for keys (handle floating point precision). Monitor hit rate - low rate means caching isn't beneficial. Clear expired entries to prevent memory leaks. For distributed systems, use Redis instead of in-memory cache.",
+      "hints": [
+        "Use hashlib.md5 to hash feature array for cache key",
+        "Convert numpy array to bytes: features.tobytes()",
+        "Store (prediction, timestamp) tuples in cache dict",
+        "In get(): check if current_time - timestamp > ttl_seconds",
+        "Track hits, misses for statistics",
+        "Periodically call clear_expired() to prevent memory growth"
+      ],
+      "id": "m9.3_q012",
+      "points": 5,
+      "question": "Implement a caching system for model predictions with TTL (time-to-live) to handle repeated requests efficiently.",
+      "starter_code": "from functools import lru_cache\nimport hashlib\nimport json\nimport time\nfrom typing import Any, Optional\nimport numpy as np\n\nclass PredictionCache:\n    \"\"\"\n    Cache for model predictions with TTL support.\n    \"\"\"\n    \n    def __init__(self, ttl_seconds: int = 300):\n        self.cache = {}  # {key: (prediction, timestamp)}\n        self.ttl_seconds = ttl_seconds\n        \n    def _compute_key(self, features: np.ndarray) -> str:\n        \"\"\"Compute cache key from features.\"\"\"\n        # Your implementation here\n        pass\n        \n    def get(self, features: np.ndarray) -> Optional[Any]:\n        \"\"\"Get cached prediction if available and not expired.\"\"\"\n        # Your implementation here\n        pass\n        \n    def set(self, features: np.ndarray, prediction: Any):\n        \"\"\"Cache prediction with current timestamp.\"\"\"\n        # Your implementation here\n        pass\n        \n    def clear_expired(self):\n        \"\"\"Remove expired entries.\"\"\"\n        # Your implementation here\n        pass\n        \n    def get_stats(self) -> dict:\n        \"\"\"Return cache statistics.\"\"\"\n        # Your implementation here\n        pass",
+      "test_cases": [
+        {
+          "description": "Cache hit within TTL",
+          "expected_output": "Returns cached prediction if within TTL",
+          "input": "cache.set(features, pred); cache.get(features)"
+        },
+        {
+          "description": "Cache miss after TTL",
+          "expected_output": "Returns None (expired)",
+          "input": "Wait > TTL seconds, then cache.get(features)"
+        }
+      ],
+      "topic": "caching_system",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Dynamic batching trades latency for throughput. Accumulate requests for short window (10-50ms), then process as batch. Improves GPU utilization (larger batches = better throughput). Configure wait_time based on latency budget and request rate. Monitor batch sizes - small batches mean low throughput, large means good utilization.",
+      "hints": [
+        "Use asyncio.Queue for thread-safe queuing",
+        "Use asyncio.sleep(wait_time_ms/1000) for timeout",
+        "Collect requests until batch_size or timeout",
+        "Stack features into batch: np.vstack([f for f, _ in batch])",
+        "Distribute predictions back to waiting coroutines",
+        "Use asyncio.Future for request-response matching"
+      ],
+      "id": "m9.3_q013",
+      "points": 4,
+      "question": "Implement dynamic batching for model inference that accumulates requests for a specified time window before processing.",
+      "starter_code": "import asyncio\nimport numpy as np\nfrom typing import List\nimport time\n\nclass DynamicBatcher:\n    \"\"\"\n    Accumulates requests and processes them in batches.\n    \"\"\"\n    \n    def __init__(self, model, batch_size: int = 32, wait_time_ms: int = 10):\n        self.model = model\n        self.batch_size = batch_size\n        self.wait_time_ms = wait_time_ms\n        self.queue = []\n        \n    async def predict(self, features: np.ndarray) -> dict:\n        \"\"\"\n        Add request to queue and wait for batch processing.\n        \n        Args:\n            features: Single sample features\n            \n        Returns:\n            dict with 'prediction' and 'probability'\n        \"\"\"\n        # Your implementation here\n        # Add to queue\n        # Wait for batch to fill or timeout\n        # Process batch\n        # Return result for this request\n        pass\n        \n    async def _process_batch(self):\n        \"\"\"Process accumulated batch.\"\"\"\n        # Your implementation here\n        pass",
+      "test_cases": [
+        {
+          "description": "Dynamic batching under load",
+          "expected_output": "All processed in 1-2 batches with latency < wait_time + inference_time",
+          "input": "10 concurrent requests"
+        }
+      ],
+      "topic": "batch_inference",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Latency monitoring is critical for production ML systems. Track percentiles (p50=median, p95/p99=tail latency) not just mean (hides outliers). Use sliding window for real-time monitoring. Alert on SLA violations (p95 > threshold). Investigate violations: model complexity, infrastructure, data loading, batching configuration. Integrate with monitoring tools (Prometheus, Grafana).",
+      "hints": [
+        "Use deque with maxlen for sliding window",
+        "Calculate percentiles with np.percentile(list(self.latencies), [50, 95, 99])",
+        "Check if p95 > self.sla_p95_ms for alert",
+        "Return alert dict with timestamp, p95 value, SLA threshold",
+        "Increment violation counter when alerting",
+        "Use len(self.latencies) to ensure enough samples before calculating"
+      ],
+      "id": "m9.3_q014",
+      "points": 5,
+      "question": "Implement a latency monitoring system that tracks p50, p95, and p99 latency percentiles and alerts when SLA is violated.",
+      "starter_code": "import numpy as np\nfrom collections import deque\nimport time\nfrom typing import Optional\n\nclass LatencyMonitor:\n    \"\"\"\n    Monitor request latency with SLA alerting.\n    \"\"\"\n    \n    def __init__(self, window_size: int = 1000, sla_p95_ms: float = 100):\n        self.window_size = window_size\n        self.sla_p95_ms = sla_p95_ms\n        self.latencies = deque(maxlen=window_size)\n        self.violations = 0\n        \n    def record_latency(self, latency_ms: float) -> Optional[dict]:\n        \"\"\"\n        Record latency and check SLA.\n        \n        Args:\n            latency_ms: Request latency in milliseconds\n            \n        Returns:\n            Alert dict if SLA violated, None otherwise\n        \"\"\"\n        # Your implementation here\n        # Add latency to window\n        # Calculate percentiles\n        # Check if p95 exceeds SLA\n        # Return alert if violated\n        pass\n        \n    def get_statistics(self) -> dict:\n        \"\"\"Get latency statistics.\"\"\"\n        # Your implementation here\n        # Calculate p50, p95, p99\n        # Return as dict with percentiles and violation count\n        pass\n        \n    def reset(self):\n        \"\"\"Reset statistics.\"\"\"\n        self.latencies.clear()\n        self.violations = 0",
+      "test_cases": [
+        {
+          "description": "SLA violation detection",
+          "expected_output": "Alert when p95 > SLA threshold",
+          "input": "Record 100 latencies, most <50ms but some >100ms"
+        }
+      ],
+      "topic": "latency_optimization",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Async preprocessing enables concurrent handling of multiple requests. Use async I/O for file reading (aiofiles), thread pool for CPU-bound operations (image processing). This overlaps I/O waits across requests, dramatically improving throughput for I/O-bound workloads. For pure CPU-bound, use multiprocessing instead of async.",
+      "hints": [
+        "Use asyncio.gather(*[preprocess_image_async(p) for p in paths])",
+        "For I/O-bound (file reading): use aiofiles",
+        "For CPU-bound (image processing): use asyncio.to_thread() or ThreadPoolExecutor",
+        "Return list of features from gather, then np.vstack()",
+        "Add error handling for missing/corrupted files"
+      ],
+      "id": "m9.3_q015",
+      "points": 4,
+      "question": "Implement async data preprocessing for concurrent request handling in a FastAPI server.",
+      "starter_code": "import asyncio\nimport numpy as np\nfrom typing import List\nimport aiofiles  # For async file I/O\n\nasync def preprocess_image_async(image_path: str) -> np.ndarray:\n    \"\"\"\n    Asynchronously load and preprocess wafer image.\n    \n    Args:\n        image_path: Path to image file\n        \n    Returns:\n        Preprocessed feature vector\n    \"\"\"\n    # Your implementation here\n    # Async read image file\n    # Resize/normalize (these are CPU-bound, might need thread pool)\n    # Extract features\n    # Return feature vector\n    pass\n\nasync def batch_preprocess(image_paths: List[str]) -> np.ndarray:\n    \"\"\"\n    Preprocess multiple images concurrently.\n    \n    Args:\n        image_paths: List of image paths\n        \n    Returns:\n        Stacked feature array (n_images, n_features)\n    \"\"\"\n    # Your implementation here\n    # Use asyncio.gather to process all images concurrently\n    # Stack results into array\n    pass",
+      "test_cases": [
+        {
+          "description": "Concurrent async preprocessing",
+          "expected_output": "Array shape (10, n_features), processed concurrently",
+          "input": "10 image paths"
+        }
+      ],
+      "topic": "async_preprocessing",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Model versioning enables safe deployment strategies: (1) Canary - route 5-10% traffic to new model, monitor, gradually increase if metrics good; (2) A/B testing - split traffic 50/50, compare performance statistically; (3) Shadow mode - route to both, only use old results (testing without risk). Track latency, accuracy, error rate per version. Rollback if new version underperforms. Essential for production ML systems.",
+      "hints": [
+        "Use random.choices() with weights for traffic routing",
+        "Normalize traffic_split percentages to sum to 100",
+        "Store models in dict by version string",
+        "Track metrics per version in nested dict",
+        "For A/B testing, use 50/50 split; for canary, use 95/5 or 90/10"
+      ],
+      "id": "m9.3_q016",
+      "points": 5,
+      "question": "Implement a model version manager that supports A/B testing and canary deployments with traffic splitting.",
+      "starter_code": "import random\nfrom typing import Dict, Optional\nimport pickle\n\nclass ModelVersionManager:\n    \"\"\"\n    Manage multiple model versions with traffic splitting.\n    \"\"\"\n    \n    def __init__(self):\n        self.models = {}  # {version: model}\n        self.traffic_split = {}  # {version: percentage}\n        self.metrics = {}  # {version: {metric_name: value}}\n        \n    def register_model(self, version: str, model, traffic_pct: float = 0.0):\n        \"\"\"\n        Register new model version.\n        \n        Args:\n            version: Model version identifier\n            model: Trained model object\n            traffic_pct: Percentage of traffic (0-100)\n        \"\"\"\n        # Your implementation here\n        pass\n        \n    def route_request(self) -> str:\n        \"\"\"\n        Route request to model version based on traffic split.\n        \n        Returns:\n            Selected model version\n        \"\"\"\n        # Your implementation here\n        # Use weighted random selection based on traffic_split\n        pass\n        \n    def predict(self, features, version: Optional[str] = None):\n        \"\"\"\n        Make prediction with specified or routed version.\n        \n        Args:\n            features: Input features\n            version: Specific version or None for routing\n            \n        Returns:\n            Prediction from selected model\n        \"\"\"\n        # Your implementation here\n        pass\n        \n    def update_metrics(self, version: str, metric_name: str, value: float):\n        \"\"\"Update performance metrics for version.\"\"\"\n        # Your implementation here\n        pass\n        \n    def get_version_comparison(self) -> dict:\n        \"\"\"Compare metrics across versions.\"\"\"\n        # Your implementation here\n        pass",
+      "test_cases": [
+        {
+          "description": "Canary deployment traffic routing",
+          "expected_output": "~90% requests to v1, ~10% to v2 (canary)",
+          "input": "2 models with 90/10 traffic split"
+        }
+      ],
+      "topic": "model_versioning",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Health checks enable automated monitoring and load balancer decisions. /health - liveness check (is service running?), /readiness - is service ready for traffic (model loaded, resources available). Include: model prediction test, resource usage (CPU, memory), metrics (error rate, request count), version info. Kubernetes and cloud platforms use these for auto-scaling and rollback decisions.",
+      "hints": [
+        "Use psutil.cpu_percent() and psutil.virtual_memory().percent",
+        "Test prediction with dummy input: model.predict(np.zeros((1, n_features)))",
+        "Calculate uptime: time.time() - self.start_time",
+        "Error rate: self.error_count / self.request_count if request_count > 0",
+        "Return 200 if healthy, 503 if unhealthy",
+        "Include version, uptime, resource usage in response"
+      ],
+      "id": "m9.3_q017",
+      "points": 4,
+      "question": "Implement comprehensive health check endpoints for model serving system monitoring.",
+      "starter_code": "from fastapi import FastAPI, status\nfrom fastapi.responses import JSONResponse\nimport time\nimport psutil  # For system metrics\nimport numpy as np\n\napp = FastAPI()\n\nclass HealthChecker:\n    def __init__(self, model):\n        self.model = model\n        self.start_time = time.time()\n        self.request_count = 0\n        self.error_count = 0\n        \n    def check_model_health(self) -> dict:\n        \"\"\"Check if model can make predictions.\"\"\"\n        # Your implementation here\n        # Make test prediction\n        # Return status and latency\n        pass\n        \n    def check_system_health(self) -> dict:\n        \"\"\"Check system resources.\"\"\"\n        # Your implementation here\n        # Check CPU, memory usage\n        # Return resource statistics\n        pass\n        \n    def get_metrics(self) -> dict:\n        \"\"\"Get service metrics.\"\"\"\n        # Your implementation here\n        # Calculate uptime, request rate, error rate\n        pass\n\nhealth_checker = HealthChecker(model=None)  # Initialize with model\n\n@app.get(\"/health\")\nasync def health_check():\n    \"\"\"Comprehensive health check endpoint.\"\"\"\n    # Your implementation here\n    pass\n\n@app.get(\"/readiness\")\nasync def readiness_check():\n    \"\"\"Check if service is ready to handle requests.\"\"\"\n    # Your implementation here\n    pass",
+      "test_cases": [
+        {
+          "description": "Health check returns comprehensive status",
+          "expected_output": "200 OK with model, system, and metrics status",
+          "input": "GET /health"
+        }
+      ],
+      "topic": "health_checks",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Systematic latency optimization: (1) Profile - identify bottleneck (model inference? preprocessing? I/O?), use cProfile or profiling tools; (2) Model optimization - quantize to int8 (2-4x speedup), prune weights, knowledge distillation to smaller model, use TensorRT/ONNX Runtime; (3) Preprocessing - optimize image loading (use faster libraries), cache preprocessed features if inputs repeat, use efficient data formats; (4) Infrastructure - deploy on GPU (10-100x faster), use model compilation (TorchScript, ONNX), optimize batch size; (5) Architecture - consider simpler model (RandomForest instead of CNN if similar accuracy), use cascaded approach (fast model filters, slow model for edge cases); (6) Caching - cache predictions for repeated inputs; (7) Validate - ensure accuracy maintained, test on production-like data, measure p99 not just p50. Target breakdown: 2x from quantization, 2x from GPU, achieve <50ms.",
+      "hints": [
+        "Think about the inference pipeline: loading, preprocessing, model, postprocessing",
+        "Consider model complexity vs accuracy trade-offs",
+        "Think about hardware acceleration",
+        "Consider what operations can be cached or precomputed"
+      ],
+      "id": "m9.3_q018",
+      "points": 5,
+      "question": "A real-time wafer inspection system currently has p95 latency of 200ms but needs to achieve <50ms to keep up with production line speed. Outline a systematic approach to reduce latency by 4x.",
+      "rubric": [
+        {
+          "criteria": "Discusses model optimization (quantization, pruning, distillation)",
+          "points": 2
+        },
+        {
+          "criteria": "Addresses preprocessing and data loading optimization",
+          "points": 2
+        },
+        {
+          "criteria": "Considers infrastructure improvements (GPU, batching, caching)",
+          "points": 2
+        },
+        {
+          "criteria": "Mentions profiling to identify bottlenecks",
+          "points": 2
+        },
+        {
+          "criteria": "Discusses trade-offs and validation approach",
+          "points": 2
+        }
+      ],
+      "topic": "latency_optimization",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "High-availability architecture: (1) Load balancing - Use nginx/HAProxy to distribute across N model servers (10K req/s \u2192 ~1K req/s per server with 10 servers), health checks remove failed instances; (2) Horizontal scaling - Deploy multiple model server replicas (containers/pods), use Kubernetes for orchestration, auto-scale based on request rate and latency; (3) Redundancy - Run in multiple availability zones, replicate model servers across zones, use circuit breakers to isolate failures; (4) Request queuing - Use message queue (Redis, RabbitMQ) for buffering during load spikes, implement backpressure (reject requests when queue full to prevent cascade failures); (5) Caching - Redis cache for repeated predictions, reduce load on model servers by ~20-40%; (6) Monitoring - Track latency (p95/p99), error rate, throughput per server, set alerts for SLA violations, use Prometheus+Grafana; (7) Database - Async logging of predictions (don't block serving), use time-series DB for metrics; (8) Model updates - Rolling deployment with health checks, canary testing (5% traffic first), rollback capability. Capacity planning: Each server handles 1K req/s @ 100ms = need 10 servers + 50% headroom = 15 servers. Technology stack: Kubernetes, FastAPI servers, nginx load balancer, Redis cache, Prometheus monitoring.",
+      "hints": [
+        "Think about what happens when one server fails",
+        "Consider peak load vs average load",
+        "Think about request queuing under high load",
+        "Consider geographic distribution for fabs"
+      ],
+      "id": "m9.3_q019",
+      "points": 5,
+      "question": "Design a fault-tolerant, high-availability real-time inference architecture for semiconductor manufacturing that handles 10,000 requests/second with <100ms p95 latency and 99.9% uptime.",
+      "rubric": [
+        {
+          "criteria": "Discusses load balancing and horizontal scaling",
+          "points": 2
+        },
+        {
+          "criteria": "Addresses redundancy and failover mechanisms",
+          "points": 2
+        },
+        {
+          "criteria": "Considers request queuing and backpressure handling",
+          "points": 2
+        },
+        {
+          "criteria": "Mentions monitoring, alerting, and auto-scaling",
+          "points": 2
+        },
+        {
+          "criteria": "Discusses specific technology choices and justification",
+          "points": 2
+        }
+      ],
+      "topic": "deployment_architecture",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Real-time vs Batch trade-offs: **Real-time inference**: Low latency (ms-seconds), individual/small batches, needed when immediate action required. Pros: enables interactive use, inline inspection, process control. Cons: higher cost per prediction (dedicated infrastructure), lower throughput, potential idle time. Use when: (1) Inline defect detection (must keep up with line), (2) Process control adjustments (real-time parameter tuning), (3) Immediate quality gates (pass/fail decisions), (4) Interactive applications (operator tools). **Batch inference**: High throughput (process thousands together), delayed results (minutes-hours), much lower cost per prediction. Pros: efficient GPU utilization, amortized overhead, lower infrastructure cost. Cons: latency too high for time-sensitive decisions. Use when: (1) Overnight quality analysis, (2) Historical data processing, (3) Yield prediction for completed lots, (4) Periodic report generation, (5) Model retraining on production data. **Hybrid approach**: Use real-time for critical path (inline inspection), batch for analysis (detailed defect characterization, root cause analysis). Example: Real-time model flags defects quickly (simple model, fast), batch model does detailed classification overnight (complex model, accurate). Decision factors: (1) Latency requirements - can you wait?, (2) Volume - how many predictions?, (3) Cost budget - real-time needs dedicated resources, (4) Accuracy needs - batch can use larger models. Most fabs use both: real-time for production line, batch for engineering analysis.",
+      "hints": [
+        "Think about when immediate results are critical",
+        "Consider computational efficiency for large volumes",
+        "Think about infrastructure costs",
+        "Consider use cases at different production stages"
+      ],
+      "id": "m9.3_q020",
+      "points": 5,
+      "question": "Discuss the trade-offs between real-time inference and batch inference for semiconductor manufacturing. When would you choose each approach? Provide specific use cases.",
+      "rubric": [
+        {
+          "criteria": "Compares latency, throughput, and resource utilization",
+          "points": 2
+        },
+        {
+          "criteria": "Discusses cost implications of each approach",
+          "points": 2
+        },
+        {
+          "criteria": "Provides clear decision criteria based on requirements",
+          "points": 2
+        },
+        {
+          "criteria": "Gives specific semiconductor manufacturing use cases",
+          "points": 2
+        },
+        {
+          "criteria": "Mentions hybrid approaches when appropriate",
+          "points": 2
+        }
+      ],
+      "topic": "realtime_tradeoffs",
+      "type": "conceptual"
+    }
+  ],
+  "sub_module": "9.3",
+  "title": "Real-time Inference & Model Serving",
+  "version": "1.0",
+  "week": 18
+}

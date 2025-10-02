@@ -1,0 +1,642 @@
+{
+  "description": "Assessment covering documentation standards, docstring conventions, API documentation generation, README best practices, version control for reproducibility, experiment tracking, and ensuring reproducible ML workflows for semiconductor applications.",
+  "estimated_time_minutes": 90,
+  "module_id": "module-10.3",
+  "passing_score": 70,
+  "questions": [
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "Documentation enables understanding, usage, and maintenance of code. It helps teammates onboard, helps your future self remember design decisions, enables code reuse, and facilitates debugging. Good documentation is essential for collaboration and long-term project success.",
+      "id": "m10.3_q001",
+      "options": [
+        "To increase the project's file size",
+        "To enable others (and future you) to understand, use, and maintain the code",
+        "To satisfy management requirements only",
+        "Documentation is not necessary for ML projects"
+      ],
+      "points": 2,
+      "question": "What is the primary purpose of documentation in ML projects?",
+      "topic": "documentation_importance",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "NumPy/SciPy style and Google style are the most popular docstring formats in Python data science. Both are well-structured, readable, and supported by documentation generators like Sphinx. NumPy style uses sections like 'Parameters', 'Returns', 'Examples', while Google style is more compact.",
+      "id": "m10.3_q002",
+      "options": [
+        "Javadoc style",
+        "NumPy/SciPy style or Google style",
+        "Markdown style",
+        "XML style"
+      ],
+      "points": 2,
+      "question": "Which docstring format is most widely used in Python data science projects?",
+      "topic": "docstring_standards",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "A comprehensive README includes: project description (what and why), installation instructions, quick start/usage examples, features, documentation links, contributing guidelines, license, and contact info. This helps users quickly understand and start using the project.",
+      "id": "m10.3_q003",
+      "options": [
+        "Only the project title",
+        "Project description, installation instructions, usage examples, and license",
+        "The complete source code",
+        "Only links to related projects"
+      ],
+      "points": 2,
+      "question": "What should a good README.md file for an ML project include?",
+      "topic": "readme_essentials",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Reproducibility means others can recreate your exact results using your code, data, and documented environment. This requires: versioned code, documented dependencies, fixed random seeds, data versioning, and clear instructions. Reproducibility is essential for scientific validity and production deployment.",
+      "id": "m10.3_q004",
+      "options": [
+        "Writing the same code multiple times",
+        "Ability to recreate exact results from the same code, data, and environment",
+        "Making multiple copies of the project",
+        "Running experiments multiple times"
+      ],
+      "points": 2,
+      "question": "What does reproducibility mean in the context of ML projects?",
+      "topic": "reproducibility",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Semantic versioning (MAJOR.MINOR.PATCH) communicates change impact: MAJOR = breaking changes (incompatible API), MINOR = new features (backward compatible), PATCH = bug fixes. This helps users understand update risks. For ML models: major = architecture changes, minor = retraining, patch = bug fixes.",
+      "id": "m10.3_q005",
+      "options": [
+        "It makes version numbers look professional",
+        "It communicates the impact of changes (major.minor.patch) to users",
+        "It's required by Python",
+        "It has no real purpose"
+      ],
+      "points": 2,
+      "question": "Why is semantic versioning (e.g., v2.3.1) important for ML models in production?",
+      "topic": "version_control",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "Sphinx (with autodoc extension) and MkDocs (with mkdocstrings) automatically generate HTML documentation from docstrings. They parse docstrings, create structured documentation, support multiple output formats, and integrate with version control. This ensures documentation stays synchronized with code.",
+      "id": "m10.3_q006",
+      "options": [
+        "Microsoft Word",
+        "Sphinx or MkDocs",
+        "Excel",
+        "PowerPoint"
+      ],
+      "points": 3,
+      "question": "What tool is commonly used to automatically generate API documentation from Python docstrings?",
+      "topic": "api_documentation",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Experiment tracking tools log: hyperparameters, metrics (accuracy, loss), artifacts (models, plots), environment info, and code versions for each experiment. This enables: comparing experiments, reproducing results, tracking progress, and identifying best models. Essential for systematic ML development.",
+      "id": "m10.3_q007",
+      "options": [
+        "To track time spent working on the project",
+        "To log hyperparameters, metrics, and artifacts for each training run",
+        "To track bugs in the code",
+        "To replace version control"
+      ],
+      "points": 2,
+      "question": "What is the purpose of experiment tracking tools like MLflow or Weights & Biases?",
+      "topic": "experiment_tracking",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 2,
+      "difficulty": "easy",
+      "explanation": "Write comments to explain: (1) Why - design decisions, trade-offs, (2) Complex logic - algorithms, mathematical operations, (3) Caveats - limitations, edge cases, temporary workarounds. Don't comment obvious code (what) - use clear naming instead. Good comments add context that code alone can't convey.",
+      "id": "m10.3_q008",
+      "options": [
+        "On every single line of code",
+        "Never - code should be self-explanatory",
+        "To explain why (rationale, not what), document complex logic, and note caveats",
+        "Only when management requires it"
+      ],
+      "points": 2,
+      "question": "When should you write code comments?",
+      "topic": "code_comments",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Document data lineage: source (where data came from), collection period, preprocessing steps, version/hash, quality checks performed, known issues, and statistics. This enables: reproducing training, understanding model limitations, debugging performance issues, and ensuring compliance. Critical for regulated industries.",
+      "id": "m10.3_q009",
+      "options": [
+        "Only the filename",
+        "Source, collection date, preprocessing steps, version, and quality checks",
+        "Just the number of rows",
+        "Nothing - data speaks for itself"
+      ],
+      "points": 2,
+      "question": "For a semiconductor yield prediction model, what information should be documented about training data?",
+      "topic": "data_lineage",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "Model cards (proposed by Google) document: intended use, training data, evaluation metrics, performance across demographics, limitations, and ethical considerations. They increase transparency, help users understand appropriate usage, identify biases, and facilitate responsible deployment. Especially important for high-stakes applications.",
+      "id": "m10.3_q010",
+      "options": [
+        "A physical card with model parameters printed on it",
+        "A standardized document describing model purpose, performance, limitations, and ethical considerations",
+        "A credit card for purchasing ML models",
+        "A diagram of the model architecture"
+      ],
+      "points": 3,
+      "question": "What is a model card and why is it important for ML systems?",
+      "topic": "model_cards",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "NumPy-style docstrings use structured sections (Parameters, Returns, Examples, Notes). They're human-readable and machine-parseable. Good docstrings explain: what the function does, what each parameter means (including types and defaults), what's returned, and provide usage examples. They're the first thing users read.",
+      "hints": [
+        "Start with one-line summary, then detailed description",
+        "Parameters section: name : type, then description",
+        "Returns section: type, then description",
+        "Examples section: code blocks showing usage",
+        "Use proper indentation (4 spaces for NumPy style)",
+        "Include type hints in signature AND docstring"
+      ],
+      "id": "m10.3_q011",
+      "points": 4,
+      "question": "Write comprehensive docstrings for a machine learning function using NumPy style documentation.",
+      "starter_code": "import pandas as pd\nimport numpy as np\nfrom sklearn.base import BaseEstimator\nfrom typing import Optional, Dict, Any\n\ndef train_defect_classifier(\n    X_train: pd.DataFrame,\n    y_train: np.ndarray,\n    model_type: str = 'random_forest',\n    hyperparameters: Optional[Dict[str, Any]] = None,\n    random_state: int = 42\n) -> tuple:\n    \"\"\"\n    # Write comprehensive NumPy-style docstring here\n    # Should include:\n    # - Brief description\n    # - Parameters section\n    # - Returns section\n    # - Examples section\n    # - Notes section (if applicable)\n    \"\"\"\n    pass",
+      "test_cases": [
+        {
+          "description": "Docstring completeness check",
+          "expected_output": "Well-structured NumPy-style docstring with all sections",
+          "input": "Docstring review"
+        }
+      ],
+      "topic": "docstring_writing",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "A comprehensive README is the entry point to your project. It should answer: What is this? Why should I use it? How do I get started? Structure information clearly with headers, use code blocks for examples, and provide links to detailed docs. Good README increases adoption and reduces support burden.",
+      "hints": [
+        "Use Markdown headers (# ## ###) for sections",
+        "Include code blocks with ```python syntax",
+        "Add badges for build status, coverage, version",
+        "Provide specific installation commands",
+        "Include a minimal working example",
+        "Link to more detailed documentation",
+        "Use tables for structured information"
+      ],
+      "id": "m10.3_q012",
+      "points": 4,
+      "question": "Create a comprehensive README.md template for a semiconductor ML project.",
+      "starter_code": "# Create a README.md template with the following structure:\n# 1. Project title and description\n# 2. Features/capabilities\n# 3. Installation instructions\n# 4. Quick start example\n# 5. Usage documentation\n# 6. Project structure\n# 7. Contributing guidelines\n# 8. License\n# 9. Contact/support\n\n# Write your README.md content here (use Markdown)\n",
+      "test_cases": [
+        {
+          "description": "README completeness and formatting check",
+          "expected_output": "Complete README with all sections and proper Markdown formatting",
+          "input": "README.md review"
+        }
+      ],
+      "topic": "readme_creation",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "MLflow tracks experiments systematically. mlflow.start_run() creates a run, log_params() records hyperparameters, log_metrics() tracks performance, log_model() saves model artifacts. All runs are stored with timestamps, enabling comparison and reproduction. This is essential for managing multiple experiments and model versions.",
+      "hints": [
+        "Use mlflow.set_experiment() to set experiment name",
+        "Use mlflow.start_run() as context manager",
+        "mlflow.log_params() for hyperparameters (can pass dict)",
+        "mlflow.log_metrics() for metrics",
+        "mlflow.sklearn.log_model() for model artifact",
+        "mlflow.log_figure() for plots",
+        "Access run_id with mlflow.active_run().info.run_id"
+      ],
+      "id": "m10.3_q013",
+      "points": 5,
+      "question": "Implement experiment tracking using MLflow to log training runs with parameters, metrics, and artifacts.",
+      "starter_code": "import mlflow\nimport mlflow.sklearn\nfrom sklearn.ensemble import RandomForestClassifier\nfrom sklearn.metrics import accuracy_score, precision_score, recall_score\nimport pandas as pd\nimport numpy as np\n\ndef train_with_tracking(\n    X_train: pd.DataFrame,\n    y_train: np.ndarray,\n    X_val: pd.DataFrame,\n    y_val: np.ndarray,\n    hyperparameters: dict,\n    experiment_name: str = 'wafer_defect_classification'\n) -> str:\n    \"\"\"\n    Train model with MLflow experiment tracking.\n    \n    Should log:\n    - All hyperparameters\n    - Training and validation metrics\n    - Model artifact\n    - Feature importance plot\n    - Training data statistics\n    \n    Args:\n        X_train, y_train: Training data\n        X_val, y_val: Validation data\n        hyperparameters: Model hyperparameters\n        experiment_name: MLflow experiment name\n        \n    Returns:\n        run_id: MLflow run ID\n    \"\"\"\n    # Your implementation here\n    # 1. Set experiment\n    # 2. Start MLflow run\n    # 3. Log parameters\n    # 4. Train model\n    # 5. Log metrics\n    # 6. Log model and artifacts\n    # 7. Return run_id\n    pass",
+      "test_cases": [
+        {
+          "description": "Complete experiment tracking",
+          "expected_output": "MLflow run created with all logs, returns run_id",
+          "input": "train_with_tracking(X_train, y_train, X_val, y_val, {'n_estimators': 100})"
+        }
+      ],
+      "topic": "experiment_tracking_setup",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Documenting the environment enables reproducibility. Capture: Python version (different versions may produce different results), OS (affects some libraries), package versions (APIs change), hardware (affects numeric precision), and code version (git hash). This information should be saved with every experiment result.",
+      "hints": [
+        "sys.version for Python version",
+        "platform module for OS info (platform.system(), platform.machine())",
+        "subprocess to run 'pip freeze' for package list",
+        "subprocess to run 'git rev-parse HEAD' for commit hash",
+        "psutil library for hardware info (optional)",
+        "Save as JSON with json.dump()",
+        "Include timestamp with datetime.now().isoformat()"
+      ],
+      "id": "m10.3_q014",
+      "points": 4,
+      "question": "Create a script to document the complete environment (packages, versions, hardware) for reproducibility.",
+      "starter_code": "import sys\nimport platform\nimport subprocess\nfrom pathlib import Path\nfrom datetime import datetime\nimport json\n\ndef document_environment(output_file: str = 'environment.json') -> dict:\n    \"\"\"\n    Document complete environment for reproducibility.\n    \n    Should capture:\n    - Python version\n    - OS and architecture\n    - Installed packages with versions\n    - Hardware info (CPU, memory)\n    - Git commit hash (if in repo)\n    - Timestamp\n    \n    Args:\n        output_file: Path to save environment documentation\n        \n    Returns:\n        Dictionary with environment information\n    \"\"\"\n    # Your implementation here\n    pass",
+      "test_cases": [
+        {
+          "description": "Environment documentation",
+          "expected_output": "JSON file with complete environment info",
+          "input": "document_environment('env.json')"
+        }
+      ],
+      "topic": "environment_documentation",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Data versioning tracks dataset changes. Hashing detects modifications, metadata documents provenance. This enables: reproducing experiments with exact data, detecting data drift, understanding model performance changes. Tools like DVC provide more features, but simple systems suffice for small projects.",
+      "hints": [
+        "Use hashlib.sha256() to compute hash",
+        "Hash DataFrame.to_csv() content for consistent hashing",
+        "Store: hash, shape, columns, dtypes, creation_date, metadata",
+        "Use JSON for registry storage",
+        "Registry is dict: {hash: {metadata}",
+        "Include dataset statistics (nulls, value ranges)"
+      ],
+      "id": "m10.3_q015",
+      "points": 5,
+      "question": "Implement a simple data versioning system that creates hashes of datasets and tracks their metadata.",
+      "starter_code": "import hashlib\nimport json\nimport pandas as pd\nfrom pathlib import Path\nfrom datetime import datetime\nfrom typing import Dict, Any\n\nclass DataVersionManager:\n    \"\"\"\n    Simple data versioning system.\n    \n    Tracks:\n    - Dataset hash (for detecting changes)\n    - Metadata (shape, columns, creation date)\n    - Lineage (source, transformations)\n    \"\"\"\n    \n    def __init__(self, registry_path: str = 'data_versions.json'):\n        self.registry_path = Path(registry_path)\n        self.registry = self._load_registry()\n    \n    def _load_registry(self) -> dict:\n        \"\"\"Load existing registry or create new.\"\"\"\n        # Your implementation here\n        pass\n    \n    def _save_registry(self):\n        \"\"\"Save registry to file.\"\"\"\n        # Your implementation here\n        pass\n    \n    def compute_hash(self, df: pd.DataFrame) -> str:\n        \"\"\"Compute hash of DataFrame content.\"\"\"\n        # Your implementation here\n        pass\n    \n    def register_dataset(\n        self,\n        name: str,\n        df: pd.DataFrame,\n        metadata: Dict[str, Any]\n    ) -> str:\n        \"\"\"\n        Register a dataset version.\n        \n        Args:\n            name: Dataset name\n            df: DataFrame to register\n            metadata: Additional metadata (source, description, etc.)\n            \n        Returns:\n            Dataset hash (version identifier)\n        \"\"\"\n        # Your implementation here\n        pass\n    \n    def get_version_info(self, dataset_hash: str) -> Dict[str, Any]:\n        \"\"\"Get metadata for a specific version.\"\"\"\n        # Your implementation here\n        pass",
+      "test_cases": [
+        {
+          "description": "Dataset registration",
+          "expected_output": "Returns hash, saves to registry",
+          "input": "register_dataset('wafer_train', df, {'source': 'fab_A'})"
+        },
+        {
+          "description": "Version retrieval",
+          "expected_output": "Returns complete metadata",
+          "input": "get_version_info(hash)"
+        }
+      ],
+      "topic": "data_versioning",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Model cards increase ML transparency. They document: what the model does, what data it was trained on, how well it performs, what its limitations are, and ethical considerations. This helps users understand appropriate usage and identify potential biases. Essential for responsible AI deployment.",
+      "hints": [
+        "Use f-strings for Markdown formatting",
+        "Structure with ## headers for sections",
+        "Use bullet points for lists",
+        "Use tables for metrics",
+        "Include dates and versions prominently",
+        "Make limitations and ethical considerations clear",
+        "Use dataclasses.asdict() for JSON conversion"
+      ],
+      "id": "m10.3_q016",
+      "points": 4,
+      "question": "Create a model card template generator for documenting ML models.",
+      "starter_code": "from dataclasses import dataclass\nfrom typing import List, Dict, Any\nfrom datetime import datetime\n\n@dataclass\nclass ModelCard:\n    \"\"\"\n    Model card for ML model documentation.\n    Based on Google's Model Card framework.\n    \"\"\"\n    model_name: str\n    model_version: str\n    model_description: str\n    intended_use: str\n    training_data: Dict[str, Any]\n    evaluation_data: Dict[str, Any]\n    metrics: Dict[str, float]\n    limitations: List[str]\n    ethical_considerations: List[str]\n    created_date: str = None\n    \n    def __post_init__(self):\n        if self.created_date is None:\n            self.created_date = datetime.now().isoformat()\n    \n    def to_markdown(self) -> str:\n        \"\"\"\n        Generate Markdown model card.\n        \n        Should include all sections:\n        - Model Details\n        - Intended Use\n        - Training Data\n        - Evaluation Data\n        - Performance Metrics\n        - Limitations\n        - Ethical Considerations\n        \"\"\"\n        # Your implementation here\n        pass\n    \n    def to_json(self) -> str:\n        \"\"\"Export as JSON.\"\"\"\n        # Your implementation here\n        pass",
+      "test_cases": [
+        {
+          "description": "Model card generation",
+          "expected_output": "Well-formatted Markdown document",
+          "input": "ModelCard(...).to_markdown()"
+        }
+      ],
+      "topic": "model_card_generation",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Reproducibility checkers automate verification. They ensure: code version tracked (git), dependencies specified with exact versions, random seeds set, data versioned, hyperparameters logged, and environment documented. This is especially important for regulated industries and scientific research.",
+      "hints": [
+        "Check for files: git commit (in metadata), requirements.txt, config.yaml",
+        "For requirements.txt, check for pinned versions (==)",
+        "Look for random_seed in config files",
+        "Check for data hash/version in metadata",
+        "Calculate score: percentage of checks passed",
+        "Return detailed results for failed checks",
+        "Use Path.exists() to check files"
+      ],
+      "id": "m10.3_q017",
+      "points": 5,
+      "question": "Implement a reproducibility checker that verifies all necessary components are documented for experiment reproduction.",
+      "starter_code": "from pathlib import Path\nfrom typing import Dict, List, Any\nimport json\n\nclass ReproducibilityChecker:\n    \"\"\"\n    Check if an ML experiment is reproducible.\n    \n    Verifies:\n    - Code version (git commit)\n    - Dependencies (requirements.txt)\n    - Random seeds documented\n    - Data version documented\n    - Hyperparameters logged\n    - Environment documented\n    \"\"\"\n    \n    def __init__(self, experiment_dir: Path):\n        self.experiment_dir = Path(experiment_dir)\n    \n    def check_code_version(self) -> Dict[str, Any]:\n        \"\"\"Check if git commit is documented.\"\"\"\n        # Your implementation here\n        pass\n    \n    def check_dependencies(self) -> Dict[str, Any]:\n        \"\"\"Check if requirements.txt exists and has pinned versions.\"\"\"\n        # Your implementation here\n        pass\n    \n    def check_random_seeds(self) -> Dict[str, Any]:\n        \"\"\"Check if random seeds are documented.\"\"\"\n        # Your implementation here\n        pass\n    \n    def check_data_version(self) -> Dict[str, Any]:\n        \"\"\"Check if data version/hash is documented.\"\"\"\n        # Your implementation here\n        pass\n    \n    def check_hyperparameters(self) -> Dict[str, Any]:\n        \"\"\"Check if hyperparameters are logged.\"\"\"\n        # Your implementation here\n        pass\n    \n    def run_all_checks(self) -> Dict[str, Any]:\n        \"\"\"\n        Run all reproducibility checks.\n        \n        Returns:\n            dict with check results and overall score\n        \"\"\"\n        # Your implementation here\n        # Return: {'checks': {...}, 'score': 0-100, 'reproducible': bool}\n        pass",
+      "test_cases": [
+        {
+          "description": "Reproducibility audit",
+          "expected_output": "Report with pass/fail for each check and overall score",
+          "input": "checker.run_all_checks()"
+        }
+      ],
+      "topic": "reproducibility_checker",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Automated changelog generation from git history keeps documentation synchronized with development. Following Conventional Commits (feat:, fix:, docs:) enables parsing. Changelogs help users understand what changed between versions, decide when to upgrade, and understand release notes.",
+      "hints": [
+        "Use subprocess to run git log command",
+        "git log format: --pretty=format:'%h %s' for hash and message",
+        "Parse commit message for type: 'feat:', 'fix:', etc.",
+        "Use regex to extract type and message",
+        "Group commits by type using dict",
+        "Format with Markdown: ## sections for types, - bullets for commits",
+        "Include commit hashes as links if using GitHub"
+      ],
+      "id": "m10.3_q018",
+      "points": 4,
+      "question": "Create a script to automatically generate a CHANGELOG.md from git commit history.",
+      "starter_code": "import subprocess\nfrom datetime import datetime\nfrom typing import List, Dict\nimport re\n\ndef generate_changelog(\n    since_tag: str = None,\n    output_file: str = 'CHANGELOG.md'\n) -> str:\n    \"\"\"\n    Generate CHANGELOG.md from git history.\n    \n    Groups commits by type:\n    - feat: New features\n    - fix: Bug fixes\n    - docs: Documentation\n    - refactor: Code refactoring\n    - test: Test additions/changes\n    \n    Follows Conventional Commits format.\n    \n    Args:\n        since_tag: Generate log since this tag (e.g., 'v1.0.0')\n        output_file: Output file path\n        \n    Returns:\n        Changelog content\n    \"\"\"\n    # Your implementation here\n    # 1. Get git log\n    # 2. Parse commits (type, message, hash)\n    # 3. Group by type\n    # 4. Format as Markdown\n    # 5. Write to file\n    pass",
+      "test_cases": [
+        {
+          "description": "Changelog generation",
+          "expected_output": "CHANGELOG.md with formatted commit history",
+          "input": "generate_changelog()"
+        }
+      ],
+      "topic": "changelog_generation",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Comprehensive documentation strategy: (1) API documentation - auto-generated from docstrings (Sphinx), versioned with code; (2) User guides - tutorials, how-tos, hosted on docs site (MkDocs, Read the Docs); (3) Architecture documentation - ADRs (Architecture Decision Records), system diagrams, updated with major changes; (4) Runbooks - operational procedures for deployment, monitoring, troubleshooting; (5) Model cards - document each production model; (6) Contributing guide - for developers. Keep up-to-date: docs as code (version controlled), docs PRs required with code changes, automated doc building in CI, periodic doc reviews, docs testing (run code examples), doc ownership (teams responsible for their docs). Tools: Sphinx/MkDocs for generation, GitHub/GitLab for hosting, automated deployment.",
+      "hints": [
+        "Think about different stakeholders and their needs",
+        "Consider automation to reduce maintenance burden",
+        "Think about documentation testing (examples that run)",
+        "Consider versioning documentation with code"
+      ],
+      "id": "m10.3_q019",
+      "points": 5,
+      "question": "Design a comprehensive documentation strategy for a large semiconductor ML project with multiple teams. What documents would you create, and how would you keep them up-to-date?",
+      "rubric": [
+        {
+          "criteria": "Identifies different documentation types (API docs, user guides, architecture docs, runbooks)",
+          "points": 2
+        },
+        {
+          "criteria": "Discusses automation strategies (docstring generation, changelog automation)",
+          "points": 2
+        },
+        {
+          "criteria": "Addresses documentation maintenance and review processes",
+          "points": 2
+        },
+        {
+          "criteria": "Mentions documentation for different audiences (users, developers, operators)",
+          "points": 2
+        },
+        {
+          "criteria": "Discusses tools and platforms (Sphinx, MkDocs, wikis)",
+          "points": 2
+        }
+      ],
+      "topic": "documentation_strategy",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Reproducibility challenges in multi-fab environments: (1) Data privacy - can't share proprietary fab data; Solution: Use synthetic data for testing, document data characteristics (schema, distributions, not raw data), federated learning for multi-site training; (2) Environment variation - different hardware, OS versions across sites; Solution: Containerization (Docker) for consistent environments, document hardware requirements, test on representative hardware; (3) Model versioning - tracking which model version at which site; Solution: Centralized model registry (MLflow), deployment tracking system, automated version checking; (4) Configuration variation - site-specific parameters; Solution: Config templates with site-specific overrides, document all customizations; (5) Validation - ensuring consistent performance; Solution: Standardized test suites (without revealing data), performance benchmarks, statistical validation. Key: separate what's site-specific from what's shared.",
+      "hints": [
+        "Think about what can be shared vs. what must stay private",
+        "Consider techniques for validating without raw data",
+        "Think about standardizing environments",
+        "Consider federated or distributed approaches"
+      ],
+      "id": "m10.3_q020",
+      "points": 5,
+      "question": "Discuss the challenges of achieving reproducibility in semiconductor ML systems where models are trained on proprietary fab data and deployed across multiple sites. How would you address these challenges?",
+      "rubric": [
+        {
+          "criteria": "Identifies data privacy and proprietary concerns",
+          "points": 2
+        },
+        {
+          "criteria": "Discusses environment variation across fabs",
+          "points": 2
+        },
+        {
+          "criteria": "Addresses model versioning and tracking across sites",
+          "points": 2
+        },
+        {
+          "criteria": "Proposes practical solutions (synthetic data, containerization, centralized tracking)",
+          "points": 2
+        },
+        {
+          "criteria": "Mentions validation strategies without sharing data",
+          "points": 2
+        }
+      ],
+      "topic": "reproducibility_challenges",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Living documentation evolves with code, staying synchronized automatically. Differs from static docs that become outdated. Examples: (1) Docstrings - auto-generated API docs (Sphinx autodoc); (2) Type hints - document expected types, checked by mypy; (3) Tests as documentation - tests demonstrate usage, run in CI; (4) Example notebooks - tested notebooks ensure examples work; (5) Schema definitions - API/data schemas as single source of truth; (6) ADRs in code - architecture decisions in version control; (7) Inline visualization - generated plots/reports update automatically. Advantages: always current, less maintenance, trustworthy (tests validate), discoverable (in code). Practices: docs-as-code, automated doc builds, example testing, doc linting. Tools: Sphinx, doctest, pytest-notebooks, MkDocs.",
+      "hints": [
+        "Think about docs that stay synchronized automatically",
+        "Consider tests as documentation",
+        "Think about doc generation from code",
+        "Consider documentation that validates itself"
+      ],
+      "id": "m10.3_q021",
+      "points": 5,
+      "question": "Explain the concept of 'living documentation' and how it differs from traditional documentation. Provide examples of living documentation practices for ML projects.",
+      "rubric": [
+        {
+          "criteria": "Explains living documentation concept (documentation that evolves with code)",
+          "points": 2
+        },
+        {
+          "criteria": "Discusses automation and code generation",
+          "points": 2
+        },
+        {
+          "criteria": "Provides specific examples (docstrings, API docs, tests as docs)",
+          "points": 2
+        },
+        {
+          "criteria": "Addresses advantages over static documentation",
+          "points": 2
+        },
+        {
+          "criteria": "Mentions tools and practices for maintaining living docs",
+          "points": 2
+        }
+      ],
+      "topic": "living_documentation",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Addressing documentation debt: (1) Audit - identify critical gaps, outdated sections, inconsistencies; (2) Prioritize - focus on high-traffic docs (README, getting started, API docs for core functions) first; (3) Phased cleanup - dedicate sprint time, assign ownership, set deadlines; (4) Templates - create doc templates for consistency; (5) Automation - set up automated doc generation, dead link checking; (6) Prevention - require docs in PRs (enforce with CI checks), docs reviews alongside code reviews, update docs in definition of done; (7) Culture - celebrate good docs, make it visible (doc contributions in standups), lightweight doc processes (don't make it painful); (8) Metrics - track doc coverage (functions with docstrings), doc build success, broken links, docs age; (9) Tools - use doc linters, automated formatting, link checkers. Start small, build momentum, make it sustainable.",
+      "hints": [
+        "Think about quick wins vs. long-term solutions",
+        "Consider making docs part of definition of done",
+        "Think about doc quality metrics",
+        "Consider incentivizing good documentation"
+      ],
+      "id": "m10.3_q022",
+      "points": 5,
+      "question": "Your team has accumulated significant documentation debt - outdated docs, missing documentation, and inconsistent formatting. Develop a strategy to address this technical debt while preventing future accumulation.",
+      "rubric": [
+        {
+          "criteria": "Proposes phased approach to addressing existing debt",
+          "points": 2
+        },
+        {
+          "criteria": "Discusses prioritization (critical vs. nice-to-have docs)",
+          "points": 2
+        },
+        {
+          "criteria": "Addresses prevention strategies (docs in PRs, doc reviews, automation)",
+          "points": 2
+        },
+        {
+          "criteria": "Mentions cultural changes and incentives",
+          "points": 2
+        },
+        {
+          "criteria": "Proposes metrics for tracking documentation health",
+          "points": 2
+        }
+      ],
+      "topic": "documentation_debt",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Information needed for reproduction: (1) Exact code version (git commit hash); (2) Exact data - version/hash, train/test split, preprocessing steps; (3) Complete hyperparameters - including defaults; (4) Random seeds - Python, NumPy, ML library; (5) Environment - package versions (requirements.txt with pinned versions), hardware specs; (6) Training procedure - number of epochs, early stopping criteria, batch size; (7) Evaluation methodology - metrics calculation, validation strategy; (8) Data splits - exact train/val/test indices or splitting procedure. Prevention practices: (1) Experiment tracking (MLflow) for every run; (2) Config files for all parameters; (3) Seed setting in all scripts; (4) Data versioning; (5) Containerization; (6) Detailed documentation; (7) Code availability; (8) Reproducibility checklist before claiming results. Common culprits: data leakage, different random seeds, undocumented preprocessing, environment differences.",
+      "hints": [
+        "Think about all sources of variation",
+        "Consider data-related issues",
+        "Think about randomness and seeds",
+        "Consider environmental factors"
+      ],
+      "id": "m10.3_q023",
+      "points": 5,
+      "question": "A researcher claims they achieved 99% accuracy on a wafer defect detection task, but you cannot reproduce the results. What information would you need to reproduce their experiment, and what practices would prevent this issue?",
+      "rubric": [
+        {
+          "criteria": "Lists essential information: code version, data, hyperparameters, seeds, environment",
+          "points": 2
+        },
+        {
+          "criteria": "Discusses data preprocessing and splitting details",
+          "points": 2
+        },
+        {
+          "criteria": "Addresses training procedure details",
+          "points": 2
+        },
+        {
+          "criteria": "Mentions validation methodology",
+          "points": 2
+        },
+        {
+          "criteria": "Proposes best practices for reproducibility",
+          "points": 2
+        }
+      ],
+      "topic": "experiment_reproducibility",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Documentation-driven API design: (1) Self-documenting names - clear function/parameter names reduce doc needs (train_classifier vs. tc); (2) Consistency - follow established patterns (fit/predict like scikit-learn); (3) Type hints - document expected types in signature; (4) Sensible defaults - common cases should require minimal parameters; (5) Single responsibility - functions do one thing, reducing explanation needs; (6) Examples in docstrings - show actual usage; (7) Error messages - clear, actionable errors are documentation; (8) Progressive disclosure - simple interface for beginners, advanced options for experts; (9) Conventions - follow community standards (PEP 8); (10) Versioning - semantic versioning communicates change impact; (11) Deprecation - clear warnings and migration paths. Self-documenting APIs: intent is clear from signature, behavior is predictable, examples are concise. Good API design minimizes required documentation while making usage intuitive.",
+      "hints": [
+        "Think about APIs that are easy to learn",
+        "Consider how to make intent clear from signatures",
+        "Think about what makes documentation necessary vs. unnecessary",
+        "Consider how popular libraries design APIs"
+      ],
+      "id": "m10.3_q024",
+      "points": 5,
+      "question": "You're designing a public API for a semiconductor ML library. Discuss how documentation should influence API design, and how to create self-documenting APIs.",
+      "rubric": [
+        {
+          "criteria": "Discusses principle of least surprise and intuitive naming",
+          "points": 2
+        },
+        {
+          "criteria": "Addresses consistency in API design",
+          "points": 2
+        },
+        {
+          "criteria": "Mentions type hints and docstrings for self-documentation",
+          "points": 2
+        },
+        {
+          "criteria": "Discusses examples and usage patterns in docs",
+          "points": 2
+        },
+        {
+          "criteria": "Addresses versioning and deprecation documentation",
+          "points": 2
+        }
+      ],
+      "topic": "api_design_documentation",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Four documentation types (Di\u00e1taxis framework): (1) Tutorials - learning-oriented, step-by-step lessons for beginners; Example: 'Building Your First Yield Prediction Model' - takes beginner through loading data, training model, making predictions; (2) How-to guides - task-oriented, solve specific problems; Example: 'How to Handle Imbalanced Yield Data' - specific steps for class imbalance; (3) Explanations - understanding-oriented, clarify concepts; Example: 'Understanding Feature Engineering for Yield Prediction' - explains why certain features matter, how they're computed; (4) Reference - information-oriented, technical descriptions; Example: API documentation for YieldPredictor class - complete parameter descriptions, return types. Each serves different purposes: tutorials teach, how-tos solve problems, explanations build understanding, references inform. Complete documentation includes all four types.",
+      "hints": [
+        "Think about different user goals (learning vs. solving a problem)",
+        "Consider the Di\u00e1taxis documentation framework",
+        "Think about when you use each type of documentation",
+        "Consider audience knowledge level for each type"
+      ],
+      "id": "m10.3_q025",
+      "points": 5,
+      "question": "Explain the difference between tutorials, how-to guides, explanations, and reference documentation. For a semiconductor yield prediction library, provide an example of each type.",
+      "rubric": [
+        {
+          "criteria": "Explains the four documentation types (Di\u00e1taxis framework)",
+          "points": 2
+        },
+        {
+          "criteria": "Provides clear tutorial example (learning-oriented)",
+          "points": 2
+        },
+        {
+          "criteria": "Provides clear how-to example (task-oriented)",
+          "points": 2
+        },
+        {
+          "criteria": "Provides clear explanation example (understanding-oriented)",
+          "points": 2
+        },
+        {
+          "criteria": "Provides clear reference example (information-oriented)",
+          "points": 2
+        }
+      ],
+      "topic": "documentation_types",
+      "type": "conceptual"
+    }
+  ],
+  "sub_module": "10.3",
+  "title": "Documentation & Reproducibility",
+  "version": "1.0",
+  "week": 20
+}

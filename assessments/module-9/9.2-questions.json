@@ -1,0 +1,355 @@
+{
+  "description": "Assessment covering production ML best practices: model serving, A/B testing, drift detection, monitoring, troubleshooting, and reliability for semiconductor manufacturing.",
+  "estimated_time_minutes": 60,
+  "module_id": "module-9.2",
+  "passing_score": 70,
+  "questions": [
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "Model serving systems expose trained models as APIs/services for real-time or batch inference, ensuring reliability, scalability, and low latency for production use cases.",
+      "id": "m9.2_q001",
+      "options": [
+        "To train models faster",
+        "To provide reliable, low-latency predictions from trained models via an API or service",
+        "To store raw data",
+        "To visualize model metrics"
+      ],
+      "points": 2,
+      "question": "What is the primary goal of a model serving system in production?",
+      "topic": "model_serving_basics",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "TensorFlow Serving, TorchServe, FastAPI, and Triton Inference Server are widely used for scalable, production-grade model serving. Flask is suitable for prototyping but lacks production features.",
+      "id": "m9.2_q002",
+      "options": [
+        "Jupyter Notebook and Excel",
+        "TensorFlow Serving, TorchServe, FastAPI, Triton Inference Server",
+        "Only Flask",
+        "Only cloud vendor-specific tools"
+      ],
+      "points": 2,
+      "question": "Which tools are commonly used for serving ML models in production?",
+      "topic": "model_serving_tools",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Batch serving is ideal for non-urgent, high-volume inference tasks (e.g., nightly defect analysis), while real-time serving is for low-latency, immediate predictions (e.g., inline quality control).",
+      "id": "m9.2_q003",
+      "options": [
+        "Always use real-time",
+        "Batch serving is best for large volumes of non-urgent predictions, such as daily reports or historical data processing",
+        "Batch serving is never used",
+        "Batch serving is only for training"
+      ],
+      "points": 2,
+      "question": "When should batch serving be used instead of real-time serving for ML models?",
+      "topic": "batch_vs_realtime_serving",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "API versioning ensures that changes to model interfaces do not break existing clients, allowing safe upgrades and rollback in production environments.",
+      "id": "m9.2_q004",
+      "options": [
+        "It is not important",
+        "It allows backward compatibility, safe model upgrades, and prevents breaking changes for clients",
+        "It slows down development",
+        "It is only needed for web apps"
+      ],
+      "points": 2,
+      "question": "Why is API versioning important in production ML systems?",
+      "topic": "api_versioning",
+      "type": "multiple_choice"
+    },
+    {
+      "code_template": "from fastapi import FastAPI, HTTPException\nfrom pydantic import BaseModel\nimport numpy as np\nimport joblib\n\napp = FastAPI()\n\nclass BatchRequest(BaseModel):\n    inputs: list[list[float]]\n\nclass BatchResponse(BaseModel):\n    predictions: list[float]\n\n# Load model at startup\nmodel = joblib.load('model.joblib')\n\n@app.post('/predict-batch', response_model=BatchResponse)\ndef predict_batch(request: BatchRequest):\n    # Your implementation here\n    pass\n",
+      "difficulty": "medium",
+      "explanation": "Batch prediction endpoints improve throughput for non-urgent inference tasks and are essential for scalable production ML systems.",
+      "hints": [
+        "Use model.predict on the input array",
+        "Validate input shape",
+        "Return predictions as a list"
+      ],
+      "id": "m9.2_q005",
+      "points": 3,
+      "question": "Implement a FastAPI endpoint for batch prediction using a preloaded ML model.",
+      "test_cases": [
+        {
+          "description": "Batch prediction endpoint",
+          "expected_output": "Returns predictions for all 10 samples",
+          "input": "POST /predict-batch with 10 samples"
+        }
+      ],
+      "topic": "fastapi_serving",
+      "type": "coding_exercise"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Comprehensive monitoring includes accuracy, drift, latency, error rates, and resource usage to ensure reliability and early detection of issues in production ML systems.",
+      "id": "m9.2_q006",
+      "options": [
+        "Only latency",
+        "Monitor prediction accuracy, input data drift, latency, error rates, and resource usage",
+        "Only model accuracy",
+        "Monitoring is not needed"
+      ],
+      "points": 2,
+      "question": "What should be monitored for ML models in production?",
+      "topic": "model_monitoring",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Alerting should be based on thresholds for key metrics to avoid alert fatigue and ensure timely response to significant issues.",
+      "id": "m9.2_q007",
+      "options": [
+        "Alert on every prediction",
+        "Set thresholds for key metrics (accuracy, drift, latency) and alert only on significant deviations",
+        "No alerts needed",
+        "Alert only on hardware failures"
+      ],
+      "points": 2,
+      "question": "Which alerting strategies are best for production ML systems?",
+      "topic": "alerting_strategies",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Statistical tests and tools like Prometheus and Evidently automate drift detection, enabling proactive retraining and issue resolution.",
+      "id": "m9.2_q008",
+      "options": [
+        "Manual inspection only",
+        "Statistical tests (KS, Chi-squared), Prometheus, Evidently, custom scripts",
+        "Only retrain models periodically",
+        "Drift detection is not needed"
+      ],
+      "points": 2,
+      "question": "Which tools and techniques are commonly used for drift detection in production ML?",
+      "topic": "drift_detection_tools",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Effective root cause analysis starts with collecting logs, metrics, and change history to diagnose the source of the problem before taking corrective action.",
+      "id": "m9.2_q009",
+      "options": [
+        "Retrain the model immediately",
+        "Gather logs, metrics, and recent changes to understand the context of the failure",
+        "Ignore the issue",
+        "Roll back to an old model without investigation"
+      ],
+      "points": 2,
+      "question": "What is the first step in root cause analysis for a production ML incident?",
+      "topic": "root_cause_analysis",
+      "type": "multiple_choice"
+    },
+    {
+      "code_template": "from fastapi import FastAPI, Request\nfrom prometheus_client import Counter, Histogram, make_asgi_app\nimport time\n\napp = FastAPI()\n\nREQUEST_COUNT = Counter('request_count', 'Total number of requests')\nREQUEST_LATENCY = Histogram('request_latency_seconds', 'Request latency in seconds')\n\n@app.middleware('http')\nasync def prometheus_metrics(request: Request, call_next):\n    start_time = time.time()\n    response = await call_next(request)\n    duration = time.time() - start_time\n    REQUEST_COUNT.inc()\n    REQUEST_LATENCY.observe(duration)\n    return response\n\n# Expose /metrics endpoint\napp.mount('/metrics', make_asgi_app())\n\n# Add a dummy prediction endpoint for demonstration\n@app.get('/predict')\nasync def predict():\n    return {'prediction': 1}\n",
+      "difficulty": "medium",
+      "explanation": "Prometheus enables real-time monitoring of model server health and performance, supporting alerting and troubleshooting.",
+      "hints": [
+        "Use prometheus_client for metrics",
+        "Instrument middleware for all requests",
+        "Expose /metrics endpoint"
+      ],
+      "id": "m9.2_q010",
+      "points": 3,
+      "question": "Instrument a FastAPI model server with Prometheus metrics for request count and latency.",
+      "test_cases": [
+        {
+          "description": "Prometheus monitoring",
+          "expected_output": "Prometheus metrics for request count and latency are available",
+          "input": "GET /metrics after several /predict calls"
+        }
+      ],
+      "topic": "prometheus_monitoring",
+      "type": "coding_exercise"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Structured logging of inputs, outputs, errors, and metrics enables traceability, debugging, and compliance in production ML systems.",
+      "id": "m9.2_q011",
+      "options": [
+        "Log only errors",
+        "Log inputs, predictions, errors, and key metrics in structured (JSON) format for traceability and debugging",
+        "Log everything in plain text",
+        "No logging needed"
+      ],
+      "points": 2,
+      "question": "What are best practices for logging in production ML systems?",
+      "topic": "logging_best_practices",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Rolling back to a stable model and notifying stakeholders ensures business continuity and transparency during production incidents.",
+      "id": "m9.2_q012",
+      "options": [
+        "Ignore the failure",
+        "Roll back to the last known good model and notify stakeholders",
+        "Retrain immediately without investigation",
+        "Only alert the ML team"
+      ],
+      "points": 2,
+      "question": "What is a key step in incident response for a failed production ML model?",
+      "topic": "incident_response_production",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Retraining should be triggered by data drift, performance drops, or new data, not just on a fixed schedule, to maintain model accuracy and reliability.",
+      "id": "m9.2_q013",
+      "options": [
+        "Only scheduled intervals",
+        "Significant data drift, performance degradation, or new labeled data availability",
+        "Only when a new model is available",
+        "Never retrain"
+      ],
+      "points": 2,
+      "question": "Which events should trigger model retraining in production?",
+      "topic": "model_retraining_triggers",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Shadow testing allows safe validation of new models on real traffic without impacting users, supporting robust deployment decisions.",
+      "id": "m9.2_q014",
+      "options": [
+        "Testing in the dark",
+        "Running a new model in parallel with production, logging predictions for offline comparison without affecting users",
+        "Only testing on synthetic data",
+        "Testing only on weekends"
+      ],
+      "points": 2,
+      "question": "What is shadow testing in production ML?",
+      "topic": "shadow_testing",
+      "type": "multiple_choice"
+    },
+    {
+      "code_template": "# Troubleshooting Checklist\n# Your implementation here:\n\n- [ ] Check recent data for distribution drift\n- [ ] Review model input pipeline for changes\n- [ ] Inspect logs for errors or anomalies\n- [ ] Compare recent predictions to ground truth\n- [ ] Validate model version and deployment timestamp\n- [ ] Check for recent code or config changes\n- [ ] Review monitoring dashboards for latency or error spikes\n- [ ] Confirm data labeling quality\n- [ ] Investigate hardware or resource issues\n- [ ] Communicate findings and next steps to stakeholders\n",
+      "difficulty": "hard",
+      "explanation": "A systematic troubleshooting checklist ensures all possible causes are investigated, reducing downtime and improving reliability.",
+      "hints": [
+        "Check for data drift first",
+        "Review logs and monitoring",
+        "Validate deployment and input pipeline"
+      ],
+      "id": "m9.2_q015",
+      "points": 3,
+      "question": "Write a troubleshooting checklist for diagnosing a sudden drop in production model accuracy in a semiconductor defect detection system.",
+      "test_cases": [
+        {
+          "description": "Comprehensive troubleshooting",
+          "expected_output": "Checklist covers data, model, pipeline, and operational factors",
+          "input": "Sudden accuracy drop detected"
+        }
+      ],
+      "topic": "production_troubleshooting",
+      "type": "coding_exercise"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "High availability is achieved by running multiple model server replicas, using load balancers, health checks, and auto-scaling to handle failures and traffic spikes.",
+      "id": "m9.2_q016",
+      "options": [
+        "Run a single server",
+        "Deploy multiple replicas behind a load balancer with health checks and auto-scaling",
+        "Only use cloud services",
+        "No special setup needed"
+      ],
+      "points": 2,
+      "question": "How can high availability be achieved for production ML model serving?",
+      "topic": "high_availability",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Blue-green deployment switches all traffic instantly, while canary deployment gradually shifts traffic to the new model, allowing safer validation.",
+      "id": "m9.2_q017",
+      "options": [
+        "They are the same",
+        "Blue-green switches all traffic at once, canary gradually increases traffic to the new model",
+        "Canary is only for web apps",
+        "Blue-green is only for batch jobs"
+      ],
+      "points": 2,
+      "question": "What is the difference between blue-green and canary deployment for ML models?",
+      "topic": "blue_green_canary_deployment",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Horizontal scaling and auto-scaling ensure production ML systems can handle variable load and maintain performance.",
+      "id": "m9.2_q018",
+      "options": [
+        "Manual server restarts",
+        "Horizontal scaling (more replicas), auto-scaling based on load, and resource requests/limits",
+        "Only vertical scaling (bigger servers)",
+        "No scaling needed"
+      ],
+      "points": 2,
+      "question": "Which scaling strategies are effective for production ML serving?",
+      "topic": "scaling_strategies",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Production ML APIs should use authentication, authorization, input validation, and encryption to protect data and prevent misuse.",
+      "id": "m9.2_q019",
+      "options": [
+        "No authentication needed",
+        "Use authentication, authorization, input validation, and encrypt data in transit",
+        "Only secure the database",
+        "Security is not important for ML"
+      ],
+      "points": 2,
+      "question": "What are security best practices for production ML APIs?",
+      "topic": "security_best_practices",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "A robust production ML architecture includes model servers, load balancers, auto-scaling, monitoring, security, and deployment strategies tailored for global manufacturing needs.",
+      "hints": [
+        "Think about global deployment and data residency",
+        "Consider redundancy and failover",
+        "Include monitoring and alerting"
+      ],
+      "id": "m9.2_q020",
+      "points": 5,
+      "question": "Describe a robust architecture for reliable, scalable, and secure ML model serving in a global semiconductor manufacturing environment. Include key components and best practices.",
+      "rubric": [
+        "Describes model server, load balancer, monitoring, and scaling (2 points)",
+        "Explains security and API management (2 points)",
+        "Addresses deployment strategies (blue-green, canary) (2 points)",
+        "Discusses monitoring, alerting, and incident response (2 points)",
+        "Provides manufacturing-specific considerations (2 points)"
+      ],
+      "topic": "production_ml_reliability",
+      "type": "conceptual"
+    }
+  ],
+  "sub_module": "9.2",
+  "title": "Production ML: Serving, Monitoring, and Troubleshooting",
+  "version": "1.0",
+  "week": 9
+}

@@ -1,0 +1,603 @@
+{
+  "description": "Assessment covering convolutional neural networks, convolutional layers, pooling operations, CNN architectures (ResNet, EfficientNet, VGG), transfer learning, fine-tuning, data augmentation, and applications to wafer map defect classification and visual inspection.",
+  "estimated_time_minutes": 90,
+  "module_id": "module-6.2",
+  "passing_score": 70,
+  "questions": [
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "CNNs exploit two key properties of images: spatial locality (nearby pixels are related) and translation invariance (a defect looks the same regardless of position). Convolutional layers share weights across spatial locations, dramatically reducing parameters compared to fully connected layers while preserving spatial structure.",
+      "id": "m6.2_q001",
+      "options": [
+        "CNNs have fewer parameters",
+        "CNNs exploit spatial locality and translation invariance",
+        "CNNs train faster",
+        "CNNs work only on images"
+      ],
+      "points": 2,
+      "question": "What is the primary advantage of CNNs over fully connected networks for image data?",
+      "topic": "cnn_basics",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "With padding='same' and stride=1, the spatial dimensions remain unchanged: 28\u00d728. The number of output channels equals the number of filters: 32. So output shape is (28, 28, 32). Each filter produces one output channel by convolving across all input channels.",
+      "id": "m6.2_q002",
+      "options": [
+        "(26, 26, 32)",
+        "(28, 28, 32)",
+        "(28, 28, 1)",
+        "(14, 14, 32)"
+      ],
+      "points": 2,
+      "question": "A convolutional layer has 32 filters of size 3\u00d73 applied to a 28\u00d728 input image with 1 channel, using padding='same' and stride=1. What is the output shape?",
+      "topic": "convolutional_layers",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Max pooling downsamples spatial dimensions (e.g., 2\u00d72 pooling halves width and height), reducing computation and parameters. It also adds small translation invariance by selecting the maximum activation in each pooling window, making the network less sensitive to exact feature positions - useful for detecting defects that may vary slightly in location.",
+      "id": "m6.2_q003",
+      "options": [
+        "To increase the number of parameters",
+        "To reduce spatial dimensions and add translation invariance",
+        "To normalize activations",
+        "To prevent vanishing gradients"
+      ],
+      "points": 2,
+      "question": "What is the purpose of max pooling layers in CNNs?",
+      "topic": "pooling_operations",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "The receptive field grows with depth. First layer has 3\u00d73 receptive field. Second layer neurons see 3\u00d73 of first layer outputs, but each of those corresponds to 3\u00d73 in the input. The receptive field is (3-1) + (3-1) + 1 = 5\u00d75. Deeper networks 'see' larger input regions, enabling detection of complex patterns like large wafer defects.",
+      "id": "m6.2_q004",
+      "options": [
+        "3\u00d73",
+        "5\u00d75",
+        "6\u00d76",
+        "9\u00d79"
+      ],
+      "points": 3,
+      "question": "In a CNN with two 3\u00d73 convolutional layers (no padding, stride=1), what is the receptive field of a neuron in the second layer?",
+      "topic": "receptive_field",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "easy",
+      "explanation": "Wafer maps are typically grayscale and circular/square, with defects that can appear in any orientation. Flips and rotations (90\u00b0, 180\u00b0, 270\u00b0) are appropriate as defects look similar when rotated. Color jittering is irrelevant for grayscale images. Aspect ratio changes would distort wafer geometry. Augmentation increases effective training data and improves generalization.",
+      "id": "m6.2_q005",
+      "options": [
+        "Horizontal and vertical flips, rotations",
+        "Color jittering",
+        "Changing aspect ratio",
+        "Adding text overlays"
+      ],
+      "points": 2,
+      "question": "Which data augmentation technique is most appropriate for wafer map defect classification?",
+      "topic": "data_augmentation",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "ResNet introduced skip connections that add the input of a layer block to its output (F(x) + x). This allows gradients to flow directly through the network, enabling training of very deep networks (50-200 layers). Skip connections prevent degradation problems where deeper networks perform worse than shallower ones. This is valuable for complex semiconductor visual inspection tasks.",
+      "id": "m6.2_q006",
+      "options": [
+        "Using very large filters",
+        "Skip connections (residual connections)",
+        "Eliminating pooling layers",
+        "Using only 1\u00d71 convolutions"
+      ],
+      "points": 2,
+      "question": "What is the key innovation in ResNet architecture?",
+      "topic": "cnn_architectures",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 2,
+      "difficulty": "hard",
+      "explanation": "With limited data (500 images), training from scratch risks overfitting. Freezing all layers may not adapt enough to wafer-specific patterns. The best approach: use pre-trained features (early layers learn edges, textures), freeze those, and fine-tune later layers to learn wafer-specific defect patterns. This balances leveraging pre-trained knowledge with domain adaptation.",
+      "id": "m6.2_q007",
+      "options": [
+        "Train a large CNN from scratch",
+        "Use a pre-trained ImageNet model and freeze all layers",
+        "Use a pre-trained model, freeze early layers, fine-tune later layers",
+        "Use a pre-trained model and train only the final classification layer"
+      ],
+      "points": 3,
+      "question": "You have 500 wafer map images for training a defect classifier. Which transfer learning strategy would likely work best?",
+      "topic": "transfer_learning",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "The standard practice is Conv \u2192 BatchNorm \u2192 Activation (ReLU). Batch normalization normalizes the outputs of the convolutional layer before the nonlinearity. This stabilizes training and reduces dependence on weight initialization. Some recent work explores BatchNorm after activation, but Conv \u2192 BN \u2192 ReLU is the established convention.",
+      "id": "m6.2_q008",
+      "options": [
+        "Before convolution and activation",
+        "After convolution, before activation",
+        "After activation",
+        "It doesn't matter"
+      ],
+      "points": 2,
+      "question": "Where should batch normalization be placed in a convolutional layer block?",
+      "topic": "batch_normalization_cnn",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "Depthwise separable convolutions split a standard convolution into: (1) depthwise convolution (applies one filter per input channel), and (2) pointwise convolution (1\u00d71 to combine channels). This dramatically reduces parameters and computation (8-9\u00d7 less). EfficientNet uses these for efficient defect detection models deployable on edge devices in semiconductor fabs.",
+      "id": "m6.2_q009",
+      "options": [
+        "They use larger filter sizes",
+        "They factorize standard convolution into depthwise and pointwise operations, reducing parameters",
+        "They eliminate the need for pooling",
+        "They require no training"
+      ],
+      "points": 3,
+      "question": "What is the computational advantage of depthwise separable convolutions used in MobileNet and EfficientNet?",
+      "topic": "depthwise_separable_convolutions",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Class imbalance causes models to predict the majority class. Solutions: (1) Weighted loss: assign higher weight to minority class errors. (2) Oversampling minority class. (3) Undersampling majority class. (4) Use balanced metrics (F1, precision-recall). Weighted loss is effective and doesn't require changing the dataset. Accuracy is misleading with imbalance (95% accuracy by always predicting 'good').",
+      "id": "m6.2_q010",
+      "options": [
+        "Use accuracy as the only metric",
+        "Use weighted cross-entropy loss with higher weight for defect class",
+        "Remove all good wafers",
+        "Train a regression model instead"
+      ],
+      "points": 2,
+      "question": "Your wafer defect dataset has 1000 'good' wafers and only 50 with defects. Which technique addresses this class imbalance?",
+      "topic": "class_imbalance",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "Global Average Pooling (GAP) averages each feature map to a single value, eliminating the need for large fully connected layers. Benefits: (1) Drastically fewer parameters \u2192 less overfitting. (2) More robust to spatial size changes. (3) Maintains spatial correspondence between feature maps and classes. Modern CNNs like ResNet use GAP before the final classification layer.",
+      "id": "m6.2_q011",
+      "options": [
+        "It increases model parameters",
+        "It reduces overfitting and makes the model more robust to input size changes",
+        "It provides better gradients",
+        "It's required for transfer learning"
+      ],
+      "points": 3,
+      "question": "What is the advantage of using Global Average Pooling instead of fully connected layers at the end of a CNN?",
+      "topic": "global_average_pooling",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "medium",
+      "explanation": "Pre-trained models have already learned useful features (edges, textures, shapes) on large datasets like ImageNet. Large learning rates would drastically change these weights, destroying valuable knowledge. Small learning rates (e.g., 10\u00d7 smaller) gently adapt the model to wafer-specific patterns while preserving general visual understanding. This is key to effective transfer learning.",
+      "id": "m6.2_q012",
+      "options": [
+        "Pre-trained weights are already good, large updates would destroy learned features",
+        "Fine-tuning always requires lower learning rates",
+        "It makes training faster",
+        "It's a PyTorch requirement"
+      ],
+      "points": 2,
+      "question": "When fine-tuning a pre-trained CNN for wafer defect detection, why should you use a lower learning rate than training from scratch?",
+      "topic": "learning_rate_cnn",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "Early CNN layers learn simple, low-level features: edges at various orientations, textures, color gradients. Middle layers combine these into more complex patterns (corners, curves). Deeper layers detect high-level patterns (specific defect types). This hierarchical feature learning is automatic - the network discovers optimal features through training.",
+      "id": "m6.2_q013",
+      "options": [
+        "Complex defect patterns",
+        "Low-level features like edges and textures",
+        "Specific wafer types",
+        "Color information only"
+      ],
+      "points": 2,
+      "question": "What do the filters in the first convolutional layer of a CNN typically learn to detect?",
+      "topic": "cnn_filters",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "Attention mechanisms learn to weight different spatial regions by importance. For wafer maps, the model can learn to focus on regions with defect-indicative patterns while ignoring uniform 'good' regions. This improves interpretability (visualize attention maps) and performance. Attention can be spatial (where to look) or channel-wise (which features matter). Used in advanced architectures like Vision Transformers.",
+      "id": "m6.2_q014",
+      "options": [
+        "By making the model larger",
+        "By allowing the model to focus on relevant spatial regions (where defects are likely)",
+        "By eliminating the need for convolutional layers",
+        "By reducing training time"
+      ],
+      "points": 3,
+      "question": "How can attention mechanisms improve defect detection in wafer map classification?",
+      "topic": "attention_mechanisms",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Wafer defects vary in size: small scratches to large pattern defects. Single-scale features struggle with this range. FPN builds a pyramid of feature maps at different resolutions, combining high-resolution (detailed) and low-resolution (semantic) information. This enables detecting both tiny and large defects effectively - critical for comprehensive semiconductor inspection.",
+      "id": "m6.2_q015",
+      "options": [
+        "To reduce model size",
+        "To detect defects at different sizes and scales effectively",
+        "To eliminate pooling layers",
+        "To make training faster"
+      ],
+      "points": 2,
+      "question": "Why do architectures like FPN (Feature Pyramid Networks) use multi-scale features for defect detection?",
+      "topic": "multi_scale_features",
+      "type": "multiple_choice"
+    },
+    {
+      "code_template": "import torch\nimport torch.nn as nn\n\nclass WaferDefectCNN(nn.Module):\n    \"\"\"\n    CNN for wafer map defect classification.\n    \n    Architecture:\n    - Conv1: 32 filters, 3\u00d73, BatchNorm, ReLU, MaxPool(2\u00d72)\n    - Conv2: 64 filters, 3\u00d73, BatchNorm, ReLU, MaxPool(2\u00d72)\n    - Conv3: 128 filters, 3\u00d73, BatchNorm, ReLU, MaxPool(2\u00d72)\n    - Global Average Pooling\n    - FC: 8 classes (defect types)\n    \"\"\"\n    def __init__(self, num_classes: int = 8):\n        super(WaferDefectCNN, self).__init__()\n        # Your implementation here\n        pass\n    \n    def forward(self, x: torch.Tensor) -> torch.Tensor:\n        # Your implementation here\n        # x shape: (batch, 1, 64, 64) - grayscale 64\u00d764 wafer maps\n        pass",
+      "difficulty": "medium",
+      "explanation": "This CNN progressively increases channels (32\u219264\u2192128) while reducing spatial size through pooling. Batch normalization stabilizes training. Global average pooling eliminates large FC layers, reducing overfitting. The output is raw logits for each class, typically used with CrossEntropyLoss in PyTorch.",
+      "hints": [
+        "Use nn.Conv2d for 2D convolutions",
+        "Follow pattern: Conv \u2192 BatchNorm2d \u2192 ReLU \u2192 MaxPool2d",
+        "Use nn.AdaptiveAvgPool2d(1) for global average pooling",
+        "Final FC layer outputs num_classes logits (no softmax in model)"
+      ],
+      "id": "m6.2_q016",
+      "points": 4,
+      "question": "Implement a CNN architecture for wafer map defect classification (8 defect types). Include convolutional layers, pooling, and batch normalization.",
+      "test_cases": [
+        {
+          "description": "Batch of 16 wafer maps",
+          "expected_output": "output shape: (16, 8) - logits for 8 classes",
+          "input": "model = WaferDefectCNN(8); x = torch.randn(16, 1, 64, 64)"
+        }
+      ],
+      "topic": "building_cnn",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import torch\nimport torch.nn as nn\nfrom torchvision import models\n\ndef create_transfer_model(num_classes: int = 8, \n                         freeze_backbone: bool = True) -> nn.Module:\n    \"\"\"\n    Create transfer learning model from pre-trained ResNet18.\n    \n    Args:\n        num_classes: Number of defect classes\n        freeze_backbone: If True, freeze all layers except final FC\n        \n    Returns:\n        Modified ResNet18 model\n    \"\"\"\n    # Load pre-trained ResNet18\n    model = models.resnet18(pretrained=True)\n    \n    # Your implementation here:\n    # 1. Optionally freeze backbone layers\n    # 2. Replace final FC layer for num_classes\n    # 3. Handle grayscale input (1 channel vs 3)\n    \n    pass",
+      "difficulty": "hard",
+      "explanation": "Transfer learning leverages ImageNet pre-trained weights. Freezing the backbone preserves learned features while training only the final classifier adapts to wafer defects. This is effective with limited data. For grayscale wafer maps, either modify conv1 to accept 1 channel or replicate the grayscale image to 3 channels.",
+      "hints": [
+        "Use models.resnet18(pretrained=True) to load weights",
+        "Freeze layers: for param in model.parameters(): param.requires_grad = False",
+        "Replace FC: model.fc = nn.Linear(model.fc.in_features, num_classes)",
+        "For grayscale: modify first conv layer or replicate channel 3 times",
+        "Unfreeze new layers after replacing them"
+      ],
+      "id": "m6.2_q017",
+      "points": 5,
+      "question": "Implement transfer learning by loading a pre-trained ResNet18 model and adapting it for wafer defect classification with 8 classes.",
+      "test_cases": [
+        {
+          "description": "Transfer learning model",
+          "expected_output": "ResNet18 with frozen backbone and new 8-class classifier",
+          "input": "model = create_transfer_model(8, freeze_backbone=True)"
+        }
+      ],
+      "topic": "transfer_learning_implementation",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "from torchvision import transforms\nimport torch\n\ndef get_wafer_augmentation_transforms(training: bool = True) -> transforms.Compose:\n    \"\"\"\n    Create data augmentation pipeline for wafer maps.\n    \n    Args:\n        training: If True, apply augmentation. If False, only normalize.\n        \n    Returns:\n        Composed transforms\n    \"\"\"\n    if training:\n        # Your training augmentation here\n        # Include: random flips, rotations, slight translations\n        # Normalize to mean=0, std=1\n        pass\n    else:\n        # Your validation transforms here\n        # Only resize and normalize\n        pass",
+      "difficulty": "medium",
+      "explanation": "Data augmentation artificially expands training data by applying random transformations. For wafer maps: flips (horizontal/vertical), rotations (90\u00b0, 180\u00b0, 270\u00b0), small translations. These preserve defect characteristics while varying appearance. Always normalize after augmentation. Validation uses only normalization to ensure consistent evaluation.",
+      "hints": [
+        "Use transforms.RandomHorizontalFlip() and RandomVerticalFlip()",
+        "Use transforms.RandomRotation(degrees) for rotations",
+        "Use transforms.Normalize(mean, std) for normalization",
+        "Use transforms.ToTensor() to convert to tensor",
+        "Chain transforms with transforms.Compose([...])"
+      ],
+      "id": "m6.2_q018",
+      "points": 4,
+      "question": "Implement data augmentation transforms for wafer map images to improve model generalization.",
+      "test_cases": [
+        {
+          "description": "Training augmentation pipeline",
+          "expected_output": "Compose with augmentation + normalization",
+          "input": "train_transforms = get_wafer_augmentation_transforms(training=True)"
+        }
+      ],
+      "topic": "data_augmentation_implementation",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import torch\nimport torch.nn as nn\nimport numpy as np\n\ndef grad_cam(model: nn.Module, input_image: torch.Tensor, \n             target_class: int, target_layer: nn.Module) -> np.ndarray:\n    \"\"\"\n    Compute Grad-CAM for visualizing CNN attention.\n    \n    Args:\n        model: Trained CNN model\n        input_image: Input tensor (1, C, H, W)\n        target_class: Class index to visualize\n        target_layer: Layer to compute gradients for (e.g., last conv layer)\n        \n    Returns:\n        Heatmap (H, W) showing important regions\n    \"\"\"\n    model.eval()\n    \n    # Your implementation here:\n    # 1. Register forward hook to capture activations\n    # 2. Register backward hook to capture gradients\n    # 3. Forward pass\n    # 4. Backward pass for target class\n    # 5. Compute weights (global average pool of gradients)\n    # 6. Compute weighted combination of activations\n    # 7. Apply ReLU and normalize\n    \n    pass",
+      "difficulty": "hard",
+      "explanation": "Grad-CAM visualizes what CNNs 'see' by highlighting input regions important for classification. It computes gradients of the target class score with respect to feature maps, averages them to get importance weights, then creates a weighted sum of activations. This explainability is crucial for trusting defect detection models in semiconductor manufacturing.",
+      "hints": [
+        "Use register_forward_hook to capture layer activations",
+        "Use register_backward_hook to capture gradients",
+        "Perform backward: output[0, target_class].backward()",
+        "Weights: torch.mean(gradients, dim=[2,3])",
+        "Heatmap: sum of (weights * activations) over channels",
+        "Apply ReLU to heatmap, then normalize to [0,1]"
+      ],
+      "id": "m6.2_q019",
+      "points": 5,
+      "question": "Implement Grad-CAM (Gradient-weighted Class Activation Mapping) to visualize which regions of a wafer map the CNN focuses on for classification.",
+      "test_cases": [
+        {
+          "description": "Visualize CNN attention",
+          "expected_output": "Heatmap highlighting defect regions",
+          "input": "grad_cam(model, wafer_image, target_class=2, target_layer=model.layer4)"
+        }
+      ],
+      "topic": "grad_cam",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import torch\nimport torch.nn as nn\nimport torch.nn.functional as F\n\nclass FocalLoss(nn.Module):\n    \"\"\"\n    Focal Loss for addressing class imbalance.\n    FL(p_t) = -alpha * (1 - p_t)^gamma * log(p_t)\n    \n    Focuses learning on hard examples and down-weights easy examples.\n    \"\"\"\n    def __init__(self, alpha: float = 0.25, gamma: float = 2.0):\n        \"\"\"\n        Args:\n            alpha: Weighting factor for positive class\n            gamma: Focusing parameter (higher = more focus on hard examples)\n        \"\"\"\n        super(FocalLoss, self).__init__()\n        self.alpha = alpha\n        self.gamma = gamma\n    \n    def forward(self, inputs: torch.Tensor, targets: torch.Tensor) -> torch.Tensor:\n        \"\"\"\n        Compute focal loss.\n        \n        Args:\n            inputs: Model logits (batch, num_classes)\n            targets: True class indices (batch,)\n            \n        Returns:\n            Scalar loss value\n        \"\"\"\n        # Your implementation here\n        # 1. Compute softmax probabilities\n        # 2. Get probability for true class (p_t)\n        # 3. Compute focal term: (1 - p_t)^gamma\n        # 4. Compute focal loss with alpha weighting\n        pass",
+      "difficulty": "hard",
+      "explanation": "Focal Loss addresses class imbalance by down-weighting easy examples (high p_t) and focusing on hard examples (low p_t). The gamma parameter controls how much to focus on hard examples. Alpha balances positive/negative classes. This is highly effective for rare defect types in semiconductor datasets where some defects appear infrequently.",
+      "hints": [
+        "Use F.softmax to get probabilities",
+        "Use torch.gather to select probabilities for true classes",
+        "Focal term: torch.pow(1 - p_t, gamma)",
+        "Cross-entropy: -torch.log(p_t + 1e-8) (add epsilon for stability)",
+        "Combine: focal_loss = alpha * focal_term * ce_loss"
+      ],
+      "id": "m6.2_q020",
+      "points": 5,
+      "question": "Implement Focal Loss to handle class imbalance in wafer defect datasets where certain defect types are rare.",
+      "test_cases": [
+        {
+          "description": "Focal loss for imbalanced data",
+          "expected_output": "Loss that focuses on hard-to-classify examples",
+          "input": "criterion = FocalLoss(alpha=0.25, gamma=2.0); loss = criterion(logits, targets)"
+        }
+      ],
+      "topic": "focal_loss",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import torch\nimport numpy as np\nimport matplotlib.pyplot as plt\nfrom sklearn.metrics import confusion_matrix\nimport seaborn as sns\n\ndef plot_confusion_matrix(model: nn.Module, dataloader, \n                          class_names: list, device: str = 'cpu'):\n    \"\"\"\n    Compute and plot confusion matrix.\n    \n    Args:\n        model: Trained CNN model\n        dataloader: Test/validation DataLoader\n        class_names: List of defect type names\n        device: Device to run inference on\n    \"\"\"\n    model.eval()\n    all_preds = []\n    all_labels = []\n    \n    with torch.no_grad():\n        for images, labels in dataloader:\n            images = images.to(device)\n            outputs = model(images)\n            _, preds = torch.max(outputs, 1)\n            \n            all_preds.extend(preds.cpu().numpy())\n            all_labels.extend(labels.numpy())\n    \n    # Your implementation here:\n    # 1. Compute confusion matrix using sklearn\n    # 2. Create heatmap visualization with seaborn\n    # 3. Add labels and formatting\n    \n    pass",
+      "difficulty": "medium",
+      "explanation": "Confusion matrices reveal which defect types are confused with each other, guiding improvements. Diagonal elements show correct classifications, off-diagonal show errors. For semiconductor inspection, this identifies problematic defect pairs that may need more training data or better features. Normalize rows to show per-class accuracy.",
+      "hints": [
+        "Use sklearn.metrics.confusion_matrix(all_labels, all_preds)",
+        "Normalize: cm / cm.sum(axis=1, keepdims=True)",
+        "Use sns.heatmap(cm, annot=True, fmt='.2f')",
+        "Set xticklabels and yticklabels to class_names",
+        "Add title, axis labels, and colorbar"
+      ],
+      "id": "m6.2_q021",
+      "points": 4,
+      "question": "Implement a function to compute and visualize a confusion matrix for multi-class wafer defect classification.",
+      "test_cases": [
+        {
+          "description": "Visualize classification errors",
+          "expected_output": "Confusion matrix heatmap showing classification performance per class",
+          "input": "plot_confusion_matrix(model, test_loader, defect_types, device='cuda')"
+        }
+      ],
+      "topic": "confusion_matrix_visualization",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import torch\nimport torch.nn as nn\nfrom typing import List\n\nclass CNNEnsemble:\n    \"\"\"\n    Ensemble of CNN models for robust prediction.\n    \"\"\"\n    def __init__(self, models: List[nn.Module], device: str = 'cpu'):\n        self.models = [m.to(device).eval() for m in models]\n        self.device = device\n    \n    def predict(self, x: torch.Tensor, method: str = 'average') -> torch.Tensor:\n        \"\"\"\n        Ensemble prediction.\n        \n        Args:\n            x: Input tensor (batch, C, H, W)\n            method: 'average' (avg logits), 'voting' (majority vote), or 'max' (max probability)\n            \n        Returns:\n            Ensemble predictions (batch,)\n        \"\"\"\n        # Your implementation here\n        # 1. Get predictions from all models\n        # 2. Combine based on method\n        # 3. Return final predictions\n        pass\n    \n    def predict_proba(self, x: torch.Tensor) -> torch.Tensor:\n        \"\"\"Return ensemble probability estimates.\"\"\"\n        # Your implementation here\n        pass",
+      "difficulty": "hard",
+      "explanation": "Ensembles combine multiple models trained with different initializations, architectures, or data splits. They improve robustness and reduce overfitting. Methods: (1) Average logits before softmax. (2) Majority voting on class predictions. (3) Average probabilities. Ensembles are valuable for critical semiconductor inspection where reliability is paramount.",
+      "hints": [
+        "Collect predictions: [model(x) for model in self.models]",
+        "Average method: torch.mean(torch.stack(all_logits), dim=0)",
+        "Voting method: get argmax for each model, use torch.mode()",
+        "Max method: average softmax probabilities, then argmax",
+        "Use torch.no_grad() for efficient inference"
+      ],
+      "id": "m6.2_q022",
+      "points": 5,
+      "question": "Implement an ensemble of CNN models to improve wafer defect classification robustness by combining predictions from multiple models.",
+      "test_cases": [
+        {
+          "description": "Robust ensemble prediction",
+          "expected_output": "Ensemble predictions combining multiple models",
+          "input": "ensemble = CNNEnsemble([model1, model2, model3]); preds = ensemble.predict(images)"
+        }
+      ],
+      "topic": "model_ensemble",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import torch\nimport torch.nn as nn\nimport time\nimport numpy as np\nfrom typing import Dict\n\ndef benchmark_model(model: nn.Module, input_shape: tuple, \n                   device: str = 'cpu', num_runs: int = 100,\n                   warmup_runs: int = 10) -> Dict[str, float]:\n    \"\"\"\n    Benchmark CNN model performance.\n    \n    Args:\n        model: CNN model to benchmark\n        input_shape: Input tensor shape (C, H, W)\n        device: Device to run on ('cpu', 'cuda')\n        num_runs: Number of inference runs for timing\n        warmup_runs: Number of warmup runs (not counted)\n        \n    Returns:\n        Dict with timing metrics:\n        - avg_inference_ms: Average inference time in milliseconds\n        - throughput_fps: Images per second\n        - std_inference_ms: Standard deviation\n        - meets_requirement: Boolean if <50ms requirement met\n    \"\"\"\n    model = model.to(device).eval()\n    \n    # Your implementation here:\n    # 1. Create dummy input\n    # 2. Warmup runs\n    # 3. Timed inference runs with torch.no_grad()\n    # 4. Calculate statistics\n    # 5. Check if meets <50ms requirement\n    \n    pass",
+      "difficulty": "hard",
+      "explanation": "Benchmarking measures real-world model performance. Warmup runs eliminate initialization overhead. Multiple runs provide stable averages and standard deviations. For GPU, synchronize() ensures kernels complete before timing. This data guides architecture selection for edge deployment where latency constraints are critical in semiconductor fabs.",
+      "hints": [
+        "Use torch.no_grad() for efficient inference",
+        "Create dummy input: torch.randn(1, *input_shape).to(device)",
+        "Use time.time() or time.perf_counter() for timing",
+        "Add torch.cuda.synchronize() if using GPU to ensure accurate timing",
+        "Calculate: throughput = 1000 / avg_inference_ms images per second"
+      ],
+      "id": "m6.2_q023",
+      "points": 5,
+      "question": "Implement a benchmarking function to measure CNN inference time and throughput to determine if it meets edge deployment requirements (<50ms per image).",
+      "test_cases": [
+        {
+          "description": "Benchmark MobileNet on GPU",
+          "expected_output": "Dict with avg_inference_ms, throughput_fps, std_inference_ms, meets_requirement",
+          "input": "benchmark_model(mobilenet_model, (3, 224, 224), device='cuda', num_runs=100)"
+        }
+      ],
+      "topic": "model_benchmarking",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Root causes: (1) Dataset bias: test set doesn't represent production (e.g., missing rare defect types). (2) Class imbalance: high accuracy due to majority class, minority classes fail. (3) Spurious correlations: model learned shortcuts (e.g., associates defects with acquisition artifacts). (4) Distribution shift: production wafers differ from training (new tools, processes). Prevention: (1) Stratified splits ensuring all defect types in test. (2) Per-class precision/recall, not just accuracy. (3) Test on held-out production data. (4) Monitor prediction distributions in production. (5) Adversarial testing with edge cases. (6) Shadow mode deployment before full rollout. Critical: production validation requires collaboration with domain experts.",
+      "hints": [
+        "Think about differences between training and production data",
+        "Consider what accuracy hides",
+        "Think about failure modes in manufacturing",
+        "Consider validation strategies"
+      ],
+      "id": "m6.2_q024",
+      "points": 5,
+      "question": "Your CNN achieves 95% accuracy on the test set but fails catastrophically in production, missing entire categories of defects. Describe potential root causes and how to prevent this problem.",
+      "rubric": [
+        "Discusses dataset bias and distribution shift (3 points)",
+        "Mentions importance of representative test data (2 points)",
+        "Suggests rigorous evaluation beyond accuracy (per-class metrics) (2 points)",
+        "Discusses monitoring and validation in production (2 points)",
+        "Proposes systematic testing and edge case analysis (1 point)"
+      ],
+      "topic": "failure_modes",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Weakly supervised approach: (1) Train CNN with image-level labels ('defect' vs 'no defect'). (2) Use CAM/Grad-CAM to generate localization maps showing discriminative regions. (3) Threshold and segment these maps to get pseudo bounding boxes. (4) Iteratively refine: use pseudo-labels to train object detector, which generates better pseudo-labels. (5) Multiple Instance Learning: treat image as bag of patches. Limitations: less precise than fully supervised, may miss multiple defects per image. Best when annotation budget limited but need approximate localization. For semiconductors, engineer validation crucial - false negatives expensive.",
+      "hints": [
+        "Think about techniques that localize without bounding boxes",
+        "Consider how CNNs naturally attend to discriminative regions",
+        "Think about iterative approaches",
+        "Consider when this approach is worthwhile"
+      ],
+      "id": "m6.2_q025",
+      "points": 5,
+      "question": "Pixel-level annotations for wafer defects are expensive to obtain. Explain how weakly supervised learning with image-level labels could be used for defect localization despite having no bounding box annotations.",
+      "rubric": [
+        "Explains Class Activation Mapping (CAM) or Grad-CAM for localization (3 points)",
+        "Discusses training with image-level labels only (2 points)",
+        "Mentions limitations compared to fully supervised methods (2 points)",
+        "Suggests iterative refinement or pseudo-labeling strategies (2 points)",
+        "Addresses semiconductor-specific considerations (1 point)"
+      ],
+      "topic": "weakly_supervised_learning",
+      "type": "conceptual"
+    },
+    {
+      "code_template": "import numpy as np\nimport matplotlib.pyplot as plt\nfrom sklearn.model_selection import learning_curve\nfrom typing import Tuple, List\nimport torch\nimport torch.nn as nn\n\ndef analyze_learning_curve(model_fn, X_train, y_train, X_val, y_val,\n                          train_sizes: List[int]) -> Tuple[np.ndarray, np.ndarray]:\n    \"\"\"\n    Generate learning curve showing performance vs training data size.\n    \n    Args:\n        model_fn: Function that creates and returns a new model instance\n        X_train: Training features\n        y_train: Training labels\n        X_val: Validation features\n        y_val: Validation labels\n        train_sizes: List of training set sizes to evaluate\n        \n    Returns:\n        Tuple of (train_sizes, val_accuracies)\n    \"\"\"\n    val_accuracies = []\n    \n    # Your implementation here:\n    # For each training size:\n    #   1. Create subset of training data\n    #   2. Train new model on subset\n    #   3. Evaluate on validation set\n    #   4. Record accuracy\n    # Plot learning curve\n    \n    pass\n\ndef plot_learning_curve(train_sizes: np.ndarray, val_scores: np.ndarray):\n    \"\"\"Plot learning curve.\"\"\"\n    # Your implementation here\n    pass",
+      "difficulty": "medium",
+      "explanation": "Learning curves show how performance improves with more data. If curve plateaus, more data won't help (need better model/features). If still rising, more data will improve performance. For semiconductors, this analysis guides data collection priorities - if 80% accuracy at 500 samples but 85% needs 2000, decide if 5% improvement justifies 4\u00d7 labeling cost.",
+      "hints": [
+        "Sample training data: X_subset = X_train[:size], y_subset = y_train[:size]",
+        "Train each model for fixed epochs (e.g., 20)",
+        "Use consistent hyperparameters across all sizes",
+        "Plot with plt.plot(train_sizes, val_accuracies)",
+        "Add markers for 70%, 80%, 90% accuracy thresholds"
+      ],
+      "id": "m6.2_q026",
+      "points": 4,
+      "question": "Implement a learning curve analysis to determine how model performance scales with training data size, helping estimate data requirements.",
+      "test_cases": [
+        {
+          "description": "Determine data requirements",
+          "expected_output": "Learning curve showing accuracy vs training size",
+          "input": "train_sizes=[50, 100, 200, 500, 1000], full training and validation data"
+        }
+      ],
+      "topic": "learning_curve",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import torch\nimport torch.nn as nn\nfrom typing import Tuple\n\nclass MultiTaskDefectCNN(nn.Module):\n    \"\"\"\n    Multi-task CNN for defect classification and severity prediction.\n    \n    Architecture:\n    - Shared backbone: CNN feature extractor\n    - Classification head: defect type (8 classes)\n    - Regression head: defect severity (0-1 continuous)\n    \"\"\"\n    def __init__(self, num_classes: int = 8):\n        super(MultiTaskDefectCNN, self).__init__()\n        \n        # Shared backbone\n        # Your implementation here\n        \n        # Classification head\n        # Your implementation here\n        \n        # Regression head\n        # Your implementation here\n        \n        pass\n    \n    def forward(self, x: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:\n        \"\"\"\n        Forward pass.\n        \n        Args:\n            x: Input tensor (batch, 1, 64, 64)\n            \n        Returns:\n            Tuple of (class_logits, severity_predictions)\n        \"\"\"\n        # Your implementation here\n        pass\n\nclass MultiTaskLoss(nn.Module):\n    \"\"\"Combined loss for multi-task learning.\"\"\"\n    def __init__(self, alpha: float = 1.0, beta: float = 1.0):\n        super(MultiTaskLoss, self).__init__()\n        self.alpha = alpha  # Classification weight\n        self.beta = beta    # Regression weight\n        self.cls_criterion = nn.CrossEntropyLoss()\n        self.reg_criterion = nn.MSELoss()\n    \n    def forward(self, cls_logits, severity_preds, cls_targets, severity_targets):\n        # Your implementation here\n        pass",
+      "difficulty": "hard",
+      "explanation": "Multi-task learning shares low-level features between related tasks. The shared backbone learns general defect patterns, while task-specific heads specialize. Loss weighting (alpha, beta) balances task importance. For semiconductors, predicting both defect type and severity enables smarter triage: critical defects (high severity) processed urgently while minor ones batched.",
+      "hints": [
+        "Shared backbone: 3-4 convolutional layers with pooling",
+        "After backbone, split into two heads",
+        "Classification head: FC layers \u2192 num_classes outputs",
+        "Regression head: FC layers \u2192 1 output with sigmoid activation (0-1)",
+        "Combined loss: alpha * cls_loss + beta * reg_loss",
+        "Return both outputs as tuple in forward()"
+      ],
+      "id": "m6.2_q027",
+      "points": 5,
+      "question": "Implement a multi-task CNN that simultaneously predicts defect type (classification) and defect severity (regression) with a shared backbone and task-specific heads.",
+      "test_cases": [
+        {
+          "description": "Multi-task forward pass",
+          "expected_output": "cls_logits (16, 8), severity_preds (16, 1)",
+          "input": "model = MultiTaskDefectCNN(8); x = torch.randn(16, 1, 64, 64)"
+        }
+      ],
+      "topic": "multi_task_learning",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Catastrophic forgetting: fine-tuning on new classes causes dramatic performance drop on old classes. Solutions: (1) Rehearsal: keep subset of old examples, retrain on mixed old+new data. (2) Elastic Weight Consolidation (EWC): constrain important weights (measured by Fisher information) to prevent forgetting. (3) Learning without Forgetting (LwF): use knowledge distillation to preserve old class predictions. (4) Progressive networks: add new network branches for new tasks while freezing old branches. (5) Dynamic architectures: expand capacity for new tasks. For semiconductors: rehearsal is practical if storage permits (~100-500 examples per old class). Alternatively, EWC with periodic full retraining. Monitor old class performance continuously.",
+      "hints": [
+        "Think about why networks forget old tasks",
+        "Consider different continual learning paradigms",
+        "Think about memory and computational constraints",
+        "Consider practical deployment"
+      ],
+      "id": "m6.2_q028",
+      "points": 5,
+      "question": "Your wafer fab introduces new defect types over time. Explain how continual learning could allow your CNN to learn new defects without forgetting previously learned ones (catastrophic forgetting problem).",
+      "rubric": [
+        "Explains catastrophic forgetting problem (2 points)",
+        "Describes regularization-based approaches (EWC, LwF) (2 points)",
+        "Mentions rehearsal/memory-based methods (2 points)",
+        "Discusses architecture-based solutions (progressive neural networks, dynamic architectures) (2 points)",
+        "Provides practical recommendations for semiconductor deployment (2 points)"
+      ],
+      "topic": "continual_learning",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Domain shift: Fab B wafers have different visual characteristics (brightness, noise patterns) due to different tools. Strategies: (1) Domain Adversarial Neural Network (DANN): add domain classifier head, train to make features domain-invariant. (2) Self-supervised pre-training: pre-train on unlabeled Fab B data (autoencoder, contrastive learning), then fine-tune classification head. (3) Pseudo-labeling: train on Fab A, predict Fab B data, retrain on high-confidence predictions. (4) Test-time adaptation: batch normalization statistics adapted to Fab B. (5) Source + target: if small labeled Fab B data available, combine with Fab A. Validation: (1) Label small Fab B sample for testing. (2) Monitor prediction confidence distribution. (3) Detect outliers. Critical: domain adaptation has limits - if fabs too different, may need Fab B labels.",
+      "hints": [
+        "Think about differences between fabs (tools, processes)",
+        "Consider unsupervised adaptation techniques",
+        "Think about measuring domain similarity",
+        "Consider hybrid approaches"
+      ],
+      "id": "m6.2_q029",
+      "points": 5,
+      "question": "You have abundant labeled wafer map data from Fab A but need to deploy a model in Fab B with different tools and no labeled data. Discuss domain adaptation strategies to transfer knowledge across fabs.",
+      "rubric": [
+        "Explains domain shift problem (2 points)",
+        "Discusses domain adversarial training (2 points)",
+        "Mentions self-supervised pre-training or pseudo-labeling (2 points)",
+        "Suggests test-time adaptation strategies (2 points)",
+        "Addresses validation without labels and when adaptation fails (2 points)"
+      ],
+      "topic": "domain_adaptation",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Safety-critical deployment: (1) Uncertainty quantification: use ensembles or Monte Carlo dropout to estimate prediction confidence. Flag uncertain cases for human review. (2) Calibration: ensure predicted probabilities match actual frequencies (temperature scaling, Platt scaling). (3) Operating point: tune threshold to prioritize recall over precision for critical defects (minimize false negatives even if more false positives). (4) Human-in-the-loop: predictions below confidence threshold go to expert review. (5) Ensemble voting: require multiple models to agree. (6) Monitoring: track prediction distributions, performance metrics, data drift. (7) Fail-safes: fallback to conservative rule-based system if model behaves unexpectedly. (8) Validation: extensive testing on historical failure cases. (9) Documentation: model cards, lineage tracking, audit trails. (10) Gradual rollout: shadow mode, A/B testing before full deployment. For semiconductors: regulatory compliance (FDA for medical chips), traceability requirements.",
+      "hints": [
+        "Think about what happens when the model is uncertain",
+        "Consider the cost of different error types",
+        "Think about human oversight",
+        "Consider continuous monitoring"
+      ],
+      "id": "m6.2_q030",
+      "points": 5,
+      "question": "Discuss the additional considerations and safeguards needed when deploying a CNN defect detector in a safety-critical semiconductor manufacturing environment where false negatives could cause significant financial losses.",
+      "rubric": [
+        "Discusses confidence calibration and uncertainty quantification (2 points)",
+        "Mentions ensemble methods for reliability (2 points)",
+        "Addresses human-in-the-loop validation for uncertain predictions (2 points)",
+        "Discusses monitoring, alerting, and fail-safes (2 points)",
+        "Considers regulatory and quality assurance requirements (2 points)"
+      ],
+      "topic": "safety_critical_deployment",
+      "type": "conceptual"
+    }
+  ],
+  "sub_module": "6.2",
+  "title": "CNN Defect Detection",
+  "version": "1.0",
+  "week": 12
+}

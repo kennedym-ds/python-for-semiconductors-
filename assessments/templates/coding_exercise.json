@@ -1,0 +1,75 @@
+{
+  "metadata": {
+    "author": "Your Name",
+    "created_date": "2025-09-30",
+    "description": "Example coding exercise question",
+    "updated_date": "2025-09-30"
+  },
+  "module_id": "module-X.Y",
+  "questions": [
+    {
+      "difficulty": "medium",
+      "explanation": "The solution should sum all total_dies and defective_dies across all wafers, then calculate: yield = ((total_dies - defective_dies) / total_dies) * 100. This gives the overall process yield.",
+      "hints": [
+        "Use pandas column-wise operations to sum the values",
+        "Calculate good dies as (total - defective)",
+        "Remember to convert to percentage (multiply by 100)"
+      ],
+      "id": "mX.Y_q002",
+      "points": 5,
+      "question": "Write a function that calculates the yield percentage from wafer defect data. The function should accept a pandas DataFrame with columns 'wafer_id', 'total_dies', and 'defective_dies', and return the overall yield percentage.",
+      "starter_code": "import pandas as pd\nimport numpy as np\n\ndef calculate_yield(df: pd.DataFrame) -> float:\n    \"\"\"\n    Calculate the overall yield percentage from wafer defect data.\n    \n    Args:\n        df: DataFrame with columns ['wafer_id', 'total_dies', 'defective_dies']\n    \n    Returns:\n        Yield percentage (0-100)\n    \"\"\"\n    # YOUR CODE HERE\n    pass",
+      "tags": [
+        "pandas",
+        "yield_calculation",
+        "semiconductor_metrics"
+      ],
+      "test_cases": [
+        {
+          "description": "Two wafers with 8 defective dies out of 200 total",
+          "expected_output": 96.0,
+          "input": {
+            "data": [
+              {
+                "defective_dies": 5,
+                "total_dies": 100,
+                "wafer_id": "W001"
+              },
+              {
+                "defective_dies": 3,
+                "total_dies": 100,
+                "wafer_id": "W002"
+              }
+            ]
+          }
+        },
+        {
+          "description": "Three wafers with varying defect counts",
+          "expected_output": 96.67,
+          "input": {
+            "data": [
+              {
+                "defective_dies": 25,
+                "total_dies": 500,
+                "wafer_id": "W003"
+              },
+              {
+                "defective_dies": 15,
+                "total_dies": 500,
+                "wafer_id": "W004"
+              },
+              {
+                "defective_dies": 10,
+                "total_dies": 500,
+                "wafer_id": "W005"
+              }
+            ]
+          }
+        }
+      ],
+      "topic": "data_manipulation",
+      "type": "coding_exercise"
+    }
+  ],
+  "version": "1.0"
+}

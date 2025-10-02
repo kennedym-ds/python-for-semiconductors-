@@ -571,16 +571,79 @@ class CNNDefectPipeline:
 
 
 def load_dataset(dataset_name: str) -> Tuple[np.ndarray, np.ndarray, List[str]]:
-    """Load dataset by name"""
+    """Load dataset by name
+
+    Supports:
+    - synthetic_wafer: 500 synthetic wafer maps
+    - synthetic_small: 100 synthetic wafer maps (for testing)
+    - wm811k: Real WM-811K dataset (falls back to synthetic if unavailable)
+    - wm811k_small: Subset of WM-811K (first 1000 samples)
+    """
     if dataset_name == "synthetic_wafer":
         return generate_synthetic_dataset(n_samples=500, seed=RANDOM_SEED)
     elif dataset_name == "synthetic_small":
         return generate_synthetic_dataset(n_samples=100, seed=RANDOM_SEED)
     elif dataset_name.startswith("wm811k"):
-        # Placeholder for real WM-811K data loading
-        # In practice, load from datasets/wm811k/ directory
-        warnings.warn("WM-811K dataset not available, using synthetic data")
-        return generate_synthetic_dataset(n_samples=1000, seed=RANDOM_SEED)
+        try:
+            # Attempt to load actual WM-811K dataset
+            data_root = Path(__file__).parent.parent.parent.parent / "datasets" / "wm811k"
+
+            # Import WM811K preprocessing utilities
+            import sys
+
+            datasets_path = Path(__file__).parent.parent.parent.parent / "datasets"
+            if str(datasets_path) not in sys.path:
+                sys.path.insert(0, str(datasets_path))
+
+            from wm811k_preprocessing import WM811KPreprocessor
+
+            preprocessor = WM811KPreprocessor(data_root)
+            processed_data = preprocessor.load_processed_data()
+
+            if processed_data is None:
+                print("Processed WM-811K data not found. Attempting to load raw data...")
+                raw_data = preprocessor.load_raw_data()
+
+                if raw_data is not None:
+                    print("Preprocessing raw WM-811K data...")
+                    processed_data = preprocessor.preprocess_data(
+                        raw_data, target_size=(64, 64), normalize=True, augment=False
+                    )
+
+                    # Save for future use
+                    preprocessor.save_processed_data(processed_data)
+                else:
+                    raise FileNotFoundError("WM-811K raw data not found")
+
+            # Convert to expected format
+            wafer_maps = processed_data.wafer_maps
+            labels = processed_data.labels
+            defect_types = processed_data.defect_types
+
+            # If wm811k_small requested, take subset
+            if dataset_name == "wm811k_small":
+                n_samples = min(1000, len(wafer_maps))
+                indices = np.random.RandomState(RANDOM_SEED).choice(len(wafer_maps), n_samples, replace=False)
+                wafer_maps = wafer_maps[indices]
+                labels = labels[indices]
+
+            # Convert string labels to numeric
+            label_to_idx = {label: idx for idx, label in enumerate(defect_types)}
+            numeric_labels = np.array([label_to_idx.get(l, 0) for l in labels])
+
+            print(f"Loaded {len(wafer_maps)} wafer maps from WM-811K dataset")
+            print(f"Defect types: {defect_types}")
+
+            # Add channel dimension if needed (for compatibility with CNN)
+            if len(wafer_maps.shape) == 3:
+                wafer_maps = wafer_maps[..., np.newaxis]
+
+            return wafer_maps, numeric_labels, defect_types
+
+        except (ImportError, FileNotFoundError, Exception) as e:
+            print(f"WARNING: WM-811K dataset not available ({e}). Using synthetic data instead.")
+            warnings.warn(f"WM-811K dataset loading failed: {e}. Falling back to synthetic data.")
+            return generate_synthetic_dataset(n_samples=1000, seed=RANDOM_SEED)
     else:
         raise ValueError(f"Unknown dataset: {dataset_name}")
 

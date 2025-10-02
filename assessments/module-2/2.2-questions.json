@@ -1,0 +1,426 @@
+{
+  "description": "Assessment covering feature creation, transformation, scaling, encoding, and domain-specific feature engineering",
+  "estimated_time_minutes": 60,
+  "module_id": "module-2",
+  "passing_score": 80.0,
+  "questions": [
+    {
+      "correct_answer": "B",
+      "difficulty": "medium",
+      "explanation": "Standardization (z-score) is robust to outliers and doesn't restrict values to a fixed range, making it suitable when combining with categorical features (which don't scale). Min-max scaling is sensitive to outliers and creates bounded ranges that may not match categorical encodings.",
+      "id": "m2.2_q001",
+      "options": [
+        "Min-Max scaling (0-1 normalization)",
+        "Standardization (z-score)",
+        "Log transformation",
+        "No scaling needed"
+      ],
+      "points": 1,
+      "question": "When scaling process temperature data for machine learning, you have values ranging from 25\u00b0C to 1000\u00b0C. The model will also include categorical features. Which scaling method is most appropriate?",
+      "topic": "feature_scaling",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": "B",
+      "difficulty": "medium",
+      "explanation": "Tree-based models can handle label encoding efficiently as they learn split points. One-hot encoding with 50 categories creates high dimensionality and sparsity. Label encoding is computationally efficient for trees, though ordinal relationships implied don't matter for tree splits.",
+      "id": "m2.2_q002",
+      "options": [
+        "One-hot encoding (creating 50 binary columns)",
+        "Label encoding (integers 0-49)",
+        "Target encoding (mean of target per category)",
+        "Binary encoding"
+      ],
+      "points": 1,
+      "question": "You have a categorical feature 'tool_id' with 50 different values. For a tree-based model (Random Forest), what encoding method is most efficient?",
+      "topic": "categorical_encoding",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": "A",
+      "difficulty": "easy",
+      "explanation": "Interaction terms (products) capture multiplicative relationships between features. For deposition, the combined effect of time and temperature (thermal budget) is often more predictive than individual effects. This is a domain-knowledge-driven feature.",
+      "id": "m2.2_q003",
+      "options": [
+        "Create interaction term: time \u00d7 temperature",
+        "Concatenate as string: 'time_temperature'",
+        "Use PCA to combine them",
+        "Take the difference: time - temperature"
+      ],
+      "points": 1,
+      "question": "Which feature engineering technique is most appropriate for capturing the relationship between deposition time and temperature?",
+      "topic": "feature_interactions",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": "C",
+      "difficulty": "medium",
+      "explanation": "Rolling median is the least sensitive to variability and instability since it's robust to outliers. Rolling std, range, and even mean (for detecting shifts) are all more informative about process instability. Median is best for central tendency when outliers present, but not for detecting variability.",
+      "id": "m2.2_q004",
+      "options": [
+        "Rolling standard deviation",
+        "Rolling mean",
+        "Rolling median",
+        "Rolling range (max - min)"
+      ],
+      "points": 1,
+      "question": "You're engineering features from time-series sensor data. Which rolling window statistic is LEAST useful for detecting process instability?",
+      "topic": "time_series_features",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": "C",
+      "difficulty": "medium",
+      "explanation": "Weighted sum of critical step durations incorporates domain knowledge about which steps matter and their relative importance. Simple count (A) ignores criticality, while B and D have no physical meaning. Domain-driven features outperform generic transformations.",
+      "id": "m2.2_q005",
+      "options": [
+        "Count of process steps in the recipe",
+        "Length of recipe name string",
+        "Weighted sum of critical step durations",
+        "Alphabetical position of recipe name"
+      ],
+      "points": 1,
+      "question": "For a yield prediction model, you want to create a feature capturing 'process recipe complexity.' Which approach is MOST aligned with domain knowledge?",
+      "topic": "domain_features",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": "B",
+      "difficulty": "medium",
+      "explanation": "High-degree polynomial features create highly correlated features (multicollinearity) and dramatically increase model complexity, leading to overfitting. With n features, degree=3 creates O(n\u00b3) features. Regularization becomes critical.",
+      "id": "m2.2_q006",
+      "options": [
+        "Computational cost becomes prohibitive",
+        "Creates multicollinearity and overfitting risk",
+        "Only works with linear models",
+        "Requires data to be normally distributed"
+      ],
+      "points": 1,
+      "question": "When creating polynomial features from process parameters for regression, what is the primary risk of using degree=3 or higher?",
+      "topic": "feature_creation",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": "B",
+      "difficulty": "medium",
+      "explanation": "Log(x + 1) transformation handles right-skewed data with zeros effectively. The +1 prevents log(0) errors. It compresses large values while preserving zeros. Square root is milder; min-max and z-score don't address skewness. For count data like defects, log(x+1) is standard.",
+      "id": "m2.2_q007",
+      "options": [
+        "Square root transformation",
+        "Log transformation (log(x + 1))",
+        "Min-max scaling",
+        "Standardization (z-score)"
+      ],
+      "points": 1,
+      "question": "You have a skewed feature (defect density) with many zeros and occasional high values. Which transformation is most appropriate before modeling?",
+      "topic": "feature_transformation",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": "B",
+      "difficulty": "hard",
+      "explanation": "Rare categories with few samples lead to overfitting and poor generalization. Grouping them into an 'other' category (typically if frequency <5% or <5 samples) reduces dimensionality and improves model robustness. This is especially important for one-hot encoding.",
+      "id": "m2.2_q008",
+      "options": [
+        "One-hot encode all 10 categories",
+        "Group rare categories into 'other' before encoding",
+        "Use label encoding instead",
+        "Drop samples with rare categories"
+      ],
+      "points": 1,
+      "question": "For one-hot encoding a categorical feature, you have 100 training samples and 10 categories. However, 3 categories appear only once each. What's the best practice?",
+      "topic": "categorical_encoding",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "medium",
+      "hints": [
+        "Use itertools.combinations() to get all feature pairs",
+        "Multiply features using prod(axis=1)",
+        "Name interactions as 'feat1_x_feat2_x_feat3'"
+      ],
+      "id": "m2.2_q009",
+      "points": 3,
+      "question": "Implement a function to create interaction features between numerical process parameters. This captures combined effects critical in semiconductor manufacturing.",
+      "solution": "import pandas as pd\nimport numpy as np\nfrom itertools import combinations\n\ndef create_interaction_features(df: pd.DataFrame, \n                                feature_cols: list,\n                                max_degree: int = 2) -> pd.DataFrame:\n    \"\"\"\n    Create multiplicative interaction features.\n    \n    Args:\n        df: Input DataFrame\n        feature_cols: List of numerical columns to interact\n        max_degree: Maximum interaction degree\n    \n    Returns:\n        DataFrame with interaction features\n    \"\"\"\n    df_out = df.copy()\n    \n    for degree in range(2, max_degree + 1):\n        for cols in combinations(feature_cols, degree):\n            feat_name = '_x_'.join(cols)\n            df_out[feat_name] = df[list(cols)].prod(axis=1)\n    \n    return df_out",
+      "starter_code": "import pandas as pd\nimport numpy as np\nfrom itertools import combinations\n\ndef create_interaction_features(df: pd.DataFrame, \n                                feature_cols: list,\n                                max_degree: int = 2) -> pd.DataFrame:\n    \"\"\"\n    Create multiplicative interaction features.\n    \n    Args:\n        df: Input DataFrame\n        feature_cols: List of numerical columns to interact\n        max_degree: Maximum interaction degree (2 for pairwise)\n    \n    Returns:\n        DataFrame with original features + interaction features\n    \"\"\"\n    # YOUR CODE HERE\n    pass",
+      "test_cases": [
+        {
+          "description": "Create pairwise interaction between temperature and time",
+          "expected_output": "New column 'temp_x_time' with products",
+          "input": {
+            "df": "pd.DataFrame({'temp': [100, 200], 'time': [10, 20]})",
+            "feature_cols": [
+              "temp",
+              "time"
+            ],
+            "max_degree": 2
+          }
+        }
+      ],
+      "topic": "feature_interactions",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "hints": [
+        "Use pandas rolling() method",
+        "Name features as '{column}_roll{window}_{stat}'",
+        "First window-1 values will be NaN",
+        "Consider forward-filling or dropping NaN rows"
+      ],
+      "id": "m2.2_q010",
+      "points": 4,
+      "question": "Create a function to generate rolling window statistics for time-series process data. These features capture temporal patterns and process stability.",
+      "solution": "import pandas as pd\nimport numpy as np\n\ndef create_rolling_features(df: pd.DataFrame,\n                            value_col: str,\n                            window_sizes: list = [5, 10, 20],\n                            stats: list = ['mean', 'std', 'min', 'max']) -> pd.DataFrame:\n    \"\"\"\n    Create rolling window statistics.\n    \n    Args:\n        df: DataFrame with time-series data\n        value_col: Column to compute statistics on\n        window_sizes: Window sizes\n        stats: Statistics to compute\n    \n    Returns:\n        DataFrame with rolling features\n    \"\"\"\n    df_out = df.copy()\n    \n    for window in window_sizes:\n        for stat in stats:\n            col_name = f'{value_col}_roll{window}_{stat}'\n            if stat == 'mean':\n                df_out[col_name] = df[value_col].rolling(window=window).mean()\n            elif stat == 'std':\n                df_out[col_name] = df[value_col].rolling(window=window).std()\n            elif stat == 'min':\n                df_out[col_name] = df[value_col].rolling(window=window).min()\n            elif stat == 'max':\n                df_out[col_name] = df[value_col].rolling(window=window).max()\n            elif stat == 'median':\n                df_out[col_name] = df[value_col].rolling(window=window).median()\n    \n    return df_out",
+      "starter_code": "import pandas as pd\nimport numpy as np\n\ndef create_rolling_features(df: pd.DataFrame,\n                            value_col: str,\n                            window_sizes: list = [5, 10, 20],\n                            stats: list = ['mean', 'std', 'min', 'max']) -> pd.DataFrame:\n    \"\"\"\n    Create rolling window statistics for time-series data.\n    \n    Args:\n        df: DataFrame with time-series data (sorted by time)\n        value_col: Column to compute statistics on\n        window_sizes: List of window sizes\n        stats: List of statistics ('mean', 'std', 'min', 'max', 'median')\n    \n    Returns:\n        DataFrame with original data + rolling features\n    \"\"\"\n    # YOUR CODE HERE\n    pass",
+      "test_cases": [
+        {
+          "description": "3-point rolling mean and std for temperature",
+          "expected_output": "Columns 'temp_roll3_mean' and 'temp_roll3_std'",
+          "input": {
+            "df": "pd.DataFrame({'temp': [100, 102, 101, 103, 105, 104, 106]})",
+            "stats": [
+              "mean",
+              "std"
+            ],
+            "value_col": "temp",
+            "window_sizes": [
+              3
+            ]
+          }
+        }
+      ],
+      "topic": "time_series_features",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "hints": [
+        "Calculate mean target per category",
+        "Use smoothing to regularize rare categories",
+        "Unseen categories in test get global mean",
+        "Smoothing formula: (n*mean + m*global) / (n + m)"
+      ],
+      "id": "m2.2_q011",
+      "points": 4,
+      "question": "Implement a function for target encoding of categorical variables, which is particularly effective for high-cardinality features in manufacturing data.",
+      "solution": "import pandas as pd\nimport numpy as np\n\ndef target_encode(train_df: pd.DataFrame,\n                  test_df: pd.DataFrame,\n                  cat_col: str,\n                  target_col: str,\n                  smoothing: float = 1.0) -> tuple:\n    \"\"\"\n    Target encoding with smoothing.\n    \n    Args:\n        train_df: Training data\n        test_df: Test data\n        cat_col: Categorical column\n        target_col: Target column\n        smoothing: Smoothing factor\n    \n    Returns:\n        (train_encoded, test_encoded, mapping)\n    \"\"\"\n    # Calculate global mean\n    global_mean = train_df[target_col].mean()\n    \n    # Calculate category statistics\n    agg = train_df.groupby(cat_col)[target_col].agg(['mean', 'count'])\n    \n    # Smoothed mean: (count * cat_mean + smoothing * global_mean) / (count + smoothing)\n    agg['smoothed_mean'] = (\n        (agg['count'] * agg['mean'] + smoothing * global_mean) / \n        (agg['count'] + smoothing)\n    )\n    \n    mapping = agg['smoothed_mean'].to_dict()\n    \n    # Encode\n    train_encoded = train_df.copy()\n    test_encoded = test_df.copy()\n    \n    train_encoded[f'{cat_col}_encoded'] = train_df[cat_col].map(mapping)\n    test_encoded[f'{cat_col}_encoded'] = test_df[cat_col].map(mapping).fillna(global_mean)\n    \n    return train_encoded, test_encoded, mapping",
+      "starter_code": "import pandas as pd\nimport numpy as np\n\ndef target_encode(train_df: pd.DataFrame,\n                  test_df: pd.DataFrame,\n                  cat_col: str,\n                  target_col: str,\n                  smoothing: float = 1.0) -> tuple:\n    \"\"\"\n    Target encoding with smoothing to prevent overfitting.\n    \n    Args:\n        train_df: Training DataFrame\n        test_df: Test DataFrame\n        cat_col: Categorical column to encode\n        target_col: Target variable name\n        smoothing: Smoothing factor (higher = more regularization)\n    \n    Returns:\n        Tuple of (train_encoded, test_encoded, mapping_dict)\n    \"\"\"\n    # YOUR CODE HERE\n    pass",
+      "test_cases": [
+        {
+          "description": "Encode tool IDs with mean yield per tool",
+          "expected_output": "Tool A encoded ~0.92, B ~0.72, C gets global mean",
+          "input": {
+            "cat_col": "tool",
+            "target_col": "yield",
+            "test_df": "pd.DataFrame({'tool': ['A', 'B', 'C']})",
+            "train_df": "pd.DataFrame({'tool': ['A', 'A', 'B', 'B'], 'yield': [0.9, 0.95, 0.7, 0.75]})"
+          }
+        }
+      ],
+      "topic": "categorical_encoding",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "hints": [
+        "Use pd.cut() for fixed bins, pd.qcut() for quantile bins",
+        "Add -inf and +inf for boundary cases",
+        "Handle duplicates in quantile binning"
+      ],
+      "id": "m2.2_q012",
+      "points": 3,
+      "question": "Create a function to bin continuous process parameters into categorical ranges based on specification limits or percentiles.",
+      "solution": "import pandas as pd\nimport numpy as np\n\ndef bin_process_parameter(data: pd.Series,\n                          method: str = 'spec',\n                          spec_limits: tuple = None,\n                          n_bins: int = 5) -> pd.Series:\n    \"\"\"\n    Bin continuous parameter.\n    \n    Args:\n        data: Continuous values\n        method: 'spec' or 'quantile'\n        spec_limits: Specification limits\n        n_bins: Number of bins\n    \n    Returns:\n        Categorical series\n    \"\"\"\n    if method == 'spec':\n        if spec_limits is None:\n            raise ValueError('spec_limits required for method=spec')\n        bins = list(spec_limits)\n        bins = [-np.inf] + bins + [np.inf]\n        labels = ['very_low', 'low', 'target', 'high', 'very_high']\n        return pd.cut(data, bins=bins, labels=labels[:len(bins)-1])\n    elif method == 'quantile':\n        return pd.qcut(data, q=n_bins, labels=[f'Q{i+1}' for i in range(n_bins)], duplicates='drop')\n    else:\n        raise ValueError(f'Unknown method: {method}')",
+      "starter_code": "import pandas as pd\nimport numpy as np\n\ndef bin_process_parameter(data: pd.Series,\n                          method: str = 'spec',\n                          spec_limits: tuple = None,\n                          n_bins: int = 5) -> pd.Series:\n    \"\"\"\n    Bin continuous parameter into categories.\n    \n    Args:\n        data: Series of continuous values\n        method: 'spec' (use spec limits) or 'quantile' (equal frequency)\n        spec_limits: (lower_spec, lower_target, target, upper_target, upper_spec)\n        n_bins: Number of bins for quantile method\n    \n    Returns:\n        Series with categorical bins\n    \"\"\"\n    # YOUR CODE HERE\n    pass",
+      "test_cases": [
+        {
+          "description": "Bin values relative to spec limits",
+          "expected_output": "Categories: very_low, low, target, high, very_high",
+          "input": {
+            "data": "pd.Series([95, 98, 100, 102, 105])",
+            "method": "spec",
+            "spec_limits": "(97, 99, 101, 103)"
+          }
+        }
+      ],
+      "topic": "feature_transformation",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "easy",
+      "hints": [
+        "Use pandas shift() method",
+        "Name features as '{column}_lag{n}'",
+        "First n rows will have NaN for lag-n feature"
+      ],
+      "id": "m2.2_q013",
+      "points": 3,
+      "question": "Implement lag features for time-series data, which capture temporal dependencies in process parameters.",
+      "solution": "import pandas as pd\n\ndef create_lag_features(df: pd.DataFrame,\n                        value_col: str,\n                        lags: list = [1, 2, 5]) -> pd.DataFrame:\n    \"\"\"\n    Create lagged features.\n    \n    Args:\n        df: Time-series DataFrame\n        value_col: Column for lags\n        lags: Lag periods\n    \n    Returns:\n        DataFrame with lag columns\n    \"\"\"\n    df_out = df.copy()\n    \n    for lag in lags:\n        df_out[f'{value_col}_lag{lag}'] = df[value_col].shift(lag)\n    \n    return df_out",
+      "starter_code": "import pandas as pd\n\ndef create_lag_features(df: pd.DataFrame,\n                        value_col: str,\n                        lags: list = [1, 2, 5]) -> pd.DataFrame:\n    \"\"\"\n    Create lagged features for time-series data.\n    \n    Args:\n        df: DataFrame with time-series data (sorted by time)\n        value_col: Column to create lags for\n        lags: List of lag periods\n    \n    Returns:\n        DataFrame with original + lag features\n    \"\"\"\n    # YOUR CODE HERE\n    pass",
+      "test_cases": [
+        {
+          "description": "Create 1-step and 2-step lag features",
+          "expected_output": "Columns 'temp_lag1' and 'temp_lag2'",
+          "input": {
+            "df": "pd.DataFrame({'temp': [100, 101, 102, 103, 104]})",
+            "lags": [
+              1,
+              2
+            ],
+            "value_col": "temp"
+          }
+        }
+      ],
+      "topic": "time_series_features",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "id": "m2.2_q014",
+      "keywords": [
+        "data leakage",
+        "target leakage",
+        "train-test contamination",
+        "temporal validity",
+        "future information"
+      ],
+      "points": 4,
+      "question": "Explain the concept of 'data leakage' in feature engineering for semiconductor yield prediction. Provide three specific examples of features that would cause leakage and explain why.",
+      "rubric": [
+        "Correctly defines data leakage (1 point)",
+        "Provides 3 relevant semiconductor examples (1.5 points)",
+        "Explains why each example causes leakage (1 point)",
+        "Discusses detection or prevention methods (0.5 points)"
+      ],
+      "sample_answer": "**Data Leakage Definition**:\nData leakage occurs when information from the test set or future data inadvertently influences the training process, leading to overly optimistic performance estimates that don't generalize.\n\n**Three Semiconductor-Specific Examples**:\n\n**1. Post-Production Features**\n*Leaky Feature*: Rework count or final inspection results\n*Why Leakage*: These features are only known AFTER yield is determined. Including them means the model learns to predict yield from future information. At prediction time (during production), these values don't exist yet.\n*Fix*: Only use features available before/during production, not after final test.\n\n**2. Global Statistics Computed on Full Dataset**\n*Leaky Feature*: Normalizing using mean/std calculated from both train and test sets\n*Why Leakage*: Test set statistics leak into training. The model indirectly learns from test data distribution.\n*Fix*: Fit scalers only on training data, then transform train and test separately.\n\n**3. Future-Looking Aggregations**\n*Leaky Feature*: 'Number of defects found in next 100 wafers from same tool'\n*Why Leakage*: This feature looks into the future relative to prediction time. It's a forward-looking aggregation that wouldn't be available in real-time.\n*Fix*: Use only backward-looking aggregations (trailing averages) or same-timepoint features.\n\n**Detection Methods**:\n- Check feature timestamps vs target timestamp\n- Validate that features can be computed at prediction time\n- Look for unrealistically high cross-validation scores\n- Test temporal validity (can feature X be known before outcome Y?)\n\n**Impact**:\nLeakage causes models to fail catastrophically in production despite excellent validation metrics, as the leaked information isn't available at deployment.",
+      "topic": "feature_engineering_principles",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "id": "m2.2_q015",
+      "keywords": [
+        "one-hot encoding",
+        "target encoding",
+        "high cardinality",
+        "dimensionality",
+        "overfitting",
+        "smoothing"
+      ],
+      "points": 3,
+      "question": "Compare one-hot encoding vs target encoding for a categorical feature 'tool_id' with 100 different tools in a yield prediction model. Discuss the trade-offs and when to use each.",
+      "rubric": [
+        "Explains both encoding methods correctly (1 point)",
+        "Discusses advantages/disadvantages of each (1 point)",
+        "Provides decision criteria specific to the scenario (0.75 points)",
+        "Mentions leakage prevention for target encoding (0.25 points)"
+      ],
+      "sample_answer": "**One-Hot Encoding**:\n\n*Mechanism*: Creates 100 binary columns, one per tool\n\n*Advantages*:\n- No ordinal assumption - treats tools as truly categorical\n- No target leakage - encoding independent of target\n- Works well with regularized linear models (Lasso/Ridge)\n- Interpretable - each tool gets its own coefficient\n\n*Disadvantages*:\n- High dimensionality (100 features from 1)\n- Sparse matrices (mostly zeros)\n- Poor performance with rare tools (few training examples)\n- Computational cost increases\n- Doesn't generalize to new tools\n\n*Best For*: Linear models, low-cardinality features (<20 categories), balanced category frequencies\n\n**Target Encoding**:\n\n*Mechanism*: Replaces each tool with its mean yield (with smoothing)\n\n*Advantages*:\n- Low dimensionality (1 feature remains 1)\n- Captures tool-specific yield patterns efficiently\n- Handles high cardinality well\n- Works excellently with tree models\n- Can generalize to unseen tools (use global mean)\n\n*Disadvantages*:\n- Risk of target leakage / overfitting (without proper CV)\n- Loses information if target relationship is non-monotonic\n- Requires careful smoothing for rare categories\n- Must compute on training set only\n- Less interpretable than one-hot\n\n*Best For*: Tree models (RF, XGBoost), high cardinality (>20 categories), when target relationship is strong\n\n**Decision Framework for Tool_ID**:\n\n*Use One-Hot If*:\n- Using linear/logistic regression\n- Tool count is manageable (<30)\n- Tools are relatively balanced\n- Interpretability is critical\n\n*Use Target Encoding If*:\n- Using tree-based models (Random Forest, XGBoost)\n- High cardinality (100 tools)\n- Strong yield variation across tools\n- Computational efficiency matters\n\n**Best Practice**:\nFor 100 tools in yield prediction, use target encoding with:\n- Smoothing factor based on sample size\n- K-fold cross-validation to prevent leakage\n- Global mean fallback for unseen tools\n- Consider hybrid: target encode, then add one-hot for top 10 highest-volume tools",
+      "topic": "categorical_encoding",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "id": "m2.2_q016",
+      "keywords": [
+        "time-series features",
+        "lag features",
+        "rolling window",
+        "domain knowledge",
+        "temporal validity",
+        "feature engineering workflow"
+      ],
+      "points": 4,
+      "question": "Describe a systematic approach to feature engineering for a time-series semiconductor process dataset. What types of features should be created and in what order?",
+      "rubric": [
+        "Presents logical ordered workflow (1 point)",
+        "Includes domain, temporal, and statistical features (1.5 points)",
+        "Discusses temporal validity and leakage prevention (0.75 points)",
+        "Mentions practical considerations (dimensionality, NaN handling) (0.75 points)"
+      ],
+      "sample_answer": "**Systematic Time-Series Feature Engineering Workflow**:\n\n**Phase 1: Domain Knowledge Features** (Do First)\nLeverage manufacturing expertise:\n- Physical relationships (thermal budget = temp \u00d7 time)\n- Process ratios (actual/target for each parameter)\n- Specification violations (count of out-of-spec events)\n- Recipe compliance flags\n*Rationale*: Domain features have strongest signal and physical meaning\n\n**Phase 2: Temporal Lag Features**\nCapture sequential dependencies:\n- Lag features (t-1, t-2, t-5, t-10 for each parameter)\n- Lead-lag relationships (temp lags pressure by 2 steps)\n- Delta features (change from previous step)\n*Rationale*: Process values depend on recent history\n\n**Phase 3: Rolling Window Aggregations**\nCapture local trends and stability:\n- Rolling mean (windows: 5, 10, 20 steps)\n- Rolling std (detect instability)\n- Rolling min/max (range captures volatility)\n- Rolling median (robust central tendency)\n*Rationale*: Process stability affects quality\n\n**Phase 4: Expanding Window Features**\nCapture cumulative effects:\n- Cumulative sum (total material deposited)\n- Cumulative count (wafers processed by tool)\n- Expanding mean (tool drift over time)\n*Rationale*: Wear, contamination accumulate\n\n**Phase 5: Frequency Domain Features** (if applicable)\nFor periodic signals:\n- FFT features (dominant frequencies)\n- Spectral power (signal energy)\n- Autocorrelation at key lags\n*Rationale*: Detect cyclic patterns, tool vibrations\n\n**Phase 6: Statistical Features per Window**\nHigher-order statistics:\n- Skewness (distribution asymmetry)\n- Kurtosis (tail behavior)\n- Quantiles (25th, 75th percentiles)\n*Rationale*: Capture distribution shape changes\n\n**Phase 7: Interaction Features**\nCombined effects:\n- Products of critical parameters\n- Ratios (e.g., pressure/temperature)\n- Cross-feature statistics\n*Rationale*: Many process effects are multiplicative\n\n**Phase 8: Encoding & Scaling** (Do Last)\n- Encode categorical features (tool_id, recipe)\n- Scale numerical features\n- Handle any remaining missing values\n*Rationale*: Should be done after all features created\n\n**Critical Considerations**:\n- **Temporal Validity**: Ensure no future leakage\n- **Group Handling**: Apply within-tool or within-lot groups\n- **Memory**: First N rows will have NaN from lags/rolling\n- **Feature Count**: Monitor dimensionality, use selection\n- **Validation**: Time-based splits, not random\n\n**Avoid**:\n- Mixing train/test for statistics\n- Creating features with NaN >30%\n- Ignoring temporal order\n- Over-engineering (>10x original features)",
+      "topic": "feature_engineering_workflow",
+      "type": "conceptual"
+    },
+    {
+      "correct_answer": "B",
+      "difficulty": "hard",
+      "explanation": "High correlation with target is suspicious and warrants checking for leakage. If maintenance is scheduled AFTER yield drops are detected, then 'days_since_maintenance' contains information about past yield, creating leakage. The feature might be predictive only because maintenance timing depends on yield itself.",
+      "id": "m2.2_q017",
+      "options": [
+        "Nothing - high correlation means it's a great feature",
+        "Check for target leakage - is maintenance triggered by yield drops?",
+        "Remove it due to multicollinearity",
+        "Apply log transformation to reduce correlation"
+      ],
+      "points": 1,
+      "question": "You create a new feature 'days_since_last_maintenance' for each tool. This feature shows very high correlation (r=0.85) with yield. What should you investigate before using it in production?",
+      "topic": "feature_engineering_principles",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": "C",
+      "difficulty": "medium",
+      "explanation": "K-Means requires all features on comparable scales since it uses Euclidean distance. One-hot encode categorical features (creating binary 0/1 columns), then standardize everything to give equal weight. Min-max to 0-1 works but standardization is more robust. Leaving categorical as-is or using label encoding introduces arbitrary distances.",
+      "id": "m2.2_q018",
+      "options": [
+        "Standardize numerical features, leave categorical as-is",
+        "Min-max scale all features to 0-1",
+        "Convert categorical to one-hot, then standardize all features",
+        "Apply log transformation to everything"
+      ],
+      "points": 1,
+      "question": "For a dataset with mixed numerical (continuous) and categorical (nominal) features, which scaling approach is recommended before applying K-Means clustering?",
+      "topic": "feature_scaling",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": "B",
+      "difficulty": "medium",
+      "explanation": "With degree=2, you get: 10 original + 10 squared terms + C(10,2)=45 pairwise products = 55 total features (plus intercept = 56 if include_bias=True). The formula is C(n+d, d) where n=features, d=degree. For n=10, d=2: C(12,2)=66, but this includes the constant term.",
+      "id": "m2.2_q019",
+      "options": [
+        "20 (10 original + 10 squared)",
+        "55 (10 + 10 squared + 45 pairwise products)",
+        "100 (10 \u00d7 10 interactions)",
+        "30 (10 original + 10 squared + 10 interactions)"
+      ],
+      "points": 1,
+      "question": "When creating polynomial features for regression, you apply PolynomialFeatures(degree=2) to 10 features. How many features will you have (including interactions)?",
+      "topic": "feature_creation",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "medium",
+      "hints": [
+        "Calculate correlation matrix with df.corr()",
+        "Use upper triangle to avoid checking pairs twice",
+        "Drop one feature from each pair exceeding threshold",
+        "Use np.triu() for upper triangular matrix"
+      ],
+      "id": "m2.2_q020",
+      "points": 3,
+      "question": "Implement a function to detect and remove highly correlated features to reduce multicollinearity in a feature set.",
+      "solution": "import pandas as pd\nimport numpy as np\n\ndef remove_correlated_features(df: pd.DataFrame, \n                               threshold: float = 0.95) -> pd.DataFrame:\n    \"\"\"\n    Remove highly correlated features.\n    \n    Args:\n        df: Numerical DataFrame\n        threshold: Correlation cutoff\n    \n    Returns:\n        DataFrame with reduced features\n    \"\"\"\n    # Compute correlation matrix\n    corr_matrix = df.corr().abs()\n    \n    # Get upper triangle (avoid duplicates)\n    upper = corr_matrix.where(\n        np.triu(np.ones(corr_matrix.shape), k=1).astype(bool)\n    )\n    \n    # Find features with correlation > threshold\n    to_drop = [column for column in upper.columns if any(upper[column] > threshold)]\n    \n    # Drop and return\n    return df.drop(columns=to_drop)",
+      "starter_code": "import pandas as pd\nimport numpy as np\n\ndef remove_correlated_features(df: pd.DataFrame, \n                               threshold: float = 0.95) -> pd.DataFrame:\n    \"\"\"\n    Remove one feature from each pair with correlation > threshold.\n    \n    Args:\n        df: DataFrame with numerical features\n        threshold: Correlation threshold (default 0.95)\n    \n    Returns:\n        DataFrame with highly correlated features removed\n    \"\"\"\n    # YOUR CODE HERE\n    pass",
+      "test_cases": [
+        {
+          "description": "Remove redundant correlated features",
+          "expected_output": "One feature from each correlated pair is removed",
+          "input": {
+            "df": "pd.DataFrame with pairs of highly correlated features (r>0.95)",
+            "threshold": 0.95
+          }
+        }
+      ],
+      "topic": "feature_selection",
+      "type": "coding_exercise"
+    }
+  ],
+  "sub_module": "2.2",
+  "title": "Feature Engineering for Semiconductor Data",
+  "week": 4
+}

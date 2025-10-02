@@ -1,0 +1,621 @@
+{
+  "description": "Assessment covering classification algorithms, evaluation metrics, confusion matrices, ROC curves, class imbalance handling, and model selection strategies for semiconductor manufacturing applications",
+  "estimated_time_minutes": 90,
+  "module_id": "module-3.2",
+  "passing_score": 70,
+  "questions": [
+    {
+      "correct_answer": 0,
+      "difficulty": "easy",
+      "explanation": "The sigmoid function in logistic regression maps the linear combination of features to a probability between 0 and 1, representing the likelihood that the instance belongs to the positive class.",
+      "id": "m3.2_q001",
+      "options": [
+        "The probability that a wafer belongs to the positive class (defective)",
+        "The raw feature values of the wafer",
+        "The distance from the decision boundary",
+        "The classification accuracy on training data"
+      ],
+      "points": 2,
+      "question": "In logistic regression for wafer defect classification, what does the sigmoid function output represent?",
+      "topic": "logistic_regression",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "medium",
+      "explanation": "With many features and no constraints, decision trees can grow very deep and memorize training data, leading to overfitting. Regularization through max_depth, min_samples_split, or pruning is essential.",
+      "id": "m3.2_q002",
+      "options": [
+        "The tree may become too deep and overfit the training data",
+        "Decision trees cannot handle numerical features",
+        "Decision trees are incompatible with manufacturing data",
+        "The tree will always underfit with many features"
+      ],
+      "points": 2,
+      "question": "When building a decision tree for semiconductor defect classification with 150 features, which concern is most critical?",
+      "topic": "decision_trees",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "easy",
+      "explanation": "Accuracy is misleading with imbalanced classes. A model predicting 'no defect' for all wafers would achieve 98% accuracy but fail completely at detecting defects. Precision, recall, and F1 are more informative.",
+      "id": "m3.2_q003",
+      "options": [
+        "Accuracy",
+        "Precision",
+        "Recall",
+        "F1-score"
+      ],
+      "points": 2,
+      "question": "For a wafer defect classifier where defects are rare (2% of production), which metric would be most misleading?",
+      "topic": "evaluation_metrics",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "medium",
+      "explanation": "False Negative (FN) occurs when the model predicts negative (good) but the true label is positive (defective). This is critical in manufacturing as it means defective products pass inspection.",
+      "id": "m3.2_q004",
+      "options": [
+        "A defective wafer was incorrectly classified as good (missed defect)",
+        "A good wafer was incorrectly classified as defective",
+        "A defective wafer was correctly identified",
+        "A good wafer was correctly classified"
+      ],
+      "points": 2,
+      "question": "In defect detection, a False Negative means:",
+      "topic": "confusion_matrix",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "hard",
+      "explanation": "ROC-AUC can be optimistic with imbalanced data because it considers true negatives. PR-AUC focuses on positive class performance and is more informative when positive class is rare. The discrepancy suggests class imbalance.",
+      "id": "m3.2_q005",
+      "options": [
+        "The dataset is highly imbalanced; PR-AUC is more informative for this case",
+        "ROC-AUC calculation is incorrect",
+        "The model is overfitting",
+        "PR-AUC is always lower than ROC-AUC by definition"
+      ],
+      "points": 3,
+      "question": "Your defect classifier achieves ROC-AUC = 0.95 but Precision-Recall AUC = 0.60. What does this suggest?",
+      "topic": "roc_auc",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "medium",
+      "explanation": "Learning rate affects optimization speed but doesn't address class imbalance. SMOTE oversampling, class weights, and stratified sampling are all effective techniques for handling imbalanced data.",
+      "id": "m3.2_q006",
+      "options": [
+        "Increasing the learning rate",
+        "Using SMOTE to oversample the minority class",
+        "Adjusting class weights in the model",
+        "Using stratified sampling for train/test split"
+      ],
+      "points": 2,
+      "question": "Which technique would NOT help with class imbalance in a dataset with 5% defective wafers?",
+      "topic": "class_imbalance",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "easy",
+      "explanation": "Random Forests reduce overfitting by averaging predictions from multiple trees trained on bootstrap samples with random feature subsets. This ensemble approach provides better generalization than single trees.",
+      "id": "m3.2_q007",
+      "options": [
+        "Reduced overfitting through ensemble averaging",
+        "Faster training time",
+        "Simpler interpretation of results",
+        "Lower memory requirements"
+      ],
+      "points": 2,
+      "question": "What is the main advantage of Random Forests over single decision trees for classification?",
+      "topic": "random_forest",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "hard",
+      "explanation": "Lowering the threshold increases sensitivity (recall) by classifying more instances as positive. This increases true positives (catching defects) but also increases false positives. The trade-off is acceptable when missing defects is costly.",
+      "id": "m3.2_q008",
+      "options": [
+        "Lower the threshold (e.g., from 0.5 to 0.2) to classify more instances as defective",
+        "Increase the threshold (e.g., from 0.5 to 0.8) to be more selective",
+        "Keep threshold at 0.5 and retrain the model",
+        "Threshold adjustment cannot affect recall"
+      ],
+      "points": 3,
+      "question": "For critical defect detection, you need to catch 98% of defects (recall \u2265 0.98). How should you adjust the classification threshold?",
+      "topic": "threshold_tuning",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "medium",
+      "explanation": "One-vs-Rest trains one binary classifier per class (5 total), each distinguishing one class from all others. OvO trains C(n,2) = 10 classifiers. Softmax is a multi-class extension of logistic regression. K-means is unsupervised.",
+      "id": "m3.2_q009",
+      "options": [
+        "One-vs-Rest (OvR)",
+        "One-vs-One (OvO)",
+        "Softmax regression",
+        "K-means clustering"
+      ],
+      "points": 2,
+      "question": "For classifying wafer defects into 5 types (A, B, C, D, E), which approach trains 5 binary classifiers?",
+      "topic": "multiclass",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "easy",
+      "explanation": "Stratified sampling maintains the same class distribution in train and test sets as in the original data. This is crucial with imbalanced data to ensure both sets are representative and test set accurately reflects real-world distribution.",
+      "id": "m3.2_q010",
+      "options": [
+        "It ensures class proportions are preserved in train and test sets",
+        "It increases the size of the training set",
+        "It automatically balances the classes",
+        "It removes outliers from the dataset"
+      ],
+      "points": 2,
+      "question": "Why is stratified sampling important when splitting defect classification data?",
+      "topic": "train_test_split",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "medium",
+      "explanation": "High feature importance indicates a strong relationship with defects. This provides actionable insight for process engineers to investigate that process parameter, potentially identifying root causes of defects.",
+      "id": "m3.2_q011",
+      "options": [
+        "Investigate temperature_zone_3 in the manufacturing process for potential issues",
+        "Remove temperature_zone_3 as it may cause overfitting",
+        "Focus only on this feature and ignore others",
+        "Feature importance is not actionable information"
+      ],
+      "points": 2,
+      "question": "A Random Forest defect classifier identifies 'temperature_zone_3' as the most important feature. What should you do?",
+      "topic": "feature_importance",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "hard",
+      "explanation": "This describes poor probability calibration\u2014predicted probabilities don't reflect true likelihoods. Well-calibrated classifiers can use techniques like Platt scaling or isotonic regression to align predicted probabilities with observed frequencies.",
+      "id": "m3.2_q012",
+      "options": [
+        "Poor probability calibration",
+        "Underfitting",
+        "High variance",
+        "Feature scaling problem"
+      ],
+      "points": 3,
+      "question": "Your classifier's predicted probabilities don't match actual defect rates (predicted 30% defective but actually 5% defective). What is this issue called?",
+      "topic": "calibration",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "medium",
+      "explanation": "Stratified K-Fold ensures each fold maintains the same class distribution as the original dataset. With 1% defects, regular K-Fold might create folds with no defective samples, making evaluation unreliable.",
+      "id": "m3.2_q013",
+      "options": [
+        "Stratified K-Fold to preserve class distribution in each fold",
+        "Regular K-Fold with random splits",
+        "Leave-One-Out cross-validation",
+        "Time-series split (even if data is not sequential)"
+      ],
+      "points": 2,
+      "question": "For defect classification with severe class imbalance (1% defective), which cross-validation strategy is most appropriate?",
+      "topic": "cross_validation",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "easy",
+      "explanation": "Precision = TP/(TP+FP) measures the proportion of positive predictions that are correct. High precision means few false positives (false alarms). High recall means catching most actual defects (few false negatives).",
+      "id": "m3.2_q014",
+      "options": [
+        "When the model predicts a defect, it's usually correct (few false alarms)",
+        "The model catches most of the actual defects",
+        "The model has high overall accuracy",
+        "The model works well on balanced data"
+      ],
+      "points": 2,
+      "question": "In defect detection, high precision means:",
+      "topic": "precision_recall",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "hard",
+      "explanation": "With a 100:1 cost ratio favoring defect detection, optimize for recall to minimize false negatives (missed defects). Accept more false positives (false alarms) as they're much less costly. Use cost-sensitive learning or threshold adjustment.",
+      "id": "m3.2_q015",
+      "options": [
+        "Maximize recall (minimize false negatives) even if precision decreases",
+        "Maximize precision (minimize false positives) even if recall decreases",
+        "Optimize for balanced accuracy",
+        "Use default threshold of 0.5"
+      ],
+      "points": 3,
+      "question": "Missing a critical defect costs $10,000, while a false alarm costs $100. How should you optimize your classifier?",
+      "topic": "cost_sensitive",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "easy",
+      "hints": [
+        "Create a LogisticRegression instance",
+        "Use fit() to train on training data",
+        "Use predict() to get predictions on test data",
+        "Use accuracy_score() to compare predictions with true labels"
+      ],
+      "id": "m3.2_q016",
+      "points": 5,
+      "question": "Train a logistic regression classifier on the provided defect data and return the accuracy score.",
+      "solution": "from sklearn.linear_model import LogisticRegression\nfrom sklearn.metrics import accuracy_score\nimport numpy as np\n\ndef train_classifier(X_train, y_train, X_test, y_test):\n    # Initialize and train logistic regression\n    clf = LogisticRegression(random_state=42, max_iter=1000)\n    clf.fit(X_train, y_train)\n    \n    # Make predictions\n    y_pred = clf.predict(X_test)\n    \n    # Calculate accuracy\n    accuracy = accuracy_score(y_test, y_pred)\n    \n    return accuracy",
+      "starter_code": "from sklearn.linear_model import LogisticRegression\nfrom sklearn.metrics import accuracy_score\nimport numpy as np\n\ndef train_classifier(X_train, y_train, X_test, y_test):\n    \"\"\"\n    Train logistic regression and return test accuracy.\n    \n    Args:\n        X_train: Training features (numpy array)\n        y_train: Training labels (numpy array)\n        X_test: Test features (numpy array)\n        y_test: Test labels (numpy array)\n    \n    Returns:\n        float: Accuracy score on test set\n    \"\"\"\n    # Your code here\n    pass",
+      "test_cases": [
+        {
+          "description": "Basic classification on random data",
+          "expected_output": "float between 0 and 1",
+          "input": "X_train = np.random.randn(100, 10); y_train = np.random.randint(0, 2, 100); X_test = np.random.randn(30, 10); y_test = np.random.randint(0, 2, 30)"
+        }
+      ],
+      "topic": "basic_classification",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "hints": [
+        "Confusion matrix format: [[TN, FP], [FN, TP]]",
+        "Precision = TP / (TP + FP)",
+        "Recall = TP / (TP + FN)",
+        "F1 = 2 * (Precision * Recall) / (Precision + Recall)",
+        "Handle division by zero cases"
+      ],
+      "id": "m3.2_q017",
+      "points": 6,
+      "question": "Calculate precision, recall, and F1-score from a confusion matrix for defect classification.",
+      "solution": "import numpy as np\n\ndef calculate_metrics(confusion_matrix):\n    # Extract values from confusion matrix\n    TN, FP = confusion_matrix[0]\n    FN, TP = confusion_matrix[1]\n    \n    # Calculate precision: TP / (TP + FP)\n    precision = TP / (TP + FP) if (TP + FP) > 0 else 0.0\n    \n    # Calculate recall: TP / (TP + FN)\n    recall = TP / (TP + FN) if (TP + FN) > 0 else 0.0\n    \n    # Calculate F1-score: 2 * (precision * recall) / (precision + recall)\n    f1 = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0.0\n    \n    return {\n        'precision': precision,\n        'recall': recall,\n        'f1': f1\n    }",
+      "starter_code": "import numpy as np\n\ndef calculate_metrics(confusion_matrix):\n    \"\"\"\n    Calculate precision, recall, and F1-score from confusion matrix.\n    \n    Args:\n        confusion_matrix: 2x2 numpy array [[TN, FP], [FN, TP]]\n    \n    Returns:\n        dict: {'precision': float, 'recall': float, 'f1': float}\n    \"\"\"\n    # Your code here\n    pass",
+      "test_cases": [
+        {
+          "description": "Calculate metrics from confusion matrix with imbalanced classes",
+          "expected_output": "{'precision': 0.286, 'recall': 0.4, 'f1': 0.333}",
+          "input": "confusion_matrix = np.array([[90, 5], [3, 2]])"
+        }
+      ],
+      "topic": "confusion_matrix",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "hints": [
+        "Use sklearn.metrics.roc_curve() to get FPR, TPR, and thresholds",
+        "Use sklearn.metrics.auc() to compute area under curve",
+        "FPR = False Positive Rate, TPR = True Positive Rate (Recall)",
+        "AUC ranges from 0 to 1; 0.5 = random, 1.0 = perfect"
+      ],
+      "id": "m3.2_q018",
+      "points": 6,
+      "question": "Create an ROC curve by calculating TPR and FPR at different thresholds, and compute AUC.",
+      "solution": "import numpy as np\nfrom sklearn.metrics import roc_curve, auc\n\ndef compute_roc_auc(y_true, y_pred_proba):\n    # Calculate ROC curve\n    fpr, tpr, thresholds = roc_curve(y_true, y_pred_proba)\n    \n    # Calculate AUC\n    roc_auc = auc(fpr, tpr)\n    \n    return {\n        'fpr': fpr,\n        'tpr': tpr,\n        'auc': roc_auc\n    }",
+      "starter_code": "import numpy as np\nfrom sklearn.metrics import roc_curve, auc\n\ndef compute_roc_auc(y_true, y_pred_proba):\n    \"\"\"\n    Compute ROC curve and AUC score.\n    \n    Args:\n        y_true: True binary labels (numpy array)\n        y_pred_proba: Predicted probabilities for positive class (numpy array)\n    \n    Returns:\n        dict: {'fpr': array, 'tpr': array, 'auc': float}\n    \"\"\"\n    # Your code here\n    pass",
+      "test_cases": [
+        {
+          "description": "Compute ROC curve and AUC for simple case",
+          "expected_output": "{'fpr': array, 'tpr': array, 'auc': ~0.75}",
+          "input": "y_true = np.array([0, 0, 1, 1]); y_pred_proba = np.array([0.1, 0.4, 0.35, 0.8])"
+        }
+      ],
+      "topic": "roc_curve",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "hints": [
+        "Train baseline model without any imbalance handling",
+        "Use SMOTE to create synthetic samples of minority class",
+        "Use compute_class_weight('balanced') to get class weights",
+        "Pass class_weight parameter to RandomForestClassifier",
+        "Compare F1 scores to see which approach works best"
+      ],
+      "id": "m3.2_q019",
+      "points": 8,
+      "question": "Handle class imbalance using SMOTE oversampling and class weights, then compare performance.",
+      "solution": "from sklearn.utils.class_weight import compute_class_weight\nfrom imblearn.over_sampling import SMOTE\nfrom sklearn.ensemble import RandomForestClassifier\nfrom sklearn.metrics import f1_score\nimport numpy as np\n\ndef compare_imbalance_techniques(X_train, y_train, X_test, y_test):\n    # Baseline: train without handling imbalance\n    clf_baseline = RandomForestClassifier(random_state=42, n_estimators=50)\n    clf_baseline.fit(X_train, y_train)\n    y_pred_baseline = clf_baseline.predict(X_test)\n    baseline_f1 = f1_score(y_test, y_pred_baseline)\n    \n    # SMOTE: oversample minority class\n    smote = SMOTE(random_state=42)\n    X_train_smote, y_train_smote = smote.fit_resample(X_train, y_train)\n    clf_smote = RandomForestClassifier(random_state=42, n_estimators=50)\n    clf_smote.fit(X_train_smote, y_train_smote)\n    y_pred_smote = clf_smote.predict(X_test)\n    smote_f1 = f1_score(y_test, y_pred_smote)\n    \n    # Class weights: penalize misclassification of minority class more\n    classes = np.unique(y_train)\n    class_weights = compute_class_weight('balanced', classes=classes, y=y_train)\n    class_weight_dict = {classes[i]: class_weights[i] for i in range(len(classes))}\n    \n    clf_weighted = RandomForestClassifier(random_state=42, n_estimators=50, \n                                          class_weight=class_weight_dict)\n    clf_weighted.fit(X_train, y_train)\n    y_pred_weighted = clf_weighted.predict(X_test)\n    weighted_f1 = f1_score(y_test, y_pred_weighted)\n    \n    return {\n        'baseline_f1': baseline_f1,\n        'smote_f1': smote_f1,\n        'weighted_f1': weighted_f1\n    }",
+      "starter_code": "from sklearn.utils.class_weight import compute_class_weight\nfrom imblearn.over_sampling import SMOTE\nfrom sklearn.ensemble import RandomForestClassifier\nfrom sklearn.metrics import f1_score\nimport numpy as np\n\ndef compare_imbalance_techniques(X_train, y_train, X_test, y_test):\n    \"\"\"\n    Compare baseline, SMOTE, and class weights for handling imbalance.\n    \n    Args:\n        X_train, y_train: Training data (imbalanced)\n        X_test, y_test: Test data\n    \n    Returns:\n        dict: {'baseline_f1': float, 'smote_f1': float, 'weighted_f1': float}\n    \"\"\"\n    # Your code here\n    pass",
+      "test_cases": [
+        {
+          "description": "Compare three approaches to handling class imbalance",
+          "expected_output": "F1 scores showing improvement with SMOTE or class weights",
+          "input": "Imbalanced dataset with 5% positive class"
+        }
+      ],
+      "topic": "class_imbalance",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "hints": [
+        "Use precision_recall_curve() to get precision, recall, and thresholds",
+        "Filter thresholds where recall >= target_recall",
+        "Among valid thresholds, select one with highest precision",
+        "Handle edge case where target recall cannot be achieved"
+      ],
+      "id": "m3.2_q020",
+      "points": 7,
+      "question": "Find the optimal classification threshold to achieve target recall while maximizing precision.",
+      "solution": "import numpy as np\nfrom sklearn.metrics import precision_recall_curve\n\ndef find_optimal_threshold(y_true, y_pred_proba, target_recall=0.95):\n    # Get precision, recall, and thresholds\n    precisions, recalls, thresholds = precision_recall_curve(y_true, y_pred_proba)\n    \n    # Find indices where recall >= target_recall\n    valid_indices = np.where(recalls >= target_recall)[0]\n    \n    if len(valid_indices) == 0:\n        # If target recall can't be achieved, return lowest threshold\n        return {\n            'threshold': 0.0,\n            'precision': precisions[-1],\n            'recall': recalls[-1]\n        }\n    \n    # Among valid thresholds, find one with maximum precision\n    best_idx = valid_indices[np.argmax(precisions[valid_indices])]\n    \n    # Handle edge case where best_idx might be beyond thresholds array\n    if best_idx >= len(thresholds):\n        best_threshold = 0.0\n    else:\n        best_threshold = thresholds[best_idx]\n    \n    return {\n        'threshold': float(best_threshold),\n        'precision': float(precisions[best_idx]),\n        'recall': float(recalls[best_idx])\n    }",
+      "starter_code": "import numpy as np\nfrom sklearn.metrics import precision_recall_curve\n\ndef find_optimal_threshold(y_true, y_pred_proba, target_recall=0.95):\n    \"\"\"\n    Find threshold that achieves target recall with maximum precision.\n    \n    Args:\n        y_true: True labels\n        y_pred_proba: Predicted probabilities\n        target_recall: Minimum recall required (default 0.95)\n    \n    Returns:\n        dict: {'threshold': float, 'precision': float, 'recall': float}\n    \"\"\"\n    # Your code here\n    pass",
+      "test_cases": [
+        {
+          "description": "Find threshold for high recall requirement",
+          "expected_output": "Threshold < 0.5 to achieve high recall",
+          "input": "y_true with 10% positive class, y_pred_proba, target_recall=0.95"
+        }
+      ],
+      "topic": "threshold_tuning",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "hints": [
+        "Train a RandomForestClassifier",
+        "Access feature_importances_ attribute after training",
+        "Create DataFrame with feature names and importance scores",
+        "Sort by importance in descending order",
+        "Return top N features"
+      ],
+      "id": "m3.2_q021",
+      "points": 7,
+      "question": "Extract and rank feature importance from Random Forest, then analyze top features.",
+      "solution": "from sklearn.ensemble import RandomForestClassifier\nimport numpy as np\nimport pandas as pd\n\ndef analyze_feature_importance(X_train, y_train, feature_names, top_n=10):\n    # Train Random Forest\n    rf = RandomForestClassifier(n_estimators=100, random_state=42, max_depth=10)\n    rf.fit(X_train, y_train)\n    \n    # Get feature importances\n    importances = rf.feature_importances_\n    \n    # Create DataFrame with feature names and importances\n    importance_df = pd.DataFrame({\n        'feature': feature_names,\n        'importance': importances\n    })\n    \n    # Sort by importance (descending) and get top N\n    importance_df = importance_df.sort_values('importance', ascending=False)\n    importance_df = importance_df.head(top_n)\n    \n    # Reset index for clean output\n    importance_df = importance_df.reset_index(drop=True)\n    \n    return importance_df",
+      "starter_code": "from sklearn.ensemble import RandomForestClassifier\nimport numpy as np\nimport pandas as pd\n\ndef analyze_feature_importance(X_train, y_train, feature_names, top_n=10):\n    \"\"\"\n    Train Random Forest and return top N most important features.\n    \n    Args:\n        X_train: Training features\n        y_train: Training labels\n        feature_names: List of feature names\n        top_n: Number of top features to return\n    \n    Returns:\n        pd.DataFrame: Columns ['feature', 'importance'] sorted by importance\n    \"\"\"\n    # Your code here\n    pass",
+      "test_cases": [
+        {
+          "description": "Extract and rank most important features",
+          "expected_output": "DataFrame with top 10 features and their importance scores",
+          "input": "X_train with 50 features, feature_names list, top_n=10"
+        }
+      ],
+      "topic": "feature_importance",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "hints": [
+        "Use StratifiedKFold to maintain class distribution in each fold",
+        "Loop through each fold and split data",
+        "Train classifier on train split, predict on validation split",
+        "Calculate metrics for each fold",
+        "Return mean of metrics across all folds"
+      ],
+      "id": "m3.2_q022",
+      "points": 6,
+      "question": "Perform stratified k-fold cross-validation for imbalanced defect data and compute mean metrics.",
+      "solution": "from sklearn.model_selection import StratifiedKFold\nfrom sklearn.ensemble import RandomForestClassifier\nfrom sklearn.metrics import f1_score, precision_score, recall_score\nimport numpy as np\n\ndef stratified_cv_evaluation(X, y, n_splits=5):\n    # Initialize stratified k-fold\n    skf = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=42)\n    \n    # Store scores for each fold\n    f1_scores = []\n    precision_scores = []\n    recall_scores = []\n    \n    # Perform cross-validation\n    for train_idx, val_idx in skf.split(X, y):\n        X_train, X_val = X[train_idx], X[val_idx]\n        y_train, y_val = y[train_idx], y[val_idx]\n        \n        # Train classifier\n        clf = RandomForestClassifier(n_estimators=50, random_state=42)\n        clf.fit(X_train, y_train)\n        \n        # Predict on validation set\n        y_pred = clf.predict(X_val)\n        \n        # Calculate metrics\n        f1_scores.append(f1_score(y_val, y_pred))\n        precision_scores.append(precision_score(y_val, y_pred, zero_division=0))\n        recall_scores.append(recall_score(y_val, y_pred, zero_division=0))\n    \n    # Return mean scores\n    return {\n        'mean_f1': np.mean(f1_scores),\n        'mean_precision': np.mean(precision_scores),\n        'mean_recall': np.mean(recall_scores)\n    }",
+      "starter_code": "from sklearn.model_selection import StratifiedKFold\nfrom sklearn.ensemble import RandomForestClassifier\nfrom sklearn.metrics import f1_score, precision_score, recall_score\nimport numpy as np\n\ndef stratified_cv_evaluation(X, y, n_splits=5):\n    \"\"\"\n    Perform stratified cross-validation and return mean metrics.\n    \n    Args:\n        X: Features\n        y: Labels (imbalanced)\n        n_splits: Number of CV folds\n    \n    Returns:\n        dict: {'mean_f1': float, 'mean_precision': float, 'mean_recall': float}\n    \"\"\"\n    # Your code here\n    pass",
+      "test_cases": [
+        {
+          "description": "Stratified CV with proper class distribution in each fold",
+          "expected_output": "Mean F1, precision, and recall across 5 folds",
+          "input": "Imbalanced X, y with 5% positive class, n_splits=5"
+        }
+      ],
+      "topic": "cross_validation",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "hints": [
+        "Use OneVsRestClassifier to wrap any binary classifier",
+        "LogisticRegression works well as base classifier",
+        "Train on multiclass labels directly",
+        "Use classification_report with output_dict=True",
+        "Provide target_names for readable class labels"
+      ],
+      "id": "m3.2_q023",
+      "points": 8,
+      "question": "Implement One-vs-Rest multiclass classification for 5 defect types and generate classification report.",
+      "solution": "from sklearn.multiclass import OneVsRestClassifier\nfrom sklearn.linear_model import LogisticRegression\nfrom sklearn.metrics import classification_report\nimport numpy as np\n\ndef train_multiclass_ovr(X_train, y_train, X_test, y_test, class_names):\n    # Initialize base classifier\n    base_clf = LogisticRegression(random_state=42, max_iter=1000)\n    \n    # Wrap with OneVsRestClassifier\n    ovr_clf = OneVsRestClassifier(base_clf)\n    \n    # Train on multiclass data\n    ovr_clf.fit(X_train, y_train)\n    \n    # Predict on test set\n    y_pred = ovr_clf.predict(X_test)\n    \n    # Generate classification report\n    report = classification_report(y_test, y_pred, \n                                   target_names=class_names,\n                                   output_dict=True)\n    \n    return report",
+      "starter_code": "from sklearn.multiclass import OneVsRestClassifier\nfrom sklearn.linear_model import LogisticRegression\nfrom sklearn.metrics import classification_report\nimport numpy as np\n\ndef train_multiclass_ovr(X_train, y_train, X_test, y_test, class_names):\n    \"\"\"\n    Train One-vs-Rest classifier for multiclass defect classification.\n    \n    Args:\n        X_train, y_train: Training data\n        X_test, y_test: Test data\n        class_names: List of class names (e.g., ['Type_A', 'Type_B', ...])\n    \n    Returns:\n        dict: Classification report as dictionary\n    \"\"\"\n    # Your code here\n    pass",
+      "test_cases": [
+        {
+          "description": "Multiclass classification with OvR strategy",
+          "expected_output": "Dictionary with precision, recall, f1 for each class",
+          "input": "5-class defect data with class_names=['Type_A', 'Type_B', 'Type_C', 'Type_D', 'Type_E']"
+        }
+      ],
+      "topic": "multiclass",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "hints": [
+        "Use Pipeline to chain preprocessing and model steps",
+        "StandardScaler for feature scaling",
+        "RandomForestClassifier as the model",
+        "Fit pipeline on training data (scaling + training happen together)",
+        "Generate classification report from predictions"
+      ],
+      "id": "m3.2_q024",
+      "points": 6,
+      "question": "Build a complete classification pipeline with preprocessing, model training, and evaluation.",
+      "solution": "from sklearn.pipeline import Pipeline\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.ensemble import RandomForestClassifier\nfrom sklearn.metrics import classification_report\nimport numpy as np\n\ndef build_classification_pipeline(X_train, y_train, X_test, y_test):\n    # Build pipeline with preprocessing and model\n    pipeline = Pipeline([\n        ('scaler', StandardScaler()),\n        ('classifier', RandomForestClassifier(n_estimators=100, random_state=42))\n    ])\n    \n    # Train pipeline\n    pipeline.fit(X_train, y_train)\n    \n    # Predict on test set\n    y_pred = pipeline.predict(X_test)\n    \n    # Generate classification report\n    report = classification_report(y_test, y_pred, output_dict=True)\n    \n    return {\n        'pipeline': pipeline,\n        'report': report\n    }",
+      "starter_code": "from sklearn.pipeline import Pipeline\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.ensemble import RandomForestClassifier\nfrom sklearn.metrics import classification_report\nimport numpy as np\n\ndef build_classification_pipeline(X_train, y_train, X_test, y_test):\n    \"\"\"\n    Build and evaluate a classification pipeline.\n    \n    Args:\n        X_train, y_train: Training data\n        X_test, y_test: Test data\n    \n    Returns:\n        dict: {'pipeline': trained pipeline, 'report': classification report dict}\n    \"\"\"\n    # Your code here\n    pass",
+      "test_cases": [
+        {
+          "description": "Complete pipeline with scaling and classification",
+          "expected_output": "Trained pipeline and classification report",
+          "input": "Training and test data for binary classification"
+        }
+      ],
+      "topic": "pipeline",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "id": "m3.2_q025",
+      "keywords": [
+        "recall",
+        "precision",
+        "training time",
+        "missed defects",
+        "false positives",
+        "trade-off",
+        "business cost"
+      ],
+      "points": 8,
+      "question": "You have three trained defect classifiers:\n- Logistic Regression: Accuracy=92%, Precision=0.85, Recall=0.60, Training time=5s\n- Random Forest: Accuracy=94%, Precision=0.75, Recall=0.85, Training time=45s\n- SVM: Accuracy=93%, Precision=0.90, Recall=0.55, Training time=120s\n\nMissing defects is very costly, but the model needs to retrain daily. Which model would you choose and why? Consider trade-offs between performance metrics, computational cost, and business requirements. (8 points)",
+      "rubric": {
+        "business_context": 2,
+        "justification_quality": 1,
+        "precision_tradeoff": 2,
+        "recall_priority": 2,
+        "training_time_consideration": 1
+      },
+      "sample_answer": "I would choose Random Forest for the following reasons:\n\n1. **Recall is Critical**: With costly missed defects, recall (0.85) is the most important metric. Random Forest has significantly higher recall than Logistic Regression (0.60) and SVM (0.55), meaning it catches 85% of defects versus only 55-60% for others.\n\n2. **Acceptable Precision**: While Random Forest has lower precision (0.75) than SVM (0.90), this trade-off is acceptable. Higher false positives (lower precision) are less costly than missed defects (lower recall). The 0.75 precision still means 75% of flagged wafers are truly defective.\n\n3. **Feasible Training Time**: The 45-second training time is manageable for daily retraining, unlike SVM's 120 seconds. While Logistic Regression is faster (5s), the dramatic recall improvement (0.85 vs 0.60) justifies the 8x longer training time.\n\n4. **Balanced Performance**: Random Forest offers the best overall accuracy (94%) while prioritizing recall. It represents the optimal balance between catching defects (recall) and operational efficiency (training time).\n\n5. **Interpretability**: Random Forest provides feature importance, helping engineers identify root causes of defects, adding value beyond pure classification.\n\nThe decision prioritizes recall (business-critical for defect detection) while maintaining reasonable precision and acceptable training time for daily retraining requirements.",
+      "topic": "model_selection",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "id": "m3.2_q026",
+      "keywords": [
+        "SMOTE",
+        "class weights",
+        "undersampling",
+        "false positive",
+        "false negative",
+        "recall priority",
+        "precision trade-off",
+        "synthetic data",
+        "information loss",
+        "production monitoring"
+      ],
+      "points": 10,
+      "question": "Your wafer defect dataset has severe class imbalance: 99% good wafers, 1% defective. You've tried three approaches:\n1. SMOTE oversampling: F1=0.65, Precision=0.50, Recall=0.95\n2. Class weights: F1=0.55, Precision=0.40, Recall=0.98\n3. Undersampling majority class: F1=0.70, Precision=0.60, Recall=0.85\n\nWhich approach would you use in production? Discuss the implications of each approach, including risks of synthetic data, information loss from undersampling, and the business impact of false positives vs false negatives. (10 points)",
+      "rubric": {
+        "approach_comparison": 3,
+        "business_impact_analysis": 2,
+        "justification_depth": 1,
+        "production_considerations": 2,
+        "risk_assessment": 2
+      },
+      "sample_answer": "I would recommend SMOTE oversampling for production, with careful monitoring. Here's my analysis:\n\n**SMOTE Oversampling (Recommended)**:\n- **Best balanced performance**: F1=0.65 with 95% recall catches nearly all defects\n- **Acceptable precision**: 0.50 means half of flagged wafers are true defects\n- **Advantages**: Retains all real data, creates synthetic minority examples to balance training\n- **Risks**: Synthetic samples may not represent all real defect patterns; could overfit if defect modes are diverse\n- **Mitigation**: Validate on real holdout data, monitor production performance continuously, retrain monthly with new real defects\n\n**Class Weights (Alternative)**:\n- **Highest recall**: 0.98 catches virtually all defects (strongest business value)\n- **Low precision**: 0.40 means 60% false positive rate (high inspection cost)\n- **When to use**: If inspection cost is negligible compared to missed defect cost\n- **Drawback**: May overwhelm downstream inspection capacity with false alarms\n\n**Undersampling (Not Recommended)**:\n- **Best F1 and precision**: Appears strongest statistically\n- **Critical flaw**: Discards 99% of good wafer data, losing valuable information\n- **Lower recall**: 0.85 means 15% of defects missed (unacceptable business risk)\n- **When to use**: Only if computational resources are severely limited\n\n**Production Decision Factors**:\n1. **Business cost**: Missing defects likely costs >>$10K; extra inspection costs ~$100\n2. **Inspection capacity**: Can downstream process handle 1-2% flagging rate?\n3. **Defect patterns**: Are defects diverse (favors SMOTE) or concentrated (favors class weights)?\n\n**Implementation Plan**:\n- Deploy SMOTE model initially\n- Set alert if precision drops below 0.40 (indicating concept drift)\n- A/B test against class weights approach for one month\n- Collect production feedback to validate recall remains >90%\n- Retrain quarterly with new real defect examples\n\nSMOTE provides the best balance of catching defects (recall) while managing false alarm rates (precision), making it most suitable for sustained production use with appropriate monitoring.",
+      "topic": "class_imbalance_strategy",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "id": "m3.2_q027",
+      "keywords": [
+        "threshold",
+        "precision",
+        "recall",
+        "trade-off",
+        "false positive",
+        "false negative",
+        "cost-sensitive",
+        "production stage"
+      ],
+      "points": 8,
+      "question": "Explain how adjusting the classification threshold affects the precision-recall trade-off in defect detection. Include specific threshold recommendations for two scenarios: (A) early production testing where false alarms are acceptable, and (B) final product inspection where customer returns must be minimized. (8 points)",
+      "rubric": {
+        "business_context": 1,
+        "implementation_strategy": 1,
+        "scenario_A_analysis": 2,
+        "scenario_B_analysis": 2,
+        "threshold_mechanics": 2
+      },
+      "sample_answer": "Classification threshold adjustment directly controls the precision-recall trade-off:\n\n**Threshold Mechanics**:\n- **Lower threshold** (e.g., 0.2): Classifies more samples as defective \u2192 Higher Recall, Lower Precision\n- **Higher threshold** (e.g., 0.8): More conservative classification \u2192 Lower Recall, Higher Precision\n- **Default 0.5**: Often suboptimal for imbalanced data\n\n**Scenario A: Early Production Testing**\n- **Goal**: Catch all potential defects for root cause analysis\n- **Recommended threshold**: 0.2-0.3 (low)\n- **Rationale**: \n  - High recall (>95%) ensures virtually no defects escape\n  - False alarms acceptable; extra testing on good wafers isn't costly\n  - Early detection enables process adjustments before large-scale production\n- **Expected outcome**: Recall ~0.98, Precision ~0.40 (60% false positive rate acceptable)\n\n**Scenario B: Final Product Inspection**\n- **Goal**: Minimize customer returns while maintaining quality\n- **Recommended threshold**: 0.6-0.7 (higher)\n- **Rationale**:\n  - Balance is critical; missing defects reaches customers (costly)\n  - But excessive false rejections waste finished products (also costly)\n  - Need high confidence before rejecting finished product\n- **Expected outcome**: Recall ~0.85, Precision ~0.75 (acceptable balance)\n\n**Implementation Strategy**:\n1. Generate ROC and PR curves from validation data\n2. Calculate cost function: Cost = (FN \u00d7 $10K) + (FP \u00d7 $100)\n3. Select threshold minimizing expected cost\n4. Validate threshold achieves minimum acceptable recall (e.g., 0.90)\n5. Monitor and adjust based on production feedback\n\n**Key Insight**: Threshold should be business-driven, not arbitrary. Different production stages have different cost structures, requiring different threshold strategies.",
+      "topic": "threshold_tuning",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "easy",
+      "id": "m3.2_q028",
+      "keywords": [
+        "precision",
+        "recall",
+        "accuracy",
+        "false negative",
+        "missed defect",
+        "imbalanced",
+        "cost"
+      ],
+      "points": 6,
+      "question": "Your defect classifier produces this confusion matrix:\n```\n                Predicted\n              Good  Defective\nActual Good    950      50\n       Defect   15      85\n```\nCalculate precision, recall, and accuracy. Explain which metric is most important for this application and why. (6 points)",
+      "rubric": {
+        "correct_calculations": 2,
+        "metric_identification": 2,
+        "reasoning_quality": 2
+      },
+      "sample_answer": "**Calculations**:\n- True Negatives (TN) = 950 (correctly identified good wafers)\n- False Positives (FP) = 50 (good wafers incorrectly flagged)\n- False Negatives (FN) = 15 (defects missed)\n- True Positives (TP) = 85 (correctly identified defects)\n\n**Metrics**:\n- **Accuracy** = (TP + TN) / Total = (85 + 950) / 1100 = 0.940 (94.0%)\n- **Precision** = TP / (TP + FP) = 85 / (85 + 50) = 0.630 (63.0%)\n- **Recall** = TP / (TP + FN) = 85 / (85 + 15) = 0.850 (85.0%)\n\n**Most Important Metric: Recall**\n\n**Reasoning**:\n1. **Defect detection priority**: Missing defects (FN = 15) means defective wafers reach customers, causing expensive failures, returns, and reputation damage\n2. **Imbalanced classes**: With 9% defect rate, accuracy is misleading. A model always predicting \"good\" would achieve 91% accuracy but be useless\n3. **False positive cost**: While 50 false alarms require extra inspection, this is far less costly than 15 missed defects reaching customers\n4. **Current recall of 85%**: Still misses 15% of defects. Depending on cost structure, may need improvement to 90-95%\n\n**Recommendation**: Monitor recall closely. If defect costs are extremely high, consider adjusting threshold to achieve recall >90%, even if precision drops to ~50%.",
+      "topic": "confusion_matrix",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "id": "m3.2_q029",
+      "keywords": [
+        "monitoring",
+        "concept drift",
+        "data drift",
+        "retraining",
+        "performance degradation",
+        "alert threshold",
+        "feedback loop",
+        "rollback",
+        "production deployment"
+      ],
+      "points": 10,
+      "question": "You're deploying a defect classifier to production. Describe a comprehensive monitoring strategy to detect model degradation. Include specific metrics to track, alert thresholds, retraining triggers, and how to handle concept drift in manufacturing processes. (10 points)",
+      "rubric": {
+        "concept_drift_handling": 2,
+        "drift_detection": 2,
+        "implementation_detail": 1,
+        "metrics_selection": 2,
+        "operational_safeguards": 1,
+        "retraining_strategy": 2
+      },
+      "sample_answer": "**Comprehensive Production Monitoring Strategy:**\n\n**1. Performance Metrics Tracking (Daily)**\n- **Recall**: Most critical; alert if drops below 0.85 (15% missed defects unacceptable)\n- **Precision**: Alert if drops below 0.50 (excessive false alarms)\n- **F1-Score**: Overall health indicator; alert if drops >10% from baseline\n- **Prediction distribution**: Track % predicted defective; alert if deviates >30% from baseline\n- **Confidence scores**: Monitor average prediction probability; low confidence suggests uncertainty\n\n**2. Data Drift Detection (Weekly)**\n- **Feature distribution shift**: Use Kolmogorov-Smirnov test on input features\n- **Covariate drift**: Alert if statistical distance (KL divergence) from training data exceeds threshold\n- **Example**: If temperature sensor readings shift from mean=150\u00b0C to 170\u00b0C, model may be invalid\n- **Implementation**: Store training data statistics, compare production data distributions\n\n**3. Concept Drift Detection (Weekly)**\n- **Ground truth comparison**: Collect actual defect status from downstream inspection (lag: 1-7 days)\n- **Rolling window performance**: Calculate metrics on last 1000 wafers with ground truth\n- **Alert triggers**:\n  - Recall drops below 0.80 (vs 0.90 baseline)\n  - Precision drops below 0.40 (vs 0.60 baseline)\n  - Statistical significance test (p < 0.05) shows performance degradation\n\n**4. Retraining Triggers (Automatic)**\n- **Schedule-based**: Retrain monthly with accumulated production data\n- **Performance-based**: Immediate retraining if:\n  - Recall drops below critical threshold (0.85)\n  - >5% feature distribution shift detected\n  - New defect types observed (human feedback)\n- **Data-based**: Retrain when 1000+ new labeled examples accumulated\n\n**5. Handling Concept Drift**\n- **Scenario A - Gradual drift** (e.g., equipment aging):\n  - Increase retraining frequency to weekly\n  - Use time-weighted samples (recent data weighted higher)\n  - Expand training window to 6 months\n\n- **Scenario B - Sudden drift** (e.g., new equipment, process change):\n  - Immediate alert to engineering team\n  - Temporarily fall back to human inspection or previous model version\n  - Rapid data collection campaign (1-2 weeks) for emergency retraining\n  - A/B test new model before full deployment\n\n**6. Feedback Loop Integration**\n- **Human-in-the-loop**: Inspection results fed back as training labels\n- **Active learning**: Prioritize labeling of low-confidence predictions\n- **Root cause tracking**: Link defect patterns to process parameters for continuous improvement\n\n**7. Operational Safeguards**\n- **Shadow mode**: Run new model alongside production model, compare results before switching\n- **Canary deployment**: Deploy to 10% of production line first, monitor for 1 week\n- **Rollback capability**: Maintain previous model version, can revert in <1 hour\n- **Alert escalation**: Auto-page data science team if critical metrics degraded for >4 hours\n\n**Implementation Tools**:\n- MLflow or Weights & Biases for experiment tracking\n- Evidently AI for drift detection\n- Grafana dashboards for real-time monitoring\n- PagerDuty for alert management\n\nThis multi-layered approach ensures early detection of issues, rapid response to concept drift, and continuous model improvement based on production feedback.",
+      "topic": "deployment",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "id": "m3.2_q030",
+      "keywords": [
+        "feature importance",
+        "SHAP",
+        "decision path",
+        "interpretability",
+        "explainability",
+        "root cause",
+        "process control",
+        "corrective action"
+      ],
+      "points": 8,
+      "question": "Process engineers need to understand why your Random Forest classifier flags certain wafers as defective. Describe three methods to provide interpretability and explain how each helps engineers take corrective action in the manufacturing process. (8 points)",
+      "rubric": {
+        "engineer_actions": 1,
+        "method_1_explanation": 2,
+        "method_2_explanation": 2,
+        "method_3_explanation": 2,
+        "practical_implementation": 1
+      },
+      "sample_answer": "**Method 1: Feature Importance Analysis**\n\n**Implementation**:\n- Extract feature_importances_ from trained Random Forest\n- Rank features by importance score (based on reduction in impurity)\n- Visualize top 10-20 features with bar chart\n\n**Engineer Action Example**:\n- If 'temperature_zone_3' ranks highest with 0.25 importance:\n  - Engineers investigate zone 3 temperature control\n  - Check if heater calibration is off\n  - Review temperature logs for correlation with defect batches\n  - Implement tighter temperature control (\u00b12\u00b0C instead of \u00b15\u00b0C)\n\n**Limitations**: Shows overall importance but not direction (high/low temp?) or interactions\n\n**Method 2: SHAP (SHapley Additive exPlanations)**\n\n**Implementation**:\n- Calculate SHAP values for individual predictions\n- Generate SHAP summary plots showing feature contribution to each prediction\n- Use SHAP force plots for specific defective wafers\n\n**Engineer Action Example**:\n- SHAP shows specific wafer flagged because:\n  - Pressure = 850 Pa (low) contributes +0.3 to defect probability\n  - Etch time = 125s (high) contributes +0.2\n  - Temperature = 152\u00b0C (normal) contributes -0.05\n- Engineers conclude: Low pressure + excessive etch time causes defects\n- Corrective action: Increase pressure setpoint to 900 Pa, reduce etch time to 115s\n- Validate: Run test batch with adjusted parameters\n\n**Method 3: Decision Path Analysis**\n\n**Implementation**:\n- For flagged wafer, trace decision path through representative tree\n- Extract sequence of feature splits leading to defect prediction\n- Identify critical thresholds\n\n**Engineer Action Example**:\n- Decision path shows:\n  1. If temperature < 155\u00b0C \u2192 go left\n  2. If pressure < 875 Pa \u2192 go left  \n  3. If flow_rate > 45 sccm \u2192 predict defective\n- Engineers learn: Cold temperature + low pressure + high flow rate = defects\n- This combination wasn't obvious in univariate analysis\n- Corrective action: Implement interlock preventing high flow rate when temperature <155\u00b0C\n\n**Comparative Value**:\n- **Feature Importance**: Best for overall process understanding, monthly reviews\n- **SHAP**: Best for root cause analysis of defect clusters, investigative work\n- **Decision Paths**: Best for understanding interactions, setting process control limits\n\n**Implementation Strategy**:\n1. Daily: Auto-generate feature importance dashboard for process engineers\n2. Weekly: SHAP analysis on defective wafers from past week\n3. Monthly: Review decision paths to refine process control limits\n4. Ad-hoc: Deep dive SHAP analysis when new defect patterns emerge\n\nThese interpretability methods transform the black-box classifier into an actionable process improvement tool.",
+      "topic": "interpretability",
+      "type": "conceptual"
+    }
+  ],
+  "sub_module": "3.2",
+  "title": "Classification",
+  "version": "1.0",
+  "week": 5
+}

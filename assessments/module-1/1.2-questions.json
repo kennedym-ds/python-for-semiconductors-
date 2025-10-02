@@ -1,0 +1,592 @@
+{
+  "description": "Assessment covering statistical methods for semiconductor process control and data analysis",
+  "estimated_time_minutes": 75,
+  "module_id": "module-1",
+  "passing_score": 80.0,
+  "questions": [
+    {
+      "correct_answer": "B",
+      "difficulty": "easy",
+      "explanation": "Within \u00b110\u03bcm means \u00b12 standard deviations (10/5=2). According to the empirical rule, approximately 95.4% of values fall within 2 standard deviations of the mean in a normal distribution.",
+      "id": "m1.2_q001",
+      "options": [
+        "68.3%",
+        "95.4%",
+        "99.7%",
+        "90.0%"
+      ],
+      "points": 1,
+      "question": "In semiconductor manufacturing, a process engineer observes that wafer thickness measurements follow a normal distribution with mean 725\u03bcm and standard deviation 5\u03bcm. What percentage of wafers are expected to fall within \u00b110\u03bcm of the target?",
+      "topic": "normal_distribution",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": "B",
+      "difficulty": "medium",
+      "explanation": "The Poisson distribution models events that occur randomly and independently at a constant average rate over a fixed interval - perfect for modeling random defect occurrences in semiconductor manufacturing.",
+      "id": "m1.2_q002",
+      "options": [
+        "Defects occur in predictable clusters",
+        "Defects occur randomly and independently at a constant average rate",
+        "Defects are normally distributed across wafers",
+        "Defects always occur in pairs"
+      ],
+      "points": 1,
+      "question": "A yield analysis shows that defect density follows a Poisson distribution. What does this tell you about the defect occurrence pattern?",
+      "topic": "probability_distributions",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": "B",
+      "difficulty": "easy",
+      "explanation": "The significance level \u03b1 represents the probability of rejecting the null hypothesis when it is actually true (Type I error). \u03b1 = 0.05 means we accept a 5% chance of false positives.",
+      "id": "m1.2_q003",
+      "options": [
+        "The probability that the null hypothesis is true",
+        "The probability of Type I error (false positive)",
+        "The probability of Type II error (false negative)",
+        "The statistical power of the test"
+      ],
+      "points": 1,
+      "question": "When performing hypothesis testing on process parameters, you set \u03b1 = 0.05. What does this significance level represent?",
+      "topic": "hypothesis_testing",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": "B",
+      "difficulty": "medium",
+      "explanation": "Since p-value (0.12) > \u03b1 (0.05), we fail to reject the null hypothesis. This means there's insufficient statistical evidence to conclude the chambers produce different yields, though it doesn't prove they're identical.",
+      "id": "m1.2_q004",
+      "options": [
+        "Reject the null hypothesis - there is a significant difference between chambers",
+        "Fail to reject the null hypothesis - insufficient evidence of difference",
+        "The chambers are definitely identical",
+        "The test is invalid and needs more data"
+      ],
+      "points": 1,
+      "question": "You're comparing yield rates between two different etch chambers using a t-test. The p-value is 0.12. With \u03b1 = 0.05, what should you conclude?",
+      "topic": "hypothesis_testing",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": "B",
+      "difficulty": "easy",
+      "explanation": "In a full factorial design, the number of experimental conditions is the product of all factor levels: 3 energy levels \u00d7 4 dose levels = 12 experimental conditions.",
+      "id": "m1.2_q005",
+      "options": [
+        "7",
+        "12",
+        "24",
+        "64"
+      ],
+      "points": 1,
+      "question": "In a DOE (Design of Experiments) for ion implantation, you're testing 3 energy levels and 4 dose levels. How many experimental conditions are in a full factorial design?",
+      "topic": "design_of_experiments",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": "B",
+      "difficulty": "medium",
+      "explanation": "Seven consecutive points on one side of the center line violates Run Rule 1 and indicates a special cause (non-random) variation, such as a process shift or trend, requiring investigation.",
+      "id": "m1.2_q006",
+      "options": [
+        "Normal process variation - no action needed",
+        "A special cause variation is likely present",
+        "The control limits need to be recalculated",
+        "The process is approaching specification limits"
+      ],
+      "points": 1,
+      "question": "A process control chart shows 7 consecutive points all above the center line. What does this pattern suggest according to Western Electric rules?",
+      "topic": "statistical_process_control",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": "D",
+      "difficulty": "medium",
+      "explanation": "Cpk > 1.67 indicates a highly capable process with excellent performance. The process mean is well-centered and variation is small relative to specification limits, with less than 1 defect per million expected.",
+      "id": "m1.2_q007",
+      "options": [
+        "Process is not capable - immediate action required",
+        "Process is marginally capable - monitor closely",
+        "Process is capable - good performance",
+        "Process is highly capable - excellent performance"
+      ],
+      "points": 1,
+      "question": "You calculate Cpk = 1.8 for a critical dimension measurement. What does this indicate about process capability?",
+      "topic": "process_capability",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": "C",
+      "difficulty": "medium",
+      "explanation": "ANOVA (Analysis of Variance) tests whether the means of multiple groups are equal. The null hypothesis is that all 4 tools produce wafers with the same mean thickness, while the alternative is that at least one mean differs.",
+      "id": "m1.2_q008",
+      "options": [
+        "All wafers have identical thickness",
+        "All tools produce the same variance in thickness",
+        "All tools have the same mean thickness",
+        "Thickness follows a normal distribution"
+      ],
+      "points": 1,
+      "question": "When analyzing variance in wafer thickness, you perform ANOVA to compare 4 different deposition tools. Which null hypothesis is being tested?",
+      "topic": "anova",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": "C",
+      "difficulty": "hard",
+      "explanation": "A confidence interval is about the long-run frequency of the method. If we repeated sampling and calculated 95% CIs many times, 95% of those intervals would contain the true population mean. It's not about probability of individual values or a single interval.",
+      "id": "m1.2_q009",
+      "options": [
+        "There's a 95% probability the true mean is between 92.3% and 94.7%",
+        "95% of individual wafers have yield between 92.3% and 94.7%",
+        "If we repeated this study many times, 95% of calculated intervals would contain the true mean",
+        "The next measured yield has 95% chance of being in this range"
+      ],
+      "points": 1,
+      "question": "You calculate a 95% confidence interval for mean yield as [92.3%, 94.7%]. What is the correct interpretation?",
+      "topic": "confidence_intervals",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": "B",
+      "difficulty": "medium",
+      "explanation": "R\u00b2 (coefficient of determination) represents the proportion of variance in the dependent variable (deposition rate) that is explained by the independent variable(s) (temperature) in the model. It doesn't imply causation or probability.",
+      "id": "m1.2_q010",
+      "options": [
+        "Temperature causes 89% of the variation in deposition rate",
+        "The model explains 89% of the variance in deposition rate",
+        "There's an 89% probability the model is correct",
+        "Temperature and deposition rate have 89% correlation"
+      ],
+      "points": 1,
+      "question": "In regression analysis of film deposition rate vs. temperature, R\u00b2 = 0.89. What does this tell you?",
+      "topic": "regression_analysis",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": "B",
+      "difficulty": "easy",
+      "explanation": "Correlation strength is measured by the absolute value of the coefficient. |\u22120.92| = 0.92 is the highest, indicating a very strong negative relationship. The sign indicates direction (negative/inverse relationship), not strength.",
+      "id": "m1.2_q011",
+      "options": [
+        "r = 0.85",
+        "r = -0.92",
+        "r = 0.45",
+        "r = -0.33"
+      ],
+      "points": 1,
+      "question": "You're analyzing correlation between two process parameters. Which correlation coefficient indicates the strongest relationship (regardless of direction)?",
+      "topic": "correlation",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": "B",
+      "difficulty": "hard",
+      "explanation": "In a paired t-test, we analyze the differences between paired observations. The critical assumption is that these differences (not the original data) should be approximately normally distributed. The pairs are inherently dependent (same chamber before/after), not independent.",
+      "id": "m1.2_q012",
+      "options": [
+        "The two samples must be independent",
+        "The differences between paired observations should be approximately normal",
+        "Both groups must have equal variances",
+        "Sample sizes must be identical"
+      ],
+      "points": 1,
+      "question": "In a paired t-test comparing pre- and post-maintenance chamber performance, what assumption is critical?",
+      "topic": "statistical_tests",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "medium",
+      "hints": [
+        "Use scipy.stats.sem() to calculate standard error",
+        "Use scipy.stats.t.interval() with df = n - 1",
+        "The confidence level is 0.95, not 95"
+      ],
+      "id": "m1.2_q013",
+      "points": 3,
+      "question": "Write a function to calculate the 95% confidence interval for the mean of a sample using the t-distribution. This is essential for reporting measurement uncertainties in semiconductor metrology.",
+      "solution": "import numpy as np\nfrom scipy import stats\n\ndef calculate_ci_95(measurements: np.ndarray) -> tuple[float, float]:\n    \"\"\"\n    Calculate 95% confidence interval for the mean.\n    \n    Args:\n        measurements: 1D array of measurement values\n    \n    Returns:\n        Tuple of (lower_bound, upper_bound) for 95% CI\n    \"\"\"\n    n = len(measurements)\n    mean = np.mean(measurements)\n    std_err = stats.sem(measurements)  # Standard error of mean\n    ci = stats.t.interval(0.95, df=n-1, loc=mean, scale=std_err)\n    return ci",
+      "starter_code": "import numpy as np\nfrom scipy import stats\n\ndef calculate_ci_95(measurements: np.ndarray) -> tuple[float, float]:\n    \"\"\"\n    Calculate 95% confidence interval for the mean.\n    \n    Args:\n        measurements: 1D array of measurement values\n    \n    Returns:\n        Tuple of (lower_bound, upper_bound) for 95% CI\n    \"\"\"\n    # YOUR CODE HERE\n    pass",
+      "test_cases": [
+        {
+          "description": "Small sample with known CI",
+          "expected_output": [
+            97.8,
+            102.2
+          ],
+          "input": {
+            "measurements": [
+              100,
+              102,
+              98,
+              101,
+              99,
+              103,
+              97
+            ]
+          },
+          "tolerance": 0.5
+        }
+      ],
+      "topic": "confidence_intervals",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "hints": [
+        "Use scipy.stats.ttest_ind() for independent samples",
+        "Return both statistics as floats",
+        "The function returns (statistic, pvalue) tuple"
+      ],
+      "id": "m1.2_q014",
+      "points": 3,
+      "question": "Implement a function to perform a two-sample t-test comparing yields from two fabrication lots. Return both the t-statistic and p-value.",
+      "solution": "import numpy as np\nfrom scipy import stats\n\ndef compare_lot_yields(lot_a: np.ndarray, lot_b: np.ndarray) -> dict:\n    \"\"\"\n    Compare yields between two lots using independent t-test.\n    \n    Args:\n        lot_a: Yield percentages for lot A\n        lot_b: Yield percentages for lot B\n    \n    Returns:\n        Dictionary with 't_statistic' and 'p_value'\n    \"\"\"\n    t_stat, p_val = stats.ttest_ind(lot_a, lot_b)\n    return {'t_statistic': float(t_stat), 'p_value': float(p_val)}",
+      "starter_code": "import numpy as np\nfrom scipy import stats\n\ndef compare_lot_yields(lot_a: np.ndarray, lot_b: np.ndarray) -> dict:\n    \"\"\"\n    Compare yields between two lots using independent t-test.\n    \n    Args:\n        lot_a: Yield percentages for lot A\n        lot_b: Yield percentages for lot B\n    \n    Returns:\n        Dictionary with 't_statistic' and 'p_value'\n    \"\"\"\n    # YOUR CODE HERE\n    pass",
+      "test_cases": [
+        {
+          "description": "Lots with significantly different yields",
+          "expected_output": {
+            "p_value": 0.001
+          },
+          "input": {
+            "lot_a": [
+              95.2,
+              94.8,
+              95.5,
+              94.9,
+              95.1
+            ],
+            "lot_b": [
+              92.1,
+              91.8,
+              92.5,
+              92.0,
+              91.9
+            ]
+          },
+          "tolerance": 0.01
+        }
+      ],
+      "topic": "hypothesis_testing",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "hints": [
+        "Cp measures potential capability (doesn't consider centering)",
+        "Cpk accounts for process centering relative to spec limits",
+        "Use ddof=1 for sample standard deviation",
+        "Cpk is the minimum of CPU and CPL"
+      ],
+      "id": "m1.2_q015",
+      "points": 4,
+      "question": "Create a function to calculate process capability indices Cp and Cpk for a critical dimension measurement. These metrics are fundamental in semiconductor process control.",
+      "solution": "import numpy as np\n\ndef calculate_process_capability(measurements: np.ndarray, \n                                 lower_spec: float,\n                                 upper_spec: float) -> dict:\n    \"\"\"\n    Calculate Cp and Cpk indices.\n    \n    Args:\n        measurements: Array of measurement values\n        lower_spec: Lower specification limit (LSL)\n        upper_spec: Upper specification limit (USL)\n    \n    Returns:\n        Dictionary with 'cp' and 'cpk' values\n    \"\"\"\n    mean = np.mean(measurements)\n    std = np.std(measurements, ddof=1)  # Sample std dev\n    \n    # Cp = (USL - LSL) / (6 * sigma)\n    cp = (upper_spec - lower_spec) / (6 * std)\n    \n    # Cpk = min((USL - mean) / (3 * sigma), (mean - LSL) / (3 * sigma))\n    cpu = (upper_spec - mean) / (3 * std)\n    cpl = (mean - lower_spec) / (3 * std)\n    cpk = min(cpu, cpl)\n    \n    return {'cp': round(cp, 3), 'cpk': round(cpk, 3)}",
+      "starter_code": "import numpy as np\n\ndef calculate_process_capability(measurements: np.ndarray, \n                                 lower_spec: float,\n                                 upper_spec: float) -> dict:\n    \"\"\"\n    Calculate Cp and Cpk indices.\n    \n    Args:\n        measurements: Array of measurement values\n        lower_spec: Lower specification limit (LSL)\n        upper_spec: Upper specification limit (USL)\n    \n    Returns:\n        Dictionary with 'cp' and 'cpk' values\n    \"\"\"\n    # YOUR CODE HERE\n    pass",
+      "test_cases": [
+        {
+          "description": "Well-centered process with good capability",
+          "expected_output": {
+            "cp": 1.5,
+            "cpk": 1.2
+          },
+          "input": {
+            "lower_spec": 95,
+            "measurements": [
+              100,
+              101,
+              99,
+              100,
+              102,
+              98,
+              101,
+              100,
+              99,
+              101
+            ],
+            "upper_spec": 105
+          },
+          "tolerance": 0.2
+        }
+      ],
+      "topic": "process_capability",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "hints": [
+        "Use scipy.stats.f_oneway() for one-way ANOVA",
+        "Unpack the chamber_yields using * when calling f_oneway",
+        "Compare p-value to 0.05 for significance at \u03b1=0.05"
+      ],
+      "id": "m1.2_q016",
+      "points": 3,
+      "question": "Implement a function to perform a one-way ANOVA test comparing mean yields across multiple fabrication chambers. This is crucial for identifying if chamber-to-chamber variation is significant.",
+      "solution": "import numpy as np\nfrom scipy import stats\n\ndef anova_chamber_comparison(*chamber_yields) -> dict:\n    \"\"\"\n    Perform one-way ANOVA on yields from multiple chambers.\n    \n    Args:\n        *chamber_yields: Variable number of arrays, each containing\n                        yield measurements from one chamber\n    \n    Returns:\n        Dictionary with 'f_statistic', 'p_value', and 'significant' (bool at \u03b1=0.05)\n    \"\"\"\n    f_stat, p_val = stats.f_oneway(*chamber_yields)\n    return {\n        'f_statistic': float(f_stat),\n        'p_value': float(p_val),\n        'significant': bool(p_val < 0.05)\n    }",
+      "starter_code": "import numpy as np\nfrom scipy import stats\n\ndef anova_chamber_comparison(*chamber_yields) -> dict:\n    \"\"\"\n    Perform one-way ANOVA on yields from multiple chambers.\n    \n    Args:\n        *chamber_yields: Variable number of arrays, each containing\n                        yield measurements from one chamber\n    \n    Returns:\n        Dictionary with 'f_statistic', 'p_value', and 'significant' (bool at \u03b1=0.05)\n    \"\"\"\n    # YOUR CODE HERE\n    pass",
+      "test_cases": [
+        {
+          "description": "Chambers with similar yields (non-significant difference)",
+          "expected_output": {
+            "significant": false
+          },
+          "input": {
+            "chamber_yields": [
+              [
+                95,
+                94,
+                96
+              ],
+              [
+                93,
+                92,
+                94
+              ],
+              [
+                95,
+                96,
+                94
+              ]
+            ]
+          }
+        }
+      ],
+      "topic": "anova",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "easy",
+      "hints": [
+        "Use scipy.stats.shapiro() for the test",
+        "If p-value > alpha, fail to reject null hypothesis (data is normal)",
+        "The null hypothesis is that data comes from a normal distribution"
+      ],
+      "id": "m1.2_q017",
+      "points": 2,
+      "question": "Create a function to detect if process data is normally distributed using the Shapiro-Wilk test. Normal distribution is a key assumption for many statistical process control methods.",
+      "solution": "import numpy as np\nfrom scipy import stats\n\ndef test_normality(data: np.ndarray, alpha: float = 0.05) -> dict:\n    \"\"\"\n    Test if data is normally distributed using Shapiro-Wilk test.\n    \n    Args:\n        data: 1D array of measurements\n        alpha: Significance level (default 0.05)\n    \n    Returns:\n        Dictionary with 'statistic', 'p_value', and 'is_normal' (bool)\n    \"\"\"\n    statistic, p_value = stats.shapiro(data)\n    return {\n        'statistic': float(statistic),\n        'p_value': float(p_value),\n        'is_normal': bool(p_value > alpha)  # Fail to reject H0 means normal\n    }",
+      "starter_code": "import numpy as np\nfrom scipy import stats\n\ndef test_normality(data: np.ndarray, alpha: float = 0.05) -> dict:\n    \"\"\"\n    Test if data is normally distributed using Shapiro-Wilk test.\n    \n    Args:\n        data: 1D array of measurements\n        alpha: Significance level (default 0.05)\n    \n    Returns:\n        Dictionary with 'statistic', 'p_value', and 'is_normal' (bool)\n    \"\"\"\n    # YOUR CODE HERE\n    pass",
+      "test_cases": [
+        {
+          "description": "Normally distributed process data",
+          "expected_output": {
+            "is_normal": true
+          },
+          "input": {
+            "alpha": 0.05,
+            "data": [
+              100,
+              101,
+              99,
+              100,
+              102,
+              98,
+              101,
+              100,
+              99,
+              101,
+              100,
+              99
+            ]
+          }
+        }
+      ],
+      "topic": "normality_testing",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "id": "m1.2_q018",
+      "keywords": [
+        "false positive",
+        "false negative",
+        "alpha",
+        "beta",
+        "process control",
+        "consequences"
+      ],
+      "points": 3,
+      "question": "Explain the difference between Type I and Type II errors in the context of semiconductor process monitoring. Provide a manufacturing example where each type of error would have different consequences.",
+      "rubric": [
+        "Correctly defines Type I error as false positive (1 point)",
+        "Correctly defines Type II error as false negative (1 point)",
+        "Provides relevant semiconductor manufacturing examples (0.5 points)",
+        "Discusses trade-offs and consequences in production context (0.5 points)"
+      ],
+      "sample_answer": "**Type I Error (False Positive, \u03b1)**: Rejecting the null hypothesis when it's true. In process monitoring, this means flagging a process as out-of-control when it's actually fine.\n\n**Example**: A control chart shows an alarm for chamber temperature drift, but the chamber is actually operating normally. Consequence: Unnecessary downtime, wasted engineering time, lost production.\n\n**Type II Error (False Negative, \u03b2)**: Failing to reject the null hypothesis when it's false. This means missing a real process shift.\n\n**Example**: A deposition chamber is gradually drifting out of spec, but statistical tests fail to detect it. Consequence: Defective wafers are produced until the problem becomes obvious, leading to scrap and rework.\n\n**Trade-off**: In semiconductor manufacturing, Type II errors are often more costly because they lead to defective product, so we might accept higher \u03b1 (more false alarms) to reduce \u03b2 (missed defects).",
+      "topic": "hypothesis_testing",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "id": "m1.2_q019",
+      "keywords": [
+        "central limit theorem",
+        "sampling distribution",
+        "normal distribution",
+        "x-bar chart",
+        "subgroup",
+        "sample size"
+      ],
+      "points": 3,
+      "question": "Why is the Central Limit Theorem particularly important for semiconductor manufacturing quality control? How does it enable the use of control charts even when individual measurements may not be normally distributed?",
+      "rubric": [
+        "Correctly states the Central Limit Theorem (1 point)",
+        "Explains application to control charts and subgrouping (1 point)",
+        "Discusses implications for non-normal data in manufacturing (0.5 points)",
+        "Mentions sample size considerations (0.5 points)"
+      ],
+      "sample_answer": "The Central Limit Theorem (CLT) states that the sampling distribution of the sample mean approaches a normal distribution as sample size increases, regardless of the underlying population distribution.\n\n**Importance for Semiconductor Manufacturing**:\n\n1. **Enables X-bar charts**: Even if individual wafer measurements (e.g., thickness, resistivity) aren't perfectly normal, the average of small subgroups (n=4-5 wafers) will be approximately normal. This allows us to use control charts based on normal distribution assumptions.\n\n2. **Justifies confidence intervals**: When we calculate confidence intervals for mean yield or mean critical dimensions, the CLT ensures these intervals are valid even with non-normal individual measurements.\n\n3. **Practical application**: In practice, individual particle counts or defect densities might be Poisson or exponential, but when we track mean values across wafer lots, the CLT allows us to apply normal-based statistical tests.\n\n4. **Sample size guidance**: For moderately skewed data (common in manufacturing), n\u22655 is often sufficient; for heavily skewed data, n\u226530 may be needed.\n\nThis is why subgrouping is fundamental to SPC - it leverages the CLT to make statistical methods robust to distribution assumptions.",
+      "topic": "statistical_theory",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "id": "m1.2_q020",
+      "keywords": [
+        "factorial design",
+        "fractional factorial",
+        "confounding",
+        "screening",
+        "interactions",
+        "DOE"
+      ],
+      "points": 3,
+      "question": "In Design of Experiments (DOE) for process optimization, explain the advantage of a fractional factorial design over a full factorial design. When would a semiconductor process engineer choose each approach?",
+      "rubric": [
+        "Correctly explains full factorial design (0.75 points)",
+        "Correctly explains fractional factorial and confounding (0.75 points)",
+        "Provides appropriate use cases for each approach (1 point)",
+        "Includes semiconductor-relevant examples (0.5 points)"
+      ],
+      "sample_answer": "**Full Factorial Design**:\n- Tests all possible combinations of factor levels\n- Example: 5 factors at 2 levels = 2\u2075 = 32 runs\n- **Advantages**: Estimates all main effects and interactions completely\n- **Disadvantages**: Expensive and time-consuming for many factors\n\n**Fractional Factorial Design**:\n- Tests a carefully selected subset of combinations\n- Example: 2\u2075\u207b\u00b9 design = 16 runs (half fraction)\n- **Advantages**: Reduces experimental cost and time significantly\n- **Disadvantages**: Confounds (aliases) some interactions - can't separate certain effects\n\n**When to Use Each**:\n\n**Full Factorial**:\n- Critical processes where understanding all interactions is essential\n- Smaller number of factors (\u22644-5)\n- Development phase where comprehensive understanding is needed\n- Example: Optimizing a new etch chemistry with 3-4 key parameters\n\n**Fractional Factorial**:\n- Screening experiments with many factors (6+)\n- Main effects are primary interest; higher-order interactions assumed negligible\n- Production troubleshooting where time/cost constraints are severe\n- Example: Screening 8 potential factors affecting yield to identify the vital few\n\nIn practice, engineers often use screening fractional factorials first, then run full factorials on the significant factors identified.",
+      "topic": "design_of_experiments",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "id": "m1.2_q021",
+      "keywords": [
+        "correlation",
+        "causation",
+        "confounding",
+        "DOE",
+        "controlled experiment",
+        "mechanism"
+      ],
+      "points": 2,
+      "question": "Explain why correlation does not imply causation, using a semiconductor manufacturing example. What additional evidence would you need to establish a causal relationship?",
+      "rubric": [
+        "Clearly states correlation \u2260 causation (0.5 points)",
+        "Provides relevant semiconductor example (0.5 points)",
+        "Identifies at least 2 reasons why correlation doesn't imply causation (0.5 points)",
+        "Lists methods to establish causal relationships (0.5 points)"
+      ],
+      "sample_answer": "**Correlation vs. Causation**:\n\nCorrelation measures the strength of association between two variables, but doesn't prove that one causes the other.\n\n**Semiconductor Example**:\nSuppose you observe a strong positive correlation (r = 0.85) between fab room temperature and defect density. This correlation alone doesn't prove that temperature *causes* defects because:\n\n1. **Reverse causation**: Perhaps defect-prone batches require more rework, which generates heat and raises room temperature\n\n2. **Confounding variables**: Both temperature and defects might increase during summer months due to humidity (the true cause)\n\n3. **Coincidence**: The correlation might be spurious - perhaps higher temperature periods coincide with a different operator shift that has process issues\n\n**Establishing Causation**:\n\nTo establish a causal relationship, you need:\n\n1. **Controlled experiments (DOE)**: Deliberately vary temperature while holding other factors constant and observe defect response\n\n2. **Temporal precedence**: Demonstrate that temperature changes precede defect increases\n\n3. **Mechanism understanding**: Identify the physical mechanism (e.g., photoresist viscosity changes with temperature)\n\n4. **Replication**: Show the relationship holds across different fabs, tools, and time periods\n\n5. **Dose-response**: Demonstrate that larger temperature deviations produce proportionally more defects\n\nIn manufacturing, designed experiments (DOE) are the gold standard for establishing causation.",
+      "topic": "correlation",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "id": "m1.2_q022",
+      "keywords": [
+        "control limits",
+        "3 sigma",
+        "false alarm",
+        "type I error",
+        "normal distribution",
+        "SPC",
+        "process control"
+      ],
+      "points": 3,
+      "question": "In semiconductor Statistical Process Control (SPC), control limits are typically set at \u00b13\u03c3 from the mean. Explain the statistical reasoning behind this choice and discuss whether it's always appropriate for all types of defects.",
+      "rubric": [
+        "Explains the 99.73% coverage and false alarm rate for \u00b13\u03c3 (1 point)",
+        "Discusses the balance between Type I and Type II errors (0.75 points)",
+        "Identifies at least 2 scenarios where \u00b13\u03c3 may not be appropriate (0.75 points)",
+        "Shows understanding of context-dependent SPC strategy (0.5 points)"
+      ],
+      "sample_answer": "**Statistical Reasoning for \u00b13\u03c3 Control Limits**:\n\n1. **Normal Distribution Basis**: If a process is in statistical control and follows a normal distribution, \u00b13\u03c3 limits capture 99.73% of natural variation. Only 0.27% of points should fall outside these limits by chance alone.\n\n2. **False Alarm Rate**: With \u00b13\u03c3 limits, the probability of a Type I error (false alarm) is approximately 0.0027 or 1 in 370 samples. This provides a reasonable balance between detecting real shifts and avoiding false alarms.\n\n3. **Economic Balance**: Narrower limits (e.g., \u00b12\u03c3) would trigger more false alarms, wasting engineering time. Wider limits (e.g., \u00b14\u03c3) would miss real process shifts, allowing defects to accumulate.\n\n**When \u00b13\u03c3 May Not Be Appropriate**:\n\n1. **Critical Safety Parameters**: For parameters affecting device reliability or safety, \u00b12\u03c3 limits might be preferred despite more false alarms, to catch shifts earlier.\n\n2. **Rare Defects**: For defect types with very low baseline rates (e.g., particle contamination), attribute charts (p-charts, c-charts) with different statistical bases are more appropriate than \u00b13\u03c3.\n\n3. **Non-Normal Distributions**: If data is heavily skewed (e.g., defect counts, particle sizes), using \u00b13\u03c3 based on normal assumptions can give misleading control limits. Transformation or non-parametric methods may be needed.\n\n4. **High-Volume Manufacturing**: In high-volume production, even small shifts matter economically. Some fabs use \u00b12\u03c3 warning limits plus \u00b13\u03c3 action limits for graduated response.\n\n5. **New Processes**: During process development or after major changes, \u00b12\u03c3 limits might be used temporarily for tighter monitoring until the process stabilizes.\n\nThe key is that \u00b13\u03c3 is a practical default for stable processes, but should be adjusted based on cost of false alarms vs. cost of missing real shifts.",
+      "topic": "statistical_process_control",
+      "type": "conceptual"
+    },
+    {
+      "correct_answer": "B",
+      "difficulty": "medium",
+      "explanation": "The process has low variation (\u03c3=2 is small relative to spec width of 20), indicating good precision. However, the mean of 105 is shifted +5 from the target of 100, meaning poor accuracy/centering. This will result in a lower Cpk than Cp.",
+      "id": "m1.2_q023",
+      "options": [
+        "High variation (poor precision)",
+        "Off-center mean (poor accuracy)",
+        "Both high variation and off-center mean",
+        "The process is operating perfectly within spec"
+      ],
+      "points": 1,
+      "question": "A process has specification limits of 100 \u00b1 10 units. The process operates with mean = 105 and \u03c3 = 2. What is the primary issue with this process?",
+      "topic": "process_capability",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": "C",
+      "difficulty": "hard",
+      "explanation": "A 2\u00b3 design has 8 runs total (2\u00b3 = 8). The degrees of freedom breakdown is: 3 main effects + 3 two-factor interactions + 1 three-factor interaction = 7 degrees of freedom for estimating effects. (The 8th degree of freedom is used for the overall mean.)",
+      "id": "m1.2_q024",
+      "options": [
+        "3",
+        "6",
+        "7",
+        "8"
+      ],
+      "points": 1,
+      "question": "In a 2\u00b3 full factorial DOE for an etch process (3 factors: power, pressure, time; each at 2 levels), how many degrees of freedom are available for estimating effects?",
+      "topic": "design_of_experiments",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "medium",
+      "hints": [
+        "SEM = std / sqrt(n) or use scipy.stats.sem()",
+        "For 99% CI, use confidence level 0.99",
+        "Use t-distribution with df = n - 1"
+      ],
+      "id": "m1.2_q025",
+      "points": 3,
+      "question": "Implement a function to calculate the standard error of the mean (SEM) and construct a 99% confidence interval. This is used in metrology to report measurement uncertainty.",
+      "solution": "import numpy as np\nfrom scipy import stats\n\ndef ci_99_for_mean(data: np.ndarray) -> dict:\n    \"\"\"\n    Calculate mean, SEM, and 99% confidence interval.\n    \n    Args:\n        data: 1D array of measurements\n    \n    Returns:\n        Dictionary with 'mean', 'sem', 'ci_lower', 'ci_upper'\n    \"\"\"\n    n = len(data)\n    mean = np.mean(data)\n    sem = stats.sem(data)  # Standard error of mean\n    ci = stats.t.interval(0.99, df=n-1, loc=mean, scale=sem)\n    \n    return {\n        'mean': round(float(mean), 3),\n        'sem': round(float(sem), 3),\n        'ci_lower': round(float(ci[0]), 3),\n        'ci_upper': round(float(ci[1]), 3)\n    }",
+      "starter_code": "import numpy as np\nfrom scipy import stats\n\ndef ci_99_for_mean(data: np.ndarray) -> dict:\n    \"\"\"\n    Calculate mean, SEM, and 99% confidence interval.\n    \n    Args:\n        data: 1D array of measurements\n    \n    Returns:\n        Dictionary with 'mean', 'sem', 'ci_lower', 'ci_upper'\n    \"\"\"\n    # YOUR CODE HERE\n    pass",
+      "test_cases": [
+        {
+          "description": "Sample measurements with 99% CI calculation",
+          "expected_output": {
+            "ci_lower": 98.0,
+            "ci_upper": 102.0,
+            "mean": 100.0,
+            "sem": 0.6
+          },
+          "input": {
+            "data": [
+              100,
+              102,
+              98,
+              101,
+              99,
+              103,
+              97,
+              100,
+              101,
+              99
+            ]
+          },
+          "tolerance": 0.5
+        }
+      ],
+      "topic": "confidence_intervals",
+      "type": "coding_exercise"
+    }
+  ],
+  "sub_module": "1.2",
+  "title": "Statistical Foundations for Semiconductor Data",
+  "week": 2
+}

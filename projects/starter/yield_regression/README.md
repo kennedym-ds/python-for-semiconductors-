@@ -239,6 +239,272 @@ With default Ridge regression settings:
 | ElasticNet | 2.39 | 2.98 | 0.14 | 1.0 | Fast |
 | Random Forest | 1.89 | 2.35 | 0.49 | 1.0 | Medium |
 
+## 📚 Educational Materials
+
+### For Students
+
+This project includes comprehensive learning materials for hands-on practice with regression analysis in semiconductor manufacturing.
+
+#### 📘 Interactive Tutorial (`yield_regression_tutorial.ipynb`)
+
+An interactive Jupyter notebook with hands-on exercises covering the complete regression workflow:
+
+**Section 1: Data Generation and Exploration**
+- Exercise 1.1 (★ beginner): Generate synthetic yield data with realistic process parameters
+- Exercise 1.2 (★★ intermediate): Analyze correlations between process parameters and yield
+
+**Section 2: Model Training and Comparison**
+- Exercise 2.1 (★★ intermediate): Train multiple regression models (Linear, Ridge, Lasso, ElasticNet, Random Forest)
+- Exercise 2.2 (★★★ advanced): Compare model performance using R², RMSE, and MAE
+
+**Section 3: Manufacturing-Specific Metrics**
+- Exercise 3.1 (★★★ advanced): Analyze residuals to validate model assumptions
+- Exercise 3.2 (★★★ advanced): Calculate PWS (Prediction Within Spec) and Estimated Loss for manufacturing context
+
+**Section 4: Model Deployment**
+- Exercise 4.1 (★★ intermediate): Save production models with complete metadata
+- Exercise 4.2 (★★ intermediate): Test CLI interface for deployment scenarios
+
+**Expected Completion Time**: 100 minutes (typical lab session)
+
+```bash
+# Run locally
+jupyter notebook yield_regression_tutorial.ipynb
+
+# Run in Docker
+docker-compose up jupyter
+# Then navigate to http://localhost:8888
+```
+
+#### 📗 Solution Notebook (`yield_regression_solution.ipynb`)
+
+Complete reference implementations for all tutorial exercises:
+- **Exercise 1**: Data generation with statistical summaries and correlation heatmaps
+- **Exercise 2**: 5-model comparison demonstrating regularization effects
+- **Exercise 3**: Residual analysis with histogram, scatter, and Q-Q plots
+- **Exercise 4**: Production deployment with round-trip verification
+
+Includes best practices, debugging tips, and manufacturing interpretation throughout.
+
+#### 🔍 Automated Grading (`evaluate_submission.py`)
+
+Automated evaluation script for student submissions with 100-point scoring rubric:
+
+```bash
+# Grade a completed notebook
+python evaluate_submission.py --notebook yield_regression_tutorial.ipynb
+
+# Save results to JSON for LMS integration
+python evaluate_submission.py --notebook submission.ipynb --output-json grades.json
+
+# Get detailed feedback
+python evaluate_submission.py --notebook submission.ipynb --verbose
+```
+
+**Scoring Rubric** (100 points total):
+- Exercise 1 (Data Exploration): 20 points
+  - Data generation: 5 pts
+  - Distribution analysis: 5 pts
+  - Correlation analysis: 5 pts
+  - Visualization quality: 5 pts
+- Exercise 2 (Model Training): 30 points
+  - Data splitting: 5 pts
+  - Multiple model training: 10 pts
+  - Performance evaluation: 10 pts
+  - Model comparison: 5 pts
+- Exercise 3 (Manufacturing Metrics): 25 points
+  - Residual analysis: 10 pts
+  - PWS calculation: 5 pts
+  - Estimated Loss: 5 pts
+  - Manufacturing interpretation: 5 pts
+- Exercise 4 (Deployment): 15 points
+  - Model saving: 5 pts
+  - Model loading: 5 pts
+  - CLI demonstration: 5 pts
+- Code Quality: 10 points
+  - Documentation: 3 pts
+  - Code style: 3 pts
+  - Error handling: 2 pts
+  - Best practices: 2 pts
+
+**Features**:
+- Automated notebook execution and validation
+- Code quality checks (PEP 8, documentation)
+- Results validation against expected ranges
+- Detailed feedback with actionable suggestions
+- JSON output for Learning Management System integration
+
+**Batch Grading Example**:
+```bash
+# Grade all submissions
+for notebook in submissions/*.ipynb; do
+    python evaluate_submission.py \
+        --notebook "$notebook" \
+        --output-json "grades/$(basename $notebook .ipynb)_grade.json"
+done
+```
+
+#### Common Student Mistakes
+
+1. **Missing Engineered Features**: Forgetting to include `temp_centered`, `pressure_sq`, `flow_time_inter`, and `temp_flow_inter` when making predictions
+2. **Metric Interpretation**: Confusing R² (higher is better) with RMSE (lower is better)
+3. **Residual Analysis**: Only looking at metrics without visualizing residual plots
+4. **PWS Calculation**: Not applying spec limits (60-100%) correctly or using wrong thresholds
+5. **scikit-learn Compatibility**: Using deprecated `squared=False` parameter in RMSE calculation (fixed in sklearn 1.7+)
+
+#### Prerequisites
+
+**Required Knowledge**:
+- Python basics (functions, loops, conditionals)
+- NumPy and Pandas fundamentals
+- Basic statistics (mean, variance, correlation)
+- Regression concepts (linear models, R², residuals)
+
+**Recommended Background**:
+- Module 1: Python for Data Analysis
+- Module 2: Statistics for Manufacturing  
+- Module 3.1: Regression Analysis Fundamentals
+
+**Semiconductor Domain**:
+- Basic understanding of wafer fabrication process
+- Process control concepts (spec limits, tolerance)
+- Manufacturing metrics (yield, defect density)
+
+### For Instructors
+
+#### Teaching Tips
+
+1. **Start with Synthetic Data**: Use the built-in synthetic generator to build intuition before moving to real datasets
+2. **Emphasize Manufacturing Context**: Connect R², RMSE, and MAE to real-world yield optimization scenarios
+3. **Show Residual Plots Early**: Don't rely solely on metrics—visualize residuals to check assumptions
+4. **Compare Multiple Models**: Demonstrate regularization effects (Ridge vs Lasso vs ElasticNet)
+5. **Connect to Real Processes**: Relate temperature, pressure, flow to actual CVD/etch processes
+
+#### Grading Workflow
+
+**Automated Grading**:
+```bash
+# Single notebook
+python evaluate_submission.py --notebook student_submission.ipynb --verbose
+
+# Batch processing
+for nb in submissions/*.ipynb; do
+    python evaluate_submission.py --notebook "$nb" --output-json "grades/$(basename $nb .ipynb).json"
+done
+```
+
+**Class Summary Generation**:
+```bash
+# Generate class statistics
+python -c "
+import json
+from pathlib import Path
+
+grades = [json.load(open(f)) for f in Path('grades').glob('*.json')]
+avg_score = sum(g['total_score'] for g in grades) / len(grades)
+passing = sum(1 for g in grades if g['total_score'] >= 60)
+
+print(f'Class Average: {avg_score:.1f}/100')
+print(f'Passing Rate: {passing}/{len(grades)} ({passing/len(grades)*100:.1f}%)')
+print(f'Letter Grade Distribution:')
+for grade in ['A', 'B', 'C', 'D', 'F']:
+    count = sum(1 for g in grades if g['letter_grade'].startswith(grade))
+    print(f'  {grade}: {count} ({count/len(grades)*100:.1f}%)')
+"
+```
+
+#### Exercise Breakdown
+
+| Exercise | Points | Auto-Gradable | Manual Review | Time Est. |
+|----------|--------|---------------|---------------|-----------|
+| 1: Data Exploration | 20 | ✅ Yes | Visualization quality | 20 min |
+| 2: Model Training | 30 | ✅ Yes | Model selection rationale | 30 min |
+| 3: Manufacturing Metrics | 25 | ✅ Yes | Interpretation depth | 30 min |
+| 4: Deployment | 15 | ✅ Yes | Production considerations | 20 min |
+| Code Quality | 10 | ⚠️ Partial | Comments, organization | (continuous) |
+| **TOTAL** | **100** | **~80%** | **~20%** | **100 min** |
+
+#### Time Estimates
+
+- **Exercise 1**: 20 min (data generation + correlation analysis)
+- **Exercise 2**: 30 min (train 5 models + comparison)
+- **Exercise 3**: 30 min (residual analysis + manufacturing metrics)
+- **Exercise 4**: 20 min (deployment + CLI testing)
+- **Total**: 100 minutes (fits standard 90-120 min lab session)
+
+#### Assessment Rubric
+
+**90-100 (Exceptional)**:
+- All exercises complete with insightful analysis
+- Residual plots show proper interpretation
+- Manufacturing metrics correctly calculated and explained
+- Code is well-documented and follows best practices
+- Demonstrates understanding beyond requirements
+
+**75-89 (Proficient)**:
+- All exercises complete and correct
+- Standard metrics calculated properly
+- Residual analysis included
+- Code is functional and reasonably documented
+- Meets all core requirements
+
+**60-74 (Developing)**:
+- Most exercises complete with some errors
+- Some metrics missing or incorrect
+- Residual analysis incomplete
+- Code works but lacks documentation
+- Core concepts understood but execution needs improvement
+
+**<60 (Needs Improvement)**:
+- Multiple exercises incomplete
+- Major errors in metric calculation
+- Missing residual analysis
+- Code doesn't execute or has critical errors
+- Requires additional instruction
+
+#### Extensions and Projects
+
+Suggested follow-up projects for advanced learners:
+
+1. **Real Data Integration**: Use SECOM dataset (`datasets/secom/`) with 590 features
+2. **Hyperparameter Optimization**: Implement GridSearchCV for automated tuning
+3. **Feature Engineering**: Create domain-specific features (thermal budget, process interactions)
+4. **Ensemble Methods**: Combine multiple models for improved predictions
+5. **Deployment Integration**: Build FastAPI wrapper (`infrastructure/api/`)
+6. **Drift Monitoring**: Track model performance degradation over time (Module 5.2)
+7. **Uncertainty Quantification**: Add prediction intervals using quantile regression
+8. **Optimization**: Use model for process parameter optimization
+
+#### Common Discussion Points
+
+**Q: Why does Random Forest perform better than Linear models?**
+A: The synthetic data includes non-linear effects (pressure squared) and interaction terms that tree-based models capture naturally.
+
+**Q: When should we use Ridge vs Lasso?**
+A: Ridge (L2) when all features are potentially useful; Lasso (L1) when you want automatic feature selection with sparse coefficients.
+
+**Q: What does PWS mean in manufacturing?**
+A: Prediction Within Spec—the percentage of predictions that fall within acceptable yield range (60-100%). Critical for production decisions.
+
+**Q: Why is Estimated Loss more important than RMSE?**
+A: Estimated Loss incorporates tolerance thresholds and cost per unit, making it actionable for manufacturing decisions (e.g., scrapping out-of-spec wafers).
+
+**Q: How do we handle the sklearn deprecation warning?**
+A: This project uses `np.sqrt(mean_squared_error())` instead of the deprecated `squared=False` parameter, ensuring compatibility with sklearn 1.7+.
+
+### Related Projects
+
+After completing this project, learners can progress to:
+- **wafer_defect_classifier**: Binary classification for defect detection
+- **equipment_drift_monitor**: Time series analysis for equipment health
+- **die_defect_segmentation**: Computer vision for spatial defect analysis
+
+### Reference Documentation
+
+- **Grading Guide**: See `GRADING_SCRIPT_GUIDE.md` for detailed grading logic and pattern matching
+- **Test Suite**: See `TEST_SUITE_EXPANSION_SUMMARY.md` for 37 test cases covering edge cases, manufacturing scenarios, integration, and performance
+- **Solution Content**: See `SOLUTION_NOTEBOOK_CONTENT.md` for complete exercise solutions
+
 ## Advanced Usage
 
 ### Custom Hyperparameter Tuning

@@ -1,0 +1,38 @@
+{
+  "metadata": {
+    "author": "Your Name",
+    "created_date": "2025-09-30",
+    "description": "Example multiple choice question",
+    "updated_date": "2025-09-30"
+  },
+  "module_id": "module-X.Y",
+  "questions": [
+    {
+      "correct_answer": 0,
+      "difficulty": "easy",
+      "explanation": "NumPy provides vectorized operations that are much faster than Python loops for numerical computations, which is critical when processing large arrays of wafer measurement data.",
+      "hints": [
+        "Think about how NumPy handles array operations",
+        "Consider the performance difference between loops and vectorization"
+      ],
+      "id": "mX.Y_q001",
+      "options": [
+        "Better performance for numerical operations",
+        "Built-in plotting capabilities",
+        "Automatic data cleaning",
+        "Native JSON serialization"
+      ],
+      "points": 2,
+      "question": "What is the primary advantage of using NumPy arrays for wafer measurement data?",
+      "tags": [
+        "python",
+        "numpy",
+        "performance",
+        "semiconductor_data"
+      ],
+      "topic": "example_topic",
+      "type": "multiple_choice"
+    }
+  ],
+  "version": "1.0"
+}

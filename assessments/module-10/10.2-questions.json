@@ -1,0 +1,635 @@
+{
+  "description": "Assessment covering testing strategies for ML systems, unit testing with pytest, integration testing, test-driven development, mocking and fixtures, CI/CD integration, code coverage, and quality assurance practices for semiconductor ML applications.",
+  "estimated_time_minutes": 90,
+  "module_id": "module-10.2",
+  "passing_score": 70,
+  "questions": [
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "Unit tests verify that individual functions and components work correctly in isolation. They test a single 'unit' (function, method, class) with controlled inputs and expected outputs. This makes debugging easier, enables confident refactoring, and catches regressions early.",
+      "id": "m10.2_q001",
+      "options": [
+        "To test the entire system end-to-end",
+        "To test individual functions and components in isolation",
+        "To test model accuracy on production data",
+        "To test only the user interface"
+      ],
+      "points": 2,
+      "question": "What is the primary purpose of unit testing in ML projects?",
+      "topic": "testing_fundamentals",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 2,
+      "difficulty": "medium",
+      "explanation": "The testing pyramid recommends many unit tests (fast, specific), fewer integration tests (slower, test component interactions), and even fewer end-to-end tests (slowest, test full system). Unit tests are fastest and catch most bugs, so you should have the most of them.",
+      "id": "m10.2_q002",
+      "options": [
+        "End-to-end tests",
+        "Integration tests",
+        "Unit tests",
+        "Manual tests"
+      ],
+      "points": 2,
+      "question": "In the testing pyramid for ML systems, what should be the most numerous type of tests?",
+      "topic": "testing_pyramid",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "Pytest automatically discovers test files named test_*.py or *_test.py. Test functions within these files should start with 'test_'. This convention enables automatic test discovery without configuration.",
+      "id": "m10.2_q003",
+      "options": [
+        "unit_*.py or integration_*.py",
+        "test_*.py or *_test.py",
+        "check_*.py or *_check.py",
+        "Any .py file in a tests/ directory"
+      ],
+      "points": 2,
+      "question": "What is the naming convention for pytest test files?",
+      "topic": "pytest_basics",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Intermittent test failures (flaky tests) usually indicate dependencies on external state. Tests should be isolated and deterministic. Common causes: relying on specific files existing, using random seeds without fixing them, depending on network connectivity, or relying on execution order of other tests.",
+      "id": "m10.2_q004",
+      "options": [
+        "The test is perfectly written",
+        "The test has dependencies on external state (files, databases, network)",
+        "The model is too accurate",
+        "Pytest has a bug"
+      ],
+      "points": 2,
+      "question": "A test for a wafer defect classifier fails intermittently. What's the most likely cause?",
+      "topic": "test_isolation",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Pytest fixtures provide reusable test data and setup/teardown logic. They enable sharing test data across multiple tests, managing resources (files, connections), and ensuring clean test environments. Fixtures are declared with @pytest.fixture and injected as function arguments.",
+      "id": "m10.2_q005",
+      "options": [
+        "To fix bugs in the code",
+        "To provide reusable test data and setup/teardown logic",
+        "To make tests run faster",
+        "To replace the need for unit tests"
+      ],
+      "points": 2,
+      "question": "What is the purpose of pytest fixtures?",
+      "topic": "fixtures",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "Mocking external dependencies (databases, APIs, file systems) makes tests: (1) Fast - no I/O operations, (2) Deterministic - controlled data, no external failures, (3) Isolated - test only the code under test, not the database. Use unittest.mock or pytest-mock to replace real database calls with mock objects.",
+      "id": "m10.2_q006",
+      "options": [
+        "To make the test slower and more realistic",
+        "To avoid test dependencies on database availability and ensure deterministic, fast tests",
+        "Because pytest requires mocking all external dependencies",
+        "To test the database itself"
+      ],
+      "points": 3,
+      "question": "When testing a yield prediction model that loads data from a database, why should you mock the database connection?",
+      "topic": "mocking",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "TDD follows Red-Green-Refactor: (1) Red - write a failing test for the feature, (2) Green - write minimum code to make test pass, (3) Refactor - improve code while keeping tests green. Writing tests first clarifies requirements, ensures testable code, and provides immediate feedback.",
+      "id": "m10.2_q007",
+      "options": [
+        "After implementing the feature",
+        "Before implementing the feature",
+        "Only when bugs are found",
+        "Never - TDD doesn't use tests"
+      ],
+      "points": 2,
+      "question": "In Test-Driven Development (TDD), when do you write tests?",
+      "topic": "test_driven_development",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 2,
+      "difficulty": "easy",
+      "explanation": "Use np.testing.assert_array_almost_equal() for floating-point array comparisons. Floating-point arithmetic can introduce small errors, so exact equality checks fail. This function allows specifying decimal precision and provides informative error messages showing which elements differ.",
+      "id": "m10.2_q008",
+      "options": [
+        "assert array1 == array2",
+        "assert array1.equals(array2)",
+        "np.testing.assert_array_almost_equal(array1, array2)",
+        "assert str(array1) == str(array2)"
+      ],
+      "points": 2,
+      "question": "Which assertion should you use to check if two numpy arrays are approximately equal?",
+      "topic": "assertions",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Code coverage measures the percentage of code lines executed during tests. 60% coverage means 40% of your code is never executed by tests, potentially hiding bugs. Use coverage.py or pytest-cov to measure coverage. Note: 100% coverage doesn't guarantee bug-free code, but low coverage indicates untested code.",
+      "id": "m10.2_q009",
+      "options": [
+        "60% of your tests are passing",
+        "60% of your code is executed by your tests",
+        "60% of your bugs are caught",
+        "60% of your code is correct"
+      ],
+      "points": 2,
+      "question": "Your pytest run shows 60% code coverage. What does this mean?",
+      "topic": "code_coverage",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 2,
+      "difficulty": "hard",
+      "explanation": "ML testing challenges: (1) Probabilistic outputs - predictions vary with data, (2) No clear specifications - what's the 'correct' prediction?, (3) Data dependency - behavior depends on training data quality, (4) Model degradation - performance changes over time. Testing strategies include: testing data pipelines, checking model invariants, monitoring prediction distributions, and regression testing.",
+      "id": "m10.2_q010",
+      "options": [
+        "ML systems never have bugs",
+        "ML systems are deterministic and easy to test",
+        "ML outputs are probabilistic, data-dependent, and lack clear specifications",
+        "ML systems don't need testing"
+      ],
+      "points": 3,
+      "question": "What makes testing ML systems more challenging than traditional software?",
+      "topic": "ml_testing_challenges",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Good unit tests are: (1) Focused - test one behavior, (2) Independent - don't rely on other tests, (3) Repeatable - same results every time, (4) Fast - run in milliseconds, (5) Self-validating - clear pass/fail. Each test creates controlled input data and verifies expected transformations.",
+      "hints": [
+        "Create test DataFrame with known values",
+        "Test one behavior per test function",
+        "Use assert statements to verify expected outcomes",
+        "Check shape, values, and columns after preprocessing",
+        "Use pd.testing.assert_frame_equal for DataFrame comparisons"
+      ],
+      "id": "m10.2_q011",
+      "points": 4,
+      "question": "Write unit tests for a semiconductor data preprocessing function using pytest.",
+      "starter_code": "import pytest\nimport pandas as pd\nimport numpy as np\n\n# Function to test\ndef preprocess_wafer_data(df: pd.DataFrame) -> pd.DataFrame:\n    \"\"\"\n    Preprocess wafer sensor data:\n    - Remove rows with missing values\n    - Scale numeric columns to [0, 1]\n    - Remove constant columns (zero variance)\n    \"\"\"\n    # Remove missing\n    df = df.dropna()\n    \n    # Scale numeric columns\n    numeric_cols = df.select_dtypes(include=[np.number]).columns\n    for col in numeric_cols:\n        min_val = df[col].min()\n        max_val = df[col].max()\n        if max_val > min_val:\n            df[col] = (df[col] - min_val) / (max_val - min_val)\n    \n    # Remove constant columns\n    df = df.loc[:, df.nunique() > 1]\n    \n    return df\n\n# Write your tests here\ndef test_preprocess_removes_missing_values():\n    # Your implementation here\n    pass\n\ndef test_preprocess_scales_to_zero_one():\n    # Your implementation here\n    pass\n\ndef test_preprocess_removes_constant_columns():\n    # Your implementation here\n    pass",
+      "test_cases": [
+        {
+          "description": "Tests verify preprocessing behavior",
+          "expected_output": "All 3 tests pass",
+          "input": "Run pytest on the test file"
+        }
+      ],
+      "topic": "unit_testing_basics",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Fixtures eliminate code duplication in tests. Instead of creating test data in every test, define it once in a fixture. Fixtures can depend on other fixtures, enabling composition. Pytest automatically handles setup/teardown and dependency injection.",
+      "hints": [
+        "Use @pytest.fixture decorator",
+        "Fixtures can depend on other fixtures",
+        "Return test data from fixture function",
+        "Fixtures are called automatically when used as test parameters",
+        "Consider using fixture scopes (function, module, session)"
+      ],
+      "id": "m10.2_q012",
+      "points": 4,
+      "question": "Create pytest fixtures for reusable test data in a semiconductor ML testing suite.",
+      "starter_code": "import pytest\nimport pandas as pd\nimport numpy as np\nfrom sklearn.datasets import make_classification\n\n# Create fixtures for common test data\n\n@pytest.fixture\ndef sample_wafer_data():\n    \"\"\"\n    Fixture providing sample wafer sensor data.\n    Returns DataFrame with sensor readings and defect labels.\n    \"\"\"\n    # Your implementation here\n    pass\n\n@pytest.fixture\ndef trained_classifier(sample_wafer_data):\n    \"\"\"\n    Fixture providing a trained classifier.\n    Uses sample_wafer_data fixture.\n    \"\"\"\n    # Your implementation here\n    pass\n\n# Example test using fixtures\ndef test_classifier_predictions(trained_classifier, sample_wafer_data):\n    \"\"\"\n    Test that classifier makes valid predictions.\n    \"\"\"\n    X = sample_wafer_data.drop('defect', axis=1)\n    predictions = trained_classifier.predict(X)\n    \n    # Your assertions here\n    pass",
+      "test_cases": [
+        {
+          "description": "Fixtures provide reusable test data",
+          "expected_output": "Tests pass using shared fixtures",
+          "input": "pytest test_file.py"
+        }
+      ],
+      "topic": "pytest_fixtures",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Mocking external dependencies enables: (1) Fast tests - no network I/O, (2) Reliability - no dependency on external services, (3) Error testing - simulate failures, (4) Determinism - controlled responses. Use unittest.mock.patch to replace real functions with mocks during tests.",
+      "hints": [
+        "Use @patch('requests.get') to mock the API call",
+        "Configure mock return value: mock.return_value.json.return_value = ...",
+        "Set mock.return_value.status_code = 200 for success",
+        "Use mock.side_effect = Exception() to simulate errors",
+        "Verify mock was called: mock.assert_called_once_with(...)"
+      ],
+      "id": "m10.2_q013",
+      "points": 5,
+      "question": "Write tests for a function that loads data from an external API, using mocks to avoid actual API calls.",
+      "starter_code": "import pytest\nfrom unittest.mock import Mock, patch\nimport pandas as pd\nimport requests\n\n# Function to test\ndef fetch_equipment_data(equipment_id: str) -> pd.DataFrame:\n    \"\"\"\n    Fetch equipment sensor data from API.\n    \n    Args:\n        equipment_id: Equipment identifier\n        \n    Returns:\n        DataFrame with sensor readings\n    \"\"\"\n    response = requests.get(f'https://api.fab.com/equipment/{equipment_id}/data')\n    response.raise_for_status()\n    data = response.json()\n    return pd.DataFrame(data['readings'])\n\n# Write your tests with mocking\n\ndef test_fetch_equipment_data_success():\n    \"\"\"\n    Test successful data fetch.\n    \"\"\"\n    # Your implementation here\n    # Use @patch or unittest.mock to mock requests.get\n    pass\n\ndef test_fetch_equipment_data_api_error():\n    \"\"\"\n    Test handling of API errors.\n    \"\"\"\n    # Your implementation here\n    pass",
+      "test_cases": [
+        {
+          "description": "Tests are fast and don't depend on external services",
+          "expected_output": "Tests pass without making real API calls",
+          "input": "Run tests with mocked API"
+        }
+      ],
+      "topic": "mocking_external_dependencies",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Parametrized tests run the same test logic with different inputs. This reduces code duplication and makes it easy to add more test cases. Pytest generates a separate test for each parameter set, making failures easy to identify. This is especially useful for testing edge cases and boundary conditions.",
+      "hints": [
+        "Use @pytest.mark.parametrize decorator",
+        "Pass test cases as list of tuples",
+        "First parameter is a string of parameter names (comma-separated)",
+        "Each tuple in the list is one test case",
+        "Use pytest.approx() for floating-point comparisons"
+      ],
+      "id": "m10.2_q014",
+      "points": 5,
+      "question": "Write parametrized tests to verify a metric calculation function with multiple input scenarios.",
+      "starter_code": "import pytest\nimport numpy as np\nfrom sklearn.metrics import accuracy_score, precision_score, recall_score\n\n# Function to test\ndef calculate_classification_metrics(y_true: np.ndarray, y_pred: np.ndarray) -> dict:\n    \"\"\"\n    Calculate classification metrics.\n    \n    Args:\n        y_true: True labels\n        y_pred: Predicted labels\n        \n    Returns:\n        Dictionary with accuracy, precision, recall\n    \"\"\"\n    return {\n        'accuracy': accuracy_score(y_true, y_pred),\n        'precision': precision_score(y_true, y_pred, zero_division=0),\n        'recall': recall_score(y_true, y_pred, zero_division=0)\n    }\n\n# Write parametrized tests\n@pytest.mark.parametrize(\n    \"y_true,y_pred,expected_accuracy,expected_precision,expected_recall\",\n    [\n        # Your test cases here\n        # Format: (y_true, y_pred, expected_accuracy, expected_precision, expected_recall)\n    ]\n)\ndef test_metrics_calculation(y_true, y_pred, expected_accuracy, expected_precision, expected_recall):\n    # Your implementation here\n    pass",
+      "test_cases": [
+        {
+          "description": "Test perfect classification",
+          "expected_output": "accuracy=1.0, precision=1.0, recall=1.0",
+          "input": "Perfect predictions: [1,1,0,0], [1,1,0,0]"
+        },
+        {
+          "description": "Test completely wrong predictions",
+          "expected_output": "accuracy=0.0, precision=0.0, recall=0.0",
+          "input": "All wrong: [1,1,0,0], [0,0,1,1]"
+        },
+        {
+          "description": "Test partially correct predictions",
+          "expected_output": "accuracy=0.5, precision=0.5, recall=0.5",
+          "input": "Mixed: [1,1,0,0], [1,0,0,1]"
+        }
+      ],
+      "topic": "parametrized_tests",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "ML model testing focuses on properties and invariants: (1) Output format - valid classes/probabilities, (2) Determinism - same input \u2192 same output, (3) Robustness - handles edge cases gracefully, (4) Monotonicity - if applicable, (5) Boundary behavior. These tests catch model implementation bugs and deployment issues.",
+      "hints": [
+        "Use assert set(predictions).issubset({0, 1}) for binary check",
+        "Use np.testing.assert_array_almost_equal for probability sums",
+        "Call predict multiple times with same input to check determinism",
+        "Test with extreme inputs: all zeros, very large values, constant values",
+        "These are 'metamorphic' tests - checking properties rather than exact outputs"
+      ],
+      "id": "m10.2_q015",
+      "points": 4,
+      "question": "Write tests to verify that a trained ML model satisfies key invariants and behavioral properties.",
+      "starter_code": "import pytest\nimport numpy as np\nimport pandas as pd\nfrom sklearn.ensemble import RandomForestClassifier\n\n# Assume we have a trained model\n@pytest.fixture\ndef trained_model():\n    # Create and return a simple trained model\n    X = np.random.randn(100, 5)\n    y = (X[:, 0] > 0).astype(int)\n    model = RandomForestClassifier(n_estimators=10, random_state=42)\n    model.fit(X, y)\n    return model\n\n# Write tests for model properties\n\ndef test_model_predictions_are_binary(trained_model):\n    \"\"\"\n    Test that predictions are only 0 or 1.\n    \"\"\"\n    # Your implementation here\n    pass\n\ndef test_model_probability_sum_to_one(trained_model):\n    \"\"\"\n    Test that predicted probabilities sum to 1.\n    \"\"\"\n    # Your implementation here\n    pass\n\ndef test_model_deterministic_predictions(trained_model):\n    \"\"\"\n    Test that same input always produces same output.\n    \"\"\"\n    # Your implementation here\n    pass\n\ndef test_model_handles_edge_cases(trained_model):\n    \"\"\"\n    Test model with edge cases (all zeros, all same value, etc.).\n    \"\"\"\n    # Your implementation here\n    pass",
+      "test_cases": [
+        {
+          "description": "Tests check model behavior and invariants",
+          "expected_output": "All tests pass, verifying model properties",
+          "input": "Run model invariant tests"
+        }
+      ],
+      "topic": "testing_ml_models",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Integration tests verify that components work together correctly. Unlike unit tests (test components in isolation), integration tests check the complete workflow. They catch issues like: incompatible data formats between steps, serialization problems, missing error handling, and integration bugs.",
+      "hints": [
+        "Use tempfile.TemporaryDirectory() for test artifacts",
+        "Create sample data file for testing",
+        "Test each step produces expected output format",
+        "Verify model can be saved and reloaded",
+        "Check predictions are valid (correct shape, range, type)",
+        "Clean up temporary files after test"
+      ],
+      "id": "m10.2_q016",
+      "points": 5,
+      "question": "Write an integration test for a complete ML pipeline (data loading \u2192 preprocessing \u2192 training \u2192 prediction).",
+      "starter_code": "import pytest\nimport pandas as pd\nimport numpy as np\nfrom pathlib import Path\nimport tempfile\n\n# Assume we have these pipeline components\nfrom my_ml_package import (\n    load_data,\n    preprocess_data,\n    train_model,\n    save_model,\n    load_model,\n    predict\n)\n\ndef test_end_to_end_pipeline():\n    \"\"\"\n    Integration test for complete ML pipeline.\n    \n    Tests:\n    1. Load data from file\n    2. Preprocess data\n    3. Train model\n    4. Save model\n    5. Load model\n    6. Make predictions\n    7. Verify predictions are valid\n    \"\"\"\n    # Your implementation here\n    # Use tempfile for temporary model storage\n    # Test the complete workflow end-to-end\n    pass",
+      "test_cases": [
+        {
+          "description": "Integration test verifies component interactions",
+          "expected_output": "Pipeline executes successfully with valid predictions",
+          "input": "Run complete pipeline"
+        }
+      ],
+      "topic": "integration_testing",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Code coverage identifies untested code. Pytest-cov integrates coverage.py with pytest. Key options: --cov=<dir> measures coverage for source directory, --cov-report=html generates visual report, --cov-fail-under=<percent> fails build if coverage is too low. Aim for >80% coverage for critical code.",
+      "hints": [
+        "Use subprocess.run(['pytest', '--cov=src', ...]) to run pytest",
+        "Key pytest-cov options: --cov=<source>, --cov-report=html, --cov-fail-under=<min>",
+        "Parse stdout to extract coverage percentage",
+        "HTML report is generated in htmlcov/ directory",
+        "Return dict with results for programmatic use"
+      ],
+      "id": "m10.2_q017",
+      "points": 4,
+      "question": "Set up code coverage measurement for your test suite using pytest-cov.",
+      "starter_code": "# File: setup_coverage.py\n\"\"\"\nScript to run tests with coverage measurement.\n\nRequirements:\n- pytest\n- pytest-cov\n\nInstall:\n    pip install pytest pytest-cov\n    \nUsage:\n    python setup_coverage.py\n\"\"\"\n\nimport subprocess\nimport sys\nfrom pathlib import Path\n\ndef run_tests_with_coverage(\n    test_dir: str = 'tests',\n    source_dir: str = 'src',\n    min_coverage: int = 80,\n    html_report: bool = True\n) -> dict:\n    \"\"\"\n    Run pytest with coverage measurement.\n    \n    Args:\n        test_dir: Directory containing tests\n        source_dir: Directory with source code\n        min_coverage: Minimum coverage percentage required\n        html_report: Generate HTML coverage report\n        \n    Returns:\n        dict with 'coverage_percent', 'passed', 'html_report_path'\n    \"\"\"\n    # Your implementation here\n    # Build pytest command with coverage options\n    # Run pytest with subprocess\n    # Parse coverage output\n    # Generate HTML report if requested\n    pass\n\nif __name__ == '__main__':\n    result = run_tests_with_coverage()\n    print(f\"Coverage: {result['coverage_percent']}%\")\n    if result['coverage_percent'] < 80:\n        sys.exit(1)",
+      "test_cases": [
+        {
+          "description": "Coverage measurement setup",
+          "expected_output": "Runs tests, measures coverage, generates report",
+          "input": "run_tests_with_coverage()"
+        }
+      ],
+      "topic": "test_coverage",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "CI/CD integration automates testing on every code change. GitHub Actions workflows define jobs that run in response to events (push, pull request). Running tests automatically ensures: (1) No broken code is merged, (2) Coverage standards are maintained, (3) Tests pass on all supported Python versions. This catches integration issues early.",
+      "hints": [
+        "Use actions/checkout@v3 to checkout code",
+        "Use actions/setup-python@v4 to set up Python",
+        "Install dependencies: pip install -r requirements.txt",
+        "Run tests: pytest --cov=src --cov-report=xml --cov-fail-under=80",
+        "Use actions/upload-artifact@v3 to upload coverage report",
+        "Consider using codecov/codecov-action for coverage tracking"
+      ],
+      "id": "m10.2_q018",
+      "points": 5,
+      "question": "Create a GitHub Actions workflow that runs tests on every push and pull request.",
+      "starter_code": "# File: .github/workflows/test.yml\nname: Run Tests\n\non:\n  push:\n    branches: [ main, develop ]\n  pull_request:\n    branches: [ main ]\n\njobs:\n  test:\n    runs-on: ubuntu-latest\n    \n    strategy:\n      matrix:\n        python-version: [3.8, 3.9, '3.10']\n    \n    steps:\n      # Your implementation here\n      # Steps should:\n      # 1. Checkout code\n      # 2. Set up Python\n      # 3. Install dependencies\n      # 4. Run tests with coverage\n      # 5. Upload coverage report\n      # 6. Fail if coverage < 80%",
+      "test_cases": [
+        {
+          "description": "CI/CD integration",
+          "expected_output": "Workflow runs automatically, tests execute, results reported",
+          "input": "Push code to GitHub"
+        }
+      ],
+      "topic": "ci_cd_integration",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Comprehensive ML testing strategy: (1) Unit tests - test data loading, preprocessing, feature engineering, utility functions in isolation; (2) Model tests - verify predictions are valid format, check invariants (e.g., probabilities sum to 1), test with edge cases; (3) Integration tests - test complete pipeline end-to-end, verify component interactions; (4) Data validation tests - check input data schema, quality, distributions, detect drift; (5) Performance tests - verify inference latency, throughput; (6) Regression tests - ensure new changes don't degrade model performance; (7) Shadow testing - run new model alongside production, compare outputs. Balance test coverage with maintenance burden.",
+      "hints": [
+        "Think about different components of an ML system",
+        "Consider both code and model behavior",
+        "Think about data quality issues",
+        "Consider production monitoring"
+      ],
+      "id": "m10.2_q019",
+      "points": 5,
+      "question": "Design a comprehensive testing strategy for a semiconductor yield prediction system. What types of tests would you include, and what would each type verify?",
+      "rubric": [
+        {
+          "criteria": "Discusses unit tests for data processing, feature engineering, utilities",
+          "points": 2
+        },
+        {
+          "criteria": "Mentions model tests (invariants, properties, prediction validity)",
+          "points": 2
+        },
+        {
+          "criteria": "Addresses integration tests for complete pipeline",
+          "points": 2
+        },
+        {
+          "criteria": "Discusses data validation tests (schema, quality, drift)",
+          "points": 2
+        },
+        {
+          "criteria": "Mentions performance/regression tests and monitoring",
+          "points": 2
+        }
+      ],
+      "topic": "ml_testing_strategy",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Test data management strategies: (1) Synthetic data - generate small, deterministic datasets for fast unit tests; control edge cases; (2) Golden datasets - small, representative subsets of real data, version controlled (DVC, Git LFS); use for integration tests; (3) Data fixtures - pytest fixtures providing common test data; (4) Stratified sampling - ensure rare defect types are represented; (5) Data versioning - version test data alongside code, use semantic versioning; (6) Separate test tiers - tiny data for unit tests (milliseconds), small for integration (seconds), production-like for acceptance (minutes); (7) Data factories - functions/classes to generate test data on-demand; (8) Cloud storage - store large test datasets in S3/GCS, download on-demand. Keep test data small, controlled, and version-controlled.",
+      "hints": [
+        "Think about speed vs. realism trade-offs",
+        "Consider how to test rare defect types",
+        "Think about data changes over time",
+        "Consider storage and access patterns"
+      ],
+      "id": "m10.2_q020",
+      "points": 5,
+      "question": "Managing test data for ML systems is challenging. Discuss strategies for creating, maintaining, and versioning test data for a semiconductor defect detection system.",
+      "rubric": [
+        {
+          "criteria": "Discusses synthetic data generation for deterministic tests",
+          "points": 2
+        },
+        {
+          "criteria": "Mentions using golden datasets (versioned reference data)",
+          "points": 2
+        },
+        {
+          "criteria": "Addresses data subset selection for fast tests",
+          "points": 2
+        },
+        {
+          "criteria": "Discusses data versioning and reproducibility",
+          "points": 2
+        },
+        {
+          "criteria": "Mentions edge cases and corner cases coverage",
+          "points": 2
+        }
+      ],
+      "topic": "test_data_management",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Metamorphic testing verifies relationships (metamorphic relations) rather than exact outputs. For wafer defect classifier: (1) Permutation invariance - shuffling feature order shouldn't change predictions; (2) Directional expectations - increasing temperature beyond spec should increase defect probability; (3) Duplicate invariance - duplicating a feature shouldn't drastically change prediction; (4) Consistency - similar sensor readings should produce similar predictions; (5) Subset consistency - prediction on partial features should be less confident; (6) Domain constraints - predictions respect physical limits (e.g., probabilities in [0,1]). Implement as assertions in tests. Metamorphic testing is powerful for ML where 'correct' output is unknown.",
+      "hints": [
+        "Think about relationships that should hold regardless of exact predictions",
+        "Consider transformations that shouldn't change predictions",
+        "Think about physical/domain constraints",
+        "Consider consistency across similar samples"
+      ],
+      "id": "m10.2_q021",
+      "points": 5,
+      "question": "Explain the concept of 'metamorphic testing' for ML models and provide examples of metamorphic relations you would test for a wafer defect classifier.",
+      "rubric": [
+        {
+          "criteria": "Explains metamorphic testing concept (testing relationships, not exact outputs)",
+          "points": 2
+        },
+        {
+          "criteria": "Provides invariance examples (e.g., prediction unchanged by feature order)",
+          "points": 2
+        },
+        {
+          "criteria": "Discusses directional expectation tests (e.g., increasing temp \u2192 higher defect probability)",
+          "points": 2
+        },
+        {
+          "criteria": "Mentions consistency checks across similar inputs",
+          "points": 2
+        },
+        {
+          "criteria": "Addresses practical implementation and limitations",
+          "points": 2
+        }
+      ],
+      "topic": "testing_ml_pipelines",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Maintainable test strategies: (1) Test interfaces, not implementations - test public APIs, not internal functions; tests shouldn't break on refactoring; (2) DRY principle - use fixtures and helper functions to reduce duplication; (3) Clear naming - test names should describe what's tested and expected; (4) Single assertion per test - makes failures easy to diagnose; (5) Minimal setup - tests with complex setup are fragile; (6) Focused tests - test one behavior; (7) Regular cleanup - remove tests for deleted features; (8) Test value assessment - not everything needs 100% coverage; focus on critical paths; (9) Documentation - explain why tests exist, especially for complex scenarios; (10) Avoid hardcoded values - use constants or fixtures. Maintainable tests pay for themselves through reduced debugging time.",
+      "hints": [
+        "Think about what makes tests break when code changes",
+        "Consider the cost of maintaining many tests",
+        "Think about test readability and understanding",
+        "Consider test value vs. maintenance cost"
+      ],
+      "id": "m10.2_q022",
+      "points": 5,
+      "question": "As an ML project evolves, tests can become brittle and maintenance-heavy. Discuss strategies to write maintainable tests that don't slow down development.",
+      "rubric": [
+        {
+          "criteria": "Discusses testing interfaces/contracts rather than implementations",
+          "points": 2
+        },
+        {
+          "criteria": "Mentions using fixtures and test utilities to reduce duplication",
+          "points": 2
+        },
+        {
+          "criteria": "Addresses balancing test coverage with maintenance burden",
+          "points": 2
+        },
+        {
+          "criteria": "Discusses test documentation and clarity",
+          "points": 2
+        },
+        {
+          "criteria": "Mentions deprecating obsolete tests",
+          "points": 2
+        }
+      ],
+      "topic": "test_maintenance",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Flaky test causes and solutions: (1) Random seeds - ML models use randomness (data sampling, weight initialization); Solution: Set fixed random seeds (np.random.seed(42), random_state=42); (2) External dependencies - network calls, database connections, file system state; Solution: Mock external dependencies, use in-memory databases; (3) Timing issues - async operations, race conditions; Solution: Use deterministic waits, proper synchronization; (4) Test order dependencies - tests affecting each other's state; Solution: Isolate tests, use setup/teardown, avoid global state; (5) Floating-point precision - small numerical differences; Solution: Use approximate comparisons (np.testing.assert_almost_equal); (6) Resource contention - parallel tests competing for resources; Solution: Use test isolation, temporary directories; (7) Date/time dependencies - tests using current time; Solution: Mock time functions. Flaky tests destroy CI confidence - fix them aggressively.",
+      "hints": [
+        "Think about sources of randomness in ML systems",
+        "Consider what external resources tests might depend on",
+        "Think about parallel test execution",
+        "Consider proper vs. improper test isolation"
+      ],
+      "id": "m10.2_q023",
+      "points": 5,
+      "question": "Your CI pipeline has flaky tests that fail intermittently, causing false negatives. Investigate common causes of flaky tests in ML systems and propose solutions.",
+      "rubric": [
+        {
+          "criteria": "Identifies timing/concurrency issues as a cause",
+          "points": 2
+        },
+        {
+          "criteria": "Discusses random seed and non-determinism problems",
+          "points": 2
+        },
+        {
+          "criteria": "Mentions external dependency issues (network, filesystem)",
+          "points": 2
+        },
+        {
+          "criteria": "Addresses test order dependencies",
+          "points": 2
+        },
+        {
+          "criteria": "Provides concrete solutions for each cause",
+          "points": 2
+        }
+      ],
+      "topic": "flaky_tests",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Property-based testing (PBT) generates random test inputs and verifies properties hold. Hypothesis library automates this. For preprocessing pipeline properties: (1) Idempotence - preprocess(preprocess(data)) == preprocess(data); (2) Type preservation - output DataFrame has same type as input; (3) Shape preservation - if removing no rows, shape should be maintained; (4) Value ranges - scaled values should be in [0, 1]; (5) No data loss - number of output rows \u2264 input rows; (6) Determinism - same input produces same output. Example: @given(df=dataframes([column('sensor1', dtype=float)])) def test_property(df): ... Advantages: finds edge cases humans miss, provides regression test suite, tests general behavior vs. specific examples. Use PBT for complex logic with clear properties; use example-based for specific scenarios.",
+      "hints": [
+        "Think about properties that should always hold",
+        "Consider relationships between inputs and outputs",
+        "Think about invariants and constraints",
+        "Consider edge case discovery"
+      ],
+      "id": "m10.2_q024",
+      "points": 5,
+      "question": "Explain property-based testing using Hypothesis library and provide examples of properties you would test for a semiconductor sensor data preprocessing pipeline.",
+      "rubric": [
+        {
+          "criteria": "Explains property-based testing concept (testing properties with generated inputs)",
+          "points": 2
+        },
+        {
+          "criteria": "Discusses advantages over example-based testing",
+          "points": 2
+        },
+        {
+          "criteria": "Provides specific properties for preprocessing pipeline",
+          "points": 2
+        },
+        {
+          "criteria": "Mentions Hypothesis strategies for test data generation",
+          "points": 2
+        },
+        {
+          "criteria": "Addresses when to use property vs. example-based tests",
+          "points": 2
+        }
+      ],
+      "topic": "property_based_testing",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Continuous testing strategy: (1) Model performance monitoring - track accuracy, precision, recall, latency in production; log all predictions with timestamps; compare to baseline; (2) Data drift detection - monitor input feature distributions, compare to training data using KL divergence or Kolmogorov-Smirnov test; (3) Data quality checks - validate schema, check for nulls, verify value ranges, detect outliers; (4) Alert system - set thresholds (e.g., accuracy < 90% for 1 hour), multi-tier alerts (warning, critical), integrate with PagerDuty/Slack; (5) Automated remediation - fallback to previous model version if performance degrades, trigger model retraining pipeline, enable shadow mode for new models; (6) Dashboards - real-time monitoring dashboard (Grafana), model performance trends, data quality metrics; (7) Integration - tests run on every prediction batch, alerts trigger CI/CD rollback if needed. Continuous testing catches production issues before users notice.",
+      "hints": [
+        "Think about what can go wrong in production",
+        "Consider different types of degradation",
+        "Think about response time requirements",
+        "Consider automatic vs. manual remediation"
+      ],
+      "id": "m10.2_q025",
+      "points": 5,
+      "question": "Design a continuous testing strategy for a production ML system that monitors model performance and data quality over time. How would you implement automated alerts and remediation?",
+      "rubric": [
+        {
+          "criteria": "Discusses model performance monitoring (accuracy, latency)",
+          "points": 2
+        },
+        {
+          "criteria": "Addresses data quality monitoring (schema, distributions, drift)",
+          "points": 2
+        },
+        {
+          "criteria": "Describes alert thresholds and escalation",
+          "points": 2
+        },
+        {
+          "criteria": "Proposes automated remediation strategies",
+          "points": 2
+        },
+        {
+          "criteria": "Discusses integration with CI/CD and deployment",
+          "points": 2
+        }
+      ],
+      "topic": "continuous_testing",
+      "type": "conceptual"
+    }
+  ],
+  "sub_module": "10.2",
+  "title": "Testing & Quality Assurance",
+  "version": "1.0",
+  "week": 19
+}

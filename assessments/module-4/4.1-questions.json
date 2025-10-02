@@ -1,0 +1,519 @@
+{
+  "description": "Assessment covering ensemble learning techniques including Random Forests, Gradient Boosting, XGBoost, LightGBM, bagging, boosting, stacking, and ensemble optimization for semiconductor manufacturing applications",
+  "estimated_time_minutes": 75,
+  "module_id": "module-4.1",
+  "passing_score": 70,
+  "questions": [
+    {
+      "correct_answer": 0,
+      "difficulty": "easy",
+      "explanation": "Ensemble methods combine predictions from multiple models to reduce variance and improve generalization. While they're slower to train and harder to interpret, they typically achieve better predictive performance than single models.",
+      "id": "m4.1_q001",
+      "options": [
+        "Reduced variance and better generalization by combining multiple models",
+        "Faster training time compared to individual models",
+        "Simpler interpretation of feature relationships",
+        "Lower memory requirements during inference"
+      ],
+      "points": 2,
+      "question": "What is the primary advantage of using ensemble methods over single models for wafer defect prediction?",
+      "topic": "ensemble_basics",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "medium",
+      "explanation": "Random Forests use: (1) bootstrap sampling to create different training sets for each tree, and (2) random feature subset selection at each split. These two mechanisms ensure trees are decorrelated, which is key to ensemble effectiveness.",
+      "id": "m4.1_q002",
+      "options": [
+        "Bootstrap sampling of data and random feature subset selection at each split",
+        "Random initialization of leaf values and random tree depth",
+        "Random hyperparameters and random feature ordering",
+        "Random learning rate and random batch size"
+      ],
+      "points": 2,
+      "question": "In a Random Forest for defect classification, what two sources of randomness help reduce correlation between trees?",
+      "topic": "random_forest",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "hard",
+      "explanation": "With noisy labels, Random Forest (bagging) is preferable because it averages over many trees trained independently. Boosting methods like AdaBoost and Gradient Boosting sequentially focus on mistakes, which can cause them to overfit noisy labels. Handle imbalance separately with class weights or SMOTE.",
+      "id": "m4.1_q003",
+      "options": [
+        "Random Forest (bagging) because it's more robust to noisy labels than boosting",
+        "Gradient Boosting because it handles imbalance better",
+        "AdaBoost because it focuses on hard examples",
+        "Simple majority voting because it's fastest"
+      ],
+      "points": 3,
+      "question": "Your manufacturing dataset has extreme class imbalance (0.5% defect rate) and noisy labels from human inspectors. Which ensemble approach is most appropriate?",
+      "topic": "boosting_vs_bagging",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "medium",
+      "explanation": "Gradient Boosting trains each new tree to predict the residuals (errors) of the current ensemble. By iteratively correcting mistakes, the ensemble progressively reduces bias and improves predictions.",
+      "id": "m4.1_q004",
+      "options": [
+        "The residual errors (gradient of loss) from the previous ensemble",
+        "A completely independent pattern in the data",
+        "The same patterns as the first tree",
+        "Random noise to increase diversity"
+      ],
+      "points": 2,
+      "question": "In Gradient Boosting for yield prediction, what does each new tree learn?",
+      "topic": "gradient_boosting",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "hard",
+      "explanation": "LightGBM is optimized for large datasets: histogram-based binning reduces memory and computation, leaf-wise growth is faster than level-wise, and it handles sparse data well. It's typically 3-10x faster than XGBoost on large datasets while maintaining similar accuracy.",
+      "id": "m4.1_q005",
+      "options": [
+        "LightGBM with histogram-based learning and leaf-wise growth",
+        "XGBoost with default level-wise growth",
+        "Scikit-learn GradientBoostingClassifier",
+        "AdaBoost with decision stumps"
+      ],
+      "points": 3,
+      "question": "For a semiconductor dataset with 500,000 wafers and 200 features, which boosting library would be most efficient?",
+      "topic": "xgboost_lightgbm",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "medium",
+      "explanation": "max_depth directly controls tree complexity. Shallow trees underfit (high bias), deep trees overfit (high variance). While n_estimators affects variance and max_features affects tree correlation, max_depth is the primary bias-variance control.",
+      "id": "m4.1_q006",
+      "options": [
+        "max_depth: deeper trees reduce bias but increase variance",
+        "n_estimators: more trees always reduce both bias and variance",
+        "min_samples_split: only affects training time",
+        "max_features: only affects correlation between trees"
+      ],
+      "points": 2,
+      "question": "Which hyperparameter in Random Forest most directly controls the bias-variance tradeoff?",
+      "topic": "hyperparameters",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "easy",
+      "explanation": "Random Forest feature importance is based on impurity reduction: for each feature, average the decrease in impurity (Gini or entropy) across all splits using that feature, weighted by the number of samples affected.",
+      "id": "m4.1_q007",
+      "options": [
+        "By measuring the average reduction in impurity (e.g., Gini) when splitting on each feature",
+        "By counting how many times each feature appears in the trees",
+        "By measuring correlation between features and target",
+        "By performing statistical hypothesis tests on each feature"
+      ],
+      "points": 2,
+      "question": "How does Random Forest calculate feature importance?",
+      "topic": "feature_importance",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "hard",
+      "explanation": "The meta-learner should be trained on out-of-fold predictions to prevent data leakage. If trained on in-sample predictions, the meta-learner learns to exploit overfitting rather than true patterns, leading to poor generalization.",
+      "id": "m4.1_q008",
+      "options": [
+        "Use out-of-fold predictions from cross-validation to avoid data leakage",
+        "Train base models and meta-learner on the same data for consistency",
+        "Use predictions on training data to maximize meta-learner performance",
+        "Random split is sufficient"
+      ],
+      "points": 3,
+      "question": "You're stacking three models (Random Forest, XGBoost, Logistic Regression) for defect prediction. What's the best practice for training the meta-learner?",
+      "topic": "stacking",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "medium",
+      "explanation": "Soft voting averages predicted probabilities, allowing the ensemble to weight predictions by confidence. This works better when models provide calibrated probabilities. Hard voting (majority vote) ignores confidence and may perform worse when some predictions are uncertain.",
+      "id": "m4.1_q009",
+      "options": [
+        "When you have calibrated probability estimates and want to weight predictions by confidence",
+        "When computational speed is the primary concern",
+        "When the classes are perfectly balanced",
+        "When all models have exactly the same architecture"
+      ],
+      "points": 2,
+      "question": "When using a voting classifier with Random Forest, SVM, and Logistic Regression for defect detection, when should you use 'soft' voting instead of 'hard' voting?",
+      "topic": "voting",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "hard",
+      "explanation": "This classic overfitting pattern shows the model memorizing training data after round 230. Early stopping detected this by monitoring validation performance and stopped training, preventing overfitting. The divergence between train and validation error indicates the model has reached optimal generalization.",
+      "id": "m4.1_q010",
+      "options": [
+        "The model is overfitting; early stopping correctly prevented further training",
+        "The learning rate is too high",
+        "The model needs more trees",
+        "The validation set is too small"
+      ],
+      "points": 3,
+      "question": "In XGBoost for yield prediction, you implement early stopping with 50 rounds. Your validation RMSE stops improving at round 230 but training RMSE keeps decreasing. What's happening?",
+      "topic": "early_stopping",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "medium",
+      "explanation": "Due to bootstrap sampling, each tree uses ~63% of data. The remaining ~37% (out-of-bag samples) can be used for validation. Averaging OOB predictions across all trees provides an unbiased estimate of generalization error without needing a separate validation set.",
+      "id": "m4.1_q011",
+      "options": [
+        "An estimate of generalization error using data not in each tree's bootstrap sample",
+        "The average training accuracy across all trees",
+        "A measure of feature importance",
+        "The correlation between trees in the forest"
+      ],
+      "points": 2,
+      "question": "What is the out-of-bag (OOB) score in Random Forest and why is it useful?",
+      "topic": "oob_score",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "easy",
+      "explanation": "Random Forest rarely overfits as you add trees because each tree is independent. Performance improves with more trees until it plateaus. The main cost is training time and memory, not overfitting. Typically 100-500 trees is sufficient.",
+      "id": "m4.1_q012",
+      "options": [
+        "Generalization improves up to a point, then plateaus (doesn't overfit)",
+        "The model starts overfitting after a certain number of trees",
+        "Training time decreases due to parallelization",
+        "Feature importance becomes less reliable"
+      ],
+      "points": 2,
+      "question": "In Random Forest, what happens as you increase n_estimators (number of trees)?",
+      "topic": "n_estimators",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "easy",
+      "hints": [
+        "Use RandomForestClassifier with n_estimators=100",
+        "Set random_state=42 for reproducibility",
+        "Access feature_importances_ attribute after training",
+        "Create DataFrame with feature names and importance values",
+        "Sort by importance in descending order"
+      ],
+      "id": "m4.1_q013",
+      "points": 5,
+      "question": "Train a Random Forest classifier for wafer defect detection and return feature importance.",
+      "solution": "from sklearn.ensemble import RandomForestClassifier\nimport numpy as np\nimport pandas as pd\n\ndef train_rf_with_importance(X_train, y_train, feature_names):\n    # Train Random Forest\n    rf = RandomForestClassifier(\n        n_estimators=100,\n        max_depth=10,\n        random_state=42,\n        n_jobs=-1\n    )\n    rf.fit(X_train, y_train)\n    \n    # Extract feature importance\n    importances = rf.feature_importances_\n    \n    # Create DataFrame\n    importance_df = pd.DataFrame({\n        'feature': feature_names,\n        'importance': importances\n    }).sort_values('importance', ascending=False)\n    \n    return {\n        'model': rf,\n        'importance_df': importance_df\n    }",
+      "starter_code": "from sklearn.ensemble import RandomForestClassifier\nimport numpy as np\nimport pandas as pd\n\ndef train_rf_with_importance(X_train, y_train, feature_names):\n    \"\"\"\n    Train Random Forest and return feature importance.\n    \n    Args:\n        X_train: Training features\n        y_train: Training labels\n        feature_names: List of feature names\n    \n    Returns:\n        dict: {'model': trained model, 'importance_df': DataFrame with features and importance}\n    \"\"\"\n    # Your code here\n    pass",
+      "test_cases": [
+        {
+          "description": "Basic Random Forest training and feature importance extraction",
+          "expected_output": "Model trained, importance DataFrame with 10 rows sorted by importance",
+          "input": "100 samples, 10 features, binary classification"
+        }
+      ],
+      "topic": "random_forest_basic",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "hints": [
+        "Create DMatrix objects for XGBoost",
+        "Set objective='binary:logistic' and eval_metric='auc'",
+        "Use early_stopping_rounds=50",
+        "Access model.best_iteration after training",
+        "Calculate ROC-AUC on validation set"
+      ],
+      "id": "m4.1_q014",
+      "points": 6,
+      "question": "Train an XGBoost classifier with early stopping and return training history.",
+      "solution": "import xgboost as xgb\nfrom sklearn.metrics import roc_auc_score\n\ndef train_xgboost_early_stopping(X_train, y_train, X_val, y_val):\n    # Create DMatrix for XGBoost\n    dtrain = xgb.DMatrix(X_train, label=y_train)\n    dval = xgb.DMatrix(X_val, label=y_val)\n    \n    # Set parameters\n    params = {\n        'objective': 'binary:logistic',\n        'eval_metric': 'auc',\n        'max_depth': 6,\n        'learning_rate': 0.1,\n        'subsample': 0.8,\n        'colsample_bytree': 0.8,\n        'seed': 42\n    }\n    \n    # Train with early stopping\n    evals = [(dtrain, 'train'), (dval, 'val')]\n    model = xgb.train(\n        params,\n        dtrain,\n        num_boost_round=500,\n        evals=evals,\n        early_stopping_rounds=50,\n        verbose_eval=False\n    )\n    \n    # Get validation predictions\n    y_pred_proba = model.predict(dval)\n    val_auc = roc_auc_score(y_val, y_pred_proba)\n    \n    return {\n        'model': model,\n        'best_iteration': model.best_iteration,\n        'val_auc': val_auc\n    }",
+      "starter_code": "import xgboost as xgb\nfrom sklearn.metrics import roc_auc_score\n\ndef train_xgboost_early_stopping(X_train, y_train, X_val, y_val):\n    \"\"\"\n    Train XGBoost with early stopping.\n    \n    Args:\n        X_train, y_train: Training data\n        X_val, y_val: Validation data\n    \n    Returns:\n        dict: {'model': trained model, 'best_iteration': int, 'val_auc': float}\n    \"\"\"\n    # Your code here\n    pass",
+      "test_cases": [
+        {
+          "description": "XGBoost with early stopping monitoring",
+          "expected_output": "Trained model, best iteration number, validation AUC score",
+          "input": "Training and validation sets for binary classification"
+        }
+      ],
+      "topic": "xgboost_training",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "hints": [
+        "Use cross_val_predict with method='predict_proba' for out-of-fold predictions",
+        "Stack predictions as columns for meta-features",
+        "Retrain base models on full training data for test predictions",
+        "Train meta-learner (e.g., LogisticRegression) on out-of-fold predictions",
+        "This prevents the meta-learner from learning to exploit overfitting"
+      ],
+      "id": "m4.1_q015",
+      "points": 8,
+      "question": "Implement stacking ensemble with out-of-fold predictions to avoid data leakage.",
+      "solution": "from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier\nfrom sklearn.linear_model import LogisticRegression\nfrom sklearn.model_selection import cross_val_predict\nimport numpy as np\n\ndef create_stacking_ensemble(X_train, y_train, X_test):\n    # Define base models\n    rf = RandomForestClassifier(n_estimators=100, random_state=42)\n    gb = GradientBoostingClassifier(n_estimators=100, random_state=42)\n    \n    # Generate out-of-fold predictions for training data\n    rf_train_pred = cross_val_predict(rf, X_train, y_train, cv=5, method='predict_proba')[:, 1]\n    gb_train_pred = cross_val_predict(gb, X_train, y_train, cv=5, method='predict_proba')[:, 1]\n    \n    # Stack predictions as meta-features\n    train_meta_features = np.column_stack([rf_train_pred, gb_train_pred])\n    \n    # Train base models on full training data for test predictions\n    rf.fit(X_train, y_train)\n    gb.fit(X_train, y_train)\n    \n    # Generate test predictions\n    rf_test_pred = rf.predict_proba(X_test)[:, 1]\n    gb_test_pred = gb.predict_proba(X_test)[:, 1]\n    test_meta_features = np.column_stack([rf_test_pred, gb_test_pred])\n    \n    # Train meta-learner on out-of-fold predictions\n    meta_model = LogisticRegression(random_state=42)\n    meta_model.fit(train_meta_features, y_train)\n    \n    return {\n        'train_meta_features': train_meta_features,\n        'test_meta_features': test_meta_features,\n        'meta_model': meta_model\n    }",
+      "starter_code": "from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier\nfrom sklearn.linear_model import LogisticRegression\nfrom sklearn.model_selection import cross_val_predict\nimport numpy as np\n\ndef create_stacking_ensemble(X_train, y_train, X_test):\n    \"\"\"\n    Create stacking ensemble with proper cross-validation.\n    \n    Args:\n        X_train, y_train: Training data\n        X_test: Test data\n    \n    Returns:\n        dict: {'train_meta_features': array, 'test_meta_features': array, 'meta_model': trained meta-learner}\n    \"\"\"\n    # Your code here\n    pass",
+      "test_cases": [
+        {
+          "description": "Proper stacking with cross-validation to prevent leakage",
+          "expected_output": "Meta-features from base models and trained meta-learner",
+          "input": "Training and test data for stacking"
+        }
+      ],
+      "topic": "stacking_ensemble",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "hints": [
+        "Use VotingClassifier with voting='soft'",
+        "Provide list of (name, estimator) tuples",
+        "Set probability=True for SVM to enable predict_proba",
+        "Compare ensemble AUC to individual model AUCs",
+        "Ensemble should typically match or beat best individual model"
+      ],
+      "id": "m4.1_q016",
+      "points": 6,
+      "question": "Create a voting classifier combining multiple models with soft voting.",
+      "solution": "from sklearn.ensemble import VotingClassifier, RandomForestClassifier, GradientBoostingClassifier\nfrom sklearn.svm import SVC\nfrom sklearn.metrics import roc_auc_score\n\ndef create_voting_ensemble(X_train, y_train, X_test, y_test):\n    # Define base estimators\n    rf = RandomForestClassifier(n_estimators=100, random_state=42)\n    gb = GradientBoostingClassifier(n_estimators=100, random_state=42)\n    svm = SVC(kernel='rbf', probability=True, random_state=42)\n    \n    # Create voting classifier with soft voting\n    voting_clf = VotingClassifier(\n        estimators=[('rf', rf), ('gb', gb), ('svm', svm)],\n        voting='soft'\n    )\n    \n    # Train voting classifier\n    voting_clf.fit(X_train, y_train)\n    voting_pred = voting_clf.predict_proba(X_test)[:, 1]\n    voting_auc = roc_auc_score(y_test, voting_pred)\n    \n    # Evaluate individual models\n    individual_aucs = {}\n    for name, model in [('rf', rf), ('gb', gb), ('svm', svm)]:\n        model.fit(X_train, y_train)\n        pred = model.predict_proba(X_test)[:, 1]\n        individual_aucs[name] = roc_auc_score(y_test, pred)\n    \n    return {\n        'voting_auc': voting_auc,\n        'individual_aucs': individual_aucs\n    }",
+      "starter_code": "from sklearn.ensemble import VotingClassifier, RandomForestClassifier, GradientBoostingClassifier\nfrom sklearn.svm import SVC\nfrom sklearn.metrics import roc_auc_score\n\ndef create_voting_ensemble(X_train, y_train, X_test, y_test):\n    \"\"\"\n    Create voting classifier and compare to individual models.\n    \n    Returns:\n        dict: {'voting_auc': float, 'individual_aucs': dict}\n    \"\"\"\n    # Your code here\n    pass",
+      "test_cases": [
+        {
+          "description": "Soft voting ensemble typically outperforms individual models",
+          "expected_output": "Voting ensemble AUC and individual model AUCs for comparison",
+          "input": "Binary classification data"
+        }
+      ],
+      "topic": "voting_classifier",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "hints": [
+        "Use RandomizedSearchCV with n_iter=20 for efficiency",
+        "Define parameter distributions using scipy.stats",
+        "Use cv=5 for 5-fold cross-validation",
+        "Set scoring='roc_auc' for classification",
+        "Access best_params_, best_score_, and best_estimator_"
+      ],
+      "id": "m4.1_q017",
+      "points": 7,
+      "question": "Perform randomized search for XGBoost hyperparameter tuning.",
+      "solution": "from sklearn.model_selection import RandomizedSearchCV\nimport xgboost as xgb\nfrom scipy.stats import uniform, randint\n\ndef tune_xgboost(X_train, y_train):\n    # Define parameter distributions\n    param_dist = {\n        'n_estimators': randint(50, 300),\n        'max_depth': randint(3, 10),\n        'learning_rate': uniform(0.01, 0.29),  # 0.01 to 0.3\n        'subsample': uniform(0.6, 0.4),  # 0.6 to 1.0\n        'colsample_bytree': uniform(0.6, 0.4),  # 0.6 to 1.0\n        'min_child_weight': randint(1, 10),\n        'gamma': uniform(0, 0.5)\n    }\n    \n    # Create XGBoost classifier\n    xgb_model = xgb.XGBClassifier(\n        objective='binary:logistic',\n        eval_metric='auc',\n        random_state=42,\n        use_label_encoder=False\n    )\n    \n    # Randomized search\n    random_search = RandomizedSearchCV(\n        xgb_model,\n        param_distributions=param_dist,\n        n_iter=20,\n        cv=5,\n        scoring='roc_auc',\n        random_state=42,\n        n_jobs=-1\n    )\n    \n    # Fit\n    random_search.fit(X_train, y_train)\n    \n    return {\n        'best_params': random_search.best_params_,\n        'best_score': random_search.best_score_,\n        'best_model': random_search.best_estimator_\n    }",
+      "starter_code": "from sklearn.model_selection import RandomizedSearchCV\nimport xgboost as xgb\nfrom scipy.stats import uniform, randint\n\ndef tune_xgboost(X_train, y_train):\n    \"\"\"\n    Tune XGBoost hyperparameters using randomized search.\n    \n    Returns:\n        dict: {'best_params': dict, 'best_score': float, 'best_model': trained model}\n    \"\"\"\n    # Your code here\n    pass",
+      "test_cases": [
+        {
+          "description": "Randomized search efficiently explores hyperparameter space",
+          "expected_output": "Best parameters, CV score, and tuned model",
+          "input": "Training data for hyperparameter tuning"
+        }
+      ],
+      "topic": "hyperparameter_tuning",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "id": "m4.1_q018",
+      "keywords": [
+        "training time",
+        "interpretability",
+        "imbalanced data",
+        "hyperparameter sensitivity",
+        "robustness",
+        "production deployment",
+        "maintenance"
+      ],
+      "points": 8,
+      "question": "You're building a defect classifier for a semiconductor fab. Compare Random Forest vs XGBoost considering: (1) training time, (2) interpretability, (3) handling of imbalanced data, (4) hyperparameter sensitivity. Which would you choose for production and why? (8 points)",
+      "rubric": {
+        "comparison_depth": 3,
+        "manufacturing_context": 1,
+        "production_reasoning": 2,
+        "tradeoff_analysis": 2
+      },
+      "sample_answer": "**Comparison:**\n\n1. **Training Time**:\n   - Random Forest: Fully parallelizable, faster on multi-core systems (trains all trees simultaneously)\n   - XGBoost: Sequential boosting, slower despite optimizations (each tree depends on previous errors)\n   - Winner: Random Forest for speed\n\n2. **Interpretability**:\n   - Random Forest: Feature importance straightforward (average impurity reduction)\n   - XGBoost: Feature importance via gain/cover/weight, SHAP values for detailed analysis\n   - Winner: Tie (both provide feature importance; XGBoost has more options)\n\n3. **Handling Imbalanced Data**:\n   - Random Forest: Use class weights or SMOTE; less sensitive to imbalance\n   - XGBoost: scale_pos_weight parameter effective; but can overfit noisy minority samples\n   - Winner: Random Forest (more robust with noisy labels common in inspection)\n\n4. **Hyperparameter Sensitivity**:\n   - Random Forest: Relatively insensitive; default parameters often work well\n   - XGBoost: Requires careful tuning (learning rate, max_depth, reg_lambda, etc.)\n   - Winner: Random Forest (easier to deploy)\n\n**Production Choice: Random Forest**\n\nFor semiconductor manufacturing, I'd choose Random Forest because:\n- **Faster development**: Less hyperparameter tuning required, faster time-to-deployment\n- **Robustness**: More tolerant of noisy inspection labels (real-world scenario)\n- **Training speed**: Can retrain daily with new data without bottlenecking production\n- **Simpler maintenance**: Fewer hyperparameters to monitor in production\n\nXGBoost might achieve 1-2% better accuracy with extensive tuning, but Random Forest's operational advantages outweigh this marginal gain. For critical applications where that 1-2% matters, use XGBoost with dedicated tuning effort.\n\n**Hybrid Approach**: Use Random Forest for rapid prototyping and baseline, then consider XGBoost if business case justifies the tuning effort.",
+      "topic": "model_selection",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "id": "m4.1_q019",
+      "keywords": [
+        "model diversity",
+        "correlation",
+        "data leakage",
+        "out-of-fold",
+        "cross-validation",
+        "overfitting",
+        "calibration",
+        "meta-learner"
+      ],
+      "points": 10,
+      "question": "You've built a stacking ensemble with Random Forest, XGBoost, and Logistic Regression for yield prediction, but the ensemble performs no better than the best individual model. Explain three possible reasons for this failure and how to diagnose/fix each issue. (10 points)",
+      "rubric": {
+        "practical_solutions": 1,
+        "reason_1_explanation": 3,
+        "reason_2_explanation": 3,
+        "reason_3_explanation": 3
+      },
+      "sample_answer": "**Reason 1: Low Model Diversity (Highly Correlated Predictions)**\n\n*Diagnosis*:\n- Calculate correlation matrix of base model predictions\n- If correlations >0.95, models are too similar\n- Check if all models make the same mistakes\n\n*Cause*: All models may be learning the same dominant patterns (e.g., all tree-based models with similar depth)\n\n*Fix*:\n- Use more diverse model types: tree-based (RF, XGBoost) + linear (LR, Ridge) + SVM\n- Vary model configurations significantly (shallow vs deep trees)\n- Use different feature subsets for different models\n- Example: Train RF on all features, XGBoost on top 50 by importance, LR on engineered features\n\n**Reason 2: Data Leakage in Meta-Learner Training**\n\n*Diagnosis*:\n- Check if base model predictions were generated on training data they saw\n- Compare meta-learner performance on train vs validation\n- If training performance is much higher than validation, suspect leakage\n\n*Cause*: Meta-learner trained on in-sample predictions from base models\n\n*Fix*:\n- Use out-of-fold predictions via cross_val_predict\n- Ensure base models never see the fold they're predicting on\n- Properly separate train/validation/test sets\n```python\n# Correct approach\nrf_pred = cross_val_predict(rf, X_train, y_train, cv=5, method='predict_proba')\nmeta_model.fit(rf_pred, y_train)\n```\n\n**Reason 3: Meta-Learner Overfitting or Poor Calibration**\n\n*Diagnosis*:\n- Examine meta-learner coefficients (for linear models)\n- If coefficients are extreme or unstable, overfitting likely\n- Check if base model probabilities are calibrated (reliability diagrams)\n\n*Cause*: \n- Meta-learner too complex for the meta-features available\n- Base model probabilities not calibrated (e.g., RF tends to predict probabilities near 0.5)\n\n*Fix*:\n- Use simple meta-learner (logistic regression with regularization)\n- Calibrate base model probabilities before stacking (Platt scaling, isotonic regression)\n- Add more meta-features: base model confidences, variance across models, feature-based diversity\n```python\nfrom sklearn.calibration import CalibratedClassifierCV\nrf_calibrated = CalibratedClassifierCV(rf, method='isotonic', cv=5)\n```\n\n**Additional Checks**:\n- Verify test set is truly held-out (no overlap with training)\n- Ensure sufficient data for meta-learning (need enough diversity in base predictions)\n- Check for bugs in implementation (easy to mess up indexing with CV folds)\n\n**Diagnosis Workflow**:\n1. Calculate prediction correlation matrix\n2. Verify no data leakage (check CV implementation)\n3. Evaluate base model calibration\n4. Test meta-learner complexity (simple vs complex)\n5. If still failing, stacking may not be beneficial for this problem (base models already optimal)",
+      "topic": "ensemble_diversity",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "id": "m4.1_q020",
+      "keywords": [
+        "correlation",
+        "multicollinearity",
+        "permutation importance",
+        "SHAP",
+        "partial dependence",
+        "high cardinality",
+        "bias",
+        "validation"
+      ],
+      "points": 8,
+      "question": "Your Random Forest identifies 'temperature_zone_5' as the most important feature for defect prediction, but process engineers insist this zone is irrelevant. Explain two possible reasons for misleading feature importance and how to validate whether the importance is real. (8 points)",
+      "rubric": {
+        "practical_implementation": 1,
+        "reason_1": 2,
+        "reason_2": 2,
+        "validation_methods": 3
+      },
+      "sample_answer": "**Reason 1: Correlation with True Causal Feature**\n\n*Explanation*:\n- temperature_zone_5 might be highly correlated with the truly causal feature (e.g., pressure)\n- Random Forest picks one arbitrarily from correlated features\n- The importance is capturing pressure's effect, but attributing it to temperature\n\n*Why it happens*:\n- Tree-based models don't handle multicollinearity well\n- First split on correlated features gets credit, others ignored\n- If temp and pressure correlated at r=0.95, model might use either\n\n*Validation*:\n- Calculate correlation matrix: `df[relevant_features].corr()`\n- Check if other process parameters highly correlated with temperature_zone_5\n- Use permutation importance instead of impurity-based importance\n- Permutation importance:  shuffle temperature_zone_5 values, measure performance drop\n- If real importance, performance should degrade significantly\n\n**Reason 2: High Cardinality/Continuous Variables Bias**\n\n*Explanation*:\n- Temperature (continuous) has more split points than categorical features\n- More splits = more opportunities to reduce impurity = inflated importance\n- Doesn't mean temperature is actually more predictive\n\n*Why it happens*:\n- Impurity-based importance favors high-cardinality features\n- Continuous features have hundreds of possible splits\n- Binary features have only one split\n\n*Validation*:\n- Use permutation importance (not biased by cardinality)\n- Calculate SHAP values for model-agnostic importance\n- Compare importance after binning temperature into categories\n- Check partial dependence plots: If flat, feature isn't actually predictive\n\n**Validation Protocol**:\n\n1. **Correlation Analysis**:\n```python\nimport seaborn as sns\ncorr = df[process_features].corr()\nsns.heatmap(corr, annot=True)\n# Check if temp_zone_5 correlated with other sensors\n```\n\n2. **Permutation Importance**:\n```python\nfrom sklearn.inspection import permutation_importance\nperm_imp = permutation_importance(rf, X_test, y_test, n_repeats=10)\n# Compare to impurity-based importance\n```\n\n3. **SHAP Analysis**:\n```python\nimport shap\nexplainer = shap.TreeExplainer(rf)\nshap_values = explainer.shap_values(X_test)\nshap.summary_plot(shap_values, X_test)\n# Check if temperature truly drives predictions\n```\n\n4. **Partial Dependence Plot**:\n```python\nfrom sklearn.inspection import plot_partial_dependence\nplot_partial_dependence(rf, X_test, ['temperature_zone_5'])\n# If flat line, feature doesn't affect predictions despite high importance\n```\n\n5. **Domain Expert Validation**:\n- Show engineers the specific wafers where temperature was influential\n- Ask: \"Could temperature indirectly affect defects via another mechanism?\"\n- Consider confounding variables (e.g., both temp and defects caused by equipment age)\n\n**Conclusion**:\nFeature importance is a starting point for investigation, not definitive causal proof. Combine statistical validation (permutation, SHAP) with domain expertise to determine if importance reflects true causation or artifacts.",
+      "topic": "feature_importance_interpretation",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "easy",
+      "id": "m4.1_q021",
+      "keywords": [
+        "bias",
+        "variance",
+        "averaging",
+        "bootstrap",
+        "systematic error",
+        "random fluctuation"
+      ],
+      "points": 6,
+      "question": "Explain why bootstrap aggregating (bagging) reduces variance but not bias. Use a simple example of predicting whether a wafer is defective. (6 points)",
+      "rubric": {
+        "bias_explanation": 2,
+        "example_quality": 1,
+        "mathematical_intuition": 1,
+        "variance_explanation": 2
+      },
+      "sample_answer": "**Bias-Variance Intuition:**\n\n**Bias**: Systematic error from model assumptions (e.g., linear model for nonlinear data)\n**Variance**: Sensitivity to training data fluctuations\n\n**Why Bagging Reduces Variance:**\n\n*Example*: Predicting wafer defects with decision trees\n- Single deep tree: High variance - small changes in training data lead to very different trees\n- Different random samples might split on different features first\n- Predictions vary wildly between training runs\n\n*How bagging helps*:\n- Train 100 trees on bootstrap samples\n- Tree 1 might predict: Defective (60% confident)\n- Tree 2 might predict: Good (55% confident)  \n- Tree 100 might predict: Defective (70% confident)\n- Average: Defective (60% confident) \u2190 More stable!\n\n*Mathematical intuition*:\n- Variance of average = Variance of individual / N (for independent predictors)\n- Even with correlation, averaging reduces variance\n- Like averaging multiple noisy measurements of the same quantity\n\n**Why Bagging Doesn't Reduce Bias:**\n\n*Bias is systematic*:\n- If base model has wrong assumptions, averaging won't fix it\n- Example: If all trees max_depth=2, they all underfit (high bias)\n- Average of 100 underfitting trees = still underfitting\n- Averaging doesn't add model capacity\n\n*Analogy*:\n- Bias = using a miscalibrated thermometer (reads 2\u00b0C too high)\n- Taking 100 measurements and averaging still gives wrong temperature\n- Variance = thermometer has random \u00b10.5\u00b0C noise\n- Averaging 100 measurements reduces noise\n\n**Implication for Random Forest:**\n- Use deep trees (low bias, high variance) as base learners\n- Bagging reduces the variance\n- Result: Low bias AND low variance \u2192 good performance\n\n**Key Takeaway**: Bagging is a variance reduction technique through averaging, not a bias reduction technique.",
+      "topic": "bagging_basics",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "id": "m4.1_q022",
+      "keywords": [
+        "model compression",
+        "pruning",
+        "feature selection",
+        "quantization",
+        "ONNX",
+        "GPU acceleration",
+        "latency",
+        "trade-off"
+      ],
+      "points": 10,
+      "question": "You're deploying an XGBoost model for real-time defect detection (latency requirement: <10ms per wafer). The model has 500 trees with max_depth=10. Describe three optimization strategies to reduce inference time while maintaining accuracy above 95% of the original. Include specific techniques and trade-offs. (10 points)",
+      "rubric": {
+        "integration_and_tradeoffs": 1,
+        "strategy_1": 3,
+        "strategy_2": 3,
+        "strategy_3": 3
+      },
+      "sample_answer": "**Strategy 1: Model Compression via Tree Pruning**\n\n*Approach*:\n- Use `num_boost_round` early stopping: Find minimum trees needed (e.g., 200 instead of 500)\n- Reduce `max_depth` from 10 to 6-7 (exponentially fewer nodes: 2^depth)\n- Set `min_child_weight` higher to prevent overly specific splits\n\n*Implementation*:\n```python\n# During training\nparams = {\n    'max_depth': 6,  # Reduced from 10\n    'min_child_weight': 5,  # Increased from 1\n    'gamma': 0.1  # Minimum loss reduction for split\n}\nmodel = xgb.train(\n    params, dtrain,\n    num_boost_round=200,  # Reduced from 500\n    early_stopping_rounds=20\n)\n```\n\n*Trade-offs*:\n- Pros: 60% fewer trees (200 vs 500), 15x fewer nodes per tree (2^6 vs 2^10)\n- Cons: Slight accuracy drop (typically 0.5-2%)\n- Speedup: ~70% reduction in inference time\n\n**Strategy 2: Feature Selection & Engineering**\n\n*Approach*:\n- Analyze feature importance; keep only top-N critical features\n- Reduce from 200 features to 30-50 most important\n- Pre-compute expensive features offline when possible\n\n*Implementation*:\n```python\n# Get feature importance\nimportances = model.get_score(importance_type='gain')\ntop_features = sorted(importances, key=importances.get, reverse=True)[:50]\n\n# Retrain with selected features\nX_train_reduced = X_train[top_features]\nmodel_reduced = xgb.train(params, xgb.DMatrix(X_train_reduced, y_train))\n```\n\n*Trade-offs*:\n- Pros: Faster feature extraction, smaller model, better generalization\n- Cons: May miss subtle interactions between low-importance features\n- Speedup: 30-40% reduction (fewer features to evaluate at each node)\n\n**Strategy 3: Model Quantization & Hardware Optimization**\n\n*Approach*:\n- Convert float64 \u2192 float32 or even int8 for tree thresholds\n- Use XGBoost's GPU prediction (`predictor='gpu_predictor'`)\n- Batch predictions when possible (vectorization gains)\n- Compile model to optimized format (ONNX Runtime, TensorRT)\n\n*Implementation*:\n```python\n# Quantize model\nimport onnxruntime as ort\nimport xgboost as xgb\n\n# Export to ONNX\nmodel.save_model('model.json')\nonx_model = convert_xgboost_to_onnx(model)\n\n# Load with ONNX Runtime (optimized inference)\nsess = ort.InferenceSession(onx_model, providers=['CPUExecutionProvider'])\n\n# Batch prediction\npreds = sess.run(None, {'X': X_batch})[0]\n```\n\n*Trade-offs*:\n- Pros: No accuracy loss (if quantization careful), minimal code changes\n- Cons: Requires additional infrastructure (ONNX, GPU)\n- Speedup: 2-5x with GPU, 1.5-2x with ONNX quantization\n\n**Combined Strategy for <10ms Latency:**\n\n1. **Baseline**: 500 trees, max_depth=10, 200 features \u2192 ~30ms inference\n\n2. **Apply optimizations**:\n   - Reduce to 150 trees, max_depth=6 (Strategy 1): 30ms \u2192 10ms\n   - Select top 50 features (Strategy 2): 10ms \u2192 6ms\n   - ONNX Runtime optimization (Strategy 3): 6ms \u2192 4ms\n\n3. **Validation**:\n   - Original model: AUC = 0.95\n   - Optimized model: AUC = 0.935 (98.4% of original)\n   - Latency: 4ms \u2713 (well under 10ms requirement)\n\n**Deployment Architecture:**\n```\nIncoming Wafer Data\n  \u2193\nFeature Extraction (top 50 features only)\n  \u2193\nONNX Runtime Prediction (150 trees, depth 6)\n  \u2193\nDefect Classification (<4ms)\n  \u2193\nAlert System / Dashboard\n```\n\n**Monitoring in Production:**\n- Track inference time per wafer (p50, p99 latency)\n- Monitor accuracy degradation over time (concept drift)\n- A/B test optimized model against full model on 1% traffic\n- Maintain fallback to slower but more accurate model if needed\n\n**Cost-Benefit Analysis:**\n- 87% latency reduction (30ms \u2192 4ms)\n- 1.6% accuracy trade-off (0.95 \u2192 0.935 AUC)\n- Acceptable for real-time manufacturing where speed enables automated intervention",
+      "topic": "production_deployment",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "hints": [
+        "Train multiple models on training data",
+        "Evaluate each on validation set to get AUC scores",
+        "Calculate weights proportional to AUC (normalize to sum to 1)",
+        "Use np.average with weights parameter for final predictions",
+        "Better-performing models should have higher influence"
+      ],
+      "id": "m4.1_q023",
+      "points": 8,
+      "question": "Implement a weighted voting ensemble where weights are determined by each model's validation performance.",
+      "solution": "from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier\nfrom sklearn.linear_model import LogisticRegression\nfrom sklearn.metrics import roc_auc_score\nimport numpy as np\n\ndef weighted_voting_ensemble(X_train, y_train, X_val, y_val, X_test):\n    # Define models\n    models = {\n        'rf': RandomForestClassifier(n_estimators=100, random_state=42),\n        'gb': GradientBoostingClassifier(n_estimators=100, random_state=42),\n        'lr': LogisticRegression(random_state=42, max_iter=1000)\n    }\n    \n    # Train models and get validation predictions\n    val_predictions = {}\n    val_scores = {}\n    \n    for name, model in models.items():\n        model.fit(X_train, y_train)\n        val_pred = model.predict_proba(X_val)[:, 1]\n        val_predictions[name] = val_pred\n        val_scores[name] = roc_auc_score(y_val, val_pred)\n    \n    # Calculate weights proportional to validation AUC\n    total_score = sum(val_scores.values())\n    weights = np.array([val_scores[name] / total_score for name in models.keys()])\n    \n    # Get test predictions\n    test_predictions_list = []\n    for name, model in models.items():\n        test_pred = model.predict_proba(X_test)[:, 1]\n        test_predictions_list.append(test_pred)\n    \n    # Weighted average\n    test_predictions = np.average(test_predictions_list, axis=0, weights=weights)\n    \n    return {\n        'weights': weights,\n        'test_predictions': test_predictions,\n        'model_scores': val_scores\n    }",
+      "starter_code": "from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier\nfrom sklearn.linear_model import LogisticRegression\nfrom sklearn.metrics import roc_auc_score\nimport numpy as np\n\ndef weighted_voting_ensemble(X_train, y_train, X_val, y_val, X_test):\n    \"\"\"\n    Create weighted voting ensemble based on validation performance.\n    \n    Returns:\n        dict: {'weights': array, 'test_predictions': array}\n    \"\"\"\n    # Your code here\n    pass",
+      "test_cases": [
+        {
+          "description": "Better models get higher weight in final ensemble",
+          "expected_output": "Model weights based on validation AUC and weighted predictions",
+          "input": "Train, validation, and test data"
+        }
+      ],
+      "topic": "custom_ensemble",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "hints": [
+        "Train both RF and XGBoost on same data",
+        "Extract feature_importances_ from both models",
+        "Normalize importances to sum to 1 for fair comparison",
+        "Calculate absolute difference as disagreement metric",
+        "Sort by disagreement to identify controversial features",
+        "High disagreement may indicate feature interactions or cardinality bias"
+      ],
+      "id": "m4.1_q024",
+      "points": 7,
+      "question": "Compare feature importance from Random Forest and XGBoost, identifying features with high disagreement.",
+      "solution": "from sklearn.ensemble import RandomForestClassifier\nimport xgboost as xgb\nimport pandas as pd\nimport numpy as np\n\ndef compare_feature_importance(X_train, y_train, feature_names):\n    # Train Random Forest\n    rf = RandomForestClassifier(n_estimators=100, random_state=42)\n    rf.fit(X_train, y_train)\n    rf_importance = rf.feature_importances_\n    \n    # Train XGBoost\n    xgb_model = xgb.XGBClassifier(n_estimators=100, random_state=42, use_label_encoder=False)\n    xgb_model.fit(X_train, y_train)\n    xgb_importance = xgb_model.feature_importances_\n    \n    # Normalize importances to [0, 1]\n    rf_importance_norm = rf_importance / rf_importance.sum()\n    xgb_importance_norm = xgb_importance / xgb_importance.sum()\n    \n    # Calculate disagreement (absolute difference)\n    disagreement = np.abs(rf_importance_norm - xgb_importance_norm)\n    \n    # Create DataFrame\n    importance_df = pd.DataFrame({\n        'feature': feature_names,\n        'rf_importance': rf_importance_norm,\n        'xgb_importance': xgb_importance_norm,\n        'disagreement': disagreement,\n        'avg_importance': (rf_importance_norm + xgb_importance_norm) / 2\n    })\n    \n    # Sort by disagreement (descending)\n    importance_df = importance_df.sort_values('disagreement', ascending=False)\n    importance_df = importance_df.reset_index(drop=True)\n    \n    return importance_df",
+      "starter_code": "from sklearn.ensemble import RandomForestClassifier\nimport xgboost as xgb\nimport pandas as pd\nimport numpy as np\n\ndef compare_feature_importance(X_train, y_train, feature_names):\n    \"\"\"\n    Compare feature importance between RF and XGBoost.\n    \n    Returns:\n        pd.DataFrame: Features sorted by disagreement, with RF and XGBoost importance\n    \"\"\"\n    # Your code here\n    pass",
+      "test_cases": [
+        {
+          "description": "High disagreement suggests feature interactions or model-specific biases",
+          "expected_output": "DataFrame showing features where RF and XGBoost disagree most",
+          "input": "Training data with 50 features"
+        }
+      ],
+      "topic": "feature_importance_analysis",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "id": "m4.1_q025",
+      "keywords": [
+        "learning rate",
+        "n_estimators",
+        "regularization",
+        "early stopping",
+        "inference time",
+        "overfitting",
+        "trade-off"
+      ],
+      "points": 8,
+      "question": "In XGBoost, explain the relationship between learning_rate and n_estimators. Why is using a low learning rate with more trees often better than a high learning rate with fewer trees? What are the practical trade-offs for production deployment? (8 points)",
+      "rubric": {
+        "practical_recommendations": 1,
+        "production_tradeoffs": 3,
+        "relationship_explanation": 2,
+        "theoretical_reasoning": 2
+      },
+      "sample_answer": "**Relationship Between learning_rate and n_estimators:**\n\nThe learning rate (\u03b7, eta) controls how much each tree contributes to the ensemble:\n```\nF(x) = F\u2080(x) + \u03b7\u00b7f\u2081(x) + \u03b7\u00b7f\u2082(x) + ... + \u03b7\u00b7f\u2099(x)\n```\n- Low learning rate (e.g., 0.01): Each tree makes small corrections\n- High learning rate (e.g., 0.3): Each tree makes large corrections\n- n_estimators: Total number of trees to train\n\n**Why Low Learning Rate + More Trees is Better:**\n\n1. **Smoother Learning Trajectory**:\n   - Low \u03b7: Gradual corrections avoid overshooting optimal solution\n   - Each tree captures different aspects of the pattern\n   - Less likely to overfit individual training examples\n   \n2. **Better Regularization**:\n   - With \u03b7=0.01, need 1000 trees to equal effect of \u03b7=0.1 with 100 trees\n   - More opportunities for early stopping to prevent overfitting\n   - Ensemble averages over more diverse weak learners\n   \n3. **Finer-Grained Model**:\n   - Small steps explore loss surface more thoroughly\n   - Can capture subtle patterns without committing too early\n   - Analogy: Walking carefully vs taking large leaps on uneven terrain\n\n**Example Comparison:**\n\n*High learning rate (\u03b7=0.3, n=100)*:\n- Training: Fast (100 trees)\n- Validation AUC: 0.92\n- Overfitting: Moderate risk\n\n*Low learning rate (\u03b7=0.01, n=1000)*:\n- Training: Slower (1000 trees)\n- Validation AUC: 0.945\n- Overfitting: Lower risk with early stopping at ~700 trees\n\n**Practical Trade-offs for Production:**\n\n**Development Phase:**\n- Use low learning rate (0.01-0.05) + many trees (500-2000)\n- Enable early stopping (stopping_rounds=50)\n- Focus on model quality\n- Example: \u03b7=0.02, n=1500, early_stop at 890 \u2192 Best validation performance\n\n**Production Deployment:**\n\nTrade-off dimensions:\n1. **Inference Time**: More trees = slower predictions\n2. **Model Quality**: Lower \u03b7 typically = better generalization\n3. **Training Time**: More trees = longer retraining cycles\n\n**Optimization Strategies:**\n\n1. **If Inference Speed Critical** (e.g., real-time defect detection):\n   - Use moderate learning rate (\u03b7=0.1-0.15)\n   - Fewer trees (n=200-300)\n   - Acceptable: 1-2% accuracy trade-off for 3-5x faster inference\n   \n2. **If Model Quality Critical** (e.g., yield optimization decisions):\n   - Use low learning rate (\u03b7=0.01-0.03)\n   - Many trees (n=500-1000+)\n   - Deploy on GPU or use model compression post-training\n   \n3. **Hybrid Approach** (recommended):\n   - Train with low \u03b7 + many trees for best model\n   - Post-training: Prune ensemble to most important trees\n   - Knowledge distillation: Train smaller student model to mimic large ensemble\n\n**Tuning Recommendation:**\n\nUse inverse relationship:\n```\n\u03b7 * n \u2248 constant (e.g., 30-100)\n```\n\nExamples:\n- \u03b7=0.3, n=100\n- \u03b7=0.1, n=300  \n- \u03b7=0.03, n=1000\n- \u03b7=0.01, n=3000\n\nLower \u03b7 requires proportionally more trees, but yields better models.\n\n**Production Decision Framework:**\n\n```\nIF latency_requirement < 10ms:\n    \u03b7 = 0.1, n = 200-300\nELSE IF latency_requirement < 100ms:\n    \u03b7 = 0.03, n = 500-800\nELSE:  # Batch processing, quality prioritized\n    \u03b7 = 0.01, n = 1000-2000\n```\n\n**Key Takeaway**: Low learning rate with more trees is like compound interest\u2014smaller, consistent improvements accumulate to better results. The cost is training and inference time, which can be managed with early stopping and post-training optimization.",
+      "topic": "learning_rate_tuning",
+      "type": "conceptual"
+    }
+  ],
+  "sub_module": "4.1",
+  "title": "Ensemble Methods",
+  "version": "1.0",
+  "week": 7
+}

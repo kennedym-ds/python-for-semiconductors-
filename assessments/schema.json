@@ -1,0 +1,228 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "Schema for assessment question banks in the Python for Semiconductors learning series",
+  "properties": {
+    "metadata": {
+      "description": "Optional metadata about the question bank",
+      "properties": {
+        "author": {
+          "type": "string"
+        },
+        "created_date": {
+          "format": "date",
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "updated_date": {
+          "format": "date",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "module_id": {
+      "description": "Module identifier (e.g., 'module-1.1', 'module-2.3')",
+      "pattern": "^module-[0-9]+\\.[0-9]+$",
+      "type": "string"
+    },
+    "questions": {
+      "description": "Array of assessment questions",
+      "items": {
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "type": {
+                  "const": "multiple_choice"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "options",
+                "correct_answer",
+                "explanation"
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "type": {
+                  "const": "coding_exercise"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "starter_code",
+                "test_cases",
+                "explanation"
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "type": {
+                  "const": "conceptual"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "rubric",
+                "explanation"
+              ]
+            }
+          }
+        ],
+        "properties": {
+          "correct_answer": {
+            "description": "Correct answer (index for multiple choice, null for open-ended)"
+          },
+          "difficulty": {
+            "description": "Difficulty level",
+            "enum": [
+              "easy",
+              "medium",
+              "hard"
+            ],
+            "type": "string"
+          },
+          "explanation": {
+            "description": "Explanation of the correct answer",
+            "type": "string"
+          },
+          "hints": {
+            "description": "Progressive hints for students",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "id": {
+            "description": "Unique question identifier (e.g., 'm1.1_q001')",
+            "pattern": "^m[0-9]+\\.[0-9]+_q[0-9]{3,}$",
+            "type": "string"
+          },
+          "options": {
+            "description": "Answer options (for multiple choice)",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 2,
+            "type": "array"
+          },
+          "points": {
+            "description": "Point value for this question",
+            "minimum": 1,
+            "type": "number"
+          },
+          "question": {
+            "description": "The question text",
+            "type": "string"
+          },
+          "rubric": {
+            "description": "Grading rubric for conceptual questions",
+            "items": {
+              "properties": {
+                "criteria": {
+                  "type": "string"
+                },
+                "keywords": {
+                  "description": "Keywords to look for in student response",
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "points": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "criteria",
+                "points"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "starter_code": {
+            "description": "Starter code for coding exercises",
+            "type": "string"
+          },
+          "tags": {
+            "description": "Tags for categorization",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "test_cases": {
+            "description": "Test cases for coding exercises",
+            "items": {
+              "properties": {
+                "description": {
+                  "description": "Human-readable test case description",
+                  "type": "string"
+                },
+                "expected_output": {
+                  "description": "Expected output"
+                },
+                "input": {
+                  "description": "Input data for the test case"
+                }
+              },
+              "required": [
+                "input",
+                "expected_output"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "topic": {
+            "description": "Topic or concept being tested",
+            "type": "string"
+          },
+          "type": {
+            "description": "Question type",
+            "enum": [
+              "multiple_choice",
+              "coding_exercise",
+              "conceptual"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "difficulty",
+          "topic",
+          "question",
+          "points"
+        ],
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "version": {
+      "description": "Question bank version (semantic versioning)",
+      "pattern": "^[0-9]+\\.[0-9]+(\\.[0-9]+)?$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "module_id",
+    "version",
+    "questions"
+  ],
+  "title": "Assessment Question Bank Schema",
+  "type": "object"
+}

@@ -1,0 +1,501 @@
+{
+  "description": "Assessment covering MLOps fundamentals including experiment tracking, model versioning, CI/CD for ML, containerization, deployment strategies, and monitoring for semiconductor manufacturing applications.",
+  "estimated_time_minutes": 75,
+  "module_id": "module-9.1",
+  "passing_score": 70,
+  "questions": [
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "MLOps Definition and Importance: **MLOps**: Machine Learning Operations - systematic approach to building, deploying, and maintaining ML systems in production. Combines: (1) Machine Learning: Model development, training, evaluation. (2) DevOps: Automation, CI/CD, monitoring. (3) Data Engineering: Data pipelines, versioning, quality. **Key Practices**: (1) **Experiment Tracking**: Track all training runs, hyperparameters, metrics. Reproducibility: Recreate any past result. (2) **Model Versioning**: Version models like code. Track lineage: data + code + config \u2192 model. (3) **CI/CD for ML**: Automated testing, training, deployment. (4) **Monitoring**: Track model performance in production. Detect degradation, drift. (5) **Reproducibility**: Deterministic builds, dependency management. **Why Critical for Semiconductors**: (1) **Reliability**: Manufacturing requires consistent, predictable model behavior. (2) **Traceability**: Regulatory requirements, quality systems. (3) **Rapid Updates**: Process changes require quick model retraining. (4) **Scale**: Deploy models across multiple fabs, equipment types. (5) **Collaboration**: Data scientists, engineers, operators work together. Without MLOps: Models stuck in notebooks. Deployment takes weeks/months. No visibility into production performance. Failures hard to debug. With MLOps: Automated deployment (hours/days). Continuous monitoring. Quick rollback if issues. Reproducible results. For semiconductor fabs: MLOps enables reliable ML deployment at scale, critical for yield improvement and defect detection systems.",
+      "id": "m9.1_q001",
+      "options": [
+        "MLOps is just DevOps for ML, no real difference",
+        "MLOps is a set of practices combining ML, DevOps, and data engineering to reliably deploy, monitor, and maintain ML models in production",
+        "MLOps only applies to cloud deployments",
+        "MLOps is only needed for deep learning models"
+      ],
+      "points": 2,
+      "question": "What is MLOps and why is it important for deploying machine learning models in semiconductor manufacturing?",
+      "topic": "mlops_definition",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Experiment Tracking for Manufacturing ML: **Purpose**: Track all model training experiments systematically. Compare approaches to find best model. Ensure reproducibility. **Key Tools**: **MLflow**: Open-source, self-hosted. Tracks: parameters, metrics, models, artifacts. MLflow Registry for model management. **Weights & Biases (W&B)**: Cloud-based (or self-hosted). Rich visualizations, collaborative features. Integrates with major ML frameworks. **What to Track**: (1) **Hyperparameters**: Learning rate, batch size, model architecture, etc. (2) **Metrics**: Training/validation loss, accuracy, F1, etc. (3) **Artifacts**: Trained models, plots, confusion matrices. (4) **Environment**: Library versions, hardware specs. (5) **Data**: Dataset version, train/val/test splits. (6) **Code Version**: Git commit hash. **Benefits**: (1) **Comparison**: Compare 100s of experiments in dashboard. Identify best hyperparameters. (2) **Reproducibility**: Recreate any experiment exactly. Critical for regulatory compliance. (3) **Collaboration**: Team sees all experiments. No duplicate work. (4) **Model Selection**: Track which model deployed when. Rollback if needed. **For Semiconductors**: Track: Defect detection model experiments. Different architectures (ResNet, EfficientNet). Various data augmentation strategies. Threshold tuning for classification. Example: Train 50 models with different hyperparameters \u2192 MLflow dashboard shows F1 scores \u2192 select best \u2192 deploy. Track lineage: This model trained on data v3.2 with commit abc123 on 2025-10-01. Essential for maintaining quality systems and audit trails.",
+      "id": "m9.1_q002",
+      "options": [
+        "Excel spreadsheets are sufficient",
+        "Use MLflow or W&B to track experiments, log parameters/metrics/artifacts, enable comparison and reproducibility",
+        "Just save model files with timestamps",
+        "Experiment tracking not needed"
+      ],
+      "points": 3,
+      "question": "Which experiment tracking tools and practices are most important for managing ML model development in manufacturing?",
+      "topic": "experiment_tracking",
+      "type": "multiple_choice"
+    },
+    {
+      "code_template": "import mlflow\nimport mlflow.pytorch\nimport torch\nfrom sklearn.metrics import classification_report\nimport numpy as np\n\nclass MLflowTrainPipeline:\n    def __init__(self, experiment_name='defect_classification'):\n        \"\"\"\n        Training pipeline with MLflow tracking.\n        \"\"\"\n        mlflow.set_experiment(experiment_name)\n    \n    def train_and_log(self, model, train_loader, val_loader, config):\n        \"\"\"\n        Train model with comprehensive MLflow logging.\n        \n        Args:\n            model: PyTorch model\n            train_loader: Training data loader\n            val_loader: Validation data loader\n            config: Dict with hyperparameters\n        \"\"\"\n        with mlflow.start_run():\n            # Your implementation here:\n            # 1. Log hyperparameters\n            # 2. Train model\n            # 3. Log metrics each epoch\n            # 4. Log final model\n            # 5. Log artifacts (plots, confusion matrix)\n            pass\n    \n    def log_params(self, config):\n        \"\"\"Log all hyperparameters.\"\"\"\n        # Your implementation here\n        mlflow.log_params(config)\n    \n    def log_metrics(self, metrics, step=None):\n        \"\"\"Log metrics with optional step.\"\"\"\n        for key, value in metrics.items():\n            mlflow.log_metric(key, value, step=step)\n    \n    def log_model(self, model, artifact_path='model'):\n        \"\"\"Log trained model.\"\"\"\n        mlflow.pytorch.log_model(model, artifact_path)\n    \n    def log_confusion_matrix(self, y_true, y_pred):\n        \"\"\"Generate and log confusion matrix.\"\"\"\n        # Your implementation here:\n        # 1. Create confusion matrix plot\n        # 2. Save as image\n        # 3. Log as artifact\n        pass\n    \n    def load_best_model(self, experiment_name, metric='val_f1'):\n        \"\"\"\n        Load best model from experiment based on metric.\n        \"\"\"\n        # Your implementation here:\n        # 1. Search runs in experiment\n        # 2. Find run with best metric\n        # 3. Load model from that run\n        pass",
+      "difficulty": "medium",
+      "explanation": "MLflow Experiment Tracking Implementation: **Setup**: Set experiment name (groups related runs). Each training run is a separate MLflow run. **During Training**: Log hyperparameters at start (config dict). Log metrics each epoch (train_loss, val_loss, val_f1, etc.). Log final model (PyTorch, TensorFlow, scikit-learn). Log artifacts (confusion matrix, ROC curve, sample predictions). **Benefits**: Dashboard view of all experiments. Compare hyperparameters \u2192 metrics. Load best model programmatically. Reproducibility: Exact config for any past run. **For Semiconductors**: Track defect classifier training runs. Compare data augmentation strategies. Select best model for deployment. Audit trail for quality systems. Example: 50 experiments \u2192 MLflow UI shows val_f1 for each \u2192 deploy best \u2192 track which deployed when.",
+      "hints": [
+        "Use mlflow.start_run() context manager",
+        "Log params with mlflow.log_params(dict)",
+        "Log metrics with mlflow.log_metric(key, value, step)",
+        "Log model with mlflow.pytorch.log_model()",
+        "Save plots and log with mlflow.log_artifact()",
+        "Search runs with mlflow.search_runs()"
+      ],
+      "id": "m9.1_q003",
+      "points": 4,
+      "question": "Implement MLflow experiment tracking for a defect classification model training pipeline.",
+      "test_cases": [
+        {
+          "description": "MLflow tracking",
+          "expected_output": "All params, metrics, and model logged to MLflow",
+          "input": "Model training with config={'lr': 0.001, 'batch_size': 32, 'epochs': 10}"
+        }
+      ],
+      "topic": "mlflow_tracking",
+      "type": "coding_exercise"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Model Registry for Lifecycle Management: **Purpose**: Central repository for managing models throughout lifecycle. Track model versions, stages, metadata, lineage. **Key Features**: **1. Version Management**: Each model has versions (v1, v2, v3...). Immutable: Can't change registered model. Track which version currently deployed. **2. Model Stages**: Development: Model being tested. Staging: Model in pre-production testing. Production: Currently serving predictions. Archived: Deprecated models. **3. Metadata**: Who trained/registered model. When registered. Training dataset version. Performance metrics. Associated experiment run. **4. Lineage Tracking**: Data: Which dataset used for training. Code: Git commit hash. Environment: Library versions. Parent model (if fine-tuned). **5. Model Annotations**: Descriptions, tags. Approval/review notes. Deployment instructions. **6. Access Control**: Who can register models. Who can transition to production. Audit trail of all changes. **Tools**: MLflow Model Registry (open-source). Cloud-specific: AWS SageMaker, Azure ML, GCP Vertex AI. **Workflow Example**: (1) Data scientist trains model \u2192 registers in registry (version 1.2). (2) Sets stage to 'Staging'. (3) Engineer tests model in staging environment. (4) If passes tests, transitions to 'Production'. (5) Old production model archived. (6) Deployment system automatically uses latest production model. **For Semiconductors**: Track defect detection models: Which version deployed in each fab. Performance metrics per version. Quick rollback if new version underperforms. Audit trail: 'Model v2.3 deployed on 2025-10-01 by [user] with approval from [manager]'. Integration: CI/CD pipeline automatically deploys models marked 'Production'. Result: Systematic model management, reduced risk, clear audit trail.",
+      "id": "m9.1_q004",
+      "options": [
+        "Just a folder with model files",
+        "Centralized repository for managing model versions, stages (staging/production), metadata, and lineage",
+        "Model registry only stores models, no metadata",
+        "Model registry not needed for small teams"
+      ],
+      "points": 3,
+      "question": "What is a model registry and how does it help manage model lifecycle in production?",
+      "topic": "model_registry",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "Model Versioning Importance: **Reasons**: **1. Reproducibility**: Recreate exact model predictions from any past date. Critical for: Investigating historical incidents. Regulatory audits. Quality system requirements (ISO 9001). **2. Rollback Capability**: New model underperforms \u2192 quickly rollback to previous version. Minutes instead of hours/days to recover. **3. A/B Testing**: Deploy model v2 to 10% of traffic. Compare performance against v1. Gradual rollout based on results. **4. Audit Trail**: Track when each version deployed. Who approved deployment. Performance metrics of each version. **5. Debugging**: Model error reported \u2192 check which version was running. Compare behavior across versions. **6. Compliance**: Manufacturing quality systems require version control. Traceability of all production systems. **7. Collaboration**: Team knows which model version in each environment. No confusion about 'latest' model. **Versioning Scheme**: Semantic versioning: major.minor.patch (1.2.3). Major: Breaking changes (API, input format). Minor: New features, performance improvements. Patch: Bug fixes. **Example**: Defect classifier v2.1.0 deployed on 2025-10-01. After 1 week, accuracy drops \u2192 rollback to v2.0.3. Investigation shows data drift \u2192 retrain \u2192 v2.1.1. For semiconductors: Multiple model versions across fabs. Clear tracking essential for consistency and troubleshooting.",
+      "id": "m9.1_q005",
+      "options": [
+        "Model versioning not important",
+        "Enable reproducibility, rollback capability, A/B testing, and audit trails required for quality systems",
+        "Only needed for large models",
+        "Models don't change once deployed"
+      ],
+      "points": 2,
+      "question": "Why is model versioning critical for semiconductor manufacturing ML applications?",
+      "topic": "model_versioning",
+      "type": "multiple_choice"
+    },
+    {
+      "code_template": "# .github/workflows/ml-pipeline.yml\n# Your implementation here:\n# Complete GitHub Actions workflow for ML CI/CD\n\nname: ML Model CI/CD Pipeline\n\non:\n  push:\n    branches: [main, develop]\n  pull_request:\n    branches: [main]\n  schedule:\n    # Automated retraining (weekly)\n    - cron: '0 0 * * 0'\n\njobs:\n  # Job 1: Code quality and tests\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      # Your implementation here:\n      # 1. Checkout code\n      # 2. Setup Python\n      # 3. Install dependencies\n      # 4. Run linting (flake8, black)\n      # 5. Run unit tests\n      # 6. Run data validation tests\n      pass\n  \n  # Job 2: Model training\n  train:\n    needs: test\n    runs-on: ubuntu-latest\n    steps:\n      # Your implementation here:\n      # 1. Checkout code\n      # 2. Setup Python and dependencies\n      # 3. Download training data\n      # 4. Train model\n      # 5. Log to MLflow\n      # 6. Save model artifact\n      pass\n  \n  # Job 3: Model evaluation\n  evaluate:\n    needs: train\n    runs-on: ubuntu-latest\n    steps:\n      # Your implementation here:\n      # 1. Load trained model\n      # 2. Run on test set\n      # 3. Check performance thresholds\n      # 4. Generate evaluation report\n      # 5. Fail if below threshold\n      pass\n  \n  # Job 4: Deploy to staging\n  deploy-staging:\n    needs: evaluate\n    runs-on: ubuntu-latest\n    if: github.ref == 'refs/heads/develop'\n    steps:\n      # Your implementation here:\n      # 1. Build Docker image\n      # 2. Push to registry\n      # 3. Deploy to staging environment\n      # 4. Run smoke tests\n      pass\n  \n  # Job 5: Deploy to production (manual approval)\n  deploy-production:\n    needs: evaluate\n    runs-on: ubuntu-latest\n    if: github.ref == 'refs/heads/main'\n    environment: production  # Requires manual approval\n    steps:\n      # Your implementation here:\n      # 1. Build Docker image\n      # 2. Push to registry\n      # 3. Deploy to production\n      # 4. Run health checks\n      # 5. Send notification\n      pass",
+      "difficulty": "hard",
+      "explanation": "CI/CD Pipeline for ML: **Components**: (1) **Continuous Integration**: Automated testing on every commit. Code quality checks (linting). Unit tests for data processing, model code. Data validation tests. (2) **Continuous Training**: Automated model retraining (scheduled or triggered). Hyperparameter optimization. Experiment logging. (3) **Continuous Deployment**: Automated deployment after successful tests. Staging deployment for validation. Production deployment with approval. (4) **Monitoring**: Post-deployment health checks. Performance monitoring. Alerting on failures. **GitHub Actions Workflow**: Trigger: On push, PR, or schedule (weekly retraining). Jobs: Test \u2192 Train \u2192 Evaluate \u2192 Deploy (Staging) \u2192 Deploy (Production). Gates: Tests must pass before training. Model must meet performance thresholds before deployment. Manual approval for production. **Benefits**: Automation reduces manual errors. Faster iteration (hours vs days). Consistent deployment process. Reproducible builds. **For Semiconductors**: Automated retraining when new defect data available. Systematic testing before deployment. Rollback capability if issues. Audit trail of all deployments. Example: New data arrives \u2192 triggers retraining \u2192 if model improves AND passes tests \u2192 auto-deploy to staging \u2192 manual approve \u2192 production.",
+      "hints": [
+        "Use actions/checkout@v3 for code checkout",
+        "actions/setup-python@v4 for Python setup",
+        "Cache dependencies with actions/cache",
+        "Store artifacts with actions/upload-artifact",
+        "Use environment secrets for API keys",
+        "Implement manual approval for production with 'environment'",
+        "Add status checks and notifications"
+      ],
+      "id": "m9.1_q006",
+      "points": 5,
+      "question": "Design and implement a CI/CD pipeline for automated ML model testing, training, and deployment using GitHub Actions.",
+      "test_cases": [
+        {
+          "description": "Full CI/CD pipeline",
+          "expected_output": "Automated testing, training, evaluation, and deployment to production",
+          "input": "Git push to main branch"
+        }
+      ],
+      "topic": "ci_cd_ml_pipeline",
+      "type": "coding_exercise"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Docker Containerization for ML Models: **Benefits**: **1. Reproducibility**: Exact same environment everywhere (dev, staging, production). Fixed library versions, OS, dependencies. No 'works on my machine' problems. **2. Portability**: Same container runs on: Local laptop, on-prem servers, cloud (AWS, Azure, GCP), edge devices. **3. Isolation**: Model dependencies isolated from other applications. Multiple model versions can run simultaneously (different containers). **4. Scalability**: Easy horizontal scaling (launch more containers). Container orchestration (Kubernetes) for auto-scaling. **5. Consistency**: Same deployment process for all models. Standardized interface (REST API, gRPC). **What to Include in Container**: **1. Base Image**: Python base (python:3.9-slim). Or ML-optimized (nvidia/cuda for GPU). **2. Dependencies**: requirements.txt (pip packages). System dependencies (apt packages). **3. Model Files**: Trained model weights. Config files. Preprocessing artifacts (scaler, encoder). **4. Application Code**: Inference server (FastAPI, Flask). Model loading logic. Request validation. **5. Environment Variables**: Model paths, API keys (from secrets). Configuration options. **6. Health Check**: Endpoint for liveness/readiness checks. **Dockerfile Example**: ``` FROM python:3.9-slim WORKDIR /app COPY requirements.txt . RUN pip install --no-cache-dir -r requirements.txt COPY model/ ./model/ COPY app.py . EXPOSE 8000 CMD [\"uvicorn\", \"app:app\", \"--host\", \"0.0.0.0\", \"--port\", \"8000\"] ``` **For Semiconductors**: Deploy defect detection models consistently across: Multiple fabs (different infrastructure). Development, staging, production. On-prem and cloud. Version control: defect-classifier:v2.1.0 (Docker tag). Easy rollback: Deploy previous container version. Result: Reliable, reproducible deployment across heterogeneous environments.",
+      "id": "m9.1_q007",
+      "options": [
+        "Containers add unnecessary complexity",
+        "Containers provide reproducible environments with all dependencies, enabling consistent deployment across different platforms and easy scaling",
+        "Containers only useful for cloud deployment",
+        "Just install dependencies on server directly"
+      ],
+      "points": 3,
+      "question": "Why is Docker containerization important for deploying ML models, and what should a model container include?",
+      "topic": "containerization",
+      "type": "multiple_choice"
+    },
+    {
+      "code_template": "# Dockerfile\n# Your implementation here:\n# Create complete Dockerfile for ML model serving\n\nFROM python:3.9-slim\n\n# Set working directory\nWORKDIR /app\n\n# Install system dependencies\nRUN apt-get update && apt-get install -y \\\n    # Add necessary system packages\n    && rm -rf /var/lib/apt/lists/*\n\n# Copy and install Python dependencies\nCOPY requirements.txt .\nRUN pip install --no-cache-dir -r requirements.txt\n\n# Copy model and application code\n# Your implementation here\n\n# Expose port\nEXPOSE 8000\n\n# Health check\nHEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \\\n    CMD curl --fail http://localhost:8000/health || exit 1\n\n# Run application\nCMD [\"uvicorn\", \"app:app\", \"--host\", \"0.0.0.0\", \"--port\", \"8000\"]\n\n# ===================================================================\n# app.py - FastAPI application\n# ===================================================================\n\nfrom fastapi import FastAPI, HTTPException, File, UploadFile\nfrom pydantic import BaseModel\nimport torch\nimport numpy as np\nfrom PIL import Image\nimport io\n\napp = FastAPI(title=\"Defect Classification API\")\n\nclass PredictionRequest(BaseModel):\n    \"\"\"Request schema for batch prediction.\"\"\"\n    image_ids: list[str]\n    # Add other fields as needed\n\nclass PredictionResponse(BaseModel):\n    \"\"\"Response schema.\"\"\"\n    predictions: list[dict]\n    model_version: str\n\n# Load model at startup\n@app.on_event(\"startup\")\nasync def load_model():\n    \"\"\"\n    Load trained model on application startup.\n    \"\"\"\n    # Your implementation here:\n    # 1. Load model from file\n    # 2. Set to eval mode\n    # 3. Store in app.state\n    pass\n\n@app.get(\"/health\")\nasync def health_check():\n    \"\"\"Health check endpoint.\"\"\"\n    # Your implementation here:\n    # Check model loaded, return status\n    return {\"status\": \"healthy\", \"model_version\": \"v1.0.0\"}\n\n@app.get(\"/\")\nasync def root():\n    \"\"\"Root endpoint with API info.\"\"\"\n    return {\n        \"name\": \"Defect Classification API\",\n        \"version\": \"1.0.0\",\n        \"endpoints\": [\"/predict\", \"/predict-batch\", \"/health\"]\n    }\n\n@app.post(\"/predict\")\nasync def predict(file: UploadFile = File(...)):\n    \"\"\"\n    Predict defect class for single image.\n    \"\"\"\n    # Your implementation here:\n    # 1. Read and validate image\n    # 2. Preprocess\n    # 3. Run inference\n    # 4. Return prediction with confidence\n    pass\n\n@app.post(\"/predict-batch\")\nasync def predict_batch(request: PredictionRequest):\n    \"\"\"\n    Predict defect class for batch of images.\n    \"\"\"\n    # Your implementation here:\n    # 1. Load images\n    # 2. Batch preprocessing\n    # 3. Batch inference\n    # 4. Return predictions\n    pass",
+      "difficulty": "medium",
+      "explanation": "Dockerized ML Model Serving: **Dockerfile Best Practices**: Multi-stage builds for smaller images. Layer caching (copy requirements before code). Minimal base images (slim variants). Health checks for container orchestration. Non-root user for security. **FastAPI Application**: async endpoints for performance. Pydantic models for validation. Model loaded once at startup (not per request). Batch prediction endpoint for efficiency. Health check for Kubernetes liveness/readiness. Error handling and logging. **Deployment**: Build: docker build -t defect-classifier:v1.0 . Run: docker run -p 8000:8000 defect-classifier:v1.0. Test: curl http://localhost:8000/health. **For Semiconductors**: Single container deployable anywhere. Horizontal scaling: Run multiple containers behind load balancer. Version management: Tag containers with model versions. Result: Production-ready model serving with 99.9% uptime.",
+      "hints": [
+        "Use python:3.9-slim base image for smaller size",
+        "Install only necessary system packages",
+        "Copy requirements.txt before code (layer caching)",
+        "Use --no-cache-dir with pip to reduce image size",
+        "Implement proper error handling in endpoints",
+        "Add request validation with Pydantic",
+        "Include model version in responses"
+      ],
+      "id": "m9.1_q008",
+      "points": 4,
+      "question": "Create a complete Dockerfile and FastAPI application for serving a defect classification model as a REST API.",
+      "test_cases": [
+        {
+          "description": "Single image prediction",
+          "expected_output": "{\"class\": \"scratch\", \"confidence\": 0.95}",
+          "input": "POST /predict with defect image"
+        },
+        {
+          "description": "Health check",
+          "expected_output": "{\"status\": \"healthy\"}",
+          "input": "GET /health"
+        }
+      ],
+      "topic": "docker_ml_deployment",
+      "type": "coding_exercise"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Testing ML Models in CI/CD: **Test Categories**: **1. Code Tests**: Unit tests: Functions, data processing. Integration tests: Pipeline components. Code quality: Linting (flake8), formatting (black). **2. Data Tests**: Schema validation: Columns, types correct. Distribution tests: Feature distributions within expected ranges. Data quality: No nulls, duplicates where unexpected. Drift detection: Training data similar to historical. **3. Model Tests**: Performance tests: Accuracy, F1, ROC-AUC above thresholds. Per-class performance: Each class meets minimum. Regression tests: New model \u2265 old model performance. **4. Behavioral Tests**: Invariance tests: Small input changes \u2192 similar outputs. Directional expectation: Known relationships hold (e.g., more defects \u2192 lower quality score). Minimum functionality: Correctly predicts obvious cases. **5. Inference Tests**: Latency: Inference time < threshold (e.g., 100ms p95). Throughput: Handles expected QPS. Memory: Memory usage within limits. **6. Integration Tests**: End-to-end: Full prediction pipeline works. API tests: Endpoints respond correctly. **Example Tests for Defect Classifier**: ```python def test_model_accuracy(): assert model.accuracy(test_set) > 0.90 def test_per_class_f1(): for class_name in classes: assert model.f1_score(test_set, class_name) > 0.85 def test_inference_latency(): latency = measure_latency(model, test_image) assert latency < 0.1  # 100ms def test_small_perturbation_invariance(): pred1 = model.predict(image) pred2 = model.predict(image + small_noise) assert pred1 == pred2  # Should be robust to small noise def test_data_schema(): assert train_data.columns == expected_columns assert train_data['defect_size'].min() >= 0 ``` **Implementation in CI/CD**: Run tests on every commit. Gate: Must pass all tests before deployment. Fail fast: Stop pipeline if critical tests fail. **For Semiconductors**: Ensure model quality before deployment. Catch regressions early. Confidence in automated deployments. Result: Reliable ML systems with fewer production issues.",
+      "id": "m9.1_q009",
+      "options": [
+        "Only unit tests needed",
+        "Include data validation, model performance tests, inference latency tests, and behavioral tests",
+        "Testing not important for ML",
+        "Only test final model accuracy"
+      ],
+      "points": 3,
+      "question": "What types of tests should be included in an ML model CI/CD pipeline beyond traditional software testing?",
+      "topic": "model_testing",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Comprehensive MLOps Architecture for Semiconductor Manufacturing: **Architecture Overview**: End-to-end system covering: (1) Data \u2192 (2) Development \u2192 (3) Training \u2192 (4) Deployment \u2192 (5) Monitoring \u2192 (feedback to 1). **1. Data Layer**: **Sources**: MES (Manufacturing Execution System): Production data, lot info. SCADA: Real-time sensor data. Inspection systems: Defect images, measurements. Maintenance logs: Text data, failure reports. **Data Pipeline**: Ingestion: Real-time streaming (Kafka) + batch (Airflow). Storage: Data lake (S3/Azure Blob): Raw data. Data warehouse (Snowflake/BigQuery): Processed data. Feature store (Feast/Tecton): ML-ready features. **Data Quality**: Validation: Schema checks, range checks. Monitoring: Track data drift, anomalies. Version control: DVC or Delta Lake for datasets. **2. Development Environment**: **Tools**: Jupyter notebooks/VS Code for exploration. MLflow/W&B for experiment tracking. Git for code versioning. **Process**: Data scientists develop models locally. Track experiments in MLflow. Version control code in Git. Document in notebooks. **3. Training Pipeline**: **Automated Training**: Scheduled: Weekly/monthly retraining. Triggered: When performance degrades or new data available. **Pipeline (Airflow/Kubeflow)**: (1) Data extraction and validation. (2) Feature engineering. (3) Model training (hyperparameter optimization). (4) Model evaluation against thresholds. (5) Register model in MLflow Registry if passes. **Compute**: Training cluster (GPU nodes). Auto-scaling based on workload. Spot instances for cost optimization. **4. CI/CD Pipeline (GitHub Actions/Jenkins)**: **Continuous Integration**: Code pushed to Git \u2192 automated tests. Unit tests, data tests, model tests. Code quality checks. **Continuous Deployment**: Model registered in MLflow \u2192 CI/CD triggered. Build Docker container with model. Deploy to staging environment. Run smoke tests. Manual approval gate. Deploy to production. **5. Model Deployment**: **Architecture**: Kubernetes cluster for orchestration. Model serving: TorchServe/TensorFlow Serving in containers. Load balancer: Distribute traffic across replicas. API Gateway: Routing, auth, rate limiting. **Deployment Strategies**: Blue-green: New version alongside old, switch traffic. Canary: Gradually increase traffic to new version. A/B testing: Split traffic between versions. **Multi-Fab Deployment**: Regional clusters: One per geographic region. Model registry: Centralized, tracks deployments per fab. Configuration: Per-fab settings (thresholds, classes). **6. Monitoring & Observability**: **Model Performance**: Prediction monitoring: Log all predictions with metadata. Metrics tracking: Accuracy, latency, throughput over time. Drift detection: Input drift, concept drift. Alert thresholds: Performance drops > 5% \u2192 alert. **System Health**: Infrastructure: CPU, memory, disk, network. Application: Error rates, request rates, latency (p50, p95, p99). **Logging**: Centralized logging (ELK stack). Structured logs (JSON). Trace requests end-to-end (Jaeger). **Alerting**: PagerDuty/Slack for critical alerts. Escalation policies. Runbooks for common issues. **7. Feedback Loop**: **Data Collection**: Capture ground truth labels (operator corrections). Store prediction errors for analysis. **Model Improvement**: Analyze failure modes. Add challenging samples to training set. Retrain model with updated data. **Continuous Learning**: Online learning (optional): Model updates from production feedback. Batch retraining: Incorporate new data regularly. **8. Integration with Manufacturing Systems**: **MES Integration**: Send predictions to MES for downstream actions. Receive production data for inference. **SCADA Integration**: Real-time sensor data \u2192 feature extraction \u2192 prediction. Results feed back to SCADA dashboards. **Alerting Systems**: Critical defects \u2192 immediate alerts to operators. Integrate with fab notification systems. **9. Governance & Compliance**: **Model Registry**: Track all models, versions, stages. Approval workflows for production deployment. **Audit Trail**: Log all training runs, deployments, predictions. Traceability: Data + code + config \u2192 model \u2192 predictions. **Access Control**: RBAC for who can deploy models. Separate dev/staging/prod environments. **10. Infrastructure**: **On-Premises (Fab-Local)**: Edge deployment for low latency. Local GPU servers for inference. **Cloud (Centralized)**: Model training (large compute). Model registry and experiment tracking. Data lake for historical data. **Hybrid**: Training in cloud, inference on-prem. Data sync between cloud and fabs. **11. Technology Stack Example**: Data: Kafka, Airflow, S3, Delta Lake, Feast. Development: Jupyter, MLflow, Git, DVC. Training: PyTorch, Kubeflow, Ray. CI/CD: GitHub Actions, Docker, Kubernetes. Serving: FastAPI, TorchServe, Kubernetes. Monitoring: Prometheus, Grafana, ELK, Jaeger. Integration: REST APIs, gRPC, message queues. **12. Architecture Diagram**: ``` Fabs (Multiple Locations) \u251c\u2500\u2500 MES/SCADA \u251c\u2500\u2500 Data Collection \u2192 Kafka \u2192 Data Lake \u2502 \u2193 Model Development (Cloud/Central) \u251c\u2500\u2500 Data Warehouse \u251c\u2500\u2500 Feature Store \u251c\u2500\u2500 Jupyter + MLflow (Experiments) \u251c\u2500\u2500 Git (Code) \u2502 \u2193 Training Pipeline (Automated) \u251c\u2500\u2500 Kubeflow/Airflow \u251c\u2500\u2500 GPU Cluster \u251c\u2500\u2500 MLflow Registry \u2502 \u2193 CI/CD Pipeline \u251c\u2500\u2500 GitHub Actions \u251c\u2500\u2500 Testing (data, model, integration) \u251c\u2500\u2500 Docker Build \u2502 \u2193 Deployment (Per-Fab Kubernetes) \u251c\u2500\u2500 Staging Environment \u251c\u2500\u2500 Production Environment (per fab) \u251c\u2500\u2500 Load Balancer \u251c\u2500\u2500 Model Serving Containers \u2502 \u2193 Monitoring & Feedback \u251c\u2500\u2500 Prometheus (metrics) \u251c\u2500\u2500 ELK (logs) \u251c\u2500\u2500 Alerts (PagerDuty) \u2514\u2500\u2500 Feedback Loop \u2192 Training ``` **Benefits**: End-to-end automation reduces deployment time (weeks \u2192 days). Consistent deployment across all fabs. Continuous monitoring ensures quality. Rapid iteration and improvement. Scalable to 100s of models and multiple fabs. **For Semiconductor Manufacturing**: Multiple models: Defect detection, yield prediction, equipment health, etc. Multi-fab: Consistent deployment across geographic locations. Integration: Seamless with MES/SCADA. Compliance: Full audit trail for quality systems. Result: Enterprise-grade MLOps enabling reliable AI at scale across global semiconductor operations.",
+      "hints": [
+        "Think about data pipelines from production systems",
+        "Consider multi-environment deployment (dev, staging, prod)",
+        "Think about model retraining triggers",
+        "Consider geographic distribution of fabs"
+      ],
+      "id": "m9.1_q010",
+      "points": 5,
+      "question": "Design a complete MLOps architecture for semiconductor manufacturing that supports model development, training, deployment, and monitoring across multiple fabs. Include all key components and their interactions.",
+      "rubric": [
+        "Describes model development and experiment tracking components (2 points)",
+        "Explains automated training and CI/CD pipeline (2 points)",
+        "Discusses deployment strategy and infrastructure (2 points)",
+        "Addresses monitoring and feedback loops (2 points)",
+        "Provides integration with manufacturing systems (MES, SCADA) (2 points)"
+      ],
+      "topic": "mlops_architecture",
+      "type": "conceptual"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Data Drift Monitoring: **Definition**: Data drift (covariate shift) = distribution of input features changes over time. P_train(X) \u2260 P_production(X). **Causes in Manufacturing**: Equipment wear/aging. Process parameter changes. New materials/suppliers. Seasonal variations. **Detection Methods**: (1) **Statistical Tests**: Kolmogorov-Smirnov test, Chi-squared test. Compare production vs training distributions. (2) **Distribution Comparison**: Track feature statistics (mean, std, quantiles). Alert when outside expected ranges. (3) **Model-Based**: Train drift detector on training data. Score production data for 'unusualness'. **Monitoring Approach**: Baseline: Establish distribution from training data. Continuous: Track production data distributions. Comparison: Regular statistical tests (daily/weekly). Alerts: Drift detected \u2192 investigate and retrain. **For Semiconductors**: Equipment aging \u2192 sensor readings drift. New tool installation \u2192 different data patterns. Process recipe changes \u2192 feature distributions shift. Example: Defect classifier trained on Tool A data. Tool A ages \u2192 sensor drift \u2192 model performance degrades \u2192 drift detected \u2192 retrain with recent data. **Prevention**: Regular retraining (scheduled). Quick response to detected drift. Robust features less sensitive to drift.",
+      "id": "m9.1_q011",
+      "options": [
+        "Data drift is not a real problem",
+        "Data drift occurs when input data distribution changes over time; monitor using statistical tests and distribution comparisons",
+        "Data drift only affects accuracy, not latency",
+        "Data drift can't be detected automatically"
+      ],
+      "points": 3,
+      "question": "What is data drift and how should it be monitored in production ML systems?",
+      "topic": "data_drift_detection",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Concept Drift vs Data Drift: **Data Drift**: Input distribution changes: P(X) changes. Features look different but relationships hold. **Concept Drift**: Relationship between inputs and outputs changes: P(Y|X) changes. Same inputs \u2192 different outputs over time. **Example - Semiconductor**: Data Drift: Sensor calibration changes \u2192 readings shifted by +5%. Same defect \u2192 different sensor values. Concept Drift: Process improvement \u2192 defects that previously caused failures now acceptable. Same sensor pattern \u2192 different classification needed. **Detection**: Monitor model performance over time (accuracy, F1). Compare predictions vs ground truth (if available). Look for systematic errors. **Strategies**: (1) **Regular Retraining**: Scheduled (monthly/quarterly). Incorporate recent labeled data. (2) **Sliding Window**: Train on recent N months only. Forget old, outdated patterns. (3) **Ensemble Methods**: Combine models from different time periods. Weight recent models more. (4) **Online Learning**: Continuously update model with new data. Careful: Can lead to catastrophic forgetting. (5) **Adaptive Models**: Detect drift \u2192 trigger retraining automatically. **For Manufacturing**: Process changes \u2192 retrain models. Equipment upgrades \u2192 new relationships. Material suppliers change \u2192 different defect patterns. Solution: Continuous monitoring + automated retraining pipelines.",
+      "id": "m9.1_q012",
+      "options": [
+        "Concept drift and data drift are the same",
+        "Concept drift is when the relationship between features and target changes (P(Y|X) changes); requires model retraining",
+        "Concept drift doesn't affect model performance",
+        "Concept drift only happens in NLP"
+      ],
+      "points": 3,
+      "question": "How does concept drift differ from data drift, and what strategies address it?",
+      "topic": "concept_drift",
+      "type": "multiple_choice"
+    },
+    {
+      "code_template": "import prometheus_client as prom\nfrom scipy import stats\nimport numpy as np\nfrom datetime import datetime\nimport logging\n\nclass ModelMonitor:\n    def __init__(self, model_name, baseline_data):\n        self.model_name = model_name\n        self.baseline_data = baseline_data\n        \n        # Prometheus metrics\n        self.prediction_counter = prom.Counter(\n            f'{model_name}_predictions_total',\n            'Total predictions'\n        )\n        self.latency_histogram = prom.Histogram(\n            f'{model_name}_latency_seconds',\n            'Prediction latency'\n        )\n        self.accuracy_gauge = prom.Gauge(\n            f'{model_name}_accuracy',\n            'Rolling accuracy'\n        )\n        # Add more metrics\n    \n    def log_prediction(self, inputs, prediction, ground_truth=None, latency=None):\n        \"\"\"\n        Log single prediction with monitoring.\n        \"\"\"\n        # Your implementation here:\n        # 1. Update counters\n        # 2. Log latency\n        # 3. Check for drift\n        # 4. Update accuracy if ground_truth available\n        pass\n    \n    def detect_data_drift(self, production_data, threshold=0.05):\n        \"\"\"\n        Detect drift using statistical tests.\n        \n        Returns: Dict with drift detected per feature\n        \"\"\"\n        # Your implementation here:\n        # 1. For each feature\n        # 2. Run KS test vs baseline\n        # 3. Return features with p-value < threshold\n        pass\n    \n    def check_performance_degradation(self, recent_accuracy, threshold=0.05):\n        \"\"\"\n        Check if performance degraded significantly.\n        \"\"\"\n        baseline_accuracy = self.baseline_accuracy\n        if baseline_accuracy - recent_accuracy > threshold:\n            self.alert('Performance degradation detected')\n    \n    def alert(self, message, severity='warning'):\n        \"\"\"Send alert via configured channels.\"\"\"\n        logging.warning(f\"[{severity.upper()}] {message}\")\n        # Send to Slack, PagerDuty, etc.\n    \n    def generate_report(self):\n        \"\"\"\n        Generate monitoring report.\n        \"\"\"\n        return {\n            'total_predictions': self.prediction_counter._value.get(),\n            'avg_latency': self.get_avg_latency(),\n            'accuracy': self.accuracy_gauge._value.get(),\n            'drift_detected': self.recent_drift_status\n        }",
+      "difficulty": "hard",
+      "explanation": "Production ML Monitoring: **Key Metrics**: Performance: Accuracy, F1, precision, recall over time. Latency: p50, p95, p99 inference time. Throughput: Predictions per second. Error Rate: Failed predictions, exceptions. Data: Input distribution, drift scores. **Drift Detection**: Baseline: Store training data statistics. Production: Track incoming data. Comparison: KS test, JS divergence. Alert: Significant drift detected. **Performance Tracking**: Ground truth: Collect labels when available. Rolling metrics: Last N predictions. Comparison: Current vs baseline. **Alerting**: Thresholds: Performance drop >5%, latency >100ms, drift detected. Channels: Slack, PagerDuty, email. Severity levels: Info, warning, critical. **For Semiconductors**: Track model performance per fab, equipment, defect type. Detect equipment degradation via drift. Quick response to performance issues.",
+      "hints": [
+        "Use Prometheus for metrics collection",
+        "KS test: scipy.stats.ks_2samp()",
+        "Track rolling windows for recent performance",
+        "Set appropriate thresholds for alerts",
+        "Log structured data for analysis"
+      ],
+      "id": "m9.1_q013",
+      "points": 5,
+      "question": "Implement a comprehensive monitoring system for production ML models tracking performance, latency, data drift, and alerting.",
+      "test_cases": [
+        {
+          "description": "Drift detection and alerting",
+          "expected_output": "Drift detected and alert sent",
+          "input": "Production predictions with drift"
+        }
+      ],
+      "topic": "monitoring_system",
+      "type": "coding_exercise"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "Blue-Green Deployment: **Setup**: Blue: Current production model (v1). Green: New model (v2) deployed alongside. Both running, same infrastructure. **Process**: (1) Deploy green (v2) to production. (2) Run health checks on green. (3) Switch load balancer from blue \u2192 green (instant). (4) Monitor green performance. (5) If issues: Switch back to blue (instant rollback). (6) If stable: Decommission blue. **Benefits**: Zero downtime (instant switch). Quick rollback (flip switch back). Test in production environment before full switch. **For ML Models**: Deploy model v2 alongside v1. Validate v2 with smoke tests. Switch all traffic to v2. If accuracy drops: Instant rollback to v1. **Trade-offs**: Requires 2x resources temporarily (both models running). Instant switch (vs gradual canary). **Example**: Defect classifier v2.0 deployed. Validation: 100 test predictions look good. Switch: Load balancer \u2192 v2.0. Monitor: 1 hour, performance stable. Cleanup: Remove v1.9. Cost: Extra compute for 1-2 hours during deployment.",
+      "id": "m9.1_q014",
+      "options": [
+        "Blue-green is just a naming convention",
+        "Run old (blue) and new (green) versions simultaneously, switch traffic instantly for zero-downtime updates with quick rollback",
+        "Blue-green only works for web applications",
+        "Blue-green requires double the infrastructure permanently"
+      ],
+      "points": 2,
+      "question": "What is blue-green deployment and when is it useful for ML model updates?",
+      "topic": "blue_green_deployment",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Canary Deployment for ML: **Strategy**: Gradual rollout of new model. Old model: 95% of traffic. New model (canary): 5% of traffic initially. **Process**: (1) Deploy new model (canary). (2) Route 5% traffic to canary. (3) Monitor performance for hours/days. (4) If stable: Increase to 25%. (5) Continue: 25% \u2192 50% \u2192 100%. (6) If issues at any stage: Roll back (reduce %). **Advantages**: Early issue detection with minimal impact (only 5% affected). Gradual validation in production. Statistical significance: Compare canary vs control. Lower risk than all-at-once deployment. **Monitoring**: Compare metrics: Canary accuracy vs baseline. Latency, error rates. Statistical testing: Is canary significantly different? **For Semiconductors**: New defect classifier v2.0. Week 1: 5% of predictions use v2.0. Compare accuracy on same data. Week 2: If good, increase to 25%. Week 3: 50%. Week 4: 100%. **vs Blue-Green**: Blue-Green: Instant switch, quick rollback, higher risk. Canary: Gradual, lower risk, takes longer. **Implementation**: Load balancer with weighted routing. Or: Random sampling (5% probability \u2192 new model). Monitor both cohorts separately.",
+      "id": "m9.1_q015",
+      "options": [
+        "Canary deployment is the same as blue-green",
+        "Gradually roll out new model to increasing percentage of traffic (e.g., 5% \u2192 25% \u2192 100%), catching issues early with minimal impact",
+        "Canary deployment is slower with no benefits",
+        "Canary only works for simple models"
+      ],
+      "points": 3,
+      "question": "How does canary deployment work for ML models and what are its advantages over blue-green?",
+      "topic": "canary_deployment",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Shadow Deployment (Dark Launch): **Setup**: Production model (v1): Serves predictions to users. Shadow model (v2): Receives same inputs, makes predictions, but predictions NOT served. Both run in parallel. **Process**: (1) Deploy shadow model. (2) Duplicate traffic: Send to both models. (3) Production model: Serve predictions (user-facing). (4) Shadow model: Log predictions only. (5) Compare: Analyze predictions offline. (6) If shadow performs well: Promote to production. **Benefits**: Zero risk (users never see shadow predictions). Full production load testing. Validate on real data before serving. Compare predictions head-to-head. Identify edge cases. **Use Cases**: High-stakes models (safety-critical). Major model architecture changes. Regulatory compliance (validate thoroughly). **For Semiconductors**: Deploy new defect classifier v2 in shadow. v1 continues serving (no risk). v2 makes predictions on all images (logged). Offline: Compare v1 vs v2 predictions. Ground truth collected \u2192 evaluate both. If v2 better: Promote via canary or blue-green. **Cost**: Extra compute (running both models). But zero risk to production. **Example**: Shadow runs for 1 week. 10,000 predictions logged. Analysis: v2 has +3% accuracy. Confident to deploy via canary.",
+      "id": "m9.1_q016",
+      "options": [
+        "Shadow deployment is not a real technique",
+        "Run new model in parallel with production model, log predictions but don't serve them; compare offline before full deployment",
+        "Shadow deployment replaces A/B testing",
+        "Shadow deployment only works in cloud"
+      ],
+      "points": 3,
+      "question": "What is shadow deployment and when is it valuable for validating ML models?",
+      "topic": "shadow_deployment",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "Kubernetes for ML Deployment: **Key Features**: **1. Container Orchestration**: Manage many containers (model serving pods). Automatic placement on nodes. Resource allocation (CPU, GPU, memory). **2. Auto-Scaling**: Horizontal Pod Autoscaler (HPA): Scale replicas based on CPU, memory, or custom metrics. Handle traffic spikes automatically. **3. Self-Healing**: Restart failed containers automatically. Replace unhealthy pods. Health checks (liveness, readiness). **4. Load Balancing**: Distribute traffic across model replicas. Service discovery. **5. Rolling Updates**: Deploy new model versions gradually. Zero-downtime updates. **6. Declarative Configuration**: Define desired state (YAML). Kubernetes maintains it. Version control infrastructure. **7. Resource Management**: GPU allocation per pod. Resource limits and requests. **For ML Models**: Deploy model as container. K8s manages replicas (e.g., 5 pods). Auto-scale: 5 \u2192 20 pods during high load. Rolling update: Deploy v2 gradually. Self-healing: Pod crashes \u2192 auto-restart. **Example**: Defect classifier deployment: 10 replicas, each with 1 GPU. HPA: Scale to 50 replicas if CPU >70%. Health check: /health endpoint. Update: Rolling update to v2 (1 pod at a time). Result: Reliable, scalable, automated deployment.",
+      "id": "m9.1_q017",
+      "options": [
+        "Kubernetes is just a trend",
+        "Kubernetes provides container orchestration, auto-scaling, self-healing, and declarative configuration for reliable, scalable deployments",
+        "Kubernetes only works for web apps",
+        "Kubernetes is too complex for ML"
+      ],
+      "points": 2,
+      "question": "Why is Kubernetes commonly used for deploying ML models at scale?",
+      "topic": "kubernetes_basics",
+      "type": "multiple_choice"
+    },
+    {
+      "code_template": "# deployment.yaml\napiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: defect-classifier\n  labels:\n    app: defect-classifier\n    version: v2.0.0\nspec:\n  replicas: 3\n  selector:\n    matchLabels:\n      app: defect-classifier\n  template:\n    metadata:\n      labels:\n        app: defect-classifier\n        version: v2.0.0\n    spec:\n      containers:\n      - name: model-server\n        image: defect-classifier:v2.0.0\n        ports:\n        - containerPort: 8000\n        resources:\n          requests:\n            # Your implementation here\n            # Define CPU, memory, GPU requests\n          limits:\n            # Your implementation here\n            # Define resource limits\n        livenessProbe:\n          # Your implementation here\n          # HTTP probe to /health endpoint\n        readinessProbe:\n          # Your implementation here\n          # Check if ready to serve traffic\n        env:\n          # Your implementation here\n          # Environment variables\n\n---\n# service.yaml\napiVersion: v1\nkind: Service\nmetadata:\n  name: defect-classifier-service\nspec:\n  selector:\n    app: defect-classifier\n  ports:\n    # Your implementation here\n  type: LoadBalancer\n\n---\n# hpa.yaml (Horizontal Pod Autoscaler)\napiVersion: autoscaling/v2\nkind: HorizontalPodAutoscaler\nmetadata:\n  name: defect-classifier-hpa\nspec:\n  scaleTargetRef:\n    apiVersion: apps/v1\n    kind: Deployment\n    name: defect-classifier\n  minReplicas: 3\n  maxReplicas: 20\n  metrics:\n    # Your implementation here:\n    # - CPU target (70%)\n    # - Memory target\n    # - Custom metric (requests per second)",
+      "difficulty": "medium",
+      "explanation": "Kubernetes ML Deployment: **Deployment**: Defines desired state (3 replicas). Container spec: Image, resources, probes. **Resources**: Requests: Minimum guaranteed (CPU: 1 core, memory: 2Gi, GPU: 1). Limits: Maximum allowed (CPU: 2 cores, memory: 4Gi). **Health Checks**: Liveness: Is container alive? (restart if fails). Readiness: Is container ready? (remove from load balancer if not). **Service**: Exposes deployment via stable IP. Load balances across replicas. **HPA**: Auto-scales based on metrics. Min 3, max 20 replicas. Target: 70% CPU utilization. **Deployment**: kubectl apply -f deployment.yaml. kubectl apply -f service.yaml. kubectl apply -f hpa.yaml. **Monitoring**: kubectl get pods. kubectl get hpa. kubectl logs <pod-name>. **For Manufacturing**: Reliable model serving with auto-scaling. Handle traffic spikes (busy production periods). Self-healing for 99.9% uptime.",
+      "hints": [
+        "Resources: requests (minimum), limits (maximum)",
+        "livenessProbe: periodSeconds, failureThreshold",
+        "readinessProbe: ensures pod ready before receiving traffic",
+        "HPA: target CPU utilization 70%",
+        "Use ConfigMap for environment variables",
+        "Add labels for organization"
+      ],
+      "id": "m9.1_q018",
+      "points": 4,
+      "question": "Create Kubernetes deployment manifests for an ML model serving application with auto-scaling and health checks.",
+      "test_cases": [
+        {
+          "description": "K8s deployment",
+          "expected_output": "Deployment with 3 replicas, auto-scaling, health checks",
+          "input": "Apply manifests to Kubernetes cluster"
+        }
+      ],
+      "topic": "kubernetes_deployment",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "MLOps Maturity Levels: **Level 0: Manual Process**: Characteristics: Notebooks, manual training. Copy-paste to production. No version control. Ad-hoc deployment. Challenges: Not reproducible. Deployment takes weeks. No monitoring. For Semiconductors: Proof-of-concept models. Research phase. Data scientists working in isolation. **Level 1: ML Pipeline Automation**: Achievements: Automated training scripts. Version control (Git). Experiment tracking (MLflow). Reproducible training. Challenges: Still manual deployment. Limited collaboration. Milestones: Scripts replace notebooks. MLflow tracking all experiments. Data versioning (DVC). For Semiconductors: First production models. Defect detection POCs. 1-2 models deployed manually. **Level 2: Automated Training Pipeline**: Achievements: Orchestrated training (Airflow/Kubeflow). Automated data validation. Model registry. Scheduled retraining. Challenges: Deployment still manual or semi-automated. Limited monitoring. Milestones: Training triggered automatically. Data pipeline automated. Model registry in use. For Semiconductors: Regular retraining (weekly/monthly). Multiple models (defect detection, yield prediction). Data from MES integrated. **Level 3: Automated Deployment (CI/CD)**: Achievements: CI/CD pipeline (GitHub Actions). Automated testing (data, model, integration). Automated deployment to staging. Model serving infrastructure (Kubernetes). Blue-green or canary deployments. Challenges: Monitoring still limited. Manual intervention for production issues. Milestones: Code push \u2192 auto-test \u2192 auto-deploy to staging. Manual approval \u2192 production. Docker + Kubernetes. For Semiconductors: Consistent deployment across fabs. 5-10 models in production. Model updates deployed in days, not weeks. **Level 4: Full MLOps Automation**: Achievements: Automated monitoring and alerting. Data drift detection. Automated retraining triggers. Feature store. A/B testing framework. Model governance. Feedback loops. Challenges: Maintaining complex system. Organizational maturity required. Milestones: Performance drop \u2192 auto-retrain \u2192 auto-deploy. Drift detected \u2192 alert \u2192 retrain. Continuous monitoring dashboard. For Semiconductors: 20+ models deployed. Multi-fab, global. Real-time monitoring. Automated response to issues. **Progression Strategy for Semiconductors**: **Phase 1 (6 months): Level 0 \u2192 1**: Goals: Version control all code. Experiment tracking. Actions: Adopt Git, MLflow. Train data scientists on tools. Deliverable: Reproducible model training. **Phase 2 (6 months): Level 1 \u2192 2**: Goals: Automated training pipeline. Model registry. Actions: Implement Airflow/Kubeflow. Set up MLflow Registry. Integrate with data sources (MES). Deliverable: Scheduled automated retraining. **Phase 3 (6-12 months): Level 2 \u2192 3**: Goals: CI/CD pipeline. Containerized deployment. Actions: GitHub Actions setup. Dockerize models. Kubernetes cluster. Deliverable: Automated deployment to staging, manual to production. **Phase 4 (12+ months): Level 3 \u2192 4**: Goals: Full automation with monitoring. Actions: Prometheus + Grafana. Drift detection. Automated retraining. Feature store. Deliverable: Self-healing ML system. **Organizational Changes**: **Level 0-1**: Data scientists only. **Level 2**: + ML Engineers. **Level 3**: + DevOps/MLOps Engineers. + Data Engineers. **Level 4**: Dedicated MLOps team. Cross-functional collaboration. **Skills Required**: Level 1: Python, Git, MLflow. Level 2: Workflow orchestration, data engineering. Level 3: Docker, Kubernetes, CI/CD. Level 4: Monitoring, distributed systems, feature stores. **Semiconductor-Specific Considerations**: Integration complexity: MES, SCADA, existing systems. Compliance: Quality systems, audit requirements. Multi-fab: Deployment across locations. Domain knowledge: ML engineers need semiconductor understanding. **Success Metrics**: **Level 1**: Time to reproduce experiment < 1 hour. **Level 2**: Retraining frequency: weekly/monthly. **Level 3**: Deployment time: days (vs weeks). **Level 4**: Model uptime >99.9%, auto-recovery from failures. **Common Pitfalls**: Trying to jump levels (build incrementally). Tools over process (focus on workflow, not just tools). Ignoring org change (need buy-in, training). Over-engineering (start simple). **For Semiconductor Manufacturing**: Start: Level 0-1 (many are here). Target: Level 3 within 18 months (realistic). Aspiration: Level 4 in 2-3 years. Result: Reliable, scalable ML deployment supporting yield improvement and defect detection at scale.",
+      "hints": [
+        "Think about current manual processes",
+        "Consider technical and organizational barriers",
+        "Think about team structure and skills",
+        "Consider compliance requirements"
+      ],
+      "id": "m9.1_q019",
+      "points": 5,
+      "question": "Describe the MLOps maturity levels (0-4) and how a semiconductor manufacturing organization should progress through them. Include specific milestones and challenges at each level.",
+      "rubric": [
+        "Describes Level 0-1: Manual processes and basic automation (2 points)",
+        "Explains Level 2: Automated training pipeline (2 points)",
+        "Discusses Level 3: Automated deployment with CI/CD (2 points)",
+        "Addresses Level 4: Full MLOps with monitoring and feedback (2 points)",
+        "Provides semiconductor-specific progression strategy (2 points)"
+      ],
+      "topic": "mlops_maturity",
+      "type": "conceptual"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "Feature Store Benefits: **Definition**: Centralized platform for storing, discovering, and serving ML features. **Key Capabilities**: (1) **Feature Repository**: Catalog of all features. Versioning (feature v1, v2). Metadata: Description, owner, lineage. (2) **Online Serving**: Low-latency feature retrieval for prediction. Cached, optimized. (3) **Offline Storage**: Historical features for training. Time-travel: Features as of specific date. (4) **Consistency**: Same feature computation for training and serving. Avoid training-serving skew. (5) **Monitoring**: Track feature distributions. Detect data drift. **Benefits**: Reuse: Features computed once, used by many models. Consistency: Guarantees train/serve parity. Collaboration: Teams share features. Efficiency: Avoid redundant computation. **Tools**: Feast (open-source). Tecton (commercial). AWS SageMaker Feature Store. **For Semiconductors**: Features: Equipment sensor statistics, process parameters, defect history. Example: 'avg_chamber_pressure_last_24h'. Compute once \u2192 use in multiple models (defect detection, yield prediction). Training: Pull historical features. Serving: Real-time feature lookup. Result: Faster development, consistent features, team collaboration.",
+      "id": "m9.1_q020",
+      "options": [
+        "Feature store is just a database",
+        "Centralized repository for ML features with versioning, enabling feature reuse, consistency between training/serving, and collaboration",
+        "Feature stores are only for large companies",
+        "Feature stores slow down ML development"
+      ],
+      "points": 2,
+      "question": "What is a feature store and why is it valuable for MLOps?",
+      "topic": "feature_store",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "ML Reproducibility for Manufacturing: **Why Critical**: Regulatory compliance (quality systems). Debugging production issues. Audit trails. Scientific rigor. **Components**: **1. Data Versioning**: Tool: DVC (Data Version Control), Delta Lake. Version datasets like code. Track: Data version, splits, preprocessing. Example: defect_images_v3.2 (specific dataset version). **2. Code Versioning**: Git for all code (training, serving, preprocessing). Tag releases: v2.1.0. Track: Exact commit used for each model. **3. Environment**: Docker: Exact library versions, OS. requirements.txt with pinned versions (numpy==1.21.0, not numpy>=1.20). Conda environments with explicit specifications. **4. Randomness Control**: Set random seeds: Python: random.seed(42), np.random.seed(42). PyTorch: torch.manual_seed(42), torch.cuda.manual_seed_all(42). Document non-deterministic operations (some GPU ops). **5. Experiment Tracking**: MLflow: Log all hyperparameters, metrics. Associate code commit, data version, environment. **6. Model Artifacts**: Save everything needed for reproduction: Model weights. Preprocessing artifacts (scaler, encoder). Config files. Feature definitions. **7. Documentation**: README: How to reproduce. Training logs with all parameters. Data lineage: Where data came from. **Implementation Checklist**: [ ] Data: Versioned, immutable datasets. [ ] Code: Git tags for releases. [ ] Environment: Dockerfiles, pinned requirements. [ ] Seeds: Fixed random seeds everywhere. [ ] Tracking: MLflow logs all experiments. [ ] Artifacts: Model + preprocessing saved together. [ ] Docs: Reproduction instructions. **For Semiconductors**: Scenario: Model deployed 6 months ago, need to reproduce. Steps: (1) Git checkout tag v2.1.0. (2) Load data defect_images_v3.2. (3) Docker build from Dockerfile (pinned versions). (4) Run train.py --seed 42 --config config_v2.1.yaml. (5) Result: Bit-for-bit identical model. **Benefits**: Debug production issues. Regulatory audits. Scientific validation. Team collaboration. **Challenges**: Storage: Datasets + models + environments. Compute: Non-determinism in distributed training. Long-term: Old library versions deprecated. **Best Practices**: Version everything. Document assumptions. Test reproducibility regularly. Automate (CI/CD). Result: Complete audit trail, ability to recreate any production model.",
+      "hints": [
+        "Think about all sources of variation",
+        "Consider audit and compliance needs",
+        "Think about long-term reproducibility (years)",
+        "Consider hardware differences"
+      ],
+      "id": "m9.1_q021",
+      "points": 5,
+      "question": "Explain how to ensure reproducibility in ML systems for semiconductor manufacturing. Address data, code, environment, and randomness.",
+      "rubric": [
+        "Discusses data versioning and lineage tracking (2 points)",
+        "Explains code versioning and dependency management (2 points)",
+        "Addresses environment reproducibility (containers, environments) (2 points)",
+        "Describes handling randomness (random seeds) (2 points)",
+        "Provides practical implementation for manufacturing (2 points)"
+      ],
+      "topic": "reproducibility",
+      "type": "conceptual"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "A/B Testing for ML Models: **Setup**: Model A (control): Current production model (v1). Model B (variant): New model (v2). Random assignment: 50% traffic \u2192 A, 50% \u2192 B. **Process**: (1) Deploy both models. (2) Randomly route predictions. (3) Log: Model version used, prediction, outcome. (4) Collect data (days/weeks). (5) Statistical test: Is B significantly better than A? (6) Decision: Deploy B fully, rollback, or iterate. **Metrics**: Defect detection: Accuracy, false positive/negative rates. User feedback (if applicable). Business metrics: Yield improvement, cost savings. **Statistical Testing**: Hypothesis: Model B performance = Model A. Statistical test: T-test, chi-squared. Significance: p-value < 0.05. Effect size: Is improvement meaningful? **Sample Size**: Need enough predictions for statistical power. Calculate required sample size upfront. Typical: 1000s of predictions per variant. **For Semiconductors**: Test: Defect classifier v2.0 vs v1.9. Split: Random 50/50 on production line. Collect: 5000 defect classifications per model. Measure: Accuracy (ground truth from inspection). Analysis: v2.0: 94% accuracy, v1.9: 91% accuracy. Statistical test: p=0.001 (significant). Decision: Deploy v2.0 fully. **Challenges**: Long feedback loop (ground truth delayed). Imbalanced traffic (one fab busier). External factors (process changes). **Best Practices**: Stratify: Ensure balanced distribution across equipment, shifts. Monitor: Real-time dashboards. Early stopping: Stop if clearly worse. Document: Results, decision rationale.",
+      "id": "m9.1_q022",
+      "options": [
+        "A/B testing is too complex for ML",
+        "Randomly route traffic to model A vs B, track performance metrics, use statistical tests to determine winner",
+        "Just deploy the new model and hope",
+        "A/B testing only works for web features"
+      ],
+      "points": 3,
+      "question": "How should A/B testing be implemented for comparing ML model versions in production?",
+      "topic": "ab_testing",
+      "type": "multiple_choice"
+    },
+    {
+      "code_template": "# DVC Workflow Implementation\n# Your implementation here:\n\n# 1. Initialize DVC in repository\n# $ dvc init\n# $ git add .dvc .dvcignore\n# $ git commit -m \"Initialize DVC\"\n\n# 2. Add remote storage (S3, Azure Blob, GCS, local)\n# $ dvc remote add -d storage s3://my-bucket/dvc-storage\n# $ git add .dvc/config\n# $ git commit -m \"Configure DVC remote\"\n\n# 3. Track dataset with DVC\n# Your commands here:\n# Track datasets/defect_images/ with DVC\n# $ dvc add datasets/defect_images/\n# $ git add datasets/defect_images.dvc datasets/.gitignore\n# $ git commit -m \"Add defect images dataset v1.0\"\n# $ git tag -a data-v1.0 -m \"Dataset version 1.0\"\n# $ dvc push\n\n# 4. Python code to track dataset versions\nimport subprocess\nimport json\nfrom pathlib import Path\n\nclass DataVersionManager:\n    def __init__(self, dataset_path):\n        self.dataset_path = Path(dataset_path)\n    \n    def track_dataset(self, version_tag):\n        \"\"\"\n        Track dataset with DVC and create Git tag.\n        \"\"\"\n        # Your implementation here:\n        # 1. dvc add dataset_path\n        # 2. git add .dvc file and .gitignore\n        # 3. git commit\n        # 4. git tag with version\n        # 5. dvc push\n        pass\n    \n    def checkout_version(self, version_tag):\n        \"\"\"\n        Checkout specific dataset version.\n        \"\"\"\n        # Your implementation here:\n        # 1. git checkout <tag>\n        # 2. dvc checkout\n        pass\n    \n    def get_dataset_info(self):\n        \"\"\"\n        Get current dataset version and metadata.\n        \"\"\"\n        # Read .dvc file\n        dvc_file = self.dataset_path.with_suffix('.dvc')\n        with open(dvc_file) as f:\n            info = yaml.safe_load(f)\n        return info\n    \n    def compare_versions(self, tag1, tag2):\n        \"\"\"\n        Compare two dataset versions.\n        \"\"\"\n        # Your implementation here:\n        # Show diff between versions\n        pass\n\n# 5. Training script with data versioning\ndef train_with_versioned_data(data_version='v1.0', model_version='v1.0'):\n    \"\"\"\n    Train model with specific data version.\n    \"\"\"\n    # Your implementation here:\n    # 1. Checkout data version with DVC\n    # 2. Load data\n    # 3. Train model\n    # 4. Log data version in MLflow\n    # 5. Save model with data version metadata\n    pass",
+      "difficulty": "medium",
+      "explanation": "Data Versioning with DVC: **Why**: Large datasets don't fit in Git. Need version control for data like code. **How DVC Works**: Git: Tracks .dvc files (metadata, hash). DVC: Tracks actual data files (in remote storage). .dvc file: Contains hash of data. **Workflow**: Add data: dvc add dataset/ (creates .dvc file). Commit: git add dataset.dvc \u2192 git commit. Push: dvc push (uploads data to remote). Checkout: git checkout <tag> \u2192 dvc checkout (retrieves data). **Benefits**: Data versioning parallel to code. Reproducibility: Exact data for any model. Collaboration: Team shares same data versions. Storage: Efficient (only store diffs). **Integration with ML**: MLflow experiment: Log data version tag. Model metadata: Include data version. Reproducibility: Code v2.1 + Data v3.2 \u2192 Model. **For Semiconductors**: Version defect image datasets. Track: Data collection date, equipment, process. Example: defect_images_v3.2 (Oct 2025, Tool A+B+C). Training: Always log which data version used. Reproduction: Checkout data v3.2 + code v2.1 \u2192 train. Result: Complete data lineage and reproducibility.",
+      "hints": [
+        "DVC tracks data, Git tracks .dvc metadata files",
+        "Use Git tags for data versions",
+        "dvc push uploads data to remote storage",
+        "dvc checkout retrieves data for current .dvc files",
+        "Integrate with MLflow: log data version in experiments"
+      ],
+      "id": "m9.1_q023",
+      "points": 4,
+      "question": "Implement data versioning workflow using DVC (Data Version Control) for managing training datasets.",
+      "test_cases": [
+        {
+          "description": "Data versioning workflow",
+          "expected_output": "Can checkout any version, track lineage",
+          "input": "Dataset with multiple versions"
+        }
+      ],
+      "topic": "dvc_data_versioning",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "ML Incident Response Plan: **Incident Types**: **Severity 1 (Critical)**: Model completely down (no predictions). Predictions causing safety issues. Data corruption. Impact: Production halted or at risk. **Severity 2 (High)**: Significant performance degradation (>10% accuracy drop). High latency (>5x normal). Partial outage (one fab affected). Impact: Production affected but not halted. **Severity 3 (Medium)**: Moderate performance degradation (5-10% drop). Data drift detected. Non-critical errors. Impact: Monitoring required, plan fix. **Severity 4 (Low)**: Minor issues, no immediate impact. **Detection**: **Automated Monitoring**: Prometheus alerts: Prediction latency >200ms p95. Error rate >5%. Accuracy drop >10% (if ground truth available). Data drift detected. Health check failures. **Manual Detection**: Operator reports unexpected behavior. Quality control catches errors. **Escalation Chain**: **Severity 1**: Immediate: PagerDuty to on-call ML Engineer. Within 5 min: Notify ML Manager, Production Manager. Within 15 min: Incident Commander assigned. **Severity 2**: Within 15 min: Alert on-call ML Engineer. Within 1 hour: Assess and create incident ticket. **Severity 3**: Business hours: Create ticket, prioritize in sprint. **Immediate Mitigation (Severity 1-2)**: **Step 1: Contain (5-15 min)**: Rollback to previous model version (if recent deployment). Switch to rule-based fallback system (if available). Isolate affected fab/equipment. **Step 2: Assess (15-30 min)**: Confirm scope: Which fabs, equipment, timeframe? Check logs, metrics, recent changes. Identify root cause hypothesis. **Step 3: Communicate (Ongoing)**: Status updates every 30 min. Notify: ML team, production, management. Document in incident channel (Slack). **Step 4: Resolve (Variable)**: Apply fix (code, config, data). Test in staging. Deploy to production (careful validation). Monitor closely. **Root Cause Analysis (Post-Incident)**: **Timeline**: Within 24 hours: Initial RCA document. Within 1 week: Full post-mortem meeting. **RCA Document**: What happened: Timeline, symptoms, impact. Why it happened: Root cause(s), contributing factors. How we responded: Actions taken, time to resolution. What we learned: What went well, what didn't. Action items: Prevent recurrence, improve detection/response. **Example Scenarios**: **Scenario 1: Defect Classifier Accuracy Drop**: Detection: Monitoring alert - accuracy dropped from 95% \u2192 82%. Mitigation: Rollback to previous model version (10 min). Investigation: Data drift - new equipment introduced, sensor calibration different. Resolution: Retrain model with new equipment data. Deploy with canary (gradual rollout). Prevention: Auto-detect equipment changes, trigger retraining. **Scenario 2: Prediction Service Down**: Detection: Health check failures, no predictions served. Mitigation: Restart service (5 min). If fails, rollback deployment (10 min). Investigation: Out-of-memory error due to memory leak. Resolution: Fix memory leak, deploy patch. Prevention: Better load testing, memory profiling in CI/CD. **Scenario 3: Data Pipeline Failure**: Detection: Training pipeline failed, no updated model. Mitigation: Use previous day's model (already in production). Investigation: Data source (MES) schema changed. Resolution: Update data extraction code, backfill data. Retrain model. Prevention: Schema validation, alerts on upstream changes. **Roles & Responsibilities**: **On-Call ML Engineer**: First responder. Incident assessment and initial mitigation. **ML Manager**: Resource allocation. Escalation to executives if needed. Communication with stakeholders. **DevOps/MLOps Engineer**: Infrastructure issues. Deployment and rollback support. **Data Scientist**: Model investigation and retraining if needed. **Production Manager**: Business impact assessment. Production scheduling adjustments. **Incident Commander (Sev 1)**: Coordinates response. Decision-making authority. Communication. **Documentation**: **Incident Log**: Timestamp of all actions. Who did what. Decisions made and rationale. **Runbooks**: Common failure modes and fixes. Rollback procedures. Contact information. **Post-Mortem Template**: Standard format for RCA docs. Blameless culture. **Communication**: **During Incident**: Status page: External visibility. Slack channel: Internal coordination. Regular updates (every 30 min for Sev 1-2). **After Resolution**: Incident summary to stakeholders. Post-mortem meeting (optional for Sev 3-4). **Preventive Measures**: Automated testing (CI/CD). Canary deployments (catch issues early). Comprehensive monitoring. Regular fire drills (test incident response). Runbook maintenance. **For Semiconductor Manufacturing**: High stakes: Incidents affect production, yield, revenue. Integration: Coordinate with production, quality, equipment teams. Compliance: Document for quality systems. 24/7: On-call rotation for global fabs. Result: Rapid incident response minimizing production impact, continuous improvement of ML reliability.",
+      "hints": [
+        "Think about different failure modes",
+        "Consider impact on production",
+        "Think about on-call procedures",
+        "Consider communication during incidents"
+      ],
+      "id": "m9.1_q024",
+      "points": 5,
+      "question": "Design an incident response plan for ML model failures in production semiconductor manufacturing. Include detection, escalation, mitigation, and post-mortem processes.",
+      "rubric": [
+        "Describes incident detection and classification (2 points)",
+        "Explains escalation procedures and responsibilities (2 points)",
+        "Discusses immediate mitigation strategies (2 points)",
+        "Addresses root cause analysis and prevention (2 points)",
+        "Provides manufacturing-specific considerations (2 points)"
+      ],
+      "topic": "incident_response",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "MLOps Team Structure for Semiconductor Manufacturing: **Core Roles**: **1. Data Scientists**: Responsibilities: Develop ML models and algorithms. Experiment and iterate on model architectures. Analyze model performance. Domain expertise (semiconductor processes). Skills: Python, ML frameworks (PyTorch, TensorFlow). Statistics, ML theory. Domain knowledge (manufacturing, defects). Count: 2-5 initially, scale to 10-20. **2. ML Engineers**: Responsibilities: Productionize models (code refactoring). Implement training pipelines. Optimize model performance (speed, size). Bridge between research and production. Skills: Software engineering (clean code, testing). ML frameworks. Performance optimization. Count: 1-3 initially, scale with number of models. **3. MLOps Engineers**: Responsibilities: Build and maintain ML infrastructure. CI/CD pipelines for ML. Monitoring and alerting systems. Model deployment automation. Skills: DevOps (Docker, Kubernetes, CI/CD). Cloud platforms (AWS, Azure, GCP). Monitoring tools (Prometheus, Grafana). Infrastructure as Code (Terraform). Count: 1-2 initially, scale to 5-10. **4. Data Engineers**: Responsibilities: Data pipelines from MES/SCADA. Data quality and validation. Feature engineering infrastructure. Data versioning and storage. Skills: ETL pipelines (Airflow, Spark). Databases (SQL, NoSQL). Data modeling. Integration with manufacturing systems. Count: 2-4. **5. ML Platform Engineer (Advanced)**: Responsibilities: Feature store development. Model registry and lifecycle management. ML platform development. Self-service ML tools. Skills: Distributed systems. Platform development. Count: 0-1 initially (not needed early), 1-3 at scale. **Supporting Roles**: **6. Manufacturing/Process Engineers**: Responsibilities: Domain expertise and problem definition. Ground truth labeling and validation. Use case identification. Model validation from domain perspective. Skills: Semiconductor manufacturing. Statistical process control. Quality systems. Count: Collaborate, not dedicated to ML team. **7. Software Engineers**: Responsibilities: Integration with MES/SCADA/ERP. Application development (dashboards, tools). API development for model consumers. Skills: Full-stack development. System integration. Manufacturing software systems. Count: 1-2 for integration work. **8. QA/Test Engineer**: Responsibilities: ML model testing strategies. Test automation. Performance testing. Skills: Software testing. ML testing specifics. Count: 0-1 initially, 1-2 at scale. **Management**: **ML Manager/Lead**: Responsibilities: Team leadership. Project prioritization. Stakeholder management. Resource allocation. Skills: Technical + management. ML + manufacturing domain. Count: 1. **MLOps Manager (at scale)**: Responsibilities: MLOps strategy. Infrastructure planning. Tool selection. Count: 1 (when team >15 people). **Team Structure Models**: **Model 1: Small Team (5-10 people)**: 3 Data Scientists (generalists). 1 ML Engineer. 1 MLOps Engineer. Pros: Tight collaboration, fast iteration. Cons: Limited specialization. **Model 2: Medium Team (10-20 people)**: 5-7 Data Scientists (some specialization). 2-3 ML Engineers. 2-3 MLOps Engineers. 2 Data Engineers. 1-2 Domain experts (embedded). Pros: Balanced, sustainable. Cons: Coordination overhead. **Model 3: Large Team (20+ people)**: Multiple squads: Squad 1: Defect detection models. Squad 2: Yield prediction models. Squad 3: Equipment health models. Centralized platform team. Pros: Scale, specialization. Cons: Coordination, consistency. **Collaboration Interfaces**: **Data Scientists \u2194 ML Engineers**: DS: Prototype in notebooks. MLE: Productionize to production code. Interface: Handoff documentation, code review. **ML Engineers \u2194 MLOps Engineers**: MLE: Provide model code and requirements. MLOps: Deploy and operate. Interface: Deployment specifications, SLAs. **MLOps \u2194 Data Engineers**: DE: Provide data pipelines. MLOps: Integrate with training/serving. Interface: Data contracts, schemas. **ML Team \u2194 Manufacturing**: Manufacturing: Problem definition, validation. ML Team: Solutions, model outputs. Interface: Regular meetings, dashboards. **Skills Development**: **Data Scientists**: Training: Software engineering, MLOps practices. Tools: Docker, Git (beyond notebooks). **ML Engineers**: Training: Manufacturing domain, MLOps tools. **MLOps Engineers**: Training: ML fundamentals, model deployment. **Cross-training**: Rotate: Data scientists shadow MLOps. Workshops: Share knowledge across roles. **Growth Path**: **Phase 1 (Year 1)**: 1-2 Data Scientists (POCs). 1 ML Engineer / MLOps hybrid. 1 Data Engineer (part-time). **Phase 2 (Year 2)**: 3-5 Data Scientists. 1-2 ML Engineers. 1-2 MLOps Engineers. 2 Data Engineers. **Phase 3 (Year 3+)**: 10+ Data Scientists (specialized). 3-5 ML Engineers. 5+ MLOps Engineers. 3-5 Data Engineers. Platform team. **Organizational Placement**: Option 1: Centralized AI/ML team. Pros: Focus, shared resources. Cons: Distance from manufacturing. Option 2: Embedded in manufacturing/quality. Pros: Close to problems. Cons: Limited ML expertise concentration. Option 3 (Recommended): Hybrid: Centralized ML platform team (MLOps, Data Eng). Data Scientists embedded in business units. **For Semiconductor Manufacturing**: Close collaboration with process engineers essential. Domain knowledge critical for success. Compliance and quality focus (vs pure tech). Result: Well-structured team enabling reliable ML deployment at scale.",
+      "hints": [
+        "Think about separation of concerns",
+        "Consider existing manufacturing roles",
+        "Think about team growth stages",
+        "Consider cross-functional collaboration"
+      ],
+      "id": "m9.1_q025",
+      "points": 5,
+      "question": "Describe the ideal team structure and roles for implementing MLOps in a semiconductor manufacturing organization. Include responsibilities and skill requirements for each role.",
+      "rubric": [
+        "Identifies key roles (Data Scientists, ML Engineers, MLOps, etc.) (2 points)",
+        "Describes responsibilities for each role (2 points)",
+        "Explains collaboration and interfaces between roles (2 points)",
+        "Addresses skill requirements and training needs (2 points)",
+        "Provides organizational structure recommendations (2 points)"
+      ],
+      "topic": "team_structure",
+      "type": "conceptual"
+    }
+  ],
+  "sub_module": "9.1",
+  "title": "MLOps Fundamentals",
+  "version": "1.0",
+  "week": 9
+}

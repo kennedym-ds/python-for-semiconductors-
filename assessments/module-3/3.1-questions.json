@@ -1,0 +1,622 @@
+{
+  "description": "Comprehensive assessment covering linear regression, polynomial regression, regularization techniques (Ridge/Lasso), model evaluation metrics, feature selection, and residual analysis for semiconductor process modeling and yield prediction.",
+  "estimated_time_minutes": 120,
+  "module_id": "module-3.1",
+  "passing_score": 75,
+  "questions": [
+    {
+      "correct_answer": 0,
+      "difficulty": "easy",
+      "explanation": "The regression coefficient represents the change in the dependent variable (yield) for a one-unit increase in the independent variable (etch time). A negative coefficient indicates an inverse relationship.",
+      "id": "m3.1_q001",
+      "options": [
+        "For every 1 unit increase in etch time, yield decreases by 0.8 units (on average)",
+        "Etch time explains 80% of yield variance",
+        "The model has 80% accuracy",
+        "There is an 80% correlation between etch time and yield"
+      ],
+      "points": 2,
+      "question": "In a linear regression model predicting wafer yield from etch time, the coefficient is -0.8. What does this mean?",
+      "topic": "linear_regression_basics",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "medium",
+      "explanation": "R\u00b2 (coefficient of determination) represents the proportion of variance in the dependent variable that is predictable from the independent variables. R\u00b2 = 0.72 means 72% of thickness variation is explained by the model, while 28% remains unexplained.",
+      "id": "m3.1_q002",
+      "options": [
+        "72% of the variance in film thickness is explained by the model's features",
+        "The model is 72% accurate",
+        "There is a 72% correlation between predicted and actual values",
+        "The model makes 72% fewer errors than random guessing"
+      ],
+      "points": 3,
+      "question": "Your regression model predicting film thickness has R\u00b2 = 0.72. What does this mean?",
+      "topic": "r_squared",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "hard",
+      "explanation": "Ridge and Lasso regularization are effective for handling multicollinearity by penalizing large coefficients. While removing features is an option, regularization allows keeping potentially useful features while stabilizing coefficient estimates. VIF > 10 indicates problematic multicollinearity that can inflate standard errors and make coefficients unstable.",
+      "id": "m3.1_q003",
+      "options": [
+        "Apply Ridge or Lasso regularization to handle multicollinearity",
+        "Remove all features with high VIF immediately",
+        "Increase the sample size to reduce VIF",
+        "Ignore VIF as it doesn't affect predictions"
+      ],
+      "points": 4,
+      "question": "In a regression model with 20 process parameters, several features have VIF (Variance Inflation Factor) > 10. What is the best approach?",
+      "topic": "multicollinearity",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "easy",
+      "hints": [
+        "Use train_test_split with test_size=0.2",
+        "Fit LinearRegression on training data",
+        "Calculate R\u00b2 on test predictions"
+      ],
+      "id": "m3.1_q004",
+      "points": 5,
+      "question": "Implement a simple linear regression to predict wafer yield from process temperature. Return the trained model and calculate R\u00b2 score on test data.",
+      "solution": "import numpy as np\nimport pandas as pd\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.metrics import r2_score\nfrom sklearn.model_selection import train_test_split\n\ndef train_yield_model(X: pd.DataFrame, y: pd.Series) -> tuple:\n    \"\"\"\n    Train linear regression model for yield prediction.\n    \n    Args:\n        X: DataFrame with 'temperature' column\n        y: Series with yield values\n    \n    Returns:\n        tuple: (trained_model, r2_score_on_test)\n    \"\"\"\n    # Split data\n    X_train, X_test, y_train, y_test = train_test_split(\n        X, y, test_size=0.2, random_state=42\n    )\n    \n    # Train model\n    model = LinearRegression()\n    model.fit(X_train, y_train)\n    \n    # Evaluate on test set\n    y_pred = model.predict(X_test)\n    r2 = r2_score(y_test, y_pred)\n    \n    return model, r2",
+      "starter_code": "import numpy as np\nimport pandas as pd\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.metrics import r2_score\nfrom sklearn.model_selection import train_test_split\n\ndef train_yield_model(X: pd.DataFrame, y: pd.Series) -> tuple:\n    \"\"\"\n    Train linear regression model for yield prediction.\n    \n    Args:\n        X: DataFrame with 'temperature' column\n        y: Series with yield values\n    \n    Returns:\n        tuple: (trained_model, r2_score_on_test)\n    \"\"\"\n    # Your code here\n    pass",
+      "test_cases": [
+        {
+          "description": "Returns valid LinearRegression model and R\u00b2 in valid range",
+          "expected_output": "isinstance(model, LinearRegression) and 0 <= r2 <= 1",
+          "input": "X = pd.DataFrame({'temperature': np.linspace(200, 400, 100)}); y = pd.Series(50 + 0.1 * X['temperature'] + np.random.randn(100)); model, r2 = train_yield_model(X, y)"
+        }
+      ],
+      "topic": "simple_linear_regression",
+      "type": "coding_exercise"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "medium",
+      "explanation": "Lasso (L1 regularization) can shrink coefficients to exactly zero, effectively performing feature selection. Ridge (L2) shrinks coefficients but rarely to zero. Use Lasso when you suspect many features are irrelevant and want automatic selection.",
+      "id": "m3.1_q005",
+      "options": [
+        "When you want automatic feature selection by driving some coefficients to exactly zero",
+        "When you have fewer samples than features",
+        "When all features are equally important",
+        "Lasso and Ridge always produce identical results"
+      ],
+      "points": 3,
+      "question": "When should you use Lasso regression instead of Ridge regression for semiconductor process modeling?",
+      "topic": "regularization",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "medium",
+      "hints": [
+        "Use Pipeline to chain transformations",
+        "StandardScaler before PolynomialFeatures",
+        "Set include_bias=False in PolynomialFeatures"
+      ],
+      "id": "m3.1_q006",
+      "points": 7,
+      "question": "Implement polynomial regression with degree 2 to capture nonlinear relationships between process pressure and deposition rate. Include feature scaling.",
+      "solution": "import numpy as np\nimport pandas as pd\nfrom sklearn.preprocessing import StandardScaler, PolynomialFeatures\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.pipeline import Pipeline\n\ndef train_polynomial_model(X: pd.DataFrame, y: pd.Series, degree: int = 2) -> Pipeline:\n    \"\"\"\n    Train polynomial regression model.\n    \n    Args:\n        X: DataFrame with features\n        y: Series with target values\n        degree: Polynomial degree\n    \n    Returns:\n        Trained sklearn Pipeline\n    \"\"\"\n    # Create pipeline with scaling, polynomial features, and regression\n    pipeline = Pipeline([\n        ('scaler', StandardScaler()),\n        ('poly', PolynomialFeatures(degree=degree, include_bias=False)),\n        ('regressor', LinearRegression())\n    ])\n    \n    # Fit pipeline\n    pipeline.fit(X, y)\n    \n    return pipeline",
+      "starter_code": "import numpy as np\nimport pandas as pd\nfrom sklearn.preprocessing import StandardScaler, PolynomialFeatures\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.pipeline import Pipeline\n\ndef train_polynomial_model(X: pd.DataFrame, y: pd.Series, degree: int = 2) -> Pipeline:\n    \"\"\"\n    Train polynomial regression model.\n    \n    Args:\n        X: DataFrame with features\n        y: Series with target values\n        degree: Polynomial degree\n    \n    Returns:\n        Trained sklearn Pipeline\n    \"\"\"\n    # Your code here\n    pass",
+      "test_cases": [
+        {
+          "description": "Returns Pipeline with 3 steps",
+          "expected_output": "isinstance(model, Pipeline) and len(model.steps) == 3",
+          "input": "X = pd.DataFrame({'pressure': np.linspace(1, 10, 50)}); y = pd.Series(2 * X['pressure']**2 + np.random.randn(50)); model = train_polynomial_model(X, y, 2)"
+        }
+      ],
+      "topic": "polynomial_regression",
+      "type": "coding_exercise"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "hard",
+      "explanation": "A funnel-shaped residual plot indicates heteroscedasticity (non-constant variance). This violates linear regression assumptions and makes confidence intervals unreliable. Solutions include log-transforming the target variable, using weighted least squares, or robust regression methods.",
+      "id": "m3.1_q007",
+      "options": [
+        "Heteroscedasticity; consider log transformation of target or use weighted regression",
+        "Perfect model fit; no action needed",
+        "Multicollinearity; remove correlated features",
+        "Overfitting; add more regularization"
+      ],
+      "points": 4,
+      "question": "Your regression residual plot shows a clear funnel shape (increasing spread). What does this indicate and how should you address it?",
+      "topic": "residual_analysis",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "medium",
+      "hints": [
+        "Standardize features first",
+        "Use np.logspace to create alpha range",
+        "RidgeCV automatically selects best alpha via CV"
+      ],
+      "id": "m3.1_q008",
+      "points": 7,
+      "question": "Implement Ridge regression with cross-validation to find optimal alpha. Return the best alpha and the trained model.",
+      "solution": "import numpy as np\nimport pandas as pd\nfrom sklearn.linear_model import RidgeCV\nfrom sklearn.preprocessing import StandardScaler\n\ndef train_ridge_cv(X: pd.DataFrame, y: pd.Series) -> tuple:\n    \"\"\"\n    Train Ridge regression with cross-validated alpha selection.\n    \n    Args:\n        X: DataFrame with features\n        y: Series with target\n    \n    Returns:\n        tuple: (best_alpha, trained_model)\n    \"\"\"\n    # Standardize features\n    scaler = StandardScaler()\n    X_scaled = scaler.fit_transform(X)\n    \n    # Ridge with CV to find best alpha\n    alphas = np.logspace(-3, 3, 50)\n    ridge_cv = RidgeCV(alphas=alphas, cv=5)\n    ridge_cv.fit(X_scaled, y)\n    \n    best_alpha = ridge_cv.alpha_\n    \n    return best_alpha, ridge_cv",
+      "starter_code": "import numpy as np\nimport pandas as pd\nfrom sklearn.linear_model import RidgeCV\nfrom sklearn.preprocessing import StandardScaler\n\ndef train_ridge_cv(X: pd.DataFrame, y: pd.Series) -> tuple:\n    \"\"\"\n    Train Ridge regression with cross-validated alpha selection.\n    \n    Args:\n        X: DataFrame with features\n        y: Series with target\n    \n    Returns:\n        tuple: (best_alpha, trained_model)\n    \"\"\"\n    # Your code here\n    pass",
+      "test_cases": [
+        {
+          "description": "Returns positive alpha and fitted model",
+          "expected_output": "alpha > 0 and hasattr(model, 'predict')",
+          "input": "X = pd.DataFrame(np.random.randn(100, 10)); y = pd.Series(np.random.randn(100)); alpha, model = train_ridge_cv(X, y)"
+        }
+      ],
+      "topic": "ridge_regression",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "id": "m3.1_q009",
+      "keywords": [
+        "bias",
+        "variance",
+        "tradeoff",
+        "overfitting",
+        "underfitting",
+        "regularization",
+        "generalization"
+      ],
+      "points": 8,
+      "question": "Explain the bias-variance tradeoff in the context of predicting wafer yield. How does this tradeoff relate to model complexity, and what role does regularization play?",
+      "rubric": {
+        "criteria": [
+          "Defines bias correctly (2 points)",
+          "Defines variance correctly (2 points)",
+          "Explains the tradeoff relationship (2 points)",
+          "Discusses regularization's role (2 points)"
+        ],
+        "max_points": 8
+      },
+      "sample_answer": "The bias-variance tradeoff is a fundamental machine learning concept:\n\nBias: Error from overly simplistic model assumptions. High bias models (e.g., linear regression with few features) underfit the data, missing important patterns. For yield prediction, this might mean ignoring nonlinear effects of temperature or interactions between parameters.\n\nVariance: Error from model sensitivity to training data fluctuations. High variance models (e.g., high-degree polynomials) overfit, capturing noise as signal. For yield, this might mean learning wafer-specific quirks that don't generalize.\n\nTradeoff: As model complexity increases, bias decreases but variance increases. The goal is finding the sweet spot that minimizes total error (bias\u00b2 + variance + irreducible error).\n\nRegularization Role: Ridge/Lasso add penalty terms that constrain model complexity, intentionally increasing bias to dramatically reduce variance. This typically improves generalization. For semiconductor data with many correlated process parameters, regularization prevents overfitting to noise while maintaining predictive power on new wafers.",
+      "topic": "bias_variance_tradeoff",
+      "type": "conceptual"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "easy",
+      "explanation": "RMSE (Root Mean Squared Error) squares errors before averaging, giving disproportionate weight to large errors. For yield prediction where a 20% error is much worse than four 5% errors, RMSE better reflects business impact. MAE treats all errors equally.",
+      "id": "m3.1_q010",
+      "options": [
+        "RMSE penalizes large errors more heavily, which is important when big prediction errors have severe consequences",
+        "RMSE is always smaller than MAE",
+        "RMSE is easier to calculate",
+        "MAE cannot be used for regression problems"
+      ],
+      "points": 2,
+      "question": "When evaluating regression models for critical yield prediction, why might RMSE be preferred over MAE?",
+      "topic": "mae_vs_rmse",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "hard",
+      "hints": [
+        "Use cross_validate with multiple scoring metrics",
+        "sklearn returns negative MAE/RMSE, negate back to positive",
+        "Calculate mean and std on test scores"
+      ],
+      "id": "m3.1_q011",
+      "points": 9,
+      "question": "Implement k-fold cross-validation for a regression model, returning mean and std of R\u00b2, MAE, and RMSE across folds.",
+      "solution": "import numpy as np\nimport pandas as pd\nfrom sklearn.model_selection import cross_validate\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.metrics import make_scorer, mean_absolute_error, mean_squared_error, r2_score\n\ndef cross_val_regression(X: pd.DataFrame, y: pd.Series, k: int = 5) -> dict:\n    \"\"\"\n    Perform k-fold CV and return metrics.\n    \n    Args:\n        X: Features DataFrame\n        y: Target Series\n        k: Number of folds\n    \n    Returns:\n        dict: {'r2_mean', 'r2_std', 'mae_mean', 'mae_std', 'rmse_mean', 'rmse_std'}\n    \"\"\"\n    model = LinearRegression()\n    \n    # Define scoring metrics\n    scoring = {\n        'r2': 'r2',\n        'mae': 'neg_mean_absolute_error',\n        'rmse': 'neg_root_mean_squared_error'\n    }\n    \n    # Perform cross-validation\n    cv_results = cross_validate(model, X, y, cv=k, scoring=scoring, return_train_score=False)\n    \n    # Aggregate results (negate mae/rmse back to positive)\n    results = {\n        'r2_mean': cv_results['test_r2'].mean(),\n        'r2_std': cv_results['test_r2'].std(),\n        'mae_mean': -cv_results['test_mae'].mean(),\n        'mae_std': cv_results['test_mae'].std(),\n        'rmse_mean': -cv_results['test_rmse'].mean(),\n        'rmse_std': cv_results['test_rmse'].std()\n    }\n    \n    return results",
+      "starter_code": "import numpy as np\nimport pandas as pd\nfrom sklearn.model_selection import cross_validate\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.metrics import make_scorer, mean_absolute_error, mean_squared_error, r2_score\n\ndef cross_val_regression(X: pd.DataFrame, y: pd.Series, k: int = 5) -> dict:\n    \"\"\"\n    Perform k-fold CV and return metrics.\n    \n    Args:\n        X: Features DataFrame\n        y: Target Series\n        k: Number of folds\n    \n    Returns:\n        dict: {'r2_mean', 'r2_std', 'mae_mean', 'mae_std', 'rmse_mean', 'rmse_std'}\n    \"\"\"\n    # Your code here\n    pass",
+      "test_cases": [
+        {
+          "description": "Returns all required metrics",
+          "expected_output": "all(k in res for k in ['r2_mean', 'r2_std', 'mae_mean', 'mae_std', 'rmse_mean', 'rmse_std'])",
+          "input": "X = pd.DataFrame(np.random.randn(100, 5)); y = pd.Series(np.random.randn(100)); res = cross_val_regression(X, y, 5)"
+        }
+      ],
+      "topic": "cross_validation",
+      "type": "coding_exercise"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "medium",
+      "explanation": "With more features than samples (p > n), or close to it, ordinary regression is prone to overfitting. Lasso with appropriate regularization automatically shrinks irrelevant feature coefficients to zero, performing feature selection while preventing overfitting. This is ideal for high-dimensional, low-sample scenarios common in manufacturing.",
+      "id": "m3.1_q012",
+      "options": [
+        "Use Lasso regression with high alpha to automatically select important features",
+        "Use all 50 features with ordinary least squares regression",
+        "Manually select 5 random features",
+        "Feature selection is unnecessary with modern computers"
+      ],
+      "points": 3,
+      "question": "You have 50 process parameters but only 200 wafer samples. Which feature selection approach is most appropriate before training a regression model?",
+      "topic": "feature_selection",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "medium",
+      "hints": [
+        "Standardize features before Lasso",
+        "Use np.where to find non-zero coefficients",
+        "Index X.columns with selected indices"
+      ],
+      "id": "m3.1_q013",
+      "points": 7,
+      "question": "Use Lasso regression to select top features. Return a list of selected feature names (non-zero coefficients).",
+      "solution": "import numpy as np\nimport pandas as pd\nfrom sklearn.linear_model import Lasso\nfrom sklearn.preprocessing import StandardScaler\n\ndef lasso_feature_selection(X: pd.DataFrame, y: pd.Series, alpha: float = 0.1) -> list:\n    \"\"\"\n    Select features using Lasso regression.\n    \n    Args:\n        X: Features DataFrame\n        y: Target Series\n        alpha: Regularization strength\n    \n    Returns:\n        list: Selected feature names (non-zero coefficients)\n    \"\"\"\n    # Standardize features\n    scaler = StandardScaler()\n    X_scaled = scaler.fit_transform(X)\n    \n    # Train Lasso\n    lasso = Lasso(alpha=alpha, max_iter=10000)\n    lasso.fit(X_scaled, y)\n    \n    # Get non-zero coefficient indices\n    non_zero_idx = np.where(lasso.coef_ != 0)[0]\n    \n    # Return corresponding feature names\n    selected_features = X.columns[non_zero_idx].tolist()\n    \n    return selected_features",
+      "starter_code": "import numpy as np\nimport pandas as pd\nfrom sklearn.linear_model import Lasso\nfrom sklearn.preprocessing import StandardScaler\n\ndef lasso_feature_selection(X: pd.DataFrame, y: pd.Series, alpha: float = 0.1) -> list:\n    \"\"\"\n    Select features using Lasso regression.\n    \n    Args:\n        X: Features DataFrame\n        y: Target Series\n        alpha: Regularization strength\n    \n    Returns:\n        list: Selected feature names (non-zero coefficients)\n    \"\"\"\n    # Your code here\n    pass",
+      "test_cases": [
+        {
+          "description": "Returns list with fewer features than input",
+          "expected_output": "isinstance(features, list) and len(features) < 20",
+          "input": "X = pd.DataFrame(np.random.randn(100, 20), columns=[f'F{i}' for i in range(20)]); y = pd.Series(X['F0'] + X['F1'] + np.random.randn(100)*0.1); features = lasso_feature_selection(X, y, 0.1)"
+        }
+      ],
+      "topic": "lasso_feature_selection",
+      "type": "coding_exercise"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "hard",
+      "explanation": "Normality of residuals is required for valid statistical inference (t-tests, confidence intervals) but has minimal impact on prediction accuracy. The model can still make good predictions with non-normal residuals. In contrast, violating linearity, independence, or homoscedasticity affects both inference AND prediction quality.",
+      "id": "m3.1_q014",
+      "options": [
+        "Normality of residuals",
+        "Linearity of relationships",
+        "Independence of observations",
+        "Homoscedasticity (constant variance)"
+      ],
+      "points": 4,
+      "question": "Which linear regression assumption is most critical for valid inference (confidence intervals, p-values) but least critical for prediction accuracy?",
+      "topic": "assumptions",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "hard",
+      "id": "m3.1_q015",
+      "keywords": [
+        "Ridge",
+        "Lasso",
+        "Elastic Net",
+        "L1",
+        "L2",
+        "multicollinearity",
+        "feature selection",
+        "sparse",
+        "regularization"
+      ],
+      "points": 10,
+      "question": "Compare Ridge, Lasso, and Elastic Net regularization for semiconductor process modeling with 100+ correlated parameters. When would you use each, and what are the tradeoffs?",
+      "rubric": {
+        "criteria": [
+          "Correctly explains Ridge behavior and use cases (2 points)",
+          "Correctly explains Lasso behavior and use cases (2 points)",
+          "Correctly explains Elastic Net as combination (2 points)",
+          "Discusses multicollinearity implications (2 points)",
+          "Provides clear guidance for semiconductor context (2 points)"
+        ],
+        "max_points": 10
+      },
+      "sample_answer": "Ridge Regression (L2):\n- Shrinks all coefficients toward zero but never to exactly zero\n- Handles multicollinearity well by distributing impact across correlated features\n- Use when: All features potentially relevant, strong correlations exist\n- Tradeoff: Keeps all features (no selection), less interpretable\n\nLasso Regression (L1):\n- Shrinks some coefficients to exactly zero (feature selection)\n- Produces sparse models by eliminating irrelevant features\n- Use when: Many features are noise, interpretability critical, need automatic selection\n- Tradeoff: Arbitrarily picks one from correlated group, can be unstable\n\nElastic Net (L1 + L2):\n- Combines Ridge and Lasso penalties\n- Balances feature selection with handling correlations\n- Use when: High multicollinearity AND desire feature selection\n- Tradeoff: Two hyperparameters to tune (alpha, l1_ratio)\n\nFor semiconductor manufacturing with 100+ correlated process parameters:\n- Start with Elastic Net for flexibility\n- Use Ridge if domain knowledge suggests all parameters matter\n- Use Lasso if many parameters are known noise/redundant\n- Cross-validation should guide final selection\n\nKey insight: With severe multicollinearity (common in manufacturing), Elastic Net or Ridge are more stable than Lasso alone.",
+      "topic": "regularization_comparison",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "easy",
+      "hints": [
+        "Use sklearn.metrics functions",
+        "RMSE = sqrt(MSE)",
+        "Return dictionary with specified keys"
+      ],
+      "id": "m3.1_q016",
+      "points": 5,
+      "question": "Calculate MAE, RMSE, and R\u00b2 for regression predictions. Return a dictionary with these metrics.",
+      "solution": "import numpy as np\nfrom sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score\n\ndef calculate_regression_metrics(y_true: np.ndarray, y_pred: np.ndarray) -> dict:\n    \"\"\"\n    Calculate regression evaluation metrics.\n    \n    Args:\n        y_true: Actual values\n        y_pred: Predicted values\n    \n    Returns:\n        dict: {'mae', 'rmse', 'r2'}\n    \"\"\"\n    mae = mean_absolute_error(y_true, y_pred)\n    rmse = np.sqrt(mean_squared_error(y_true, y_pred))\n    r2 = r2_score(y_true, y_pred)\n    \n    return {\n        'mae': mae,\n        'rmse': rmse,\n        'r2': r2\n    }",
+      "starter_code": "import numpy as np\nfrom sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score\n\ndef calculate_regression_metrics(y_true: np.ndarray, y_pred: np.ndarray) -> dict:\n    \"\"\"\n    Calculate regression evaluation metrics.\n    \n    Args:\n        y_true: Actual values\n        y_pred: Predicted values\n    \n    Returns:\n        dict: {'mae', 'rmse', 'r2'}\n    \"\"\"\n    # Your code here\n    pass",
+      "test_cases": [
+        {
+          "description": "Returns all metrics with RMSE \u2265 MAE",
+          "expected_output": "all(k in metrics for k in ['mae', 'rmse', 'r2']) and metrics['rmse'] >= metrics['mae']",
+          "input": "y_true = np.array([1, 2, 3, 4, 5]); y_pred = np.array([1.1, 2.1, 2.9, 4.2, 4.8]); metrics = calculate_regression_metrics(y_true, y_pred)"
+        }
+      ],
+      "topic": "model_evaluation",
+      "type": "coding_exercise"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "medium",
+      "explanation": "Time-series data has temporal dependencies. Random splitting can place later observations in training and earlier ones in test set, causing data leakage. For time-series, use time-based splitting where training data comes strictly before test data to simulate real-world deployment.",
+      "id": "m3.1_q017",
+      "options": [
+        "It violates temporal ordering, causing data leakage where future information predicts the past",
+        "Random splitting always results in smaller training sets",
+        "Time-series data cannot be split at all",
+        "Random splitting is always the best approach regardless of data type"
+      ],
+      "points": 3,
+      "question": "For time-series semiconductor process data, why is random train-test splitting problematic?",
+      "topic": "train_test_split",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "medium",
+      "hints": [
+        "Residuals = y_true - y_pred",
+        "Use np.mean and np.std for statistics",
+        "Count residuals where |resid| \u2264 2*std"
+      ],
+      "id": "m3.1_q018",
+      "points": 6,
+      "question": "Create a function that analyzes regression residuals and returns diagnostic statistics including mean, std, and percentage of residuals within \u00b12\u03c3.",
+      "solution": "import numpy as np\nimport pandas as pd\n\ndef analyze_residuals(y_true: np.ndarray, y_pred: np.ndarray) -> dict:\n    \"\"\"\n    Analyze regression residuals.\n    \n    Args:\n        y_true: Actual values\n        y_pred: Predicted values\n    \n    Returns:\n        dict: {'mean', 'std', 'pct_within_2std', 'max_abs_residual'}\n    \"\"\"\n    # Calculate residuals\n    residuals = y_true - y_pred\n    \n    # Statistics\n    mean_resid = np.mean(residuals)\n    std_resid = np.std(residuals)\n    max_abs_resid = np.max(np.abs(residuals))\n    \n    # Percentage within \u00b12\u03c3\n    within_2std = np.abs(residuals) <= 2 * std_resid\n    pct_within_2std = 100 * np.mean(within_2std)\n    \n    return {\n        'mean': mean_resid,\n        'std': std_resid,\n        'pct_within_2std': pct_within_2std,\n        'max_abs_residual': max_abs_resid\n    }",
+      "starter_code": "import numpy as np\nimport pandas as pd\n\ndef analyze_residuals(y_true: np.ndarray, y_pred: np.ndarray) -> dict:\n    \"\"\"\n    Analyze regression residuals.\n    \n    Args:\n        y_true: Actual values\n        y_pred: Predicted values\n    \n    Returns:\n        dict: {'mean', 'std', 'pct_within_2std', 'max_abs_residual'}\n    \"\"\"\n    # Your code here\n    pass",
+      "test_cases": [
+        {
+          "description": "Returns all required statistics",
+          "expected_output": "all(k in res for k in ['mean', 'std', 'pct_within_2std', 'max_abs_residual'])",
+          "input": "y_true = np.array([1, 2, 3, 4, 5]); y_pred = np.array([1.1, 1.9, 3.2, 3.8, 5.1]); res = analyze_residuals(y_true, y_pred)"
+        }
+      ],
+      "topic": "residual_analysis",
+      "type": "coding_exercise"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "easy",
+      "explanation": "Large gap between training and test performance (0.98 vs 0.45) indicates severe overfitting. The model has learned training data noise rather than generalizable patterns. Solutions include regularization, reducing model complexity, or collecting more training data.",
+      "id": "m3.1_q019",
+      "options": [
+        "The model is overfitting the training data",
+        "The model is underfitting the training data",
+        "This is normal and expected behavior",
+        "The test data is corrupted"
+      ],
+      "points": 2,
+      "question": "Your regression model achieves R\u00b2 = 0.98 on training data but R\u00b2 = 0.45 on test data. What is the problem?",
+      "topic": "overfitting",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "hard",
+      "hints": [
+        "Use sklearn.model_selection.learning_curve",
+        "Set scoring='r2' for regression",
+        "Average scores across CV folds with np.mean(axis=1)"
+      ],
+      "id": "m3.1_q020",
+      "points": 9,
+      "question": "Generate learning curves showing training and validation R\u00b2 scores as training set size increases. Return arrays of train and val scores.",
+      "solution": "import numpy as np\nimport pandas as pd\nfrom sklearn.model_selection import learning_curve\nfrom sklearn.linear_model import LinearRegression\n\ndef generate_learning_curves(X: pd.DataFrame, y: pd.Series) -> tuple:\n    \"\"\"\n    Generate learning curves for regression model.\n    \n    Args:\n        X: Features DataFrame\n        y: Target Series\n    \n    Returns:\n        tuple: (train_sizes, train_scores_mean, val_scores_mean)\n    \"\"\"\n    model = LinearRegression()\n    \n    # Generate learning curve\n    train_sizes, train_scores, val_scores = learning_curve(\n        model, X, y,\n        cv=5,\n        scoring='r2',\n        train_sizes=np.linspace(0.1, 1.0, 10),\n        n_jobs=-1\n    )\n    \n    # Calculate means across CV folds\n    train_scores_mean = np.mean(train_scores, axis=1)\n    val_scores_mean = np.mean(val_scores, axis=1)\n    \n    return train_sizes, train_scores_mean, val_scores_mean",
+      "starter_code": "import numpy as np\nimport pandas as pd\nfrom sklearn.model_selection import learning_curve\nfrom sklearn.linear_model import LinearRegression\n\ndef generate_learning_curves(X: pd.DataFrame, y: pd.Series) -> tuple:\n    \"\"\"\n    Generate learning curves for regression model.\n    \n    Args:\n        X: Features DataFrame\n        y: Target Series\n    \n    Returns:\n        tuple: (train_sizes, train_scores_mean, val_scores_mean)\n    \"\"\"\n    # Your code here\n    pass",
+      "test_cases": [
+        {
+          "description": "Returns arrays of correct length",
+          "expected_output": "len(sizes) == len(train) == len(val) and len(sizes) == 10",
+          "input": "X = pd.DataFrame(np.random.randn(200, 5)); y = pd.Series(np.random.randn(200)); sizes, train, val = generate_learning_curves(X, y)"
+        }
+      ],
+      "topic": "learning_curves",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "id": "m3.1_q021",
+      "keywords": [
+        "coefficients",
+        "importance",
+        "interpretability",
+        "correlation",
+        "causation",
+        "multicollinearity",
+        "validation",
+        "domain expertise"
+      ],
+      "points": 8,
+      "question": "A process engineer asks you to explain which parameters most affect wafer yield based on your regression model. How would you extract and communicate feature importance, and what caveats should you mention?",
+      "rubric": {
+        "criteria": [
+          "Describes valid importance extraction methods (2 points)",
+          "Discusses communication strategy (2 points)",
+          "Mentions correlation vs causation caveat (1 point)",
+          "Discusses multicollinearity impact (2 points)",
+          "Emphasizes validation with domain expertise (1 point)"
+        ],
+        "max_points": 8
+      },
+      "sample_answer": "Extracting Feature Importance:\n\n1. Standardized Coefficients: After standardizing features, compare absolute coefficient magnitudes. Larger |coefficient| = stronger impact.\n\n2. Permutation Importance: Shuffle each feature and measure performance drop. Larger drop = more important feature.\n\n3. Partial Dependence Plots: Show how yield changes across each parameter's range while averaging over others.\n\nCommunication Strategy:\n- Rank features by importance with confidence intervals\n- Use visualizations (bar charts for coefficients, PDPs for relationships)\n- Provide concrete examples: \"Increasing etch time by 10s decreases yield by 2.5%\"\n\nCritical Caveats:\n\n1. Correlation \u2260 Causation: Model shows associations, not causal relationships. Controlled experiments needed for causality.\n\n2. Multicollinearity: Correlated parameters share importance. Individual coefficients unstable. Report groups of related parameters.\n\n3. Model Validity: Importance only meaningful within model's validity range. Extrapolation risky.\n\n4. Interactions: Feature importance can change based on other parameter values (interaction effects).\n\n5. Data Quality: Garbage in, garbage out. Importance reflects training data quality/bias.\n\nFor manufacturing: Always validate model insights with domain expertise and controlled experiments before making process changes.",
+      "topic": "interpretability",
+      "type": "conceptual"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "medium",
+      "explanation": "Regularization (Ridge/Lasso) penalizes coefficient magnitudes. Without standardization, features with larger scales naturally have smaller coefficients to achieve similar impact. The penalty then disproportionately affects small-scale features. Standardization ensures fair penalization across all features.",
+      "id": "m3.1_q022",
+      "options": [
+        "Regularization penalties affect all features equally when standardized; otherwise large-scale features are under-penalized",
+        "Standardization improves model accuracy",
+        "Ridge regression cannot run without standardization",
+        "Standardization makes the model train faster"
+      ],
+      "points": 3,
+      "question": "Before training a Ridge regression model, you have features with vastly different scales (temperature: 200-800, pressure: 0.1-1.0). Why is standardization important?",
+      "topic": "feature_scaling",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "medium",
+      "hints": [
+        "Standardize features first",
+        "Use ElasticNetCV with alpha range",
+        "Count non-zero coefficients with np.sum(coef_ != 0)"
+      ],
+      "id": "m3.1_q023",
+      "points": 8,
+      "question": "Implement Elastic Net regression with specified l1_ratio. Use cross-validation to find optimal alpha.",
+      "solution": "import numpy as np\nimport pandas as pd\nfrom sklearn.linear_model import ElasticNetCV\nfrom sklearn.preprocessing import StandardScaler\n\ndef train_elastic_net(X: pd.DataFrame, y: pd.Series, l1_ratio: float = 0.5) -> tuple:\n    \"\"\"\n    Train Elastic Net with CV-optimized alpha.\n    \n    Args:\n        X: Features DataFrame\n        y: Target Series\n        l1_ratio: Mix of L1 and L2 (0=Ridge, 1=Lasso)\n    \n    Returns:\n        tuple: (best_alpha, trained_model, n_features_selected)\n    \"\"\"\n    # Standardize\n    scaler = StandardScaler()\n    X_scaled = scaler.fit_transform(X)\n    \n    # Elastic Net with CV\n    alphas = np.logspace(-3, 2, 50)\n    enet_cv = ElasticNetCV(alphas=alphas, l1_ratio=l1_ratio, cv=5, max_iter=10000)\n    enet_cv.fit(X_scaled, y)\n    \n    # Count non-zero features\n    n_selected = np.sum(enet_cv.coef_ != 0)\n    \n    return enet_cv.alpha_, enet_cv, int(n_selected)",
+      "starter_code": "import numpy as np\nimport pandas as pd\nfrom sklearn.linear_model import ElasticNetCV\nfrom sklearn.preprocessing import StandardScaler\n\ndef train_elastic_net(X: pd.DataFrame, y: pd.Series, l1_ratio: float = 0.5) -> tuple:\n    \"\"\"\n    Train Elastic Net with CV-optimized alpha.\n    \n    Args:\n        X: Features DataFrame\n        y: Target Series\n        l1_ratio: Mix of L1 and L2 (0=Ridge, 1=Lasso)\n    \n    Returns:\n        tuple: (best_alpha, trained_model, n_features_selected)\n    \"\"\"\n    # Your code here\n    pass",
+      "test_cases": [
+        {
+          "description": "Returns valid alpha, model, and feature count",
+          "expected_output": "alpha > 0 and n <= 20 and hasattr(model, 'predict')",
+          "input": "X = pd.DataFrame(np.random.randn(100, 20)); y = pd.Series(np.random.randn(100)); alpha, model, n = train_elastic_net(X, y, 0.5)"
+        }
+      ],
+      "topic": "elastic_net",
+      "type": "coding_exercise"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "hard",
+      "explanation": "The coefficient represents the conditional relationship with temperature while holding other features constant. The low p-value indicates statistical significance. However, we cannot infer causation from regression alone, nor does the coefficient size directly indicate relative importance (that depends on feature scales).",
+      "id": "m3.1_q024",
+      "options": [
+        "Holding pressure and gas flow constant, a 1-unit increase in temperature is associated with a 2.5-unit decrease in the outcome; this relationship is statistically significant",
+        "Temperature causes a 2.5-unit decrease in the outcome",
+        "Temperature is 2.5 times more important than other features",
+        "The model is 99.9% accurate"
+      ],
+      "points": 4,
+      "question": "In a multiple regression model, the coefficient for temperature is -2.5 with p-value = 0.001, controlling for pressure and gas flow. What can you conclude?",
+      "topic": "coefficient_interpretation",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "hard",
+      "hints": [
+        "Use itertools.combinations for all pairs if None specified",
+        "Multiply columns element-wise: X[feat1] * X[feat2]",
+        "Name interaction columns descriptively"
+      ],
+      "id": "m3.1_q025",
+      "points": 8,
+      "question": "Add interaction terms between specified feature pairs to capture multiplicative effects. Return the expanded feature matrix.",
+      "solution": "import numpy as np\nimport pandas as pd\nfrom itertools import combinations\n\ndef add_interaction_terms(X: pd.DataFrame, interaction_pairs: list = None) -> pd.DataFrame:\n    \"\"\"\n    Add interaction terms to feature matrix.\n    \n    Args:\n        X: Original features DataFrame\n        interaction_pairs: List of (feature1, feature2) tuples, or None for all pairs\n    \n    Returns:\n        DataFrame with original + interaction features\n    \"\"\"\n    X_expanded = X.copy()\n    \n    # If no pairs specified, use all pairs\n    if interaction_pairs is None:\n        interaction_pairs = list(combinations(X.columns, 2))\n    \n    # Add interaction terms\n    for feat1, feat2 in interaction_pairs:\n        if feat1 in X.columns and feat2 in X.columns:\n            interaction_name = f\"{feat1}_x_{feat2}\"\n            X_expanded[interaction_name] = X[feat1] * X[feat2]\n    \n    return X_expanded",
+      "starter_code": "import numpy as np\nimport pandas as pd\nfrom itertools import combinations\n\ndef add_interaction_terms(X: pd.DataFrame, interaction_pairs: list = None) -> pd.DataFrame:\n    \"\"\"\n    Add interaction terms to feature matrix.\n    \n    Args:\n        X: Original features DataFrame\n        interaction_pairs: List of (feature1, feature2) tuples, or None for all pairs\n    \n    Returns:\n        DataFrame with original + interaction features\n    \"\"\"\n    # Your code here\n    pass",
+      "test_cases": [
+        {
+          "description": "Adds interaction column correctly",
+          "expected_output": "X_exp.shape[1] == 3 and 'A_x_B' in X_exp.columns",
+          "input": "X = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]}); X_exp = add_interaction_terms(X, [('A', 'B')])"
+        }
+      ],
+      "topic": "interaction_terms",
+      "type": "coding_exercise"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "medium",
+      "explanation": "Regular R\u00b2 always increases (or stays constant) when adding features, even irrelevant ones. Adjusted R\u00b2 penalizes the number of predictors, only increasing if new features improve fit more than would be expected by chance. This prevents overfitting and enables fair model comparison.",
+      "id": "m3.1_q026",
+      "options": [
+        "Adjusted R\u00b2 penalizes model complexity; R\u00b2 always increases with more features even if they're noise",
+        "Adjusted R\u00b2 is always larger than R\u00b2",
+        "Adjusted R\u00b2 is easier to calculate",
+        "They are identical for all practical purposes"
+      ],
+      "points": 3,
+      "question": "Why is adjusted R\u00b2 often preferred over regular R\u00b2 when comparing models with different numbers of features?",
+      "topic": "adjusted_r2",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "hard",
+      "id": "m3.1_q027",
+      "keywords": [
+        "deployment",
+        "pipeline",
+        "monitoring",
+        "drift",
+        "versioning",
+        "fallback",
+        "retraining",
+        "validation",
+        "reliability"
+      ],
+      "points": 10,
+      "question": "You've built a regression model to predict wafer thickness in a Fab. Outline key considerations for deploying this model to production, including data pipeline, model monitoring, and handling prediction failures.",
+      "rubric": {
+        "criteria": [
+          "Discusses data pipeline and feature consistency (2 points)",
+          "Mentions model versioning and deployment strategy (2 points)",
+          "Describes monitoring approach (drift, performance) (2 points)",
+          "Addresses failure handling and fallbacks (2 points)",
+          "Discusses retraining strategy and documentation (2 points)"
+        ],
+        "max_points": 10
+      },
+      "sample_answer": "Production Deployment Considerations:\n\n1. Data Pipeline:\n- Real-time feature extraction from MES/FDC systems\n- Feature engineering must match training exactly (scaling parameters, transformations)\n- Handle missing data gracefully (imputation strategy decided during training)\n- Data validation: check feature ranges, data types, schema consistency\n- Latency requirements: millisecond vs second vs minute predictions\n\n2. Model Serving:\n- Containerization (Docker) for reproducibility\n- Version control for models (MLflow, DVC)\n- A/B testing framework to validate against current system\n- Rollback mechanism if model degrades\n- Horizontal scaling for high throughput\n\n3. Monitoring & Alerting:\n- Input distribution drift: detect when new data differs from training (KL divergence, PSI)\n- Prediction distribution monitoring: unusual prediction patterns\n- Performance tracking: MAE/RMSE on recent batches with ground truth\n- Alert thresholds: notify engineers if metrics degrade >10%\n\n4. Handling Failures:\n- Prediction confidence intervals: flag uncertain predictions\n- Fallback to physics-based models or averages if ML fails\n- Human-in-the-loop for edge cases (thickness >3\u03c3 from spec)\n- Graceful degradation: system continues operating safely without predictions\n\n5. Retraining Strategy:\n- Periodic retraining (weekly/monthly) with recent data\n- Trigger-based: retrain when performance drops below threshold\n- Maintain training data lineage and reproducibility\n\n6. Regulatory & Documentation:\n- Model card documenting intended use, limitations, performance\n- Audit trail for predictions and decisions\n- Validation against test wafers\n\nCritical: Semiconductor Fabs require high reliability. Model should enhance, not replace, existing process control.",
+      "topic": "production_deployment",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "easy",
+      "hints": [
+        "Calculate residual standard error from training residuals",
+        "Use scipy.stats.t.ppf for t-statistic",
+        "Prediction interval = prediction \u00b1 t * residual_std"
+      ],
+      "id": "m3.1_q028",
+      "points": 7,
+      "question": "Generate prediction intervals for regression using residual standard error. Return point predictions with lower and upper bounds.",
+      "solution": "import numpy as np\nimport pandas as pd\nfrom sklearn.linear_model import LinearRegression\nfrom scipy import stats\n\ndef predict_with_intervals(model: LinearRegression, X_train: pd.DataFrame, y_train: pd.Series, \n                           X_new: pd.DataFrame, confidence: float = 0.95) -> pd.DataFrame:\n    \"\"\"\n    Generate predictions with confidence intervals.\n    \n    Args:\n        model: Trained LinearRegression model\n        X_train: Training features\n        y_train: Training target\n        X_new: New data for prediction\n        confidence: Confidence level (default 0.95)\n    \n    Returns:\n        DataFrame with columns: ['prediction', 'lower', 'upper']\n    \"\"\"\n    # Make predictions\n    predictions = model.predict(X_new)\n    \n    # Calculate residual standard error\n    y_train_pred = model.predict(X_train)\n    residuals = y_train - y_train_pred\n    residual_std = np.std(residuals, ddof=X_train.shape[1] + 1)\n    \n    # t-statistic for confidence level\n    dof = len(y_train) - X_train.shape[1] - 1\n    t_val = stats.t.ppf((1 + confidence) / 2, dof)\n    \n    # Prediction intervals (simplified, assumes constant variance)\n    margin = t_val * residual_std\n    \n    results = pd.DataFrame({\n        'prediction': predictions,\n        'lower': predictions - margin,\n        'upper': predictions + margin\n    })\n    \n    return results",
+      "starter_code": "import numpy as np\nimport pandas as pd\nfrom sklearn.linear_model import LinearRegression\n\ndef predict_with_intervals(model: LinearRegression, X_train: pd.DataFrame, y_train: pd.Series, \n                           X_new: pd.DataFrame, confidence: float = 0.95) -> pd.DataFrame:\n    \"\"\"\n    Generate predictions with confidence intervals.\n    \n    Args:\n        model: Trained LinearRegression model\n        X_train: Training features\n        y_train: Training target\n        X_new: New data for prediction\n        confidence: Confidence level (default 0.95)\n    \n    Returns:\n        DataFrame with columns: ['prediction', 'lower', 'upper']\n    \"\"\"\n    # Your code here\n    pass",
+      "test_cases": [
+        {
+          "description": "Returns DataFrame with correct structure and valid intervals",
+          "expected_output": "result.shape == (5, 3) and all(result['lower'] <= result['prediction']) and all(result['prediction'] <= result['upper'])",
+          "input": "from sklearn.datasets import make_regression; X, y = make_regression(n_samples=100, n_features=5, noise=10, random_state=42); X_df = pd.DataFrame(X); model = LinearRegression(); model.fit(X_df, y); result = predict_with_intervals(model, X_df, pd.Series(y), X_df[:5], 0.95)"
+        }
+      ],
+      "topic": "prediction_intervals",
+      "type": "coding_exercise"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "medium",
+      "explanation": "Normal equations solve for coefficients via (X'X)\u207b\u00b9X'y, requiring matrix inversion with O(n\u00b3) complexity. For large datasets or many features, this becomes prohibitively slow. Gradient descent iteratively optimizes with better computational scaling, especially with mini-batch or stochastic variants.",
+      "id": "m3.1_q029",
+      "options": [
+        "Normal equations require matrix inversion (O(n\u00b3)) which is computationally prohibitive for large feature sets; gradient descent scales better",
+        "Gradient descent always finds better solutions",
+        "Normal equations cannot be used with scikit-learn",
+        "Gradient descent is more accurate"
+      ],
+      "points": 3,
+      "question": "Why might gradient descent be preferred over normal equations (closed-form solution) for large-scale semiconductor datasets?",
+      "topic": "gradient_descent",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "medium",
+      "id": "m3.1_q030",
+      "keywords": [
+        "cross-validation",
+        "test set",
+        "business metrics",
+        "complexity",
+        "interpretability",
+        "robustness",
+        "production",
+        "Occam's razor"
+      ],
+      "points": 8,
+      "question": "You have three candidate regression models for predicting yield: (1) Linear with 10 features, (2) Polynomial degree 3 with 100 features, (3) Lasso with alpha=1.0. How would you systematically select the best model for production deployment?",
+      "rubric": {
+        "criteria": [
+          "Describes cross-validation approach (2 points)",
+          "Discusses business/cost metrics (1 point)",
+          "Addresses complexity vs performance tradeoff (2 points)",
+          "Mentions robustness and production constraints (2 points)",
+          "Provides clear decision framework (1 point)"
+        ],
+        "max_points": 8
+      },
+      "sample_answer": "Systematic Model Selection Process:\n\n1. Cross-Validation Performance:\n- Use 5-10 fold CV on training data\n- Calculate MAE, RMSE, R\u00b2 for each model\n- Compare mean \u00b1 std across folds\n- Look for model with best mean performance AND low variance\n\n2. Test Set Evaluation:\n- Hold out 20% of data as final test set\n- Evaluate best CV model(s) on test set\n- Ensure test performance aligns with CV results\n- If large gap: investigate overfitting or data leakage\n\n3. Business Metrics:\n- Translate errors to $ cost (prediction error \u2192 yield loss \u2192 revenue impact)\n- Calculate expected cost under each model\n- Consider false positive/negative asymmetry\n\n4. Complexity vs Performance:\n- Model 1 (10 features): Most interpretable, easiest to deploy\n- Model 2 (100 features): Risk of overfitting, harder to explain\n- Model 3 (Lasso): Balance of performance and sparsity\n- If performance is similar, prefer simpler model (Occam's razor)\n\n5. Robustness Checks:\n- Prediction stability: do predictions change wildly with small input changes?\n- Extrapolation behavior: how does model behave outside training range?\n- Feature importance: do selected features make physical sense?\n\n6. Production Constraints:\n- Latency requirements: polynomial features increase computation\n- Feature availability: are all 100 features reliably measured in real-time?\n- Retraining frequency: simpler models easier to retrain\n\nRecommendation Framework:\n- If Model 3 performance within 5% of Model 2 \u2192 choose Model 3 (sparse, interpretable)\n- If Model 1 performance within 10% of best \u2192 choose Model 1 (simplest)\n- Only choose Model 2 if significantly better AND explainability not critical\n\nFinal step: Validate with domain experts before deployment.",
+      "topic": "model_selection",
+      "type": "conceptual"
+    }
+  ],
+  "sub_module": "regression",
+  "title": "Regression Analysis for Semiconductor Manufacturing",
+  "week": 5
+}

@@ -1,0 +1,605 @@
+{
+  "description": "Assessment covering time series fundamentals, ARIMA/SARIMA models, stationarity testing, forecasting methods, and semiconductor manufacturing time series applications including equipment drift detection and yield forecasting.",
+  "estimated_time_minutes": 90,
+  "module_id": "module-5.1",
+  "passing_score": 70,
+  "questions": [
+    {
+      "correct_answer": 0,
+      "difficulty": "easy",
+      "explanation": "A time series is typically decomposed into three components: trend (long-term direction), seasonality (repeating patterns), and residuals (irregular fluctuations). This decomposition helps identify patterns and build better models.",
+      "id": "m5.1_q001",
+      "options": [
+        "Trend, seasonality, and residuals",
+        "Mean, variance, and covariance",
+        "Auto-regression, moving average, and integration",
+        "Training, validation, and test"
+      ],
+      "points": 2,
+      "question": "What are the three main components of a time series?",
+      "topic": "time_series_fundamentals",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "A stationary time series has constant mean, variance, and autocovariance structure over time. Stationarity is a key assumption for many time series models like ARIMA. Non-stationary series often need differencing or transformations to achieve stationarity.",
+      "id": "m5.1_q002",
+      "options": [
+        "The time series has no missing values",
+        "The statistical properties (mean, variance) remain constant over time",
+        "The time series has been differenced once",
+        "The time series follows a normal distribution"
+      ],
+      "points": 2,
+      "question": "What does it mean for a time series to be stationary?",
+      "topic": "stationarity",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 2,
+      "difficulty": "medium",
+      "explanation": "The Augmented Dickey-Fuller (ADF) test is a statistical test used to determine if a time series is stationary. It tests the null hypothesis that a unit root is present (non-stationary). A p-value below the significance level (e.g., 0.05) suggests the series is stationary.",
+      "id": "m5.1_q003",
+      "options": [
+        "T-test",
+        "Chi-square test",
+        "Augmented Dickey-Fuller (ADF) test",
+        "F-test"
+      ],
+      "points": 2,
+      "question": "Which test is commonly used to check for stationarity in a time series?",
+      "topic": "stationarity_testing",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "Differencing (computing the difference between consecutive observations) is used to remove trends and achieve stationarity. For an upward trend, first-order differencing (d=1 in ARIMA) typically removes the trend component, making the series suitable for modeling.",
+      "id": "m5.1_q004",
+      "options": [
+        "Log transformation only",
+        "Differencing to remove the trend",
+        "Standardization",
+        "No transformation needed"
+      ],
+      "points": 2,
+      "question": "In semiconductor manufacturing, you observe that wafer yield shows an upward trend over time due to process improvements. What technique should you apply before modeling with ARIMA?",
+      "topic": "differencing",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "The ACF measures the linear correlation between a time series and its lagged values. ACF plots help identify the moving average (MA) order in ARIMA models and detect seasonality. High autocorrelation at specific lags indicates dependence on past values.",
+      "id": "m5.1_q005",
+      "options": [
+        "The correlation between two different time series",
+        "The correlation between a time series and lagged versions of itself",
+        "The variance of the time series",
+        "The trend component of the time series"
+      ],
+      "points": 2,
+      "question": "What does the Autocorrelation Function (ACF) measure?",
+      "topic": "acf_pacf",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "An ACF that cuts off (drops to zero) after lag q with a gradually decaying PACF is the signature pattern of a moving average MA(q) model. Conversely, an AR(p) model shows a gradually decaying ACF and PACF cutting off after lag p. These patterns help identify appropriate ARIMA parameters.",
+      "id": "m5.1_q006",
+      "options": [
+        "AR(p) model",
+        "MA(q) model",
+        "ARMA(p,q) model",
+        "White noise"
+      ],
+      "points": 3,
+      "question": "In ACF and PACF plots for ARIMA model identification, an ACF that cuts off after lag q and a PACF that decays gradually suggests which model?",
+      "topic": "acf_pacf",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "In ARIMA(p, d, q), 'd' represents the order of differencing. First-order differencing (d=1) removes linear trends, second-order (d=2) removes quadratic trends. The 'p' is the autoregressive order, and 'q' is the moving average order.",
+      "id": "m5.1_q007",
+      "options": [
+        "The number of autoregressive terms",
+        "The order of differencing needed to achieve stationarity",
+        "The number of moving average terms",
+        "The degree of polynomial trend"
+      ],
+      "points": 2,
+      "question": "In ARIMA(p, d, q), what does the 'd' parameter represent?",
+      "topic": "arima_components",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "AR(1) (autoregressive model of order 1) uses only the immediately previous value to predict the current value: y_t = c + \u03c6\u2081*y_(t-1) + \u03b5_t. An AR(p) model uses p previous values. This simple model is often sufficient for equipment parameter drift monitoring.",
+      "id": "m5.1_q008",
+      "options": [
+        "0 previous points",
+        "1 previous point",
+        "2 previous points",
+        "All previous points"
+      ],
+      "points": 2,
+      "question": "An AR(1) autoregressive model uses how many previous time points to predict the current value?",
+      "topic": "arima_components",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "This is a seasonal pattern - a regular, predictable fluctuation that repeats at fixed intervals (weekly in this case). Seasonal patterns in manufacturing can be due to maintenance schedules, operator shifts, or equipment warm-up effects. SARIMA models are designed to handle such patterns.",
+      "id": "m5.1_q009",
+      "options": [
+        "Trend",
+        "Seasonality",
+        "Cyclic pattern",
+        "Random noise"
+      ],
+      "points": 2,
+      "question": "A semiconductor fab notices that yields are consistently lower every Monday after weekend shutdowns. What type of pattern is this?",
+      "topic": "seasonal_patterns",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "In SARIMA notation, 'm' is the seasonal period - the number of observations in one seasonal cycle. For example, m=7 for daily data with weekly seasonality, m=12 for monthly data with yearly seasonality, or m=24 for hourly data with daily seasonality. The uppercase (P,D,Q) are seasonal AR, differencing, and MA orders.",
+      "id": "m5.1_q010",
+      "options": [
+        "The number of months in the data",
+        "The seasonal period (number of observations per seasonal cycle)",
+        "The maximum lag to consider",
+        "The multiplicative factor for seasonal differencing"
+      ],
+      "points": 3,
+      "question": "In SARIMA(p,d,q)(P,D,Q)m, what does the 'm' parameter represent?",
+      "topic": "sarima",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 2,
+      "difficulty": "medium",
+      "explanation": "MAPE (Mean Absolute Percentage Error) is scale-independent because it measures error as a percentage of actual values. This makes it ideal for comparing forecasts across different time series with different scales (e.g., comparing yield forecasts to temperature forecasts). However, MAPE can be problematic with values close to zero.",
+      "id": "m5.1_q011",
+      "options": [
+        "MAE (Mean Absolute Error)",
+        "RMSE (Root Mean Square Error)",
+        "MAPE (Mean Absolute Percentage Error)",
+        "MSE (Mean Square Error)"
+      ],
+      "points": 2,
+      "question": "Which metric is scale-independent and useful for comparing forecast accuracy across different time series?",
+      "topic": "forecasting_metrics",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "The forecast horizon is the number of time steps into the future that you want to predict. A one-step horizon predicts only the next observation, while a multi-step horizon predicts multiple future points. Generally, forecast uncertainty increases with longer horizons.",
+      "id": "m5.1_q012",
+      "options": [
+        "The time period covered by historical data",
+        "The number of future time periods you want to predict",
+        "The accuracy threshold for acceptable forecasts",
+        "The time of day when forecasts are generated"
+      ],
+      "points": 2,
+      "question": "What is a forecast horizon?",
+      "topic": "forecasting",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Walk-forward validation (also called rolling-window validation) respects temporal ordering by always training on past data and testing on future data. This simulates real-world forecasting where you only have historical data. Standard k-fold cross-validation can leak future information into the past, leading to overly optimistic performance estimates.",
+      "id": "m5.1_q013",
+      "options": [
+        "It's faster to compute",
+        "It respects the temporal ordering and tests on truly future data",
+        "It uses more data for training",
+        "It eliminates the need for cross-validation"
+      ],
+      "points": 2,
+      "question": "Why is walk-forward validation preferred over standard train-test split for time series?",
+      "topic": "walk_forward_validation",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "Residuals from a well-fitted ARIMA model should resemble white noise with no autocorrelation. Significant autocorrelation in residuals indicates the model hasn't captured all temporal patterns - you may need to adjust p, d, or q parameters, add seasonal components, or consider external regressors.",
+      "id": "m5.1_q014",
+      "options": [
+        "The model is perfect",
+        "The model has not captured all temporal patterns in the data",
+        "The data is stationary",
+        "Overfitting has occurred"
+      ],
+      "points": 3,
+      "question": "After fitting an ARIMA model, you plot the residuals and observe significant autocorrelation at multiple lags. What does this indicate?",
+      "topic": "model_diagnostics",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Fitting ARIMA models to equipment parameters (temperature, pressure, etc.) and monitoring forecast errors is effective for drift detection. When actual values consistently deviate from forecasts, it signals drift. This approach captures both trends and short-term fluctuations, making it superior to simple moving averages or linear regression for complex equipment behavior.",
+      "id": "m5.1_q015",
+      "options": [
+        "Only calculate moving averages",
+        "Fit ARIMA model to equipment parameters and monitor forecast errors",
+        "Use clustering algorithms",
+        "Apply only simple linear regression"
+      ],
+      "points": 2,
+      "question": "A fab wants to detect gradual equipment drift before it affects yield. Which time series approach is most appropriate?",
+      "topic": "semiconductor_applications",
+      "type": "multiple_choice"
+    },
+    {
+      "code_template": "from statsmodels.tsa.stattools import adfuller\nimport pandas as pd\nimport numpy as np\n\ndef check_stationarity(data: pd.Series, significance_level: float = 0.05) -> dict:\n    \"\"\"\n    Perform ADF test and determine if series is stationary.\n    \n    Args:\n        data: Time series data\n        significance_level: p-value threshold for stationarity\n        \n    Returns:\n        dict with keys: 'is_stationary' (bool), 'adf_statistic' (float), 'p_value' (float)\n    \"\"\"\n    # Your implementation here\n    pass",
+      "difficulty": "medium",
+      "explanation": "The ADF test checks the null hypothesis that a unit root is present (non-stationary). A low p-value (< 0.05) rejects the null hypothesis, indicating stationarity. This is crucial before fitting ARIMA models.",
+      "hints": [
+        "Use adfuller() from statsmodels.tsa.stattools",
+        "The function returns (adf_statistic, p_value, ...) as first two values",
+        "Compare p-value to significance_level to determine stationarity"
+      ],
+      "id": "m5.1_q016",
+      "points": 4,
+      "question": "Implement a function that performs the Augmented Dickey-Fuller (ADF) test on equipment temperature data and returns whether the series is stationary (p-value < 0.05).",
+      "test_cases": [
+        {
+          "description": "Non-stationary series (trend)",
+          "expected_output": "{'is_stationary': False, 'p_value': > 0.05}",
+          "input": "pd.Series([100, 101, 102, 103, 104, 105, 106, 107, 108, 109] * 10)"
+        },
+        {
+          "description": "Stationary series (white noise)",
+          "expected_output": "{'is_stationary': True, 'p_value': < 0.05}",
+          "input": "pd.Series(np.random.randn(100))"
+        }
+      ],
+      "topic": "stationarity_testing",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "from statsmodels.tsa.seasonal import seasonal_decompose\nimport pandas as pd\n\ndef decompose_time_series(data: pd.Series, period: int = 7) -> dict:\n    \"\"\"\n    Decompose time series into components.\n    \n    Args:\n        data: Time series with datetime index\n        period: Seasonal period (7 for weekly pattern in daily data)\n        \n    Returns:\n        dict with keys: 'trend', 'seasonal', 'residual' (all pd.Series)\n    \"\"\"\n    # Your implementation here\n    pass",
+      "difficulty": "medium",
+      "explanation": "Seasonal decomposition separates a time series into trend (long-term direction), seasonal (repeating patterns), and residual (irregular) components. This helps identify patterns and is often a preprocessing step for forecasting models.",
+      "hints": [
+        "Use seasonal_decompose() with model='additive' or 'multiplicative'",
+        "Ensure the data has a datetime index",
+        "The period parameter should match the seasonal frequency"
+      ],
+      "id": "m5.1_q017",
+      "points": 4,
+      "question": "Implement a function to decompose a time series of daily yield data into trend, seasonal, and residual components using seasonal decomposition.",
+      "test_cases": [
+        {
+          "description": "Daily data with weekly seasonality",
+          "expected_output": "dict with 'trend', 'seasonal', 'residual' keys",
+          "input": "pd.Series(range(100), index=pd.date_range('2023-01-01', periods=100))"
+        }
+      ],
+      "topic": "time_series_decomposition",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "from statsmodels.tsa.arima.model import ARIMA\nimport pandas as pd\nimport numpy as np\n\ndef forecast_yield(data: pd.Series, order: tuple = (1, 1, 1), steps: int = 10) -> dict:\n    \"\"\"\n    Fit ARIMA model and generate forecast with confidence intervals.\n    \n    Args:\n        data: Historical yield time series\n        order: ARIMA order (p, d, q)\n        steps: Number of steps to forecast\n        \n    Returns:\n        dict with keys: 'forecast' (array), 'lower_ci' (array), 'upper_ci' (array)\n    \"\"\"\n    # Your implementation here\n    pass",
+      "difficulty": "hard",
+      "explanation": "ARIMA modeling involves selecting appropriate (p,d,q) orders, fitting the model, and generating forecasts. Confidence intervals quantify forecast uncertainty - they typically widen as the forecast horizon increases.",
+      "hints": [
+        "Use ARIMA() to create model, then .fit() to train",
+        "Use .forecast() or .get_forecast() for predictions",
+        "get_forecast() returns object with .predicted_mean and .conf_int() methods",
+        "Confidence intervals are typically at alpha=0.05 for 95% CI"
+      ],
+      "id": "m5.1_q018",
+      "points": 5,
+      "question": "Implement a function that fits an ARIMA model to yield data, makes a 10-step forecast, and returns both the forecast and 95% confidence intervals.",
+      "test_cases": [
+        {
+          "description": "Yield data with slight upward trend",
+          "expected_output": "dict with 'forecast' of length 10, confidence intervals",
+          "input": "pd.Series([95, 94, 96, 95, 97, 96, 98] * 10)"
+        }
+      ],
+      "topic": "arima_model_fitting",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "from statsmodels.graphics.tsaplots import plot_acf, plot_pacf\nimport matplotlib.pyplot as plt\nimport pandas as pd\n\ndef plot_acf_pacf(data: pd.Series, lags: int = 40) -> dict:\n    \"\"\"\n    Generate ACF and PACF plots for ARIMA parameter identification.\n    \n    Args:\n        data: Time series data\n        lags: Number of lags to plot\n        \n    Returns:\n        dict with suggested parameters: {'suggested_p': int, 'suggested_q': int}\n    \"\"\"\n    # Your implementation here\n    # Create two subplots for ACF and PACF\n    # Analyze patterns to suggest p and q\n    pass",
+      "difficulty": "medium",
+      "explanation": "ACF and PACF plots are essential tools for identifying ARIMA parameters. ACF helps identify MA order (q), while PACF helps identify AR order (p). Understanding these patterns is crucial for model selection.",
+      "hints": [
+        "Use plot_acf() and plot_pacf() from statsmodels",
+        "ACF cutting off suggests MA model (use q = lag at cutoff)",
+        "PACF cutting off suggests AR model (use p = lag at cutoff)",
+        "Both decaying gradually suggests ARMA model"
+      ],
+      "id": "m5.1_q019",
+      "points": 4,
+      "question": "Implement a function that generates ACF and PACF plots for process parameter data to help identify appropriate ARIMA parameters.",
+      "test_cases": [
+        {
+          "description": "White noise series",
+          "expected_output": "ACF and PACF plots created, suggestions returned",
+          "input": "pd.Series(np.random.randn(200))"
+        }
+      ],
+      "topic": "acf_pacf_analysis",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "from statsmodels.tsa.arima.model import ARIMA\nimport pandas as pd\nimport numpy as np\nfrom sklearn.metrics import mean_squared_error\n\ndef walk_forward_validation(data: pd.Series, order: tuple = (1, 1, 1), \n                            test_size: int = 10) -> dict:\n    \"\"\"\n    Perform walk-forward validation for ARIMA model.\n    \n    Args:\n        data: Full time series\n        order: ARIMA order (p, d, q)\n        test_size: Number of points to use for testing\n        \n    Returns:\n        dict with keys: 'predictions' (list), 'actuals' (list), 'rmse' (float)\n    \"\"\"\n    # Your implementation here\n    # Split into train and test\n    # For each test point:\n    #   - Fit model on all previous data\n    #   - Forecast one step ahead\n    #   - Compare to actual\n    pass",
+      "difficulty": "hard",
+      "explanation": "Walk-forward validation simulates real-world forecasting by always training on past data and testing on future data. This provides a realistic assessment of model performance and prevents data leakage.",
+      "hints": [
+        "Split data into train (all but last test_size points) and test",
+        "Use a loop to iterate through test points",
+        "Each iteration: fit on train+previous test points, forecast 1 step",
+        "Calculate RMSE using all predictions vs actuals"
+      ],
+      "id": "m5.1_q020",
+      "points": 5,
+      "question": "Implement walk-forward validation for an ARIMA model on yield data. Train on expanding windows and compute RMSE for each forecast.",
+      "test_cases": [
+        {
+          "description": "Yield data with walk-forward validation",
+          "expected_output": "dict with predictions, actuals, and RMSE < 2.0",
+          "input": "pd.Series([95, 94, 96, 95, 97, 96, 98, 97, 99, 98] * 5), test_size=10"
+        }
+      ],
+      "topic": "walk_forward_validation",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import pandas as pd\nimport numpy as np\nfrom statsmodels.tsa.stattools import adfuller\n\ndef difference_until_stationary(data: pd.Series, max_diff: int = 2) -> dict:\n    \"\"\"\n    Apply differencing until series becomes stationary.\n    \n    Args:\n        data: Time series data\n        max_diff: Maximum differencing order to try\n        \n    Returns:\n        dict with keys: 'differenced_data' (pd.Series), 'diff_order' (int), \n                       'is_stationary' (bool), 'p_value' (float)\n    \"\"\"\n    # Your implementation here\n    pass",
+      "difficulty": "medium",
+      "explanation": "Differencing removes trends and makes non-stationary series stationary. First-order differencing (d=1) removes linear trends, second-order (d=2) removes quadratic trends. Most series require d\u22642.",
+      "hints": [
+        "Use .diff() method to difference the series",
+        "Apply ADF test after each differencing",
+        "Stop when p-value < 0.05 or max_diff reached",
+        "Handle NaN values created by differencing"
+      ],
+      "id": "m5.1_q021",
+      "points": 4,
+      "question": "Implement a function that applies differencing to remove trend from equipment parameter data and verifies stationarity.",
+      "test_cases": [
+        {
+          "description": "Linear trend requires first-order differencing",
+          "expected_output": "diff_order=1, is_stationary=True",
+          "input": "pd.Series(range(100))"
+        },
+        {
+          "description": "Already stationary",
+          "expected_output": "diff_order=0, is_stationary=True",
+          "input": "pd.Series(np.random.randn(100))"
+        }
+      ],
+      "topic": "differencing",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "from statsmodels.tsa.statespace.sarimax import SARIMAX\nimport pandas as pd\n\ndef fit_sarima_model(data: pd.Series, order: tuple = (1, 1, 1), \n                     seasonal_order: tuple = (1, 1, 1, 7), \n                     forecast_steps: int = 14) -> dict:\n    \"\"\"\n    Fit SARIMA model with seasonal components.\n    \n    Args:\n        data: Daily yield time series\n        order: Non-seasonal ARIMA order (p, d, q)\n        seasonal_order: Seasonal order (P, D, Q, m)\n        forecast_steps: Number of days to forecast\n        \n    Returns:\n        dict with keys: 'model_summary' (str), 'forecast' (array), 'aic' (float)\n    \"\"\"\n    # Your implementation here\n    pass",
+      "difficulty": "hard",
+      "explanation": "SARIMA extends ARIMA to handle seasonal patterns. The seasonal_order (P,D,Q,m) captures seasonal AR, differencing, MA, and period. This is crucial for manufacturing data with regular patterns like weekly maintenance or shift schedules.",
+      "hints": [
+        "Use SARIMAX() instead of ARIMA() for seasonal models",
+        "Seasonal order is (P, D, Q, m) where m is seasonal period",
+        "m=7 for weekly seasonality in daily data",
+        "Access AIC via model.aic after fitting"
+      ],
+      "id": "m5.1_q022",
+      "points": 5,
+      "question": "Implement a function to fit a SARIMA model to daily yield data with weekly seasonality (period=7) and generate forecasts.",
+      "test_cases": [
+        {
+          "description": "Daily yield with weekly seasonality",
+          "expected_output": "dict with forecast of length 14, model AIC",
+          "input": "pd.Series with 100 observations, weekly pattern"
+        }
+      ],
+      "topic": "sarima_modeling",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import numpy as np\nimport pandas as pd\n\ndef calculate_forecast_metrics(actual: np.ndarray, predicted: np.ndarray) -> dict:\n    \"\"\"\n    Calculate forecast accuracy metrics.\n    \n    Args:\n        actual: Actual values\n        predicted: Forecasted values\n        \n    Returns:\n        dict with keys: 'mae', 'rmse', 'mape'\n    \"\"\"\n    # Your implementation here\n    pass",
+      "difficulty": "medium",
+      "explanation": "Different metrics emphasize different aspects: MAE is easy to interpret, RMSE penalizes large errors more, MAPE is scale-independent. Use multiple metrics for comprehensive evaluation.",
+      "hints": [
+        "MAE = mean of absolute errors",
+        "RMSE = sqrt of mean squared errors",
+        "MAPE = mean of (|actual - predicted| / actual) * 100",
+        "Handle division by zero in MAPE calculation"
+      ],
+      "id": "m5.1_q023",
+      "points": 3,
+      "question": "Implement a function to calculate multiple forecast accuracy metrics (MAE, RMSE, MAPE) for model evaluation.",
+      "test_cases": [
+        {
+          "description": "Simple forecast evaluation",
+          "expected_output": "{'mae': 1.33, 'rmse': 1.41, 'mape': 1.31}",
+          "input": "actual=[100, 101, 102], predicted=[99, 102, 101]"
+        }
+      ],
+      "topic": "forecasting_metrics",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "from statsmodels.tsa.arima.model import ARIMA\nfrom statsmodels.stats.diagnostic import acorr_ljungbox\nfrom scipy import stats\nimport pandas as pd\nimport matplotlib.pyplot as plt\n\ndef analyze_residuals(model_fit, significance_level: float = 0.05) -> dict:\n    \"\"\"\n    Perform residual diagnostics on fitted ARIMA model.\n    \n    Args:\n        model_fit: Fitted ARIMA model object\n        significance_level: Significance level for tests\n        \n    Returns:\n        dict with keys: 'residuals' (array), 'ljung_box_pvalue' (float),\n                       'normality_pvalue' (float), 'is_white_noise' (bool)\n    \"\"\"\n    # Your implementation here\n    # Extract residuals\n    # Ljung-Box test for autocorrelation\n    # Shapiro-Wilk test for normality\n    pass",
+      "difficulty": "hard",
+      "explanation": "Residual analysis validates model adequacy. Residuals should resemble white noise (no autocorrelation) and ideally be normally distributed. Ljung-Box tests for remaining autocorrelation, while Shapiro-Wilk tests normality.",
+      "hints": [
+        "Access residuals via model_fit.resid",
+        "Use acorr_ljungbox() for autocorrelation test",
+        "Use stats.shapiro() for normality test",
+        "High p-values (>0.05) indicate good model fit"
+      ],
+      "id": "m5.1_q024",
+      "points": 5,
+      "question": "Implement a function to perform comprehensive residual analysis on a fitted ARIMA model, checking for autocorrelation and normality.",
+      "test_cases": [
+        {
+          "description": "Well-fitted model residuals",
+          "expected_output": "is_white_noise=True if model is adequate",
+          "input": "Fitted ARIMA model on stationary data"
+        }
+      ],
+      "topic": "residual_analysis",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "from statsmodels.tsa.arima.model import ARIMA\nimport pandas as pd\nimport numpy as np\n\ndef detect_equipment_drift(historical_data: pd.Series, \n                          new_observation: float,\n                          threshold_std: float = 2.0) -> dict:\n    \"\"\"\n    Detect equipment drift using ARIMA forecasting.\n    \n    Args:\n        historical_data: Historical temperature readings\n        new_observation: Current temperature reading\n        threshold_std: Number of standard deviations for alert\n        \n    Returns:\n        dict with keys: 'alert' (bool), 'forecast' (float), 'deviation' (float),\n                       'threshold' (float)\n    \"\"\"\n    # Your implementation here\n    # Fit ARIMA to historical data\n    # Forecast next value with confidence interval\n    # Compare new_observation to forecast\n    # Alert if outside threshold\n    pass",
+      "difficulty": "medium",
+      "explanation": "Drift detection compares actual equipment readings to model forecasts. Persistent deviations indicate parameter drift requiring maintenance. This proactive approach prevents yield impacts from degraded equipment.",
+      "hints": [
+        "Fit ARIMA(1,0,0) or auto-select parameters",
+        "Get forecast with confidence intervals",
+        "Calculate deviation = |new_observation - forecast|",
+        "Compare to threshold_std * forecast_std_error"
+      ],
+      "id": "m5.1_q025",
+      "points": 4,
+      "question": "Implement an equipment drift detection system that monitors chamber temperature and alerts when actual values deviate from ARIMA forecasts by more than 2 standard deviations.",
+      "test_cases": [
+        {
+          "description": "Significant drift from stable baseline",
+          "expected_output": "alert=True, deviation > threshold",
+          "input": "historical_data=pd.Series([300]*50), new_observation=310"
+        },
+        {
+          "description": "Normal variation",
+          "expected_output": "alert=False, deviation < threshold",
+          "input": "historical_data=pd.Series([300]*50), new_observation=301"
+        }
+      ],
+      "topic": "semiconductor_applications",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Simpler models often generalize better, especially with limited data. Complex models may overfit training data, performing poorly on new data. In production, simpler models are easier to maintain, faster to compute, and more interpretable. Use AIC/BIC to balance fit quality with model complexity.",
+      "hints": [
+        "Consider the bias-variance tradeoff",
+        "Think about what happens with limited training data",
+        "Consider production deployment requirements",
+        "Remember Occam's Razor principle"
+      ],
+      "id": "m5.1_q026",
+      "points": 5,
+      "question": "Explain the trade-offs between model complexity and forecast accuracy in ARIMA models. When might a simpler ARIMA(1,1,1) outperform a more complex ARIMA(3,2,3) in production?",
+      "rubric": [
+        "Discusses overfitting risk with complex models (2 points)",
+        "Mentions that simpler models generalize better with limited data (2 points)",
+        "Explains computational/interpretability advantages of simpler models (2 points)",
+        "Discusses model selection criteria like AIC/BIC (2 points)",
+        "Provides semiconductor manufacturing example (2 points)"
+      ],
+      "topic": "model_selection",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Forecast uncertainty should be communicated via confidence intervals (e.g., 80% chance yield will be between 94-96%). Uncertainty increases with horizon due to error accumulation. Factors increasing uncertainty include: poor data quality, model misspecification, structural changes in the process, and external shocks. Provide multiple scenarios (optimistic/pessimistic) for robust planning.",
+      "hints": [
+        "Think about how confidence intervals widen",
+        "Consider what makes predictions more uncertain",
+        "Think about how managers can use probabilistic forecasts",
+        "Consider scenario analysis and sensitivity testing"
+      ],
+      "id": "m5.1_q027",
+      "points": 5,
+      "question": "A fab manager wants to use yield forecasts for production planning but is concerned about forecast uncertainty. Discuss how you would communicate forecast uncertainty and what factors increase uncertainty over longer horizons.",
+      "rubric": [
+        "Explains confidence intervals and prediction intervals (2 points)",
+        "Discusses how uncertainty increases with forecast horizon (2 points)",
+        "Mentions factors affecting uncertainty (data quality, model assumptions, structural changes) (3 points)",
+        "Suggests practical approaches for decision-making under uncertainty (2 points)",
+        "Provides specific semiconductor manufacturing examples (1 point)"
+      ],
+      "topic": "forecast_uncertainty",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Including process parameters as exogenous variables can improve accuracy if there are causal relationships (e.g., temperature affects yield). However, you must forecast these variables too, which adds complexity. Use ARIMAX if: (1) you have future values of exogenous variables (setpoints), or (2) you're doing what-if analysis. Use pure ARIMA if: (1) you're only forecasting based on trends, or (2) exogenous variables aren't reliably available.",
+      "hints": [
+        "Think about cause-and-effect relationships",
+        "Consider whether you'll have future values of exogenous variables",
+        "Think about model complexity vs interpretability",
+        "Consider the forecasting use case"
+      ],
+      "id": "m5.1_q028",
+      "points": 5,
+      "question": "When modeling yield as a time series, would you include process parameters (temperature, pressure, flow rates) as exogenous variables in an ARIMAX model, or model yield as a pure time series? Justify your answer.",
+      "rubric": [
+        "Discusses benefits of including exogenous variables (causal relationships) (2 points)",
+        "Considers drawbacks (need to forecast exogenous variables too) (2 points)",
+        "Explains when pure time series is sufficient (2 points)",
+        "Provides decision criteria based on data availability and use case (2 points)",
+        "Gives specific examples from semiconductor manufacturing (2 points)"
+      ],
+      "topic": "exogenous_variables",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Structural breaks (major process changes, equipment upgrades) invalidate models trained on pre-change data. Approaches: (1) Retrain using only post-change data (simple but loses history), (2) Use intervention analysis to model the break explicitly, (3) Use regime-switching models that adapt to changes, (4) Weight recent data more heavily. Best approach depends on how much post-change data you have and whether breaks are one-time or recurring.",
+      "hints": [
+        "Think about how past patterns may no longer apply",
+        "Consider how much historical data is still relevant",
+        "Think about detecting and modeling the break point",
+        "Consider both retrospective and prospective approaches"
+      ],
+      "id": "m5.1_q029",
+      "points": 5,
+      "question": "A semiconductor fab underwent a major process change that significantly improved yield. How would this structural break affect your time series model, and what approaches would you use to handle it?",
+      "rubric": [
+        "Recognizes that structural breaks violate stationarity assumptions (2 points)",
+        "Discusses impact on model performance (predictions based on old regime) (2 points)",
+        "Suggests approaches: re-training on post-change data, intervention analysis, or regime-switching models (3 points)",
+        "Considers trade-offs of different approaches (2 points)",
+        "Provides implementation recommendations (1 point)"
+      ],
+      "topic": "structural_breaks",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Production deployment requires: (1) Low latency (sub-second predictions for real-time monitoring), (2) Automated model retraining schedule (daily/weekly) to adapt to changing patterns, (3) Model performance monitoring (track forecast errors, alert when degrading), (4) Robust data pipelines (handle missing data, outliers), (5) Tuned alert thresholds to minimize false positives while catching real issues. The best model is useless if it's too slow, becomes stale, or generates alert fatigue.",
+      "hints": [
+        "Think about real-time constraints",
+        "Consider how the model stays current as patterns change",
+        "Think about operational aspects beyond accuracy",
+        "Consider the human factors and actionability"
+      ],
+      "id": "m5.1_q030",
+      "points": 5,
+      "question": "You're deploying a time series forecasting system for real-time equipment monitoring in a fab. Discuss the key considerations for production deployment beyond just model accuracy.",
+      "rubric": [
+        "Discusses computational performance and latency requirements (2 points)",
+        "Considers model updating strategy (online learning vs periodic retraining) (2 points)",
+        "Mentions monitoring for model degradation and drift (2 points)",
+        "Discusses data pipeline reliability and missing data handling (2 points)",
+        "Covers alert fatigue and actionable thresholds (2 points)"
+      ],
+      "topic": "practical_implementation",
+      "type": "conceptual"
+    }
+  ],
+  "sub_module": "5.1",
+  "title": "Time Series Analysis",
+  "version": "1.0",
+  "week": 9
+}

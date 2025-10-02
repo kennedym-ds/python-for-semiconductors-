@@ -1,0 +1,600 @@
+{
+  "description": "Assessment covering predictive maintenance strategies, failure mode analysis, RUL prediction, sensor data processing, survival analysis, and real-world implementation in semiconductor manufacturing environments.",
+  "estimated_time_minutes": 90,
+  "module_id": "module-5.2",
+  "passing_score": 70,
+  "questions": [
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "Predictive maintenance monitors actual equipment condition and performs maintenance only when indicators suggest impending failure. This reduces unnecessary maintenance (compared to time-based preventive) and prevents unexpected failures (compared to reactive). It optimizes maintenance timing and costs.",
+      "id": "m5.2_q001",
+      "options": [
+        "It's less expensive to implement",
+        "It performs maintenance only when needed based on actual condition",
+        "It requires no data collection",
+        "It eliminates all equipment failures"
+      ],
+      "points": 2,
+      "question": "What is the primary advantage of predictive maintenance over preventive maintenance?",
+      "topic": "maintenance_strategies",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 2,
+      "difficulty": "medium",
+      "explanation": "For critical equipment with high failure costs, predictive maintenance is optimal. It prevents costly unplanned downtime while avoiding unnecessary maintenance. By monitoring equipment health in real-time, maintenance can be scheduled during planned downtime windows, maximizing equipment availability and throughput.",
+      "id": "m5.2_q002",
+      "options": [
+        "Reactive maintenance (repair when it breaks)",
+        "Preventive maintenance (fixed schedule)",
+        "Predictive maintenance (condition-based)",
+        "Run-to-failure"
+      ],
+      "points": 2,
+      "question": "In a semiconductor fab, which maintenance strategy is most appropriate for critical production equipment with high failure costs?",
+      "topic": "maintenance_strategies",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "RUL (Remaining Useful Life) is the estimated time until a component or system is expected to fail. Predicting RUL allows proactive maintenance scheduling before failure occurs. RUL models use sensor data, operating conditions, and historical failure patterns to forecast when maintenance is needed.",
+      "id": "m5.2_q003",
+      "options": [
+        "Rapid Unplanned Loss",
+        "Remaining Useful Life",
+        "Required Upgrade Level",
+        "Real-time Utilization Logging"
+      ],
+      "points": 2,
+      "question": "What does RUL stand for in predictive maintenance?",
+      "topic": "rul_prediction",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "The fundamental trade-off is between false positives (alerts triggering unnecessary maintenance) and false negatives (failing to predict actual failures). Lower thresholds increase sensitivity (catch more failures) but generate more false alarms. Higher thresholds reduce false alarms but risk missing failures. Optimal threshold balances failure costs vs maintenance costs.",
+      "id": "m5.2_q004",
+      "options": [
+        "Processing speed vs accuracy",
+        "False positives (unnecessary maintenance) vs false negatives (missed failures)",
+        "Data storage vs computation time",
+        "Training time vs inference time"
+      ],
+      "points": 3,
+      "question": "When setting alert thresholds for predictive maintenance, what is the key trade-off between sensitivity and specificity?",
+      "topic": "failure_modes",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "medium",
+      "explanation": "FMEA (Failure Mode and Effects Analysis) is a systematic method for identifying potential failure modes, their causes, and effects. In predictive maintenance, FMEA helps prioritize which equipment and failure modes to monitor based on severity, occurrence probability, and detection difficulty.",
+      "id": "m5.2_q005",
+      "options": [
+        "Failure Mode Effects Analysis",
+        "Fast Maintenance Evaluation Algorithm",
+        "Flexible Modeling for Equipment Assets",
+        "Forecast Mean Error Adjustment"
+      ],
+      "points": 2,
+      "question": "What does FMEA stand for in reliability engineering?",
+      "topic": "fmea",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 2,
+      "difficulty": "medium",
+      "explanation": "Gradual increase in vibration indicates degradation or wear-out failure - a progressive deterioration over time. This pattern is ideal for predictive maintenance because it provides early warning. Vibration analysis is a common technique for rotating equipment like pumps, motors, and fans.",
+      "id": "m5.2_q006",
+      "options": [
+        "Sudden failure",
+        "Random failure",
+        "Degradation/wear-out failure",
+        "Infant mortality failure"
+      ],
+      "points": 2,
+      "question": "A vacuum pump shows gradually increasing vibration amplitude over weeks. What type of failure pattern is this?",
+      "topic": "sensor_data",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 2,
+      "difficulty": "hard",
+      "explanation": "Frequency domain features (from FFT) reveal specific fault frequencies (bearing defects, imbalance, misalignment). Statistical features like RMS (overall energy) and kurtosis (detect impulsive events) capture different failure aspects. Combining time and frequency domain features provides comprehensive health assessment.",
+      "id": "m5.2_q007",
+      "options": [
+        "Only mean vibration amplitude",
+        "Raw vibration time series",
+        "Frequency domain features (FFT peaks) and statistical features (RMS, kurtosis)",
+        "Only the most recent vibration reading"
+      ],
+      "points": 3,
+      "question": "For vibration analysis in predictive maintenance, which features are most informative?",
+      "topic": "feature_engineering",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "Censored data occurs when you know a component hasn't failed by a certain time, but don't know when it will fail. Right-censoring is common in reliability studies - equipment still running at study end. Survival analysis methods like Kaplan-Meier can properly handle censored data, unlike standard regression.",
+      "id": "m5.2_q008",
+      "options": [
+        "Data that has been removed for privacy reasons",
+        "Observations where the event of interest (failure) hasn't occurred by the end of observation period",
+        "Data with missing values",
+        "Outliers that should be excluded"
+      ],
+      "points": 2,
+      "question": "In survival analysis, what is censored data?",
+      "topic": "survival_analysis",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "The hazard function h(t) represents the instantaneous failure rate at time t, conditioned on survival up to t. It describes how failure risk changes over time. Increasing hazard indicates wear-out, decreasing hazard indicates infant mortality, and constant hazard indicates random failures.",
+      "id": "m5.2_q009",
+      "options": [
+        "The cumulative probability of failure",
+        "The instantaneous failure rate at time t, given survival to that time",
+        "The expected lifetime",
+        "The cost of failure"
+      ],
+      "points": 2,
+      "question": "What does the hazard function represent in survival analysis?",
+      "topic": "survival_analysis",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 3,
+      "difficulty": "hard",
+      "explanation": "Cox proportional hazards model is semi-parametric (no assumptions about baseline hazard shape), can include time-varying covariates (sensor trends), and estimates hazard ratios showing how features affect failure risk. This flexibility makes it powerful for predictive maintenance with multiple sensor inputs.",
+      "id": "m5.2_q010",
+      "options": [
+        "Requires no assumptions about baseline hazard",
+        "Can incorporate time-varying covariates like sensor readings",
+        "Estimates effect of features on failure risk",
+        "All of the above"
+      ],
+      "points": 3,
+      "question": "The Cox proportional hazards model is useful in predictive maintenance because it:",
+      "topic": "cox_model",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "ROI benefits include: avoided unplanned downtime costs (lost production), reduced spare parts inventory (just-in-time ordering), extended equipment life (optimal maintenance timing), and improved safety. Implementation costs include sensors, software, training, and integration. Typical ROI for predictive maintenance in semiconductor is 3-10x within 1-2 years.",
+      "id": "m5.2_q011",
+      "options": [
+        "Only maintenance labor savings",
+        "Avoided downtime costs, reduced spare parts inventory, extended equipment life",
+        "Only implementation costs",
+        "Only sensor hardware costs"
+      ],
+      "points": 2,
+      "question": "When calculating ROI for a predictive maintenance system, which costs should be considered in the benefit calculation?",
+      "topic": "roi_calculation",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 3,
+      "difficulty": "medium",
+      "explanation": "Both increasing thresholds and adding confirmation logic reduce false alarms. Confirmation logic (e.g., alert only if threshold exceeded 3 times in 5 readings) filters transient spikes while maintaining sensitivity to persistent degradation. Combining approaches - slightly raise threshold AND require confirmation - often works best.",
+      "id": "m5.2_q012",
+      "options": [
+        "Disable all alerts",
+        "Increase alert threshold to reduce sensitivity",
+        "Keep threshold but add confirmation logic (multiple consecutive violations)",
+        "Both B and C are valid approaches"
+      ],
+      "points": 2,
+      "question": "Your predictive maintenance system generates too many false alarms, causing alert fatigue. What should you do?",
+      "topic": "alert_optimization",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 2,
+      "difficulty": "hard",
+      "explanation": "Multivariate models (PCA, autoencoders, or ML classifiers) capture correlations between sensors and provide holistic health assessment. Single-sensor approaches miss complex failure modes involving multiple parameters. A combined health score is more actionable than monitoring dozens of individual parameters.",
+      "id": "m5.2_q013",
+      "options": [
+        "Monitor each sensor independently with separate alerts",
+        "Use only the most important sensor",
+        "Build a multivariate model combining all sensors for holistic health score",
+        "Average all sensor readings"
+      ],
+      "points": 3,
+      "question": "When monitoring a plasma etcher with temperature, pressure, gas flow, and RF power sensors, how should you combine these for health assessment?",
+      "topic": "multi_sensor_fusion",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "The primary challenge is integration - connecting to existing manufacturing execution systems (MES), SCADA, and equipment data sources. Data quality issues (missing data, sensor drift, inconsistent formats) are common. Once integrated, model training and deployment are relatively straightforward. Ensuring reliable data pipelines is critical.",
+      "id": "m5.2_q014",
+      "options": [
+        "Lack of machine learning algorithms",
+        "Integrating with existing MES/SCADA systems and ensuring data quality",
+        "Insufficient computing power",
+        "Too much historical data"
+      ],
+      "points": 2,
+      "question": "What is the primary challenge in deploying predictive maintenance in real-time manufacturing environments?",
+      "topic": "implementation",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Chamber matching ensures all chambers produce consistent results. If one chamber drifts (temperature, gas flow), wafers processed there will differ from others, affecting yield and quality. Predictive maintenance should monitor chamber-to-chamber consistency, alerting when any chamber deviates from the matched set.",
+      "id": "m5.2_q015",
+      "options": [
+        "It's not important",
+        "Drift in one chamber affects product uniformity across wafers processed in different chambers",
+        "It only matters for electrical testing",
+        "Chamber matching only affects throughput"
+      ],
+      "points": 2,
+      "question": "For a cluster tool with multiple process chambers, why is chamber matching important for predictive maintenance?",
+      "topic": "semiconductor_applications",
+      "type": "multiple_choice"
+    },
+    {
+      "code_template": "import pandas as pd\nimport numpy as np\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.preprocessing import StandardScaler\n\ndef predict_rul(sensor_data: pd.DataFrame, target_rul: np.ndarray) -> dict:\n    \"\"\"\n    Build RUL prediction model from sensor data.\n    \n    Args:\n        sensor_data: DataFrame with sensor features (temperature, vibration, etc.)\n        target_rul: Array of remaining useful life values (in cycles)\n        \n    Returns:\n        dict with keys: 'model', 'scaler', 'train_mae' (float)\n    \"\"\"\n    # Your implementation here\n    # Scale features\n    # Train linear regression\n    # Calculate training MAE\n    pass",
+      "difficulty": "medium",
+      "explanation": "RUL prediction estimates time until failure. Linear regression provides a simple baseline - more complex models (Random Forest, neural networks) often perform better. The model learns relationships between current sensor readings and remaining life.",
+      "hints": [
+        "Use StandardScaler to normalize features",
+        "Fit LinearRegression on scaled features",
+        "Calculate MAE between predictions and actual RUL",
+        "Return all components for later prediction"
+      ],
+      "id": "m5.2_q016",
+      "points": 4,
+      "question": "Implement a simple RUL prediction model using linear regression on sensor data features. Predict remaining cycles until failure based on current health indicators.",
+      "test_cases": [
+        {
+          "description": "Degrading equipment with decreasing RUL",
+          "expected_output": "dict with trained model, scaler, train_mae < 10",
+          "input": "sensor_data with 100 samples, 5 features; target_rul from 100 to 1"
+        }
+      ],
+      "topic": "rul_prediction",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import pandas as pd\nimport numpy as np\nfrom scipy import stats\n\ndef extract_degradation_features(sensor_data: pd.Series, window: int = 10) -> dict:\n    \"\"\"\n    Extract features indicating equipment degradation from sensor time series.\n    \n    Args:\n        sensor_data: Time series of sensor readings\n        window: Window size for moving statistics\n        \n    Returns:\n        dict with keys: 'trend_slope', 'rate_of_change', 'ma_deviation'\n    \"\"\"\n    # Your implementation here\n    # Calculate trend slope using linear regression\n    # Calculate recent rate of change\n    # Calculate deviation from moving average\n    pass",
+      "difficulty": "hard",
+      "explanation": "Degradation features capture equipment health deterioration. Trend slope shows long-term direction, rate of change shows acceleration/deceleration, and moving average deviation captures sudden changes. These features are powerful inputs for RUL models.",
+      "hints": [
+        "Use scipy.stats.linregress for trend slope",
+        "Rate of change = (recent_mean - older_mean) / time",
+        "Moving average deviation = current - rolling_mean",
+        "Consider using pandas rolling() methods"
+      ],
+      "id": "m5.2_q017",
+      "points": 5,
+      "question": "Implement a function to extract degradation features from time series sensor data: trend slope, rate of change, and moving average deviation.",
+      "test_cases": [
+        {
+          "description": "Steady upward trend",
+          "expected_output": "{'trend_slope': ~1.0, 'rate_of_change': positive, 'ma_deviation': small}",
+          "input": "pd.Series([100, 101, 102, 103, 104, 105, 106, 107, 108, 109])"
+        }
+      ],
+      "topic": "feature_engineering",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import pandas as pd\nimport numpy as np\nfrom lifelines import KaplanMeierFitter\nimport matplotlib.pyplot as plt\n\ndef estimate_survival_curve(lifetimes: np.ndarray, event_observed: np.ndarray) -> dict:\n    \"\"\"\n    Estimate survival curve using Kaplan-Meier method.\n    \n    Args:\n        lifetimes: Array of observed lifetimes (in days/cycles)\n        event_observed: Array of booleans (True=failed, False=censored)\n        \n    Returns:\n        dict with keys: 'median_lifetime' (float), 'survival_at_100' (float),\n                       'confidence_interval' (tuple)\n    \"\"\"\n    # Your implementation here\n    # Fit Kaplan-Meier estimator\n    # Extract median lifetime\n    # Get survival probability at specific time\n    # Get confidence intervals\n    pass",
+      "difficulty": "hard",
+      "explanation": "Kaplan-Meier estimation handles censored data (equipment still running). The survival curve shows probability of surviving past time t. Median lifetime is when survival probability drops to 50%. This is essential for maintenance planning and spare parts inventory.",
+      "hints": [
+        "Use KaplanMeierFitter from lifelines package",
+        "Fit using .fit(lifetimes, event_observed)",
+        "Access median via .median_survival_time_",
+        "Use .survival_function_at_times() for specific times",
+        "Confidence intervals available from fitted object"
+      ],
+      "id": "m5.2_q018",
+      "points": 5,
+      "question": "Implement Kaplan-Meier survival curve estimation for equipment lifetime analysis with censored data.",
+      "test_cases": [
+        {
+          "description": "Equipment lifetime with censoring",
+          "expected_output": "median_lifetime around 30, survival_at_100 < 0.5",
+          "input": "lifetimes=[10,20,30,40,50], event_observed=[1,1,1,0,0]"
+        }
+      ],
+      "topic": "survival_analysis",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import numpy as np\nfrom sklearn.metrics import confusion_matrix\n\ndef optimize_alert_threshold(predictions: np.ndarray, actual_failures: np.ndarray,\n                            false_positive_cost: float = 1000,\n                            false_negative_cost: float = 10000) -> dict:\n    \"\"\"\n    Find threshold that minimizes expected cost.\n    \n    Args:\n        predictions: Continuous health scores (higher = worse)\n        actual_failures: Binary array (1=failed, 0=healthy)\n        false_positive_cost: Cost of unnecessary maintenance\n        false_negative_cost: Cost of missed failure\n        \n    Returns:\n        dict with keys: 'optimal_threshold' (float), 'min_cost' (float),\n                       'false_positives' (int), 'false_negatives' (int)\n    \"\"\"\n    # Your implementation here\n    # Try range of thresholds\n    # Calculate FP and FN for each\n    # Calculate total cost\n    # Find threshold with minimum cost\n    pass",
+      "difficulty": "medium",
+      "explanation": "Optimal threshold depends on relative costs. If missing a failure costs 10x unnecessary maintenance, you'll accept more false alarms. This cost-based approach is superior to arbitrary thresholds or maximizing accuracy.",
+      "hints": [
+        "Try thresholds from min to max of predictions",
+        "Convert continuous predictions to binary using threshold",
+        "Use confusion_matrix or manual calculation for FP/FN",
+        "total_cost = FP_count * FP_cost + FN_count * FN_cost",
+        "Higher FN cost shifts optimal threshold lower (more sensitive)"
+      ],
+      "id": "m5.2_q019",
+      "points": 4,
+      "question": "Implement a function to find optimal alert threshold that minimizes total cost (false positive cost + false negative cost).",
+      "test_cases": [
+        {
+          "description": "Cost-based threshold optimization",
+          "expected_output": "optimal_threshold balancing FP and FN costs",
+          "input": "predictions from 0-100, actual_failures binary"
+        }
+      ],
+      "topic": "alert_threshold_optimization",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import pandas as pd\nimport numpy as np\nfrom sklearn.ensemble import IsolationForest\nfrom sklearn.preprocessing import StandardScaler\n\ndef detect_equipment_anomalies(sensor_data: pd.DataFrame, \n                               contamination: float = 0.1) -> dict:\n    \"\"\"\n    Detect anomalies in multi-sensor equipment data.\n    \n    Args:\n        sensor_data: DataFrame with multiple sensor columns\n        contamination: Expected proportion of anomalies\n        \n    Returns:\n        dict with keys: 'anomaly_scores' (array), 'is_anomaly' (array),\n                       'anomaly_indices' (list)\n    \"\"\"\n    # Your implementation here\n    # Scale features\n    # Fit Isolation Forest\n    # Get anomaly scores and predictions\n    # Return results\n    pass",
+      "difficulty": "hard",
+      "explanation": "Isolation Forest detects anomalies by measuring how easy it is to isolate observations. Anomalies are easier to isolate (fewer splits needed). This unsupervised approach works well for equipment monitoring when you don't have labeled failure data.",
+      "hints": [
+        "Scale data using StandardScaler first",
+        "Fit IsolationForest with specified contamination",
+        "Use .decision_function() for anomaly scores (lower = more abnormal)",
+        "Use .predict() for binary labels (1=normal, -1=anomaly)",
+        "Extract indices where prediction == -1"
+      ],
+      "id": "m5.2_q020",
+      "points": 5,
+      "question": "Implement an anomaly detection system using Isolation Forest to identify abnormal equipment behavior from multi-sensor data.",
+      "test_cases": [
+        {
+          "description": "Multi-sensor anomaly detection",
+          "expected_output": "anomaly_indices identifying outlier observations",
+          "input": "sensor_data with normal operation + few anomalous readings"
+        }
+      ],
+      "topic": "anomaly_detection",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import pandas as pd\nimport numpy as np\n\ndef schedule_maintenance(equipment_data: pd.DataFrame) -> pd.DataFrame:\n    \"\"\"\n    Prioritize equipment for maintenance scheduling.\n    \n    Args:\n        equipment_data: DataFrame with columns ['equipment_id', 'predicted_rul', \n                       'criticality_score']\n                       criticality_score: 1-10 (10=most critical)\n        \n    Returns:\n        DataFrame sorted by priority with added 'priority_score' column\n    \"\"\"\n    # Your implementation here\n    # Calculate priority score (combine RUL and criticality)\n    # Sort by priority (low RUL + high criticality = high priority)\n    # Return sorted dataframe\n    pass",
+      "difficulty": "medium",
+      "explanation": "Maintenance scheduling must balance urgency (low RUL) and impact (high criticality). Critical equipment with low RUL gets top priority. This systematic approach optimizes resource allocation and prevents high-impact failures.",
+      "hints": [
+        "Priority should be inversely related to RUL",
+        "Priority should be directly related to criticality",
+        "Simple approach: priority = criticality / (RUL + epsilon)",
+        "Sort by priority descending (highest priority first)",
+        "Add small epsilon to avoid division by zero"
+      ],
+      "id": "m5.2_q021",
+      "points": 4,
+      "question": "Implement a simple maintenance scheduling function that prioritizes equipment based on predicted RUL and criticality score.",
+      "test_cases": [
+        {
+          "description": "Maintenance prioritization",
+          "expected_output": "sorted DataFrame with priority_score, critical equipment with low RUL first",
+          "input": "equipment_data with varying RUL and criticality"
+        }
+      ],
+      "topic": "maintenance_scheduling",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import pandas as pd\nimport numpy as np\nfrom lifelines import CoxPHFitter\n\ndef fit_cox_model(data: pd.DataFrame, duration_col: str = 'lifetime',\n                  event_col: str = 'failed') -> dict:\n    \"\"\"\n    Fit Cox proportional hazards model for failure prediction.\n    \n    Args:\n        data: DataFrame with features, duration, and event columns\n        duration_col: Name of column with survival time\n        event_col: Name of column with event indicator (1=failed)\n        \n    Returns:\n        dict with keys: 'model', 'hazard_ratios' (Series), 'concordance' (float)\n    \"\"\"\n    # Your implementation here\n    # Fit CoxPHFitter\n    # Extract hazard ratios\n    # Get concordance index (model performance)\n    pass",
+      "difficulty": "hard",
+      "explanation": "Cox model estimates how covariates affect failure hazard. Hazard ratios show multiplicative effect on baseline hazard. For example, hazard ratio of 2.0 for temperature means each unit increase doubles failure risk. This helps identify key failure drivers.",
+      "hints": [
+        "Use CoxPHFitter from lifelines",
+        "Fit using .fit(data, duration_col, event_col)",
+        "Hazard ratios available via .hazard_ratios_",
+        "Concordance index via .concordance_index_",
+        "Hazard ratio > 1 means feature increases failure risk"
+      ],
+      "id": "m5.2_q022",
+      "points": 5,
+      "question": "Implement Cox proportional hazards model to estimate failure risk based on equipment operating conditions and sensor readings.",
+      "test_cases": [
+        {
+          "description": "Cox model for failure prediction",
+          "expected_output": "hazard_ratios showing feature effects, concordance > 0.6",
+          "input": "data with features (temp, pressure, cycles), lifetime, failed columns"
+        }
+      ],
+      "topic": "cox_proportional_hazards",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import numpy as np\nfrom scipy.fft import fft, fftfreq\nimport pandas as pd\n\ndef analyze_vibration(signal: np.ndarray, sampling_rate: float = 1000) -> dict:\n    \"\"\"\n    Extract frequency domain features from vibration signal.\n    \n    Args:\n        signal: Vibration time series\n        sampling_rate: Sampling rate in Hz\n        \n    Returns:\n        dict with keys: 'peak_frequency' (float), 'peak_amplitude' (float),\n                       'rms' (float), 'frequency_spectrum' (array)\n    \"\"\"\n    # Your implementation here\n    # Compute FFT\n    # Find peak frequency and amplitude\n    # Calculate RMS (root mean square)\n    # Return frequency domain features\n    pass",
+      "difficulty": "medium",
+      "explanation": "FFT converts time-domain vibration to frequency domain. Specific frequencies indicate different faults: bearing defects create distinct frequency peaks. Peak frequency and amplitude changes over time indicate degradation. RMS captures overall vibration energy.",
+      "hints": [
+        "Use scipy.fft.fft() for FFT computation",
+        "Use scipy.fft.fftfreq() for frequency bins",
+        "Take absolute value of FFT for amplitude spectrum",
+        "Find peak using np.argmax() on positive frequencies only",
+        "RMS = sqrt(mean(signal**2))"
+      ],
+      "id": "m5.2_q023",
+      "points": 4,
+      "question": "Implement FFT-based vibration analysis to extract frequency domain features indicating bearing wear.",
+      "test_cases": [
+        {
+          "description": "Vibration signal with 50 Hz component",
+          "expected_output": "peak_frequency ~50 Hz, spectrum array",
+          "input": "signal=np.sin(2*np.pi*50*t) with noise, sampling_rate=1000"
+        }
+      ],
+      "topic": "vibration_analysis",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import pandas as pd\nimport numpy as np\n\ndef calculate_pm_roi(implementation_cost: float,\n                     annual_downtime_reduction_hours: float,\n                     cost_per_downtime_hour: float,\n                     annual_maintenance_cost_reduction: float,\n                     years: int = 3) -> dict:\n    \"\"\"\n    Calculate ROI for predictive maintenance implementation.\n    \n    Args:\n        implementation_cost: One-time setup cost (sensors, software, training)\n        annual_downtime_reduction_hours: Hours of avoided downtime per year\n        cost_per_downtime_hour: Cost of one hour of production downtime\n        annual_maintenance_cost_reduction: Annual savings in maintenance costs\n        years: Number of years to calculate\n        \n    Returns:\n        dict with keys: 'roi' (float), 'payback_period' (float), \n                       'annual_benefit' (float), 'net_benefit' (float)\n    \"\"\"\n    # Your implementation here\n    # Calculate annual benefits\n    # Calculate total benefits over period\n    # Calculate ROI = (total_benefit - cost) / cost\n    # Calculate payback period\n    pass",
+      "difficulty": "hard",
+      "explanation": "ROI justifies predictive maintenance investment. Benefits include avoided downtime (typically largest), reduced maintenance costs, and extended equipment life. Semiconductor fabs often see 5-10x ROI due to extremely high downtime costs ($5,000-10,000/hour).",
+      "hints": [
+        "annual_benefit = downtime_savings + maintenance_savings",
+        "downtime_savings = hours * cost_per_hour",
+        "total_benefit = annual_benefit * years",
+        "roi = (total_benefit - implementation_cost) / implementation_cost",
+        "payback_period = implementation_cost / annual_benefit"
+      ],
+      "id": "m5.2_q024",
+      "points": 5,
+      "question": "Implement a function to calculate ROI for a predictive maintenance system considering implementation costs and operational benefits.",
+      "test_cases": [
+        {
+          "description": "Typical predictive maintenance ROI",
+          "expected_output": "roi > 5.0 (500%), payback_period < 1 year",
+          "input": "implementation_cost=100000, downtime_reduction=100hr, cost_per_hour=5000, maintenance_reduction=50000, years=3"
+        }
+      ],
+      "topic": "roi_calculation",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import pandas as pd\nimport numpy as np\nfrom sklearn.preprocessing import MinMaxScaler\n\ndef calculate_health_score(sensor_data: pd.DataFrame,\n                          sensor_thresholds: dict) -> pd.Series:\n    \"\"\"\n    Calculate equipment health score from multiple sensors.\n    \n    Args:\n        sensor_data: DataFrame with sensor columns\n        sensor_thresholds: Dict mapping sensor names to (min, max) thresholds\n                          Values within thresholds = healthy\n        \n    Returns:\n        Series with health scores (0=critical, 100=excellent)\n    \"\"\"\n    # Your implementation here\n    # For each sensor, calculate deviation from threshold\n    # Normalize and combine into overall health score\n    # Return scores\n    pass",
+      "difficulty": "medium",
+      "explanation": "Health scores simplify monitoring by combining multiple parameters. Operators can quickly see overall equipment condition. Detailed sensor data is available for diagnosis, but a single health score enables proactive intervention and prioritization.",
+      "hints": [
+        "For each sensor, calculate distance from healthy range",
+        "Penalize values outside thresholds more",
+        "Normalize deviations to 0-100 scale",
+        "Combine sensor scores (average or weighted average)",
+        "100 = all sensors within thresholds, 0 = all far outside"
+      ],
+      "id": "m5.2_q025",
+      "points": 4,
+      "question": "Implement a multi-sensor health scoring function that combines multiple sensor readings into a single 0-100 health score.",
+      "test_cases": [
+        {
+          "description": "Multi-sensor health scoring",
+          "expected_output": "health_scores 0-100, lower when sensors outside thresholds",
+          "input": "sensor_data with temp, pressure, flow; thresholds defining healthy ranges"
+        }
+      ],
+      "topic": "health_scoring",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Phased rollout: (1) Pilot on 1-3 critical tools with good data availability and maintenance history. (2) Run for 3-6 months, measure avoided downtime and maintenance costs vs baseline. (3) Build business case from results. (4) Expand to similar tool types, then to all critical equipment. (5) Iterate on models and thresholds based on feedback. Success requires both technical excellence and stakeholder engagement.",
+      "hints": [
+        "Think about starting small and proving value",
+        "Consider which tools are best candidates for pilot",
+        "Think about what metrics demonstrate success",
+        "Consider organizational and technical challenges"
+      ],
+      "id": "m5.2_q026",
+      "points": 5,
+      "question": "You're implementing predictive maintenance in a fab with 100+ process tools. Describe a phased rollout strategy, starting with a pilot program and scaling to full deployment.",
+      "rubric": [
+        "Suggests starting with pilot on 1-3 critical tools (2 points)",
+        "Describes success criteria for pilot (metrics, timeline) (2 points)",
+        "Explains how to select next tools for expansion (criticality, data availability) (2 points)",
+        "Discusses lessons learned and iteration process (2 points)",
+        "Addresses change management and stakeholder buy-in (2 points)"
+      ],
+      "topic": "implementation_strategy",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Minimum requirements: (1) Sensor data: at least 5-10 key parameters, collected at appropriate frequency (seconds for fast processes, minutes for slow). (2) Maintenance history: records of all maintenance activities, ideally 2+ years. (3) Failure records: at least 10-20 examples of target failure mode. (4) Operating conditions: equipment usage, process recipes. Don't wait for perfect data - start with available data, build baseline models, iterate. Data quality is more important than quantity.",
+      "hints": [
+        "Think about what models need to learn from",
+        "Consider failure examples and normal operation data",
+        "Think about temporal resolution requirements",
+        "Consider starting with limited data vs waiting for comprehensive data"
+      ],
+      "id": "m5.2_q027",
+      "points": 5,
+      "question": "What are the minimum data requirements for implementing predictive maintenance? Discuss the types of data needed, collection frequency, historical period, and quality requirements.",
+      "rubric": [
+        "Lists required data types: sensor data, maintenance logs, failure records (2 points)",
+        "Discusses collection frequency requirements (real-time vs batch) (2 points)",
+        "Specifies need for historical data covering multiple failure cycles (2 points)",
+        "Addresses data quality requirements (completeness, accuracy) (2 points)",
+        "Explains trade-offs and minimum viable approach (2 points)"
+      ],
+      "topic": "data_requirements",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Model drift occurs when equipment behavior changes due to: new failure modes, process changes, sensor drift, or preventive maintenance effectiveness. Detection: track prediction accuracy, monitor feature distributions, alert when performance drops. Mitigation: (1) Scheduled retraining (monthly/quarterly), (2) Triggered retraining when performance degrades, (3) Online learning for continuous updates. Always validate retrained models on holdout data before deployment. Consider A/B testing new models against current models.",
+      "hints": [
+        "Think about what causes models to become less accurate",
+        "Consider how to detect when retraining is needed",
+        "Think about continuous monitoring and updating",
+        "Consider the risk of deploying updated models"
+      ],
+      "id": "m5.2_q028",
+      "points": 5,
+      "question": "Predictive maintenance models can degrade over time as equipment behavior changes. Discuss strategies for detecting model drift and keeping models current in production.",
+      "rubric": [
+        "Explains concept of model drift (patterns change over time) (2 points)",
+        "Suggests monitoring prediction accuracy over time (2 points)",
+        "Discusses retraining strategies (scheduled, triggered, online learning) (3 points)",
+        "Addresses validation and testing of updated models (2 points)",
+        "Provides specific semiconductor manufacturing examples (1 point)"
+      ],
+      "topic": "model_maintenance",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Prioritization framework: Score each failure mode on (1) Impact: downtime cost, safety risk, quality impact (1-10), (2) Frequency: annual occurrences (1-10), (3) Predictability: lead time for prediction, data availability (1-10). Priority score = Impact \u00d7 Frequency \u00d7 Predictability. Focus on high-impact, frequent, predictable failures first. Example: vacuum pump failures (high impact, moderate frequency, highly predictable) score higher than random electrical issues (moderate impact, rare, unpredictable).",
+      "hints": [
+        "Think about FMEA-style risk assessment",
+        "Consider both severity and probability",
+        "Think about technical feasibility",
+        "Consider business impact and ROI"
+      ],
+      "id": "m5.2_q029",
+      "points": 5,
+      "question": "With limited resources, how would you prioritize which failure modes to address with predictive maintenance? Describe a framework for prioritization.",
+      "rubric": [
+        "Discusses criticality/impact assessment (downtime cost, safety) (2 points)",
+        "Considers failure frequency/occurrence probability (2 points)",
+        "Addresses predictability (can failures be predicted with available data?) (2 points)",
+        "Mentions cost-benefit analysis (2 points)",
+        "Provides prioritization matrix or scoring framework (2 points)"
+      ],
+      "topic": "failure_mode_prioritization",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Challenges: (1) Technical: integrating with CMMS via APIs, ensuring alert delivery, managing alert volumes. (2) Workflow: shifting from scheduled to condition-based, balancing planned schedules with predictive alerts. (3) Organizational: maintenance teams may distrust predictions initially. Solutions: (1) Start with alerts as recommendations, not mandates. (2) Provide detailed diagnostic info with alerts. (3) Track prediction accuracy, share successes. (4) Training on system use and interpretation. (5) Feedback loop: maintenance outcomes inform model improvement. Success requires both technical integration and culture change.",
+      "hints": [
+        "Think about system integration complexity",
+        "Consider how maintenance teams currently work",
+        "Think about resistance to change",
+        "Consider how to build trust in predictions"
+      ],
+      "id": "m5.2_q030",
+      "points": 5,
+      "question": "Discuss the technical and organizational challenges of integrating predictive maintenance alerts into existing maintenance workflows and CMMS (Computerized Maintenance Management Systems).",
+      "rubric": [
+        "Identifies technical integration challenges (APIs, data formats, real-time requirements) (2 points)",
+        "Discusses workflow changes for maintenance teams (2 points)",
+        "Addresses trust and adoption challenges (2 points)",
+        "Suggests training and change management approaches (2 points)",
+        "Discusses feedback loops for continuous improvement (2 points)"
+      ],
+      "topic": "integration_challenges",
+      "type": "conceptual"
+    }
+  ],
+  "sub_module": "5.2",
+  "title": "Predictive Maintenance",
+  "version": "1.0",
+  "week": 9
+}

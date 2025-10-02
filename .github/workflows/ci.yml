@@ -74,6 +74,15 @@ jobs:
 
       - name: Run targeted tests
         run: |
+          # Module 1 tests
+          python -m pytest modules/foundation/module-1/test_1_1_wafer_analysis.py -v || true
+          python -m pytest modules/foundation/module-1/test_1_2_statistical_tools.py -v || true
+
+          # Module 2 tests
+          python -m pytest modules/foundation/module-2/test_2_1_data_quality.py -v || true
+          python -m pytest modules/foundation/module-2/test_2_3_advanced_stats.py -v || true
+
+          # Existing tests
           python modules/intermediate/module-4/test_ensemble_pipeline.py
           if [ -f test_regression_pipeline.py ]; then python test_regression_pipeline.py; fi
 

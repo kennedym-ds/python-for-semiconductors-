@@ -1,0 +1,16 @@
+{
+  "id": "m9.2_q001",
+  "type": "multiple_choice",
+  "difficulty": "easy",
+  "topic": "model_serving_basics",
+  "question": "What is the primary goal of a model serving system in production?",
+  "options": [
+    "To train models faster",
+    "To provide reliable, low-latency predictions from trained models via an API or service",
+    "To store raw data",
+    "To visualize model metrics"
+  ],
+  "correct_answer": 1,
+  "explanation": "Model serving systems expose trained models as APIs/services for real-time or batch inference, ensuring reliability, scalability, and low latency for production use cases.",
+  "points": 2
+}

@@ -234,9 +234,14 @@ All CLI commands return JSON output for programmatic consumption:
 
 ```
 wafer_defect_classifier/
-├── wafer_defect_pipeline.py      # Main pipeline script
-├── test_wafer_defect_pipeline.py # Unit tests
-└── README.md                     # This file
+├── wafer_defect_pipeline.py         # Production pipeline (1000+ lines)
+├── wafer_defect_tutorial.ipynb      # Interactive learning notebook with 8 exercises
+├── wafer_defect_solution.ipynb      # Complete solutions and reference implementations
+├── evaluate_submission.py           # Automated grading script (100-point rubric)
+├── test_wafer_defect_pipeline.py    # Comprehensive test suite (37 tests, 95% coverage)
+├── README.md                        # This file
+├── BUG_FIXES_SUMMARY.md            # Bug resolution documentation
+└── TEST_ENHANCEMENT_SUMMARY.md     # Test suite details and benchmarks
 ```
 
 ## Dependencies
@@ -336,9 +341,33 @@ This pipeline logs semiconductor-specific metrics:
 - **False Positive Cost**: Impact of scrapping good wafers
 - **False Negative Cost**: Impact of shipping defective wafers
 
-## Notebook Tutorial
+## Educational Materials
 
-Explore the interactive tutorial:
+### For Learners
+
+This project includes comprehensive learning materials for hands-on practice:
+
+#### 📘 Interactive Tutorial (`wafer_defect_tutorial.ipynb`)
+
+An interactive Jupyter notebook with 8 hands-on exercises covering the complete ML workflow:
+
+**Section 1: Data Generation and Exploration**
+- Exercise 1.1 (★ beginner): Generate synthetic wafer defect data
+- Exercise 1.2 (★★ intermediate): Visualize feature distributions and identify discriminative features
+
+**Section 2: Model Training and Comparison**
+- Exercise 2.1 (★★ intermediate): Train multiple classifiers (logistic, SVM, tree, RF, GB)
+- Exercise 2.2 (★★ intermediate): Visualize model performance with ROC curves
+
+**Section 3: Manufacturing-Specific Metrics**
+- Exercise 3.1 (★★★ advanced): Calculate manufacturing costs (FP vs FN asymmetry)
+- Exercise 3.2 (★★★ advanced): Optimize decision thresholds for cost minimization
+
+**Section 4: Model Deployment**
+- Exercise 4.1 (★★ intermediate): Save production models with metadata
+- Exercise 4.2 (★★ intermediate): Test model loading and CLI usage
+
+**Expected Completion Time**: 2 hours for first-time learners
 
 ```bash
 # Run locally
@@ -349,11 +378,115 @@ docker-compose up jupyter
 # Then navigate to http://localhost:8888
 ```
 
-The tutorial covers:
-- Data generation and exploration
-- Model comparison and selection
-- Manufacturing threshold optimization
-- Production deployment examples
+#### 📗 Solution Notebook (`wafer_defect_solution.ipynb`)
+
+Complete reference implementations for all tutorial exercises:
+- **Exercise 1**: Data generation with statistical analysis
+- **Exercise 2**: 5-model comparison with comprehensive metrics
+- **Exercise 3**: Threshold optimization showing 10-30% cost savings
+- **Exercise 4**: Production deployment checklist (40+ items)
+
+Includes debugging tips, best practices, and manufacturing context throughout.
+
+#### 🔍 Automated Grading (`evaluate_submission.py`)
+
+Automated evaluation script for student submissions with 100-point scoring rubric:
+
+```bash
+# Grade a completed notebook
+python evaluate_submission.py --notebook wafer_defect_tutorial.ipynb
+
+# Save results to JSON
+python evaluate_submission.py --notebook submission.ipynb --output-json grades.json
+
+# Verbose feedback
+python evaluate_submission.py --notebook submission.ipynb --verbose
+```
+
+**Scoring Rubric** (100 points total):
+- Exercise 1 (Data Exploration): 20 points
+- Exercise 2 (Model Training): 30 points
+- Exercise 3 (Manufacturing Metrics): 25 points
+- Exercise 4 (CLI Usage): 15 points
+- Code Quality: 10 points
+
+**Features**:
+- Automated notebook execution and validation
+- Code quality checks (PEP 8, documentation)
+- Results validation against expected ranges
+- Detailed feedback generation
+- JSON output for LMS integration
+
+### For Instructors
+
+#### Common Student Mistakes
+
+1. **Stratification**: Forgetting stratification in train/test split leads to imbalanced test sets
+2. **Metrics Selection**: Using accuracy instead of ROC-AUC for imbalanced data
+3. **Threshold Default**: Setting threshold = 0.5 without cost analysis (misses cost asymmetry)
+4. **Model Metadata**: Not including timestamps/metrics when saving models (breaks versioning)
+
+#### Teaching Tips
+
+- **Exercise 1**: Emphasize 5-20% defect rate is typical in semiconductor manufacturing
+- **Exercise 2**: Discuss why RF/GB outperform linear models (non-linear patterns)
+- **Exercise 3**: Highlight FN costs 4-10x more than FP (customer returns vs inspection)
+- **Exercise 4**: Connect CLI design to MES/ERP integration requirements
+
+#### Grading Workflow
+
+```bash
+# Grade all submissions in a directory
+for notebook in submissions/*.ipynb; do
+    python evaluate_submission.py \
+        --notebook "$notebook" \
+        --output-json "grades/$(basename $notebook .ipynb)_grade.json" \
+        --verbose
+done
+
+# Generate class summary
+python -c "
+import json
+from pathlib import Path
+grades = [json.load(open(f)) for f in Path('grades').glob('*.json')]
+avg_score = sum(g['total_score'] for g in grades) / len(grades)
+print(f'Class Average: {avg_score:.1f}/100')
+"
+```
+
+#### Extensions and Projects
+
+Suggested follow-up projects for advanced learners:
+1. **Real Data Integration**: Use WM-811K dataset (`datasets/wm811k/`)
+2. **Deep Learning**: Implement CNN models (see Module 6.2)
+3. **Feature Engineering**: Add spatial statistics and pattern descriptors
+4. **Model Ensemble**: Combine predictions for improved robustness
+5. **Real-time Deployment**: Use FastAPI template (`infrastructure/api/`)
+6. **Drift Monitoring**: Track performance degradation (see Module 5.2)
+
+### Related Projects
+
+After completing this project, learners can progress to:
+- **yield_regression**: Predict wafer yield from process parameters
+- **equipment_drift_monitor**: Time series anomaly detection for equipment health
+- **die_defect_segmentation**: Computer vision for defect localization
+
+### Prerequisites
+
+**Required Knowledge**:
+- Python basics (variables, functions, loops)
+- Basic ML concepts (train/test split, overfitting, metrics)
+- Numpy and pandas fundamentals
+
+**Recommended Background**:
+- Module 1: Python for Data Analysis
+- Module 2: Statistics for Manufacturing
+- Module 3: Machine Learning Fundamentals
+
+**Semiconductor Domain**:
+- Basic understanding of wafer fabrication process
+- Quality control concepts (Type I/II errors)
+- Manufacturing cost structure (scrap vs rework vs ship)
 
 ## Production Deployment
 

@@ -1,0 +1,633 @@
+{
+  "description": "Assessment covering performance profiling, code optimization, memory management, vectorization, parallel processing, distributed computing, GPU acceleration, and cloud deployment strategies for production-scale semiconductor ML systems.",
+  "estimated_time_minutes": 90,
+  "module_id": "module-10.4",
+  "passing_score": 70,
+  "questions": [
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "Always measure before optimizing. Profiling identifies actual bottlenecks (often surprising). Premature optimization wastes time and can make code complex. Use tools like cProfile, line_profiler, memory_profiler to find hotspots, then optimize those specific areas.",
+      "id": "m10.4_q001",
+      "options": [
+        "Rewrite everything in C++",
+        "Measure and profile to identify bottlenecks",
+        "Add more servers",
+        "Use GPU for all operations"
+      ],
+      "points": 2,
+      "question": "What is the first step in optimizing ML code performance?",
+      "topic": "performance_basics",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Vectorization using NumPy eliminates Python loops, using optimized C code instead. For 1M operations, this can be 10-100x faster. Replace loops with array operations: arr[arr > 0] instead of for-loops with if statements. NumPy operations are optimized and parallelized.",
+      "id": "m10.4_q002",
+      "options": [
+        "Write comments explaining the loop",
+        "Vectorize using NumPy operations to eliminate the loop",
+        "Add print statements for debugging",
+        "Use a longer variable name"
+      ],
+      "points": 2,
+      "question": "A loop processes 1 million sensor readings one at a time. What technique would provide the biggest speedup?",
+      "topic": "vectorization",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "Batch processing is the first solution for memory issues. Load and process data in chunks (batches) rather than all at once. Use generators, data loaders, or chunked reading (pd.read_csv with chunksize). This trades memory for time. Also consider: reducing batch size, using data types with less precision (float32 vs float64), deleting unused variables.",
+      "id": "m10.4_q003",
+      "options": [
+        "Buy more RAM immediately",
+        "Process data in batches instead of loading everything at once",
+        "Use smaller variable names",
+        "Restart your computer"
+      ],
+      "points": 2,
+      "question": "Your ML training script runs out of memory. What should you try first?",
+      "topic": "memory_management",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "multiprocessing.Pool distributes work across CPU cores for embarrassingly parallel tasks (independent operations). For 8 cores, expect ~6-8x speedup. Use pool.map() for simple parallelization. Alternatives: joblib.Parallel, concurrent.futures. Note: multiprocessing has overhead, best for CPU-bound tasks with substantial work per item.",
+      "id": "m10.4_q004",
+      "options": [
+        "Process them sequentially in a for loop",
+        "Use multiprocessing.Pool to distribute across CPU cores",
+        "Use more nested loops",
+        "Process them on different days"
+      ],
+      "points": 2,
+      "question": "You need to process 1000 wafer images independently. What Python approach provides easy parallelization?",
+      "topic": "parallel_processing",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "Python's GIL (Global Interpreter Lock) allows only one thread to execute Python bytecode at a time. Threading provides concurrency (switching between tasks) but not true parallelism for CPU-bound work. Use threading for I/O-bound tasks (network, disk), multiprocessing for CPU-bound tasks. The GIL doesn't affect multiprocessing (separate processes) or C extensions (NumPy, which releases GIL).",
+      "id": "m10.4_q005",
+      "options": [
+        "Threads are slower than sequential code",
+        "The Global Interpreter Lock (GIL) prevents true parallel CPU execution",
+        "Python doesn't support threading",
+        "Threading only works on Windows"
+      ],
+      "points": 3,
+      "question": "Why doesn't Python threading provide speedup for CPU-intensive computations?",
+      "topic": "gil_and_threading",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "GPUs excel at: matrix operations (deep learning), element-wise operations on large arrays, and massively parallel tasks. They have thousands of simple cores vs CPUs' few complex cores. Use for: deep learning (PyTorch, TensorFlow), large matrix operations (cupy), image processing. Not beneficial for: sequential logic, small data, I/O-bound tasks (data transfer overhead).",
+      "id": "m10.4_q006",
+      "options": [
+        "Reading CSV files",
+        "Matrix operations and large-scale parallel computations",
+        "Printing to console",
+        "Writing if-else statements"
+      ],
+      "points": 2,
+      "question": "Which operations benefit most from GPU acceleration?",
+      "topic": "gpu_acceleration",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "Caching stores computed results for reuse. For expensive operations (model inference), caching identical inputs avoids recomputation. Trade memory for speed. Use: functools.lru_cache for functions, Redis/Memcached for distributed caching, disk caching for large results. Check cache hit rate to ensure effectiveness.",
+      "id": "m10.4_q007",
+      "options": [
+        "Making the code more complex",
+        "Storing results and reusing them instead of recomputing",
+        "Using more memory unnecessarily",
+        "Slowing down the application"
+      ],
+      "points": 2,
+      "question": "Caching model predictions that don't change can improve performance by:",
+      "topic": "caching",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "float32 uses 4 bytes vs float64's 8 bytes - 50% memory reduction. For large arrays, this is significant. Accuracy loss is usually negligible for ML (neural networks typically use float32). Also speeds up computation. Consider: int32 vs int64, uint8 for images, pandas categorical for string columns.",
+      "id": "m10.4_q008",
+      "options": [
+        "Make no difference whatsoever",
+        "Reduce memory usage by 50% with minimal accuracy loss",
+        "Increase memory usage",
+        "Prevent the code from running"
+      ],
+      "points": 2,
+      "question": "Switching from float64 to float32 in large NumPy arrays can:",
+      "topic": "data_types",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "Distributed frameworks (Dask, Ray, Spark) split work across multiple machines. Dask: scales pandas/NumPy, Ray: distributed computing framework, Spark: big data processing. They handle data partitioning, parallel execution, and result aggregation. Use when: data > single machine memory, want horizontal scaling, have cluster resources available.",
+      "id": "m10.4_q009",
+      "options": [
+        "Wait for a bigger machine to become available",
+        "Use distributed computing frameworks like Dask or Ray",
+        "Process data manually one record at a time",
+        "Give up on using that much data"
+      ],
+      "points": 3,
+      "question": "For training ML models on massive datasets that don't fit on one machine, which approach is most appropriate?",
+      "topic": "distributed_computing",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Cloud platforms (AWS, Azure, GCP) provide elastic scaling - automatically add/remove resources based on load. Key advantages: pay-as-you-go, no upfront hardware costs, global availability, managed services (reducing ops burden), quick experimentation. Disadvantages: ongoing costs, data transfer costs, vendor lock-in potential, compliance considerations.",
+      "id": "m10.4_q010",
+      "options": [
+        "Cloud is always cheaper",
+        "Elastic scaling - add resources as needed and pay for what you use",
+        "Cloud platforms are always faster",
+        "No internet connection needed"
+      ],
+      "points": 2,
+      "question": "What is a key advantage of deploying ML models on cloud platforms vs. on-premise servers?",
+      "topic": "cloud_deployment",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "cProfile measures time spent in each function. It identifies bottlenecks - the 20% of code causing 80% of slowness. After profiling, optimize the hot spots. Common bottlenecks: loops over DataFrames (vectorize), redundant computations (cache), inefficient data structures.",
+      "hints": [
+        "Use cProfile.Profile() to create profiler",
+        "Call profiler.enable() before and profiler.disable() after function",
+        "Use pstats.Stats(profiler) to analyze results",
+        "stats.sort_stats('cumulative') sorts by cumulative time",
+        "stats.print_stats() shows results (capture with StringIO for parsing)",
+        "Return top functions by time with function names and times"
+      ],
+      "id": "m10.4_q011",
+      "points": 4,
+      "question": "Use cProfile to identify performance bottlenecks in a data preprocessing function.",
+      "starter_code": "import cProfile\nimport pstats\nimport pandas as pd\nimport numpy as np\nfrom io import StringIO\n\ndef preprocess_wafer_data(df: pd.DataFrame) -> pd.DataFrame:\n    \"\"\"Preprocessing with intentional inefficiencies.\"\"\"\n    # Inefficient: row-by-row processing\n    for idx in df.index:\n        df.loc[idx, 'sensor1_squared'] = df.loc[idx, 'sensor1'] ** 2\n    \n    # Efficient operation for comparison\n    df['sensor2_normalized'] = (df['sensor2'] - df['sensor2'].mean()) / df['sensor2'].std()\n    \n    return df\n\ndef profile_function(func, *args, **kwargs) -> dict:\n    \"\"\"\n    Profile a function and return performance statistics.\n    \n    Args:\n        func: Function to profile\n        *args, **kwargs: Arguments to pass to function\n        \n    Returns:\n        dict with 'total_time', 'top_functions' (list of slowest functions)\n    \"\"\"\n    # Your implementation here\n    # Use cProfile.Profile() to profile the function\n    # Use pstats.Stats to analyze results\n    # Return dict with timing info and top bottlenecks\n    pass",
+      "test_cases": [
+        {
+          "description": "Profile preprocessing function",
+          "expected_output": "dict with total_time and list of slowest functions",
+          "input": "profile_function(preprocess_wafer_data, large_df)"
+        }
+      ],
+      "topic": "profiling",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Vectorization replaces Python loops with optimized C code. NumPy operations work on entire arrays, using SIMD instructions and avoiding Python overhead. Key techniques: use axis parameter, broadcasting, built-in functions. Speedups of 10-100x are common for large arrays.",
+      "hints": [
+        "Use axis parameter in NumPy functions: np.mean(arr, axis=1)",
+        "axis=1 operates across columns (row-wise)",
+        "Calculate all features at once with array operations",
+        "Use np.ptp() for peak-to-peak (max-min) range",
+        "Broadcasting handles comparisons across rows",
+        "Time with time.time() before and after"
+      ],
+      "id": "m10.4_q012",
+      "points": 4,
+      "question": "Optimize a slow loop-based calculation by vectorizing it with NumPy.",
+      "starter_code": "import numpy as np\nimport time\n\n# Slow version using loops\ndef calculate_features_slow(sensor_data: np.ndarray) -> np.ndarray:\n    \"\"\"\n    Calculate features for each sensor reading.\n    sensor_data: shape (n_samples, n_sensors)\n    returns: shape (n_samples, n_features)\n    \n    Features:\n    - Mean of sensors\n    - Std of sensors  \n    - Max - Min range\n    - Number of sensors above mean\n    \"\"\"\n    n_samples = sensor_data.shape[0]\n    features = np.zeros((n_samples, 4))\n    \n    for i in range(n_samples):\n        row = sensor_data[i, :]\n        features[i, 0] = np.mean(row)\n        features[i, 1] = np.std(row)\n        features[i, 2] = np.max(row) - np.min(row)\n        features[i, 3] = np.sum(row > np.mean(row))\n    \n    return features\n\n# Optimized version - implement this\ndef calculate_features_fast(sensor_data: np.ndarray) -> np.ndarray:\n    \"\"\"\n    Vectorized version of calculate_features_slow.\n    Should produce identical results but much faster.\n    \"\"\"\n    # Your implementation here\n    # Use NumPy array operations instead of loops\n    pass\n\ndef benchmark_optimization(n_samples: int = 10000, n_sensors: int = 50):\n    \"\"\"Compare performance of slow vs fast implementations.\"\"\"\n    data = np.random.randn(n_samples, n_sensors)\n    \n    # Your benchmarking code here\n    pass",
+      "test_cases": [
+        {
+          "description": "Vectorization speedup",
+          "expected_output": "Fast version is 10-100x faster, same results",
+          "input": "benchmark_optimization(10000, 50)"
+        }
+      ],
+      "topic": "vectorization",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "multiprocessing bypasses GIL by using separate processes. Pool.map() distributes work across workers. Speedup \u2248 n_cores for CPU-bound tasks. Overhead: process creation, data serialization. Best for: independent operations, substantial work per item (>0.1s). Not beneficial for: small tasks, I/O-bound work.",
+      "hints": [
+        "Use multiprocessing.Pool(n_workers) to create pool",
+        "Use pool.map() for ordered results",
+        "Default n_workers to cpu_count() if None",
+        "Use context manager: with Pool() as pool",
+        "pool.map(func, iterable) applies func to each item in parallel",
+        "Results maintain input order"
+      ],
+      "id": "m10.4_q013",
+      "points": 5,
+      "question": "Implement parallel processing to speed up inference on a large batch of wafer images.",
+      "starter_code": "import numpy as np\nfrom multiprocessing import Pool, cpu_count\nimport time\nfrom typing import List, Callable\n\ndef process_single_image(image: np.ndarray) -> dict:\n    \"\"\"\n    Simulate expensive image processing (e.g., defect detection).\n    In reality, this would run a CNN model.\n    \"\"\"\n    time.sleep(0.1)  # Simulate processing time\n    # Simplified processing\n    return {\n        'mean_intensity': np.mean(image),\n        'defect_score': np.random.rand(),\n        'has_defect': np.random.rand() > 0.8\n    }\n\ndef process_images_sequential(images: List[np.ndarray]) -> List[dict]:\n    \"\"\"Sequential processing baseline.\"\"\"\n    return [process_single_image(img) for img in images]\n\ndef process_images_parallel(\n    images: List[np.ndarray],\n    n_workers: int = None\n) -> List[dict]:\n    \"\"\"\n    Process images in parallel using multiprocessing.\n    \n    Args:\n        images: List of image arrays\n        n_workers: Number of worker processes (default: CPU count)\n        \n    Returns:\n        List of processing results in same order as input\n    \"\"\"\n    # Your implementation here\n    # Use multiprocessing.Pool\n    # Maintain order of results\n    pass\n\ndef benchmark_parallel_processing(n_images: int = 100):\n    \"\"\"Compare sequential vs parallel processing.\"\"\"\n    # Your benchmarking code here\n    pass",
+      "test_cases": [
+        {
+          "description": "Parallel processing speedup",
+          "expected_output": "Results in same order, ~4x faster with 4 workers",
+          "input": "process_images_parallel(images, n_workers=4)"
+        }
+      ],
+      "topic": "parallel_processing",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Chunked processing trades time for memory. Process data in small batches, accumulating results incrementally. Essential for: large files, limited RAM, streaming data. Use generators for lazy evaluation. Pandas read_csv(chunksize=N) yields chunks. For complex operations, consider Dask (parallel chunked processing).",
+      "hints": [
+        "Use pd.read_csv(file, chunksize=N) returns iterator of chunks",
+        "Process each chunk, accumulate results",
+        "For mean: track sum and count, divide at end",
+        "For total rows: sum chunk lengths",
+        "Generators (yield) provide memory-efficient iteration",
+        "Alternative: use dask for larger-than-memory operations"
+      ],
+      "id": "m10.4_q014",
+      "points": 4,
+      "question": "Optimize memory usage when processing a large dataset that doesn't fit in RAM.",
+      "starter_code": "import pandas as pd\nimport numpy as np\nfrom typing import Iterator\n\ndef process_large_dataset_memory_efficient(\n    filepath: str,\n    chunksize: int = 10000\n) -> dict:\n    \"\"\"\n    Process large CSV file in chunks to avoid memory issues.\n    \n    Calculate:\n    - Total number of rows\n    - Mean of a specific column\n    - Number of defects (binary column)\n    \n    Args:\n        filepath: Path to large CSV file\n        chunksize: Number of rows per chunk\n        \n    Returns:\n        dict with statistics\n    \"\"\"\n    # Your implementation here\n    # Use pd.read_csv with chunksize parameter\n    # Process chunks iteratively\n    # Accumulate statistics without loading full dataset\n    pass\n\ndef create_data_generator(filepath: str, chunksize: int) -> Iterator[pd.DataFrame]:\n    \"\"\"\n    Generator that yields data chunks.\n    \n    Args:\n        filepath: Data file path\n        chunksize: Chunk size\n        \n    Yields:\n        DataFrame chunks\n    \"\"\"\n    # Your implementation here\n    pass",
+      "test_cases": [
+        {
+          "description": "Memory-efficient processing",
+          "expected_output": "Correct statistics without loading entire file",
+          "input": "process_large_dataset_memory_efficient('large_file.csv')"
+        }
+      ],
+      "topic": "memory_optimization",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Caching stores expensive computation results. For ML inference: identical inputs \u2192 identical outputs, avoid recomputation. Disk caching persists across runs. Memory caching (functools.lru_cache) is faster but temporary. Trade-offs: memory/disk usage vs. computation time. Best for: deterministic functions, expensive operations, repeated inputs.",
+      "hints": [
+        "Use pickle.dumps() to serialize arguments",
+        "Use hashlib.md5() to hash serialized arguments",
+        "Path(cache_dir).mkdir(exist_ok=True) creates cache dir",
+        "Cache file name: f'{func.__name__}_{args_hash}.pkl'",
+        "Use pickle to save/load results",
+        "Handle exceptions (unpicklable arguments)",
+        "Consider TTL (time-to-live) for cache invalidation"
+      ],
+      "id": "m10.4_q015",
+      "points": 5,
+      "question": "Implement a caching decorator for expensive model predictions.",
+      "starter_code": "import functools\nimport hashlib\nimport pickle\nimport time\nfrom pathlib import Path\nfrom typing import Any, Callable\n\ndef cache_predictions(cache_dir: str = '.cache'):\n    \"\"\"\n    Decorator that caches function results to disk.\n    \n    Caches based on function arguments hash.\n    Reuses cached results for identical inputs.\n    \n    Args:\n        cache_dir: Directory to store cache files\n        \n    Returns:\n        Decorator function\n        \n    Example:\n        @cache_predictions(cache_dir='model_cache')\n        def predict_yield(features):\n            # Expensive model inference\n            return model.predict(features)\n    \"\"\"\n    def decorator(func: Callable) -> Callable:\n        @functools.wraps(func)\n        def wrapper(*args, **kwargs):\n            # Your implementation here\n            # 1. Compute hash of arguments\n            # 2. Check if cached result exists\n            # 3. If exists, load and return\n            # 4. If not, compute result, cache, return\n            pass\n        return wrapper\n    return decorator\n\ndef compute_args_hash(*args, **kwargs) -> str:\n    \"\"\"\n    Compute hash of function arguments.\n    \n    Args:\n        *args, **kwargs: Function arguments\n        \n    Returns:\n        Hash string\n    \"\"\"\n    # Your implementation here\n    pass\n\n# Example usage\n@cache_predictions(cache_dir='test_cache')\ndef expensive_computation(x: int) -> int:\n    time.sleep(1)  # Simulate expensive operation\n    return x ** 2",
+      "test_cases": [
+        {
+          "description": "Caching speedup",
+          "expected_output": "First call takes ~1s, second call instant (cached)",
+          "input": "expensive_computation(5) twice"
+        }
+      ],
+      "topic": "caching",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Batch processing amortizes overhead (data transfer to GPU, model initialization). Larger batches \u2192 better throughput, but: more memory, higher latency. Optimal batch size balances throughput and latency. For streaming: accumulate samples to batch size, predict, emit results. Critical for high-throughput production systems.",
+      "hints": [
+        "Use np.array_split(X, n_batches) to split array",
+        "Calculate n_batches = len(X) // batch_size + (1 if len(X) % batch_size else 0)",
+        "Use np.concatenate() to combine batch results",
+        "For streaming: accumulate in buffer, predict when full",
+        "For optimal batch size: start small, double until memory error or slowdown",
+        "Monitor with time measurements, not just memory"
+      ],
+      "id": "m10.4_q016",
+      "points": 5,
+      "question": "Implement efficient batch processing for model inference with optimal batch sizes.",
+      "starter_code": "import numpy as np\nfrom typing import List, Any\nimport time\n\nclass BatchPredictor:\n    \"\"\"\n    Efficient batch prediction with automatic batching.\n    \n    Features:\n    - Automatic batching of inputs\n    - Optimal batch size determination\n    - GPU memory management\n    \"\"\"\n    \n    def __init__(self, model, batch_size: int = 32):\n        self.model = model\n        self.batch_size = batch_size\n    \n    def predict_single(self, x: np.ndarray) -> np.ndarray:\n        \"\"\"Predict single sample (inefficient).\"\"\"\n        return self.model.predict(x.reshape(1, -1))[0]\n    \n    def predict_batch(self, X: np.ndarray) -> np.ndarray:\n        \"\"\"\n        Predict in batches for efficiency.\n        \n        Args:\n            X: Input features (n_samples, n_features)\n            \n        Returns:\n            Predictions (n_samples,)\n        \"\"\"\n        # Your implementation here\n        # Split X into batches\n        # Predict each batch\n        # Concatenate results\n        pass\n    \n    def predict_stream(self, data_stream: List[np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Predict on streaming data with automatic batching.\n        \n        Accumulates samples until batch is full, then predicts.\n        \n        Args:\n            data_stream: List of individual samples\n            \n        Returns:\n            All predictions\n        \"\"\"\n        # Your implementation here\n        pass\n    \n    @staticmethod\n    def find_optimal_batch_size(\n        model,\n        sample_input: np.ndarray,\n        max_memory_mb: float = 1000\n    ) -> int:\n        \"\"\"\n        Find optimal batch size for hardware.\n        \n        Args:\n            model: ML model\n            sample_input: Sample input for testing\n            max_memory_mb: Maximum memory to use\n            \n        Returns:\n            Optimal batch size\n        \"\"\"\n        # Your implementation here\n        # Test increasing batch sizes\n        # Monitor memory usage\n        # Find largest that fits in memory\n        pass",
+      "test_cases": [
+        {
+          "description": "Batch processing efficiency",
+          "expected_output": "Predictions for all samples, much faster than one-by-one",
+          "input": "predictor.predict_batch(large_X)"
+        }
+      ],
+      "topic": "batch_processing",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Data type optimization reduces memory significantly. float64 \u2192 float32 (50% reduction), int64 \u2192 int16 (75% reduction), strings \u2192 category (90%+ for low cardinality). This enables: larger datasets in memory, faster processing (cache efficiency), lower costs. Critical for large-scale data processing.",
+      "hints": [
+        "Use df.memory_usage(deep=True) for accurate memory",
+        "For int: check df[col].min(), df[col].max() to determine needed range",
+        "np.iinfo(np.int16).min/max gives type ranges",
+        "Convert to category if: nunique() / len() < 0.5",
+        "Use df[col].astype('category') for categorical",
+        "Use pd.to_numeric(df[col], downcast='integer') for automatic downcasting"
+      ],
+      "id": "m10.4_q017",
+      "points": 4,
+      "question": "Optimize a DataFrame's memory usage by using appropriate data types.",
+      "starter_code": "import pandas as pd\nimport numpy as np\n\ndef optimize_dataframe_memory(df: pd.DataFrame) -> pd.DataFrame:\n    \"\"\"\n    Optimize DataFrame memory usage by converting to efficient types.\n    \n    Optimizations:\n    - int64 \u2192 int32 or int16 (if range allows)\n    - float64 \u2192 float32\n    - object \u2192 category (for low-cardinality strings)\n    - bool stored efficiently\n    \n    Args:\n        df: Input DataFrame\n        \n    Returns:\n        Memory-optimized DataFrame\n    \"\"\"\n    # Your implementation here\n    pass\n\ndef analyze_memory_usage(df: pd.DataFrame) -> dict:\n    \"\"\"\n    Analyze DataFrame memory usage.\n    \n    Returns:\n        dict with total_mb, column_usage, suggestions\n    \"\"\"\n    # Your implementation here\n    pass",
+      "test_cases": [
+        {
+          "description": "Memory optimization",
+          "expected_output": "DataFrame with 30-70% memory reduction",
+          "input": "optimize_dataframe_memory(large_df)"
+        }
+      ],
+      "topic": "data_type_optimization",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Dask enables pandas-like operations on larger-than-memory datasets. It partitions data across workers, processes in parallel, and manages memory automatically. Lazy evaluation builds task graph, compute() executes. Use when: data > RAM, want parallelism with pandas API. Overhead: scheduling, data serialization. Best for: >1GB data, complex operations.",
+      "hints": [
+        "Use Client() to set up Dask cluster: client = Client(n_workers=n_workers)",
+        "Use dd.read_csv() like pd.read_csv()",
+        "Dask operations are lazy - use .compute() to execute",
+        "blocksize parameter controls partition size",
+        "Use .persist() to keep results in memory across operations",
+        "Close client: client.close()",
+        "Dask DataFrame API similar to pandas"
+      ],
+      "id": "m10.4_q018",
+      "points": 5,
+      "question": "Implement distributed data processing using Dask for a dataset that doesn't fit in memory.",
+      "starter_code": "import dask.dataframe as dd\nimport pandas as pd\nfrom dask.distributed import Client\n\ndef process_large_dataset_distributed(\n    filepath: str,\n    n_workers: int = 4\n) -> dict:\n    \"\"\"\n    Process large dataset using Dask for distributed computing.\n    \n    Operations:\n    - Read large CSV\n    - Filter rows\n    - Group by and aggregate\n    - Compute statistics\n    \n    Args:\n        filepath: Path to large CSV (or pattern like 'data/*.csv')\n        n_workers: Number of workers for Dask cluster\n        \n    Returns:\n        dict with computed statistics\n    \"\"\"\n    # Your implementation here\n    # 1. Set up Dask client\n    # 2. Read data with dask.dataframe\n    # 3. Apply transformations (lazy)\n    # 4. Compute results\n    pass\n\ndef compare_pandas_vs_dask(\n    filepath: str,\n    operation: str = 'groupby'\n) -> dict:\n    \"\"\"\n    Compare pandas vs Dask performance.\n    \n    Args:\n        filepath: Data file\n        operation: Operation to compare\n        \n    Returns:\n        dict with timing comparison\n    \"\"\"\n    # Your implementation here\n    pass",
+      "test_cases": [
+        {
+          "description": "Distributed processing",
+          "expected_output": "Successfully processes data too large for pandas",
+          "input": "process_large_dataset_distributed('huge_data.csv')"
+        }
+      ],
+      "topic": "distributed_computing",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Systematic optimization approach: (1) Profile - use cProfile, line_profiler to identify bottlenecks (data loading? preprocessing? inference?); (2) Set targets - specific latency goals, understand requirements; (3) Quick wins first - vectorize loops, add caching, batch processing, better data types; (4) Algorithm optimization - more efficient algorithms, approximate methods if acceptable; (5) Parallelization - multiprocessing for CPU-bound, GPU for matrix ops; (6) Infrastructure - faster hardware, distributed processing; (7) Measure - benchmark each change, ensure improvements; (8) Iterate - continue until target met; (9) Monitor - track performance in production. Prioritize by: impact (speedup) vs effort. 80/20 rule: 20% effort often yields 80% improvement. Stop when: target met, diminishing returns, code becoming too complex.",
+      "hints": [
+        "Think about measuring before optimizing",
+        "Consider low-hanging fruit first",
+        "Think about different types of bottlenecks",
+        "Consider when to stop optimizing"
+      ],
+      "id": "m10.4_q019",
+      "points": 5,
+      "question": "Your semiconductor ML pipeline is too slow for production requirements (needs <1 second, currently takes 10 seconds). Outline a systematic approach to optimization, including profiling, prioritization, and implementation strategies.",
+      "rubric": [
+        {
+          "criteria": "Discusses profiling to identify bottlenecks",
+          "points": 2
+        },
+        {
+          "criteria": "Mentions prioritizing optimizations by impact",
+          "points": 2
+        },
+        {
+          "criteria": "Addresses quick wins (vectorization, caching, batch processing)",
+          "points": 2
+        },
+        {
+          "criteria": "Discusses hardware acceleration if needed (GPU, parallel)",
+          "points": 2
+        },
+        {
+          "criteria": "Mentions measuring improvements and iterating",
+          "points": 2
+        }
+      ],
+      "topic": "optimization_strategy",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Vertical scaling: bigger single machine (more CPU, RAM, GPU). Pros: simpler operations, no distributed logic, lower latency. Cons: expensive at high end, single point of failure, physical limits. Horizontal scaling: multiple machines. Pros: linear cost scaling, redundancy, infinite scaling, commodity hardware. Cons: requires distributed logic, network overhead, complexity. For image defect detection: Recommend horizontal scaling because: (1) Embarrassingly parallel - images processed independently; (2) Stateless - no data sharing between images; (3) Cost-effective - use many cheap GPUs vs one expensive one; (4) Fault-tolerant - if one node fails, others continue; (5) Elastic - add capacity for peak loads; (6) 10K images/hour reasonable for distributed system. Implementation: Kubernetes with GPU nodes, message queue for work distribution, load balancer. Hybrid approach: vertical scaling per node (multi-GPU machines) + horizontal scaling (multiple nodes).",
+      "hints": [
+        "Think about the nature of image processing",
+        "Consider operational complexity",
+        "Think about cost at different scales",
+        "Consider failure scenarios"
+      ],
+      "id": "m10.4_q020",
+      "points": 5,
+      "question": "Compare vertical scaling (bigger machines) vs horizontal scaling (more machines) for ML workloads. For a wafer image defect detection system processing 10,000 images/hour, which approach would you recommend and why?",
+      "rubric": [
+        {
+          "criteria": "Explains vertical vs horizontal scaling clearly",
+          "points": 2
+        },
+        {
+          "criteria": "Discusses trade-offs (cost, complexity, limits)",
+          "points": 2
+        },
+        {
+          "criteria": "Analyzes the specific workload characteristics",
+          "points": 2
+        },
+        {
+          "criteria": "Provides clear recommendation with justification",
+          "points": 2
+        },
+        {
+          "criteria": "Mentions hybrid approaches and future scalability",
+          "points": 2
+        }
+      ],
+      "topic": "scaling_decisions",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Memory vs compute trade-off: Use memory to save compute: (1) Caching - store results, avoid recomputation (duplicate predictions); (2) Precomputation - compute features once, store for reuse; (3) Lookup tables - store function values (sin, log) vs computing; (4) Materialized views - store aggregations; (5) Larger batch sizes - better throughput, more memory. Use compute to save memory: (1) On-the-fly feature generation - compute when needed vs storing; (2) Smaller batch sizes - fit in limited memory; (3) Recomputation - recalculate vs storing intermediate results; (4) Streaming processing - process chunk-by-chunk; (5) Model compression - smaller models, more inference time. When to choose: (1) More memory for speed when: memory available, repeated computations, latency critical; (2) More compute for memory when: memory constrained, infrequent access, compute cheap. Measure: memory usage (MB), computation time (ms), throughput. Modern trend: memory is relatively cheap, optimize for compute when possible.",
+      "hints": [
+        "Think about caching as a memory for speed trade",
+        "Consider batch processing trade-offs",
+        "Think about precomputation vs on-the-fly calculation",
+        "Consider resource constraints"
+      ],
+      "id": "m10.4_q021",
+      "points": 5,
+      "question": "Discuss the memory vs compute trade-off in ML optimization. Provide examples where you would choose to use more memory to save computation time, and vice versa.",
+      "rubric": [
+        {
+          "criteria": "Explains the fundamental trade-off clearly",
+          "points": 2
+        },
+        {
+          "criteria": "Provides examples of trading memory for speed (caching, precomputation)",
+          "points": 2
+        },
+        {
+          "criteria": "Provides examples of trading compute for memory (batch size, recomputation)",
+          "points": 2
+        },
+        {
+          "criteria": "Discusses when each approach is appropriate",
+          "points": 2
+        },
+        {
+          "criteria": "Mentions measurement and decision criteria",
+          "points": 2
+        }
+      ],
+      "topic": "memory_vs_compute",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "GPU optimization challenges: (1) Data transfer bottleneck - PCIe bandwidth limited; Solution: batch processing (transfer more at once), pin memory (page-locked), async transfers, keep data on GPU; (2) Small batch sizes - GPU underutilized; Solution: increase batch size to saturate GPU, gradient accumulation for memory-constrained cases; (3) Memory constraints - large models don't fit; Solution: mixed precision (float16), gradient checkpointing, model parallelism, smaller models; (4) CPU preprocessing - GPU waits; Solution: parallelize data loading (num_workers), GPU preprocessing (NVIDIA DALI); (5) Inefficient operations - some ops slow on GPU; Solution: profile with nvprof/NSight, replace with GPU-efficient alternatives, fuse operations. Profiling: use PyTorch Profiler, TensorBoard, check GPU utilization (nvidia-smi), memory usage. Target: >80% GPU utilization. Mixed precision: use torch.cuda.amp for 2-3x speedup with minimal accuracy loss. For inference: TensorRT for optimization.",
+      "hints": [
+        "Think about data movement between CPU and GPU",
+        "Consider GPU utilization percentage",
+        "Think about precision (float32 vs float16)",
+        "Consider batch size effects"
+      ],
+      "id": "m10.4_q022",
+      "points": 5,
+      "question": "A deep learning model for wafer defect detection runs on GPU but isn't achieving expected speedup. Discuss potential bottlenecks and optimization strategies specific to GPU computing.",
+      "rubric": [
+        {
+          "criteria": "Identifies data transfer bottleneck (CPU-GPU transfers)",
+          "points": 2
+        },
+        {
+          "criteria": "Discusses batch size and GPU utilization",
+          "points": 2
+        },
+        {
+          "criteria": "Mentions mixed precision training and inference",
+          "points": 2
+        },
+        {
+          "criteria": "Addresses memory constraints and optimization",
+          "points": 2
+        },
+        {
+          "criteria": "Discusses profiling tools and measurement",
+          "points": 2
+        }
+      ],
+      "topic": "gpu_optimization",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Cloud vs On-Premise for semiconductor ML: Cloud advantages: (1) Elastic scaling - handle load spikes; (2) Lower upfront costs - no hardware purchase; (3) Managed services - reduced ops burden; (4) Quick experimentation - spin up resources fast. Cloud disadvantages: (1) Ongoing costs - can exceed on-prem long-term; (2) Data transfer costs - expensive for large datasets; (3) Latency - network round-trips; (4) Data privacy - sensitive manufacturing data off-site; (5) Compliance - regulatory constraints. On-Premise advantages: (1) Data control - sensitive data stays in-house; (2) Lower latency - local processing; (3) Predictable costs - after initial investment; (4) Compliance - easier to meet regulatory requirements; (5) No internet dependency. On-Premise disadvantages: (1) High upfront costs - hardware, infrastructure; (2) Maintenance burden - ops team needed; (3) Scaling challenges - capacity planning difficult; (4) Slower innovation - longer procurement cycles. Recommendation for fabs: Hybrid approach - (1) Real-time inference on-premise (latency, data privacy); (2) Model training in cloud (elastic compute for experiments); (3) Anonymized data for cloud training; (4) Edge deployment for critical systems. Consider: data classification (what can leave fab), latency requirements (<100ms needs on-prem), compliance (ITAR, export control), TCO analysis (3-5 year horizon).",
+      "hints": [
+        "Think about data sensitivity in semiconductor manufacturing",
+        "Consider real-time processing requirements",
+        "Think about total cost of ownership",
+        "Consider compliance requirements"
+      ],
+      "id": "m10.4_q023",
+      "points": 5,
+      "question": "For a semiconductor fab's ML system, discuss the considerations for cloud deployment vs on-premise infrastructure. Include cost, latency, security, and compliance factors.",
+      "rubric": [
+        {
+          "criteria": "Discusses cost considerations (TCO, usage patterns)",
+          "points": 2
+        },
+        {
+          "criteria": "Addresses latency and real-time requirements",
+          "points": 2
+        },
+        {
+          "criteria": "Covers security and data privacy concerns",
+          "points": 2
+        },
+        {
+          "criteria": "Mentions compliance and regulatory requirements",
+          "points": 2
+        },
+        {
+          "criteria": "Provides balanced recommendation or hybrid approach",
+          "points": 2
+        }
+      ],
+      "topic": "cloud_vs_onprem",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Optimization anti-patterns: (1) Premature optimization - optimizing before profiling, wasting effort on non-bottlenecks; Fix: measure first, optimize hot paths only; (2) Micro-optimization - optimizing tiny functions while ignoring algorithm complexity; Fix: big-O matters more than constants; (3) Over-optimization - making code complex for 1% gain; Fix: balance performance vs maintainability; (4) Local optimization - optimizing one component while system bottleneck elsewhere; Fix: holistic profiling, Amdahl's Law; (5) Ignoring user needs - optimizing wrong metric (latency when throughput matters); Fix: understand requirements; (6) No measurement - claiming improvements without benchmarking; Fix: always measure, A/B test; (7) Cache everything - using memory for rarely-accessed data; Fix: measure cache hit rate; (8) Parallel everything - parallelizing small tasks (overhead exceeds benefit); Fix: understand overhead; (9) Latest tech - using new tech without need (GPU for small models); Fix: simple solutions first; (10) Optimization debt - unmaintainable optimized code; Fix: document, test optimizations. Guidance: (1) Profile first; (2) Set clear goals; (3) Measure improvements; (4) Document optimizations; (5) Keep it simple; (6) Know when to stop.",
+      "hints": [
+        "Think about optimizing before measuring",
+        "Consider complexity vs benefit trade-offs",
+        "Think about what actually matters for users",
+        "Consider maintenance burden"
+      ],
+      "id": "m10.4_q024",
+      "points": 5,
+      "question": "Identify and explain common optimization anti-patterns in ML systems. What mistakes do teams make when trying to improve performance?",
+      "rubric": [
+        {
+          "criteria": "Discusses premature optimization",
+          "points": 2
+        },
+        {
+          "criteria": "Mentions optimizing the wrong thing (local vs global)",
+          "points": 2
+        },
+        {
+          "criteria": "Addresses over-optimization and complexity cost",
+          "points": 2
+        },
+        {
+          "criteria": "Discusses measurement and validation failures",
+          "points": 2
+        },
+        {
+          "criteria": "Provides guidance on avoiding these anti-patterns",
+          "points": 2
+        }
+      ],
+      "topic": "optimization_antipatterns",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Production latency optimization plan: (1) Analyze current bottleneck - profile inference pipeline (model loading, preprocessing, inference, postprocessing); identify slowest component; (2) Model optimization - Quantization: int8 inference (2-4x speedup), Pruning: remove unimportant weights, Distillation: smaller student model, Simpler architecture: fewer layers/parameters; (3) Serving optimization - Model serving framework: TensorFlow Serving, TorchServe, ONNX Runtime (optimized inference), Batch inference: accumulate requests, process together (better throughput), Async processing: don't block on inference; (4) Infrastructure - Hardware: GPU for large models, edge TPU for mobile, Better instance types: CPU optimization (AVX-512), Load balancing: distribute across instances; (5) Caching - Cache frequent predictions, Use Redis/Memcached, Cache intermediate features; (6) Code optimization - Vectorize preprocessing, Use efficient data formats, Minimize data copying; (7) Trade-offs - Approximate algorithms if acceptable, Simpler features (faster extraction), Early exit (confidence-based); (8) Measurement - Load testing: measure p50, p95, p99, Monitor in production, A/B test changes; (9) Fallback - Hybrid: fast model for most, slow model for uncertain, Timeouts: return default if too slow. Target: 10x improvement needed (5s \u2192 500ms), expect: 2-4x from quantization, 2-3x from serving optimization, 2x from infrastructure = 8-24x possible.",
+      "hints": [
+        "Think about model-level optimizations",
+        "Consider serving infrastructure",
+        "Think about caching opportunities",
+        "Consider accuracy vs latency trade-offs"
+      ],
+      "id": "m10.4_q025",
+      "points": 5,
+      "question": "Your ML model meets accuracy requirements in development but is too slow for production (p99 latency 5s, need <500ms). Outline a comprehensive plan to meet production latency requirements.",
+      "rubric": [
+        {
+          "criteria": "Discusses model optimization (pruning, quantization, distillation)",
+          "points": 2
+        },
+        {
+          "criteria": "Addresses infrastructure optimization (hardware, parallelization)",
+          "points": 2
+        },
+        {
+          "criteria": "Mentions inference optimization (batching, caching, serving)",
+          "points": 2
+        },
+        {
+          "criteria": "Discusses measurement and monitoring",
+          "points": 2
+        },
+        {
+          "criteria": "Addresses trade-offs and fallback strategies",
+          "points": 2
+        }
+      ],
+      "topic": "production_optimization",
+      "type": "conceptual"
+    }
+  ],
+  "sub_module": "10.4",
+  "title": "Scaling & Optimization",
+  "version": "1.0",
+  "week": 20
+}

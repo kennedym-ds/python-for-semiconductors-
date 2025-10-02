@@ -1,0 +1,591 @@
+{
+  "description": "Assessment covering edge AI deployment, TensorFlow Lite conversion, model quantization, pruning, edge hardware optimization, resource constraints, and semiconductor manufacturing edge applications including inline inspection systems and local process control.",
+  "estimated_time_minutes": 90,
+  "module_id": "module-11.1",
+  "passing_score": 70,
+  "questions": [
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "Edge AI deploys models directly on local devices (cameras, sensors, embedded systems). Benefits: (1) Ultra-low latency (no network round-trip), (2) Privacy (data stays local), (3) Reliability (works offline), (4) Bandwidth savings (no constant data transmission). Trade-offs: limited compute/memory, need model optimization. Critical for real-time manufacturing inspection.",
+      "id": "m11.1_q001",
+      "options": [
+        "Edge models are always more accurate",
+        "Reduced latency, improved privacy, and no network dependency",
+        "Edge devices have more compute power",
+        "Edge deployment is always cheaper"
+      ],
+      "points": 2,
+      "question": "What is the primary advantage of deploying ML models on edge devices rather than cloud servers?",
+      "topic": "edge_ai_basics",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "medium",
+      "explanation": "TensorFlow Lite is Google's ML framework optimized for mobile, embedded, and edge devices. It converts TensorFlow models to a compact format (.tflite) with optimizations (quantization, pruning). Supports ARM CPUs, GPUs, NPUs (Neural Processing Units). Use when: deploying on mobile/embedded devices, need small model size (<10MB), limited compute/memory, need fast inference (<100ms).",
+      "id": "m11.1_q002",
+      "options": [
+        "A lightweight ML framework for mobile and edge devices",
+        "A data visualization library",
+        "A cloud-only deployment tool",
+        "A training acceleration library"
+      ],
+      "points": 2,
+      "question": "What is TensorFlow Lite and when should you use it?",
+      "topic": "tensorflow_lite",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "INT8 quantization converts model weights and activations from float32 (32 bits) to int8 (8 bits). Benefits: (1) 4x smaller model size, (2) 2-4x faster inference (integer ops faster than float), (3) Lower memory/energy consumption. Accuracy loss typically <1-2% with proper calibration. Two types: post-training quantization (easy, no retraining) and quantization-aware training (better accuracy, requires retraining). Essential for edge deployment.",
+      "id": "m11.1_q003",
+      "options": [
+        "Increases model accuracy",
+        "Converts 32-bit floating point weights to 8-bit integers, reducing size ~4x with minimal accuracy loss",
+        "Only works during training",
+        "Makes models slower"
+      ],
+      "points": 3,
+      "question": "What does INT8 quantization do to a neural network model?",
+      "topic": "quantization",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Pruning removes redundant weights (typically near-zero values) from neural networks. Process: (1) Train model, (2) Identify weights below threshold, (3) Set them to zero (or remove), (4) Fine-tune. Creates sparse networks that are 50-90% smaller with minimal accuracy loss. Structured pruning removes entire neurons/filters (better speedup on hardware). Combine with quantization for maximum compression.",
+      "id": "m11.1_q004",
+      "options": [
+        "Removing input features",
+        "Removing weights with small magnitudes to create sparse networks",
+        "Reducing training epochs",
+        "Compressing image inputs"
+      ],
+      "points": 2,
+      "question": "What is model pruning and how does it reduce model size?",
+      "topic": "model_pruning",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "NPUs (Neural Processing Units) and edge TPUs are specialized chips for ML inference. They accelerate matrix operations (core of neural networks) with 10-100x speedup vs CPU. Examples: Google Coral Edge TPU, Intel Neural Compute Stick, NVIDIA Jetson. Optimized for quantized models (INT8/INT16). For semiconductor inspection cameras, edge TPUs enable real-time defect detection (30+ fps).",
+      "id": "m11.1_q005",
+      "options": [
+        "Standard CPU only",
+        "Neural Processing Unit (NPU) or Tensor Processing Unit (TPU)",
+        "Hard disk drive",
+        "Ethernet controller"
+      ],
+      "points": 2,
+      "question": "Which hardware component is specifically designed to accelerate neural network inference on edge devices?",
+      "topic": "edge_hardware",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Post-training quantization (float32\u2192int8) typically causes <1-2% accuracy loss with proper calibration. It's the most accuracy-preserving optimization. Other techniques: (1) Pruning 50-70% of weights: <1-3% loss, (2) Knowledge distillation: minimal loss if done well, (3) Extreme pruning (>90%): significant loss, (4) Architectural changes (reducing layers): variable impact. Always measure accuracy on validation set after optimization.",
+      "id": "m11.1_q006",
+      "options": [
+        "Removing 90% of model layers",
+        "Post-training quantization from float32 to int8",
+        "Using random weights",
+        "Training for only 1 epoch"
+      ],
+      "points": 2,
+      "question": "Which optimization technique has the LEAST impact on model accuracy?",
+      "topic": "model_optimization",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "Need to reduce both RAM (3GB\u2192<2GB = ~1.5x reduction) and compute (200\u2192<100 GFLOPS = ~2x reduction). Strategy: (1) INT8 quantization reduces RAM by 4x (3GB\u21920.75GB \u2713) and speeds compute 2-3x (200\u219267-100 GFLOPS \u2713), (2) Pruning 30-50% further reduces compute and RAM, (3) Optimize model architecture (use depthwise separable convolutions, MobileNet). Alternative: knowledge distillation to smaller model. Always validate accuracy after optimization. Increasing batch size worsens RAM usage.",
+      "id": "m11.1_q007",
+      "options": [
+        "Just use a smaller dataset",
+        "Combine quantization (reduce RAM 4x) with pruning (reduce compute 2-3x)",
+        "Give up on edge deployment",
+        "Increase batch size"
+      ],
+      "points": 3,
+      "question": "An edge device has 2GB RAM and 100 GFLOPS compute. Your model needs 3GB RAM and 200 GFLOPS. What is the BEST optimization strategy?",
+      "topic": "edge_constraints",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "Inline inspection must process wafers in real-time as they move through production (<<1 second per wafer). Edge AI advantages: (1) Ultra-low latency (<50ms) - no network round-trip, (2) Bandwidth - high-resolution images (MB each) would overwhelm network, (3) Reliability - production can't stop for network issues, (4) Data security - proprietary fab data stays local. Deploy models on inspection camera edge devices (Jetson, Coral).",
+      "id": "m11.1_q008",
+      "options": [
+        "Edge AI is cheaper than cloud",
+        "Enables real-time defect detection without network latency or data transfer bottlenecks",
+        "Edge devices have better cameras",
+        "Edge AI requires no training"
+      ],
+      "points": 2,
+      "question": "Why is edge AI particularly valuable for inline wafer inspection systems?",
+      "topic": "semiconductor_edge",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": ".h5 (HDF5) stores Keras model weights/architecture, used in training/Python. .pb (Protocol Buffer) is TensorFlow SavedModel format, includes computation graph, used for TF Serving. .tflite is TensorFlow Lite format, highly optimized for mobile/edge: quantized, pruned, fused operations, ~10x smaller. Conversion pipeline: .h5 (training) \u2192 .pb (SavedModel) \u2192 .tflite (edge deployment). Use .tflite for production edge deployment.",
+      "id": "m11.1_q009",
+      "options": [
+        "They are all the same",
+        ".h5 is Keras weights, .pb is TensorFlow SavedModel, .tflite is optimized for edge devices",
+        ".tflite is only for training",
+        ".h5 is the fastest format"
+      ],
+      "points": 2,
+      "question": "What is the difference between .h5, .pb, and .tflite model formats?",
+      "topic": "model_formats",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "The fundamental edge optimization trade-off is model efficiency (size, speed, power) vs accuracy. Techniques like quantization, pruning, distillation reduce size/latency but may decrease accuracy. Goal: find optimal point where accuracy loss is acceptable (<1-2%) for significant efficiency gain (4-10x faster, smaller). Measure on validation set. For semiconductor inspection, slight accuracy loss acceptable if still above quality requirements (e.g., 99.5% \u2192 99.3% detection rate).",
+      "id": "m11.1_q010",
+      "options": [
+        "Model size vs training time",
+        "Model size/speed vs accuracy",
+        "Accuracy vs dataset size",
+        "Latency vs dataset quality"
+      ],
+      "points": 2,
+      "question": "What is the primary trade-off when optimizing models for edge deployment?",
+      "topic": "optimization_tradeoffs",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "hard",
+      "explanation": "Power consumption from: (1) Computation (dominant), (2) Memory access, (3) Data movement. INT8 quantization reduces power: (1) Integer ops use 4x less energy than float32, (2) 4x less memory bandwidth needed, (3) Smaller cache footprint. NPU/TPU acceleration: designed for low-power INT8 operations, 10-100x more energy efficient than CPU/GPU. Combined effect: 5-10x power reduction. Other techniques: (1) Pruning (fewer ops), (2) Dynamic voltage/frequency scaling, (3) Batch inference (amortize overhead). Monitor power with profiling tools (NVIDIA nsys, Intel VTune).",
+      "id": "m11.1_q011",
+      "options": [
+        "INT8 quantization combined with NPU acceleration",
+        "Increasing model size",
+        "Using float64 precision",
+        "Running inference continuously"
+      ],
+      "points": 3,
+      "question": "An edge device has a 10W power budget. Your model uses 15W during inference. Which optimization will MOST reduce power consumption?",
+      "topic": "power_constraints",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Edge deployment pipeline: (1) Train model (TensorFlow/Keras) with validation set, (2) Convert to TFLite format (tf.lite.TFLiteConverter), (3) Apply optimizations (quantization, pruning), (4) Validate accuracy on representative dataset (must be close to original), (5) Benchmark on target hardware (latency, throughput, power), (6) Deploy to devices with versioning, (7) Monitor in production (accuracy, latency, failures). Critical: validate after each optimization step to ensure accuracy acceptable. Use representative calibration data for quantization.",
+      "id": "m11.1_q012",
+      "options": [
+        "Train \u2192 Deploy directly",
+        "Train \u2192 Convert to TFLite \u2192 Quantize \u2192 Validate accuracy \u2192 Deploy",
+        "Train \u2192 Compress \u2192 Train again \u2192 Deploy",
+        "Deploy \u2192 Train on device"
+      ],
+      "points": 2,
+      "question": "What is the recommended pipeline for deploying a TensorFlow model to edge devices?",
+      "topic": "deployment_pipeline",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "TFLite conversion pipeline: (1) Load trained model, (2) Create TFLiteConverter, (3) Enable optimizations (DEFAULT = quantization), (4) Provide representative dataset (calibration data) for quantization ranges, (5) Convert with converter.convert(), (6) Save .tflite file. INT8 quantization needs calibration data to determine scale/zero-point for each layer. Use ~100-1000 representative samples. Compression ratio typically 3-5x (float32\u2192int8). Validate accuracy after conversion.",
+      "hints": [
+        "Load model: tf.keras.models.load_model(model_path)",
+        "Converter: tf.lite.TFLiteConverter.from_keras_model(model)",
+        "Set optimizations: converter.optimizations = [tf.lite.Optimize.DEFAULT]",
+        "Representative dataset generator: yield [calibration_data[i:i+1].astype(np.float32)]",
+        "Set converter.representative_dataset for INT8 quantization",
+        "Get file sizes: Path(path).stat().st_size / (1024**2)"
+      ],
+      "id": "m11.1_q013",
+      "points": 4,
+      "question": "Convert a trained Keras model to TensorFlow Lite format with INT8 quantization for edge deployment.",
+      "starter_code": "import tensorflow as tf\nimport numpy as np\nfrom pathlib import Path\n\ndef convert_to_tflite(model_path: str, \n                      calibration_data: np.ndarray,\n                      output_path: str) -> dict:\n    \"\"\"\n    Convert Keras model to TFLite with INT8 quantization.\n    \n    Args:\n        model_path: Path to saved Keras model (.h5)\n        calibration_data: Representative dataset for quantization (n_samples, n_features)\n        output_path: Path to save .tflite file\n        \n    Returns:\n        dict with conversion statistics:\n        - 'original_size_mb': Original model size\n        - 'tflite_size_mb': TFLite model size\n        - 'compression_ratio': Size reduction factor\n        - 'tflite_path': Path to saved model\n    \"\"\"\n    # Your implementation here\n    # Load Keras model\n    # Create TFLiteConverter\n    # Set optimizations and representative dataset\n    # Convert and save\n    # Return statistics\n    pass",
+      "test_cases": [
+        {
+          "description": "TFLite conversion with INT8 quantization achieves ~4x compression",
+          "expected_output": "{'original_size_mb': 50, 'tflite_size_mb': 12.5, 'compression_ratio': 4.0, ...}",
+          "input": "model.h5 (50MB), calibration_data (1000 samples)"
+        }
+      ],
+      "topic": "tflite_conversion",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Quantization-Aware Training (QAT) simulates quantization during training by inserting fake quantization nodes. Model learns to be robust to quantization noise. Results in better accuracy than post-training quantization (PTQ). Process: (1) Take pretrained model, (2) Apply tfmot.quantization.keras.quantize_model(), (3) Fine-tune for a few epochs, (4) Convert to TFLite with quantization. QAT typical accuracy loss: <0.5%, PTQ: 1-2%. Use QAT when PTQ accuracy unacceptable. Requires retraining time.",
+      "hints": [
+        "Use tfmot.quantization.keras.quantize_model(base_model)",
+        "Compile with optimizer and loss function",
+        "Train quantized model on same data",
+        "Evaluate base_model.evaluate(X_val, y_val)",
+        "Compare accuracies to show QAT benefit",
+        "QAT inserts fake quantization nodes during training"
+      ],
+      "id": "m11.1_q014",
+      "points": 5,
+      "question": "Implement quantization-aware training to minimize accuracy loss during INT8 quantization.",
+      "starter_code": "import tensorflow as tf\nimport tensorflow_model_optimization as tfmot\nimport numpy as np\n\ndef train_with_quantization_aware(X_train: np.ndarray,\n                                   y_train: np.ndarray,\n                                   X_val: np.ndarray,\n                                   y_val: np.ndarray,\n                                   base_model: tf.keras.Model,\n                                   epochs: int = 10) -> dict:\n    \"\"\"\n    Train model with quantization-aware training.\n    \n    Args:\n        X_train, y_train: Training data\n        X_val, y_val: Validation data\n        base_model: Pretrained base model\n        epochs: Training epochs\n        \n    Returns:\n        dict with:\n        - 'qat_model': Quantization-aware trained model\n        - 'base_accuracy': Original model validation accuracy\n        - 'qat_accuracy': QAT model validation accuracy\n        - 'accuracy_delta': Accuracy difference\n    \"\"\"\n    # Your implementation here\n    # Apply quantization to base model\n    # Compile and train with fake quantization\n    # Evaluate both models\n    # Return comparison\n    pass",
+      "test_cases": [
+        {
+          "description": "QAT preserves accuracy better than post-training quantization",
+          "expected_output": "QAT model with 97.5% accuracy (minimal loss)",
+          "input": "Trained model with 98% accuracy"
+        }
+      ],
+      "topic": "quantization_aware_training",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Magnitude-based pruning removes small-magnitude weights. Process: (1) Define pruning schedule (gradually increase sparsity from 0 to target), (2) Apply pruning wrapper to model, (3) Fine-tune while pruning (UpdatePruningStep callback), (4) Strip pruning wrapper for final model. Weights below threshold set to zero creating sparse matrices. Combine with quantization for maximum compression. Structured pruning (remove entire neurons) gives better hardware speedup than unstructured (random weights).",
+      "hints": [
+        "Define pruning params: tfmot.sparsity.keras.PolynomialDecay(...)",
+        "initial_sparsity=0, final_sparsity=target_sparsity",
+        "Apply: tfmot.sparsity.keras.prune_low_magnitude(model, pruning_params)",
+        "Add callbacks: tfmot.sparsity.keras.UpdatePruningStep()",
+        "After training: strip_pruning(pruned_model)",
+        "Calculate sparsity from model weights"
+      ],
+      "id": "m11.1_q015",
+      "points": 4,
+      "question": "Implement magnitude-based pruning to create a sparse model with 50% sparsity.",
+      "starter_code": "import tensorflow as tf\nimport tensorflow_model_optimization as tfmot\nimport numpy as np\n\ndef prune_model(model: tf.keras.Model,\n                X_train: np.ndarray,\n                y_train: np.ndarray,\n                X_val: np.ndarray,\n                y_val: np.ndarray,\n                target_sparsity: float = 0.5,\n                epochs: int = 5) -> dict:\n    \"\"\"\n    Apply magnitude-based pruning to model.\n    \n    Args:\n        model: Trained model to prune\n        X_train, y_train: Training data for fine-tuning\n        X_val, y_val: Validation data\n        target_sparsity: Target percentage of weights to prune (0.0-1.0)\n        epochs: Fine-tuning epochs\n        \n    Returns:\n        dict with:\n        - 'pruned_model': Pruned and fine-tuned model\n        - 'original_accuracy': Accuracy before pruning\n        - 'pruned_accuracy': Accuracy after pruning\n        - 'actual_sparsity': Achieved sparsity\n    \"\"\"\n    # Your implementation here\n    # Define pruning schedule\n    # Apply pruning to model\n    # Fine-tune\n    # Strip pruning wrapper\n    # Return statistics\n    pass",
+      "test_cases": [
+        {
+          "description": "50% sparsity with accuracy preserved",
+          "expected_output": "Pruned model with ~500K non-zero parameters, minimal accuracy loss",
+          "input": "Model with 1M parameters, target_sparsity=0.5"
+        }
+      ],
+      "topic": "model_pruning_implementation",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Edge benchmarking essential for deployment decisions. Measure: (1) Latency - time per prediction, report p50/p95/p99 (not just mean), important for real-time requirements; (2) Throughput - predictions/second, shows max capacity; (3) Resource usage - CPU%, memory MB, critical for edge constraints; (4) Model size - disk space; (5) Power consumption (if measurable). Run on target hardware (Jetson, Coral, phone). Use warmup runs to exclude initialization. Compare: original model vs quantized vs pruned. Validate meets requirements (<50ms latency, <100MB memory).",
+      "hints": [
+        "Use time.perf_counter() for precise timing",
+        "Run warmup iterations before measurement",
+        "Calculate percentiles: np.percentile(latencies, [50, 95, 99])",
+        "psutil.cpu_percent() and psutil.Process().memory_info().rss",
+        "Generate dummy data matching input shape for throughput test",
+        "Convert latency to milliseconds: * 1000"
+      ],
+      "id": "m11.1_q016",
+      "points": 5,
+      "question": "Implement a comprehensive benchmarking system for edge model inference including latency, throughput, and resource usage.",
+      "starter_code": "import tensorflow as tf\nimport numpy as np\nimport time\nimport psutil\nfrom typing import Dict, List\n\nclass EdgeModelBenchmark:\n    \"\"\"\n    Benchmark edge model performance.\n    \"\"\"\n    \n    def __init__(self, tflite_model_path: str):\n        self.interpreter = tf.lite.Interpreter(model_path=tflite_model_path)\n        self.interpreter.allocate_tensors()\n        self.input_details = self.interpreter.get_input_details()\n        self.output_details = self.interpreter.get_output_details()\n        \n    def measure_latency(self, test_data: np.ndarray, n_runs: int = 100) -> Dict:\n        \"\"\"\n        Measure inference latency percentiles.\n        \n        Args:\n            test_data: Test samples (n_samples, ...)\n            n_runs: Number of inference runs\n            \n        Returns:\n            dict with p50, p95, p99 latency in milliseconds\n        \"\"\"\n        # Your implementation here\n        pass\n        \n    def measure_throughput(self, batch_size: int = 32, duration_sec: int = 10) -> float:\n        \"\"\"\n        Measure throughput (samples/second).\n        \n        Args:\n            batch_size: Batch size for inference\n            duration_sec: Measurement duration\n            \n        Returns:\n            Throughput in samples/second\n        \"\"\"\n        # Your implementation here\n        pass\n        \n    def measure_resource_usage(self, test_data: np.ndarray) -> Dict:\n        \"\"\"\n        Measure CPU and memory usage during inference.\n        \n        Returns:\n            dict with CPU%, memory_mb\n        \"\"\"\n        # Your implementation here\n        pass\n        \n    def generate_report(self, test_data: np.ndarray) -> Dict:\n        \"\"\"Generate comprehensive benchmark report.\"\"\"\n        # Your implementation here\n        pass",
+      "test_cases": [
+        {
+          "description": "Comprehensive edge performance metrics",
+          "expected_output": "{'latency_p50_ms': 5.2, 'latency_p95_ms': 8.1, 'throughput': 5000, ...}",
+          "input": "TFLite model with 1000 test samples"
+        }
+      ],
+      "topic": "edge_inference_benchmark",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "TFLite inference differs from TensorFlow: (1) Load interpreter once, (2) Allocate tensors, (3) For each prediction: preprocess input, set_tensor(), invoke(), get_tensor(), postprocess output. Critical: match input dtype/shape exactly (check input_details). TFLite models typically expect float32 even if quantized (conversion handled internally). For batch prediction, loop over samples (TFLite batch support limited). Cache interpreter for multiple predictions to avoid reload overhead.",
+      "hints": [
+        "Get input shape: self.input_details[0]['shape']",
+        "Reshape: features.reshape(1, -1).astype(np.float32)",
+        "Set input: self.interpreter.set_tensor(input_details[0]['index'], input_tensor)",
+        "Run: self.interpreter.invoke()",
+        "Get output: self.interpreter.get_tensor(output_details[0]['index'])",
+        "Extract class and confidence from output"
+      ],
+      "id": "m11.1_q017",
+      "points": 4,
+      "question": "Implement efficient inference with a TFLite model including preprocessing and postprocessing for defect detection.",
+      "starter_code": "import tensorflow as tf\nimport numpy as np\nfrom typing import Tuple\n\nclass TFLiteDefectDetector:\n    \"\"\"\n    TFLite-based defect detection for edge deployment.\n    \"\"\"\n    \n    def __init__(self, model_path: str):\n        self.interpreter = tf.lite.Interpreter(model_path=model_path)\n        self.interpreter.allocate_tensors()\n        self.input_details = self.interpreter.get_input_details()\n        self.output_details = self.interpreter.get_output_details()\n        \n    def preprocess(self, features: np.ndarray) -> np.ndarray:\n        \"\"\"\n        Preprocess features for model input.\n        \n        Args:\n            features: Raw features (n_features,)\n            \n        Returns:\n            Preprocessed features matching input shape/dtype\n        \"\"\"\n        # Your implementation here\n        # Reshape to match input_details[0]['shape']\n        # Convert to correct dtype (input_details[0]['dtype'])\n        pass\n        \n    def predict(self, features: np.ndarray) -> Tuple[int, float]:\n        \"\"\"\n        Make prediction with TFLite model.\n        \n        Args:\n            features: Input features\n            \n        Returns:\n            (prediction_class, confidence_score)\n        \"\"\"\n        # Your implementation here\n        # Preprocess\n        # Set input tensor\n        # Invoke interpreter\n        # Get output\n        # Postprocess\n        pass\n        \n    def batch_predict(self, features_batch: np.ndarray) -> np.ndarray:\n        \"\"\"Predict for multiple samples.\"\"\"\n        # Your implementation here\n        pass",
+      "test_cases": [
+        {
+          "description": "Single sample inference",
+          "expected_output": "(1, 0.95) - defect detected with 95% confidence",
+          "input": "features array (100 features)"
+        }
+      ],
+      "topic": "tflite_inference",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Model size analysis guides deployment decisions. Metrics: (1) File size - disk space, download time, (2) Parameter count - computational complexity, (3) Memory footprint - runtime RAM usage (weights + activations), (4) Compression ratio - effectiveness of optimization. Compare: Original (baseline) vs Quantized (4x smaller, faster) vs Pruned (2-3x smaller) vs Pruned+Quantized (10x smaller). Recommendations: Edge devices <10MB file, <100MB RAM; Mobile <5MB, <50MB; Microcontrollers <1MB, <10MB. Generate reports for stakeholders showing size-accuracy tradeoffs.",
+      "hints": [
+        "File size: Path(path).stat().st_size / (1024**2)",
+        "Load Keras: tf.keras.models.load_model()",
+        "Count params: sum([np.prod(w.shape) for w in model.get_weights()])",
+        "Non-zero params: sum([np.count_nonzero(w) for w in model.get_weights()])",
+        "Compression ratio: original_size / compressed_size",
+        "Memory footprint: (params * dtype_bytes) + activations_estimate",
+        "Quantized uses 1 byte/param (int8), float32 uses 4 bytes"
+      ],
+      "id": "m11.1_q018",
+      "points": 5,
+      "question": "Implement comprehensive model size analysis comparing original, quantized, and pruned versions.",
+      "starter_code": "import tensorflow as tf\nimport numpy as np\nfrom pathlib import Path\nimport json\n\ndef analyze_model_sizes(original_model_path: str,\n                       quantized_model_path: str,\n                       pruned_model_path: str,\n                       output_report: str) -> dict:\n    \"\"\"\n    Analyze and compare model sizes across optimization strategies.\n    \n    Args:\n        original_model_path: Path to original .h5 model\n        quantized_model_path: Path to quantized .tflite model\n        pruned_model_path: Path to pruned .h5 model\n        output_report: Path to save JSON report\n        \n    Returns:\n        dict with comprehensive size analysis:\n        - File sizes (MB)\n        - Compression ratios\n        - Parameter counts\n        - Memory footprints\n        - Recommendations\n    \"\"\"\n    # Your implementation here\n    # Load each model\n    # Get file sizes\n    # Count parameters\n    # Calculate compression ratios\n    # Estimate runtime memory\n    # Generate recommendations\n    # Save report\n    pass\n\ndef count_parameters(model) -> dict:\n    \"\"\"Count total and non-zero parameters.\"\"\"\n    # Your implementation here\n    pass\n\ndef estimate_memory_footprint(model, dtype_size: int = 4) -> float:\n    \"\"\"Estimate runtime memory usage in MB.\"\"\"\n    # Your implementation here\n    pass",
+      "test_cases": [
+        {
+          "description": "Comprehensive size analysis across optimization strategies",
+          "expected_output": "Report with compression ratios, memory estimates, deployment recommendations",
+          "input": "Original 50MB, quantized 12MB, pruned 25MB"
+        }
+      ],
+      "topic": "model_size_analysis",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Automated deployment prevents production issues. Validation gates: (1) Size check - model fits on device (<10MB typical edge), (2) Accuracy check - optimization didn't degrade too much (typically allow <2% loss), (3) Latency check - meets real-time requirements (p95 < threshold, e.g., 50ms), (4) Memory check - runtime RAM usage acceptable. If any validation fails, block deployment and alert. For semiconductor fabs, also validate: detection rate > 99%, false positive rate < 1%. Use staging environments for validation before production deployment. Version models for rollback capability.",
+      "hints": [
+        "Size check: Path(model_path).stat().st_size / (1024**2) <= max_size",
+        "Accuracy: model.evaluate(X_test, y_test)[1] >= min_accuracy",
+        "Latency: measure with TFLite interpreter, np.percentile(latencies, 95)",
+        "Store results: self.validation_results[check_name] = passed",
+        "Deploy only if all(validation_results.values())",
+        "Use shutil.copy() to deploy model file"
+      ],
+      "id": "m11.1_q019",
+      "points": 4,
+      "question": "Implement an automated edge deployment pipeline that validates model performance before deployment.",
+      "starter_code": "import tensorflow as tf\nimport numpy as np\nfrom pathlib import Path\nfrom typing import Dict, Optional\nimport json\n\nclass EdgeDeploymentPipeline:\n    \"\"\"\n    Automated pipeline for edge model deployment.\n    \"\"\"\n    \n    def __init__(self, config: dict):\n        self.config = config\n        self.validation_results = {}\n        \n    def validate_model_size(self, model_path: str) -> bool:\n        \"\"\"\n        Validate model meets size constraints.\n        \n        Returns:\n            True if within limits, False otherwise\n        \"\"\"\n        # Your implementation here\n        # Check file size against config['max_model_size_mb']\n        pass\n        \n    def validate_accuracy(self, model, X_test: np.ndarray, y_test: np.ndarray) -> bool:\n        \"\"\"\n        Validate model meets accuracy requirements.\n        \n        Returns:\n            True if accuracy acceptable, False otherwise\n        \"\"\"\n        # Your implementation here\n        # Evaluate model\n        # Check against config['min_accuracy']\n        pass\n        \n    def validate_latency(self, model_path: str, n_samples: int = 100) -> bool:\n        \"\"\"\n        Validate inference latency meets requirements.\n        \n        Returns:\n            True if latency acceptable, False otherwise\n        \"\"\"\n        # Your implementation here\n        # Load TFLite interpreter\n        # Measure p95 latency\n        # Check against config['max_latency_ms']\n        pass\n        \n    def deploy(self, model_path: str, deployment_target: str) -> dict:\n        \"\"\"\n        Deploy model if all validations pass.\n        \n        Args:\n            model_path: Path to model file\n            deployment_target: Target deployment location\n            \n        Returns:\n            Deployment report with validation results and status\n        \"\"\"\n        # Your implementation here\n        # Run all validations\n        # If all pass, copy model to target\n        # Generate deployment report\n        # Return status\n        pass",
+      "test_cases": [
+        {
+          "description": "Successful deployment after validation",
+          "expected_output": "{'status': 'deployed', 'validations': {'size': True, 'accuracy': True, 'latency': True}}",
+          "input": "TFLite model meeting all constraints"
+        }
+      ],
+      "topic": "edge_deployment_pipeline",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Hardware-specific optimization maximizes edge performance. Device profiles vary: (1) High-end edge (Jetson Xavier): 32GB RAM, 21 TOPS, supports FP16/INT8, (2) Mid-range (Jetson Nano): 4GB RAM, 472 GFLOPS, INT8, (3) Low-end (Coral): <1GB, INT8 only via EdgeTPU. Optimization strategy: (1) Check device capabilities (RAM, compute, precision support), (2) Test precision options (FP32 baseline, FP16 if supported, INT8 if supported), (3) Measure accuracy/latency/memory for each, (4) Select best meeting constraints. For NPU/TPU devices, INT8 gives 10-100x speedup. For GPU devices, FP16 gives 2-3x speedup with minimal accuracy loss. Validate optimized model fits in device RAM and meets latency requirements.",
+      "hints": [
+        "Check device_profile for supported precisions",
+        "Convert to INT8: use TFLite converter with quantization",
+        "Convert to FP16: converter.optimizations = [tf.lite.Optimize.DEFAULT]; converter.target_spec.supported_types = [tf.float16]",
+        "Benchmark each precision on device",
+        "Select based on: accuracy_loss < threshold AND latency < requirement",
+        "If has_npu and supports_int8: prefer INT8",
+        "Estimate memory: model_size + activation_memory < device_ram"
+      ],
+      "id": "m11.1_q020",
+      "points": 5,
+      "question": "Implement hardware-specific model optimization that selects best configuration for target device.",
+      "starter_code": "import tensorflow as tf\nimport numpy as np\nfrom typing import Dict, List\nimport time\n\nclass HardwareOptimizer:\n    \"\"\"\n    Optimize model for specific hardware characteristics.\n    \"\"\"\n    \n    def __init__(self, device_profile: dict):\n        \"\"\"\n        Args:\n            device_profile: {\n                'name': 'NVIDIA Jetson Nano',\n                'ram_mb': 4096,\n                'compute_gflops': 472,\n                'has_npu': False,\n                'supports_int8': True,\n                'supports_fp16': True\n            }\n        \"\"\"\n        self.device_profile = device_profile\n        \n    def determine_optimal_precision(self, model_path: str,\n                                   test_data: np.ndarray,\n                                   test_labels: np.ndarray) -> dict:\n        \"\"\"\n        Test different precisions and select optimal.\n        \n        Args:\n            model_path: Path to original model\n            test_data: Validation data\n            test_labels: Validation labels\n            \n        Returns:\n            dict with recommended precision and benchmarks\n        \"\"\"\n        # Your implementation here\n        # Test float32, int8, fp16 (if supported)\n        # Measure accuracy, latency, memory for each\n        # Select best based on constraints and performance\n        pass\n        \n    def optimize_for_device(self, model, X_val: np.ndarray, y_val: np.ndarray) -> dict:\n        \"\"\"\n        Apply device-specific optimizations.\n        \n        Returns:\n            dict with optimized model and performance metrics\n        \"\"\"\n        # Your implementation here\n        # Check device capabilities\n        # Apply appropriate optimizations\n        # Quantize if int8 supported\n        # Use GPU-specific ops if available\n        # Validate fits in device RAM\n        pass\n        \n    def generate_optimization_report(self) -> dict:\n        \"\"\"Generate report with optimization recommendations.\"\"\"\n        # Your implementation here\n        pass",
+      "test_cases": [
+        {
+          "description": "Hardware-aware optimization selection",
+          "expected_output": "Recommends INT8 quantization with NPU acceleration",
+          "input": "Device with NPU and INT8 support"
+        }
+      ],
+      "topic": "hardware_specific_optimization",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Edge vs Cloud decision framework: **Deploy Edge when**: (1) Real-time requirements - inline inspection needs <50ms response for production speed, cloud latency (100-500ms) too slow; (2) High data volume - wafer images are MB each, thousands per day, bandwidth costs prohibitive; (3) Privacy - proprietary fab processes, IP protection, can't send data off-site; (4) Reliability - production can't stop for network outages. Edge tradeoffs: Limited compute (simpler models), maintenance overhead, harder to update. **Deploy Cloud when**: (1) Complex analysis - detailed defect characterization, root cause analysis, can wait hours; (2) Batch processing - overnight quality reports, yield analysis; (3) Model training - need powerful GPUs, large datasets; (4) Centralized analytics - aggregate data across fabs. Cloud benefits: Unlimited compute, easy scaling, centralized management. **Hybrid approach (recommended)**: Edge for critical path (real-time inline detection with lightweight model), Cloud for everything else (detailed analysis with complex models, historical trends, model retraining, cross-fab analytics). Example: Edge model does binary defect detection (<50ms), flags defects, sends metadata (not images) to cloud; cloud analyzes flagged wafers overnight with complex model for detailed classification and root cause. Cost: Edge upfront (cameras, edge devices ~$1-5K each, 100s needed), Cloud operational (compute, storage, ~$10-50K/month). For 1000 wafers/day @ 10MB each = 10GB/day, cloud bandwidth alone $100s/month, edge eliminates this. Privacy critical for leading-edge fabs (competitors can't see process data).",
+      "hints": [
+        "Think about real-time vs batch processing needs",
+        "Consider image sizes and network bandwidth",
+        "Think about proprietary manufacturing data security",
+        "Consider infrastructure and scaling costs"
+      ],
+      "id": "m11.1_q021",
+      "points": 5,
+      "question": "A semiconductor fab is designing an AI-powered defect detection system. Discuss when to deploy on edge (inspection cameras) vs cloud servers. Consider latency, data volume, privacy, cost, and accuracy requirements.",
+      "rubric": [
+        {
+          "criteria": "Analyzes latency requirements for inline vs offline inspection",
+          "points": 2
+        },
+        {
+          "criteria": "Discusses data volume and bandwidth constraints",
+          "points": 2
+        },
+        {
+          "criteria": "Addresses data privacy and security concerns",
+          "points": 2
+        },
+        {
+          "criteria": "Compares cost implications of edge vs cloud infrastructure",
+          "points": 2
+        },
+        {
+          "criteria": "Proposes hybrid architecture leveraging both edge and cloud",
+          "points": 2
+        }
+      ],
+      "topic": "edge_vs_cloud_decision",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Comprehensive edge optimization strategy: **Current state**: 200MB model, 500ms latency, 99.5% accuracy. **Target**: <4GB RAM (\u2713 model fits, but check runtime), <100ms latency (need 5x speedup), >99% accuracy (allow 0.5% loss). **Optimization pipeline**: (1) **Quantization (INT8)** - First step, biggest impact: Convert float32\u2192int8, reduces size 200MB\u219250MB (4x), speeds inference 2-3x (500ms\u2192170-250ms). Accuracy impact: typically <1%, validate on representative dataset. Use post-training quantization with calibration data. (2) **Pruning (50% sparsity)** - Further compress: Remove 50% of weights with low magnitude, reduces size 50MB\u219225MB, speeds up 1.5-2x (170ms\u219285-110ms). Fine-tune after pruning to recover accuracy. Combined with quantization: 8x compression, 3-6x speedup. (3) **Architectural optimization** - If still not meeting targets: Consider knowledge distillation (train smaller student model using original as teacher), target 10-20M parameters instead of 50M. Alternative: Use efficient architecture (MobileNetV3, EfficientNet-Lite) from scratch, designed for edge. (4) **Hardware acceleration** - Deploy on edge GPU/NPU: Use TFLite GPU delegate or NPU (if available), additional 2-5x speedup for quantized models. (5) **Operation fusion** - TFLite automatically fuses ops (Conv+BatchNorm+ReLU), reduces memory bandwidth. **Expected results**: INT8 + 50% pruning + GPU acceleration = 50MB model, ~50-80ms latency, 99-99.3% accuracy \u2713 meets all constraints. **Validation approach**: (1) Benchmark each optimization on target device (not PC), (2) Measure accuracy on full validation set after each step, (3) Profile to identify remaining bottlenecks (use TFLite profiler), (4) If accuracy <99%, reduce pruning sparsity or use knowledge distillation, (5) Test on diverse defect types to ensure no bias introduced. **Fallback**: If can't meet constraints, consider: Cascaded model (fast model filters 90%, slow model for remaining 10%), or hybrid (edge for screening, cloud for detailed analysis).",
+      "hints": [
+        "Think about combining multiple optimization techniques",
+        "Consider the order of applying optimizations",
+        "Think about accuracy vs efficiency trade-offs",
+        "Consider architectural alternatives like MobileNet"
+      ],
+      "id": "m11.1_q022",
+      "points": 5,
+      "question": "You have a defect detection CNN with 50 million parameters achieving 99.5% accuracy. The model is 200MB and takes 500ms inference time. Target edge device has 4GB RAM, 100 GFLOPS compute, and requires <100ms latency with >99% accuracy. Design a comprehensive optimization strategy to meet these constraints.",
+      "rubric": [
+        {
+          "criteria": "Proposes layered optimization approach with quantization as foundation",
+          "points": 2
+        },
+        {
+          "criteria": "Discusses pruning strategy and sparsity targets",
+          "points": 2
+        },
+        {
+          "criteria": "Considers architectural changes (knowledge distillation, efficient architectures)",
+          "points": 2
+        },
+        {
+          "criteria": "Addresses accuracy validation and acceptable trade-offs",
+          "points": 2
+        },
+        {
+          "criteria": "Provides specific metrics targets and validation approach",
+          "points": 2
+        }
+      ],
+      "topic": "optimization_strategy",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Production edge deployment strategy for 500 cameras: **Model versioning**: Use semantic versioning (v1.2.3), store models in central repository (artifact store like MLflow, DVC, or S3), track metadata (accuracy, size, training date, validation metrics), maintain model registry mapping version\u2192device. Each device stores current version ID. **Staged rollout (canary deployment)**: (1) Phase 1: Deploy to 5 canary devices (1%), monitor for 24 hours, check accuracy, latency, error rate vs baseline; (2) Phase 2: If successful, deploy to 50 devices (10%), monitor for 48 hours; (3) Phase 3: Deploy to 250 devices (50%), monitor for 72 hours; (4) Phase 4: Full rollout to all 500 devices. Automatic rollback if metrics degrade >2%. **A/B testing**: Run v1 and v2 simultaneously on subset (50 devices each), compare performance metrics (accuracy, false positive rate, latency), select winner after statistical significance achieved (1-2 weeks). **Update mechanism**: (1) Push updates via management service (centralized deployment controller), (2) Devices poll for updates hourly (pull model), (3) Download new model in background, (4) Validate checksum, (5) Load new model, (6) If validation passes (test inference), switch from old to new, (7) Report status to controller. Support offline updates: load model from USB/local storage if network unavailable. **Monitoring**: Each device reports every 15 minutes: (1) Model version currently running, (2) Inference count, latency percentiles (p50, p95, p99), (3) Error rate, prediction distribution, (4) Device health (CPU, memory, temperature), (5) Model metrics (if ground truth available: accuracy, F1). Central dashboard aggregates metrics across all devices, alerts on anomalies. **Rollback procedure**: (1) Automatic: If device-level metrics fail validation (latency >threshold, error rate spike), device automatically reverts to previous version (keep last 2 versions cached), (2) Manual: Operator triggers rollback from dashboard (push v1.2.2 to all devices running v1.2.3), (3) Emergency: If widespread issues, halt rollout immediately, rollback all updated devices. **Configuration management**: Store configs in version control (Git), include: model version, device groups (production line A, B, C), threshold parameters, update schedules. Use configuration management tool (Ansible, Puppet) for 500-device fleet. **Testing before deployment**: (1) Unit tests on model (accuracy, latency on validation set), (2) Integration tests on representative device, (3) Staging environment with 10 devices mimicking production. **Backup strategy**: Each device keeps 2 model versions (current, previous), management service keeps all versions for 6 months, daily backups of model registry and configs. **Network constraints**: Fab networks may be air-gapped for security. Solution: Management service on fab network, updates via approved process (not internet), offline update capability via USB for emergency. **Validation metrics**: Track over time: Per-device accuracy (if ground truth available from manual inspection sample), Fleet-wide latency distribution, Defect detection rate trends, False positive rate (operator feedback), Device uptime and health.",
+      "hints": [
+        "Think about phased rollout to minimize risk",
+        "Consider monitoring edge device health and model performance",
+        "Think about update mechanisms for distributed devices",
+        "Consider what happens when devices are offline"
+      ],
+      "id": "m11.1_q023",
+      "points": 5,
+      "question": "Describe a production deployment strategy for edge AI models across 500 inspection cameras in a semiconductor fab. Include model versioning, updates, monitoring, and rollback procedures.",
+      "rubric": [
+        {
+          "criteria": "Discusses staged rollout strategy (canary, blue-green)",
+          "points": 2
+        },
+        {
+          "criteria": "Addresses model versioning and A/B testing approach",
+          "points": 2
+        },
+        {
+          "criteria": "Proposes comprehensive monitoring for edge devices",
+          "points": 2
+        },
+        {
+          "criteria": "Describes rollback mechanism for failed deployments",
+          "points": 2
+        },
+        {
+          "criteria": "Considers network constraints and offline update scenarios",
+          "points": 2
+        }
+      ],
+      "topic": "production_deployment",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Edge hardware comparison for semiconductor inline defect detection: **NVIDIA Jetson Nano**: GPU: 128-core Maxwell, CPU: Quad-core ARM A57, RAM: 4GB, Power: 10W, Performance: 472 GFLOPS, INT8: 236 TOPS. Pros: Strong GPU for CNNs, excellent software support (CUDA, TensorRT, TF/PyTorch), large community, good for development. Cons: Higher cost ($99-149/unit + carrier board ~$200 total), higher power, larger form factor. Best for: Complex models (CNNs), good development ecosystem, acceptable cost for <100 devices. **Google Coral EdgeTPU**: NPU: Google EdgeTPU ASIC, Performance: 4 TOPS INT8 only, Form factors: USB accelerator ($60), Dev Board ($150), M.2 module ($25). Pros: Excellent INT8 performance (4 TOPS for $25 M.2), lowest power (<2W), small form factor, low cost at scale. Cons: INT8 only (no FP32), limited operation support (must convert to EdgeTPU-compatible), smaller community, Google ecosystem dependency. Best for: Quantized models, high-volume deployment (>500 units), power-constrained, cost-sensitive. **Raspberry Pi 4 + Intel NCS2**: RPi4: CPU-only, NCS2 USB stick adds 8 TOPS INT8. Cost: RPi4 $55 + NCS2 $69 = $124. Pros: Familiar platform, good for prototyping, flexibility. Cons: Lower performance than Jetson/Coral, USB bandwidth limits, NCS2 reliability concerns, Intel discontinuing NCS line. Best for: Prototyping, not recommended for production. **Industrial Cameras with FPGAs**: Embedded FPGA in vision system. Cost: $1000-3000/camera. Pros: Integrated solution (camera + processing), ruggedized for fab environment, vendor support, deterministic latency, no external compute needed. Cons: Highest cost, complex FPGA development (Verilog/VHDL), harder to update models, limited AI frameworks. Best for: Mission-critical, high-reliability, long product lifecycle (10+ years). **Performance comparison** (for typical CNN defect detector): Jetson Nano: 30-50 fps @ 224x224, Coral EdgeTPU: 100+ fps INT8, RPi4+NCS2: 15-30 fps, FPGA: 60+ fps (optimized). **Cost analysis** (for 500-device fleet): Jetson: $200/unit \u00d7 500 = $100K, Coral M.2: $25 + carrier $100 = $62.5K, RPi4+NCS2: $124 \u00d7 500 = $62K, FPGA cameras: $2000 \u00d7 500 = $1M. Total cost includes: development (~$50-100K), maintenance, power (Jetson 10W \u00d7 500 \u00d7 24h \u00d7 365d \u00d7 $0.10/kWh = $4380/year, Coral 2W = $876/year). **Development complexity**: Easiest: Jetson (TensorFlow/PyTorch native, CUDA), Medium: Coral (TFLite conversion, INT8 quantization required), Harder: FPGA (custom HDL). **Production requirements**: Fabs need: Industrial temp range (-20 to 70\u00b0C), 24/7 operation for years, vibration resistance, rapid vendor support. Jetson/Coral: consumer-grade, may need ruggedized enclosures. FPGA cameras: designed for industrial use, proven reliability. **Recommendation for different scenarios**: (1) Prototype/MVP: Jetson Nano (best development experience, fast iteration), (2) Production <100 units: Jetson Nano or Coral Dev Board (good performance-cost balance), (3) Production 500+ units: Coral EdgeTPU M.2 modules (best cost-performance, $25 each, 4 TOPS INT8 perfect for quantized models, 10x cheaper than Jetson at scale), (4) Mission-critical: FPGA cameras (highest reliability, vendor support, but 10x cost - justify if downtime extremely expensive). **For typical fab inline inspection (500 cameras, cost-conscious, need reliability)**: Coral EdgeTPU is best choice: Low cost ($62.5K vs $100K+ alternatives), excellent INT8 performance (>100fps), low power ($900/year vs $4400), small form factor (integrate into cameras). Trade-off: Must quantize models to INT8 (typically <1% accuracy loss) and convert to EdgeTPU-compatible format (some ops unsupported). Alternative: Jetson Nano if need FP32 or complex ops, justify extra $40K for better flexibility.",
+      "hints": [
+        "Think about total cost of ownership, not just hardware cost",
+        "Consider the AI/ML ecosystem and ease of development",
+        "Think about industrial environment requirements",
+        "Consider vendor support and product lifecycle"
+      ],
+      "id": "m11.1_q024",
+      "points": 5,
+      "question": "Compare edge hardware options (NVIDIA Jetson Nano, Google Coral EdgeTPU, Raspberry Pi 4 with Intel NCS2, and industrial cameras with embedded FPGAs) for semiconductor inline defect detection. Consider performance, cost, ease of development, and production deployment.",
+      "rubric": [
+        {
+          "criteria": "Compares compute capabilities and performance for each option",
+          "points": 2
+        },
+        {
+          "criteria": "Analyzes cost implications (per-device and total fleet)",
+          "points": 2
+        },
+        {
+          "criteria": "Discusses development complexity and ecosystem support",
+          "points": 2
+        },
+        {
+          "criteria": "Addresses production requirements (reliability, support, longevity)",
+          "points": 2
+        },
+        {
+          "criteria": "Provides clear recommendation with justification",
+          "points": 2
+        }
+      ],
+      "topic": "hardware_selection",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Edge AI optimization trade-offs: **Four competing dimensions**: (1) **Accuracy** - Detection rate, false positive/negative rates. Measurement: Validate on representative dataset, track precision/recall/F1. (2) **Speed (Latency)** - Time per inference. Measurement: p50/p95/p99 latency on target hardware. (3) **Size** - Model file size, runtime memory. Measurement: File MB, RAM MB during inference. (4) **Power** - Energy per inference, total power draw. Measurement: Watts, Joules/inference. **Trade-offs**: Improving one typically worsens others: Increasing accuracy (larger model, more layers) \u2192 larger size, slower speed, more power. Reducing size (quantization, pruning) \u2192 faster speed, lower power, BUT potential accuracy loss. **Quantification**: Accuracy: 99.5% detection rate, 0.5% false positive. Speed: 50ms p95 latency. Size: 10MB file, 50MB RAM. Power: 2W inference. **Semiconductor manufacturing priorities**: **Inline inspection (real-time)**: HARD constraints: Latency <100ms (must keep up with line), Accuracy >99% (miss defects costly), Power <10W (thermal limits in cameras). SOFT preference: Smallest size possible (easier deployment). Optimization strategy: (1) Start with accuracy requirement (>99%), (2) Apply quantization (INT8) - typically <1% accuracy loss, 4x smaller, 2-3x faster, 4x less power, (3) If still not meeting latency, prune 30-50% weights - minimal accuracy loss (<1%), further speedup, (4) If needed, simplify architecture or use distillation to smaller model - validate accuracy maintained, (5) Deploy on NPU/GPU for acceleration. Decision: Accept small accuracy loss (99.5%\u219299.0%) if needed to meet latency - false negatives caught in offline analysis, production speed critical. **Offline analysis (batch processing)**: HARD constraint: Accuracy >99.5% (detailed analysis, higher bar). SOFT preferences: Speed (faster better but can wait hours), Size (not critical), Power (less critical). Optimization strategy: (1) Prioritize accuracy - use larger, more accurate model, (2) Can run on powerful edge GPU or even cloud, (3) Batch process overnight, (4) Use ensemble of models for highest accuracy. Decision: Sacrifice speed/size/power for maximum accuracy - have time for detailed analysis. **Decision framework**: (1) Identify HARD constraints from requirements (latency, accuracy thresholds), (2) Identify SOFT preferences (nice-to-haves), (3) Test optimization techniques on validation set: Quantization (INT8): Measure accuracy_loss, speedup_factor, size_reduction, power_reduction. Pruning (50% sparsity): Measure same metrics. Distillation: Measure same metrics. (4) Plot Pareto frontier: Models that are optimal for some trade-off (no strictly better alternative). Example: Model A (99.5% acc, 50ms), Model B (99.0% acc, 20ms) - both on frontier, choice depends on priorities. (5) Select model closest to meeting all HARD constraints. (6) If multiple options meet constraints, optimize SOFT preferences. **Finding optimal point**: Use multi-objective optimization: Define loss function: loss = accuracy_penalty + \u03bb1\u00d7latency_penalty + \u03bb2\u00d7size_penalty + \u03bb3\u00d7power_penalty. Weights (\u03bb) encode priorities. For inline inspection: \u03bb1 high (latency critical), \u03bb3 medium (power constrained), \u03bb2 low. For offline: \u03bb1 low (speed less critical), all others low. **Practical example** (inline inspection): Requirement: >99% accuracy, <100ms latency, <10W power. Baseline: 99.5% acc, 500ms, 20W. Option 1 - Quantization only: 99.3% acc, 170ms, 5W. Still too slow \u2717. Option 2 - Quantization + 50% pruning: 99.0% acc, 80ms, 3W. Meets all \u2713. Option 3 - Quantization + 70% pruning: 98.5% acc, 50ms, 2W. Accuracy too low \u2717. Select Option 2: 99% accuracy \u2713, 80ms latency \u2713, 3W power \u2713. Trade-off: Lost 0.5% accuracy to meet latency constraint. Validate: Test on production data, monitor in deployment, A/B test vs baseline. **Key insight**: No perfect solution - always trade-offs. Understand application priorities, measure all dimensions, find best balance. For semiconductor manufacturing, accuracy and latency typically most critical (production speed, defect costs), accept larger size/power if needed. Use different models for different use cases (inline: fast lightweight, offline: accurate heavyweight).",
+      "hints": [
+        "Think about which constraints are hard requirements vs preferences",
+        "Consider the cost of errors in manufacturing context",
+        "Think about Pareto optimization - can't optimize all dimensions simultaneously",
+        "Consider different priorities for different use cases"
+      ],
+      "id": "m11.1_q025",
+      "points": 5,
+      "question": "Discuss the trade-offs between model accuracy, inference speed, model size, and power consumption for edge AI deployment. How would you make optimization decisions for different semiconductor manufacturing scenarios (inline inspection vs offline analysis)?",
+      "rubric": [
+        {
+          "criteria": "Explains fundamental trade-offs between competing objectives",
+          "points": 2
+        },
+        {
+          "criteria": "Discusses how to quantify and measure each dimension",
+          "points": 2
+        },
+        {
+          "criteria": "Provides decision framework based on application requirements",
+          "points": 2
+        },
+        {
+          "criteria": "Differentiates optimization strategies for inline vs offline use cases",
+          "points": 2
+        },
+        {
+          "criteria": "Addresses how to find optimal operating point on Pareto frontier",
+          "points": 2
+        }
+      ],
+      "topic": "optimization_tradeoffs",
+      "type": "conceptual"
+    }
+  ],
+  "sub_module": "11.1",
+  "title": "Edge AI & Model Deployment",
+  "version": "1.0",
+  "week": 21
+}

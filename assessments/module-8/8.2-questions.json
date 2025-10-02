@@ -1,0 +1,785 @@
+{
+  "description": "Assessment covering transformer architecture, BERT/GPT fine-tuning, text classification of failure reports, named entity recognition for equipment and parameters, knowledge extraction, and NLP applications in semiconductor manufacturing documentation and root cause analysis.",
+  "estimated_time_minutes": 105,
+  "module_id": "module-8.2",
+  "passing_score": 70,
+  "questions": [
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "Transformer's key innovation is self-attention mechanism enabling parallel processing of sequences. RNN/LSTM problems: (1) Sequential processing: Must process token t before t+1 (slow, doesn't parallelize). (2) Vanishing gradients: Difficulty learning long-range dependencies. (3) Limited context: Hidden state must compress all prior information. Transformer advantages: (1) Self-attention: Each token attends to all other tokens directly. (2) Parallel processing: All tokens processed simultaneously. (3) Long-range dependencies: Direct connections between distant tokens. (4) Scalability: Efficient on GPUs. Architecture: Self-attention layers + feedforward networks, no recurrence. For semiconductor applications: Process long failure reports (1000s of tokens) efficiently. Capture dependencies between symptoms described early and root causes mentioned later. Parallel processing enables real-time analysis of manufacturing logs.",
+      "id": "m8.2_q001",
+      "options": [
+        "It uses fewer parameters",
+        "It processes sequences in parallel using self-attention mechanism instead of sequential recurrence",
+        "It is faster to train",
+        "It only works with text"
+      ],
+      "points": 2,
+      "question": "What is the key innovation of the Transformer architecture compared to RNNs for sequence modeling?",
+      "topic": "transformer_basics",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Self-attention mechanism using Q, K, V: **Computation**: Given input X (n tokens \u00d7 d dimensions), compute: Q = XW_Q (queries: what each token looks for). K = XW_K (keys: what each token offers). V = XW_V (values: actual information to aggregate). Attention(Q,K,V) = softmax(QK^T / \u221ad_k) V. **Intuition**: (1) QK^T: Compute similarity between every pair of tokens. Result: n\u00d7n attention matrix. (2) Scale by \u221ad_k: Prevent large dot products. (3) Softmax: Convert similarities to probabilities (attention weights). (4) Multiply by V: Weighted sum of values based on attention. **Example for failure reports**: Token \"defect\" (query) attends to \"edge\" (key) if similar. Retrieves information from \"edge\" value vector. Enables understanding that \"edge defect\" is relevant context. **Multi-head attention**: Multiple Q,K,V sets capture different relationships. One head: word associations. Another head: syntactic dependencies. For semiconductor NLP: Attention mechanism connects equipment names with their parameters, failure modes with symptoms, causes with effects across long documents.",
+      "id": "m8.2_q002",
+      "options": [
+        "They are three different models",
+        "Q determines what to look for, K determines what is offered, V contains actual information; attention weights computed as softmax(QK^T/\u221ad_k) applied to V",
+        "They are just regularization terms",
+        "They reduce dimensionality"
+      ],
+      "points": 3,
+      "question": "In the self-attention mechanism, what are the roles of Query (Q), Key (K), and Value (V) matrices?",
+      "topic": "self_attention_mechanism",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "Positional Encoding Necessity: Self-attention mechanism is permutation-invariant - treats input as a set, not sequence. Without positional info: (1) \"Equipment failed then restarted\" = \"Equipment restarted then failed\" (different meanings!). (2) Token order lost. (3) Cannot distinguish position-dependent patterns. **Sinusoidal Positional Encoding (original Transformer)**: PE(pos, 2i) = sin(pos / 10000^(2i/d)). PE(pos, 2i+1) = cos(pos / 10000^(2i/d)). Where pos = position, i = dimension. Properties: (1) Unique encoding for each position. (2) Relative position relationships encoded. (3) Extrapolates to longer sequences than seen in training. (4) No trainable parameters. **Learned Positional Embeddings (BERT, GPT)**: Trainable embedding matrix (max_seq_len \u00d7 d_model). Learned during training. May not generalize beyond max_seq_len. **Usage**: Add positional encodings to input embeddings: Input = Token_Embedding + Positional_Encoding. For semiconductor failure reports: Position matters: \"defect detected before tool maintenance\" vs \"defect detected after tool maintenance\" have different implications for root cause. Positional encoding ensures model understands temporal ordering in logs.",
+      "id": "m8.2_q003",
+      "options": [
+        "To reduce model size",
+        "Because self-attention is permutation-invariant (order-agnostic), positional encodings using sinusoidal functions or learned embeddings add position information",
+        "To speed up training",
+        "To handle different languages"
+      ],
+      "points": 3,
+      "question": "Why does the Transformer require positional encodings, and how are they typically implemented?",
+      "topic": "positional_encoding",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "BERT Pretraining Objectives: **1. Masked Language Modeling (MLM)**: Randomly mask 15% of input tokens. Task: Predict masked tokens using bidirectional context. Example: \"The [MASK] chamber needs cleaning\" \u2192 predict \"etch\". Enables learning bidirectional representations (looks left and right). **2. Next Sentence Prediction (NSP)**: Given two sentences A and B. Task: Predict if B follows A in original document (binary classification). Example: A: \"Wafer defects increased.\" B: \"Tool maintenance performed.\" \u2192 IsNext or NotNext. Enables learning sentence relationships. **Why These Objectives**: MLM: Forces model to understand context from both directions. NSP: Teaches model document structure and coherence. Combined: Rich representations useful for downstream tasks. **For Semiconductors**: Pretrain BERT on: (1) Failure reports corpus (MLM learns domain terminology). (2) Sequential log entries (NSP learns event sequences). Fine-tuned BERT excels at: (1) Failure mode classification. (2) Root cause extraction. (3) Similar incident retrieval. (4) Automated documentation analysis. Modern variants (RoBERTa) show NSP may not be necessary, focus on MLM with more data.",
+      "id": "m8.2_q004",
+      "options": [
+        "Classification and regression",
+        "Masked Language Modeling (MLM) and Next Sentence Prediction (NSP)",
+        "Translation and summarization",
+        "Tokenization and embedding"
+      ],
+      "points": 3,
+      "question": "What are the two main pretraining objectives used in BERT (Bidirectional Encoder Representations from Transformers)?",
+      "topic": "bert_pretraining",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "BERT vs GPT Architecture: **BERT (Bidirectional Encoder)**: Uses encoder-only transformer architecture. Bidirectional attention: Each token sees all tokens (left and right context). Trained with MLM (can see full context for masked token prediction). Use case: Understanding tasks (classification, NER, QA). Cannot generate text naturally. **GPT (Unidirectional Decoder)**: Uses decoder-only transformer architecture. Causal (unidirectional) attention: Each token only sees previous tokens (left-to-right). Trained with language modeling objective (predict next token). Use case: Generation tasks (text completion, summarization, creative writing). Can also do understanding tasks with prompting. **For Semiconductor Applications**: BERT: (1) Classify failure reports by category. (2) Extract equipment names and parameters (NER). (3) Similarity search in documentation. (4) Question answering on technical docs. GPT: (1) Generate failure report summaries. (2) Autocomplete maintenance logs. (3) Generate recommended actions from symptoms. (4) Interactive technical assistant (ChatGPT-style). Hybrid: Some applications benefit from both - use BERT for encoding/understanding, GPT for generation. Example: Extract failure details with BERT, generate corrective action report with GPT.",
+      "id": "m8.2_q005",
+      "options": [
+        "BERT uses LSTMs, GPT uses transformers",
+        "BERT uses bidirectional encoder (sees full context), GPT uses unidirectional decoder (autoregressive, left-to-right)",
+        "BERT is smaller",
+        "GPT is faster"
+      ],
+      "points": 2,
+      "question": "What is the key architectural difference between BERT and GPT?",
+      "topic": "bert_vs_gpt",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Fine-tuning Strategy for Limited Data: **Recommended Approach**: (1) **Domain-Adaptive Pretraining (optional but helpful)**: Continue MLM pretraining on unlabeled semiconductor docs before supervised fine-tuning. Adapts general BERT to domain vocabulary. (2) **Gradual Unfreezing**: Start: Freeze BERT layers, train only classification head. Then: Unfreeze top BERT layer, train. Gradually: Unfreeze more layers progressively. Prevents catastrophic forgetting. (3) **Small Learning Rate**: Use 2e-5 to 5e-5 (much smaller than training from scratch). Pretrained weights already good - small adjustments needed. (4) **Early Stopping**: Monitor validation loss closely. Stop when overfitting begins. (5) **Regularization**: Dropout in classification head. Weight decay. **Why Not Alternatives**: Train from scratch: Requires millions of samples, will overfit with 1000. Only final layer: Underutilizes pretrained representations, may not adapt enough to domain. Bag-of-words: Loses sequential information and context, much worse performance than transformer. **For Semiconductors**: With 1000 labeled failure reports: (1) Use pretrained BERT (already knows language). (2) Optionally: Continue pretraining on 100k unlabeled fab docs. (3) Fine-tune on 1000 labeled reports with gradual unfreezing. (4) Achieves ~85-90% accuracy (vs ~60% from scratch). Data efficiency of transfer learning is crucial for domains with expensive labeling.",
+      "id": "m8.2_q006",
+      "options": [
+        "Train from scratch",
+        "Fine-tune all layers with small learning rate and gradual unfreezing, use domain-adaptive pretraining if possible",
+        "Only train final classification layer",
+        "Use a simple bag-of-words model instead"
+      ],
+      "points": 3,
+      "question": "What is the most appropriate fine-tuning strategy for adapting a pretrained BERT model to semiconductor failure report classification with limited labeled data (1000 samples)?",
+      "topic": "fine_tuning_strategies",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "Attention Head Interpretation: **Visualization Method**: For input sentence and specific head: (1) Extract attention weights (n_tokens \u00d7 n_tokens matrix). (2) Visualize as heatmap showing which tokens attend to which. (3) Identify patterns each head captures. **Common Patterns Discovered**: Different heads specialize: (1) **Syntactic heads**: Attend to syntactic dependencies (subject\u2192verb, adjective\u2192noun). (2) **Positional heads**: Attend to nearby tokens. (3) **Semantic heads**: Attend to semantically related tokens. (4) **Rare token heads**: Focus on infrequent important words. **For Semiconductor Domain**: Analyzing attention on \"Etch chamber pressure dropped before wafer 025 defect detected\": Head 1: \"chamber\"\u2192\"pressure\" (equipment-parameter relationship). Head 2: \"dropped\"\u2192\"before\" (temporal relationship). Head 3: \"pressure dropped\"\u2192\"defect detected\" (causal relationship). Head 4: \"wafer 025\" (entity recognition pattern). **Debugging Use Cases**: (1) **Model Error Analysis**: If model misclassifies, check which tokens it attended to. Is it missing critical information? (2) **Domain Adaptation Validation**: Check if model learned domain relationships (tool names\u2192parameters). (3) **Bias Detection**: Identify if model over-relies on spurious correlations. (4) **Feature Engineering**: Insights for what additional features might help. **Tools**: BertViz, AllenNLP, custom visualization code. Example: Discover model ignores temporal keywords (\"before\", \"after\") \u2192 add temporal features or re-weight loss. For semiconductor applications: Understand if model correctly associates equipment with failure modes, symptoms with causes, validates domain knowledge captured.",
+      "id": "m8.2_q007",
+      "options": [
+        "Attention heads cannot be interpreted",
+        "Visualize attention weights to see which tokens attend to which; different heads learn different linguistic patterns (syntax, semantics, domain relationships)",
+        "All heads learn the same thing",
+        "Interpretation is only possible for vision models"
+      ],
+      "points": 3,
+      "question": "How can you interpret what different attention heads in a transformer learn, and why is this useful for debugging NLP models on semiconductor text?",
+      "topic": "attention_heads_interpretation",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Subword Tokenization Benefits: **Problem with Word-Level**: Semiconductor text has: (1) Rare technical terms: \"photolithography\", \"PECVD\", \"annealing\". (2) Many OOV (Out-Of-Vocabulary) words: tool models, chemical names, parameters. (3) Compounds: \"post-CMP\", \"in-situ\", \"wafer-to-wafer\". (4) Huge vocabulary required (100k+ words) \u2192 large embedding matrix. Word-level: Maps rare words to <UNK> token \u2192 loses information. **Subword Tokenization**: Breaks words into subword units based on frequency. Example BPE: \"photolithography\" \u2192 [\"photo\", \"##litho\", \"##graphy\"]. \"PECVD\" \u2192 [\"PE\", \"##CV\", \"##D\"]. **Advantages**: (1) **No OOV**: Can represent any word as subword sequence. (2) **Smaller vocabulary**: 30k-50k subwords vs 100k+ words. (3) **Morphology**: Captures word structure (\"defect\", \"defects\", \"defective\" share \"defect\"). (4) **Domain terms**: Learns domain-specific subwords (\"##CVD\", \"##etch\"). **For Semiconductors**: Technical vocabulary is vast and evolving (new tools, processes). Subword tokenization: (1) Handles rare tool models without retraining vocabulary. (2) Shares representations across related terms (\"RIE\" and \"DRIE\" share \"RIE\"). (3) Generalizes to new compound terms. (4) Efficient vocabulary size. Common algorithms: WordPiece (BERT), BPE (GPT), SentencePiece (language-agnostic). For semiconductor NLP: Using pretrained tokenizer is fine, but custom tokenization on domain corpus can improve performance 2-5%.",
+      "id": "m8.2_q008",
+      "options": [
+        "It's faster",
+        "Handles rare technical terms, OOV words, and domain-specific compounds efficiently by breaking into subword units",
+        "It uses less memory",
+        "It's easier to implement"
+      ],
+      "points": 3,
+      "question": "Why do modern transformers use subword tokenization (WordPiece, BPE) instead of word-level tokenization for semiconductor technical text?",
+      "topic": "tokenization_subword",
+      "type": "multiple_choice"
+    },
+    {
+      "code_template": "import torch\nimport torch.nn as nn\nfrom transformers import BertTokenizer, BertModel\nfrom torch.utils.data import Dataset, DataLoader\nimport numpy as np\n\nclass FailureReportDataset(Dataset):\n    def __init__(self, texts, labels, tokenizer, max_length=512):\n        \"\"\"\n        Args:\n            texts: List of failure report texts\n            labels: List of failure mode labels (integers)\n            tokenizer: BERT tokenizer\n            max_length: Maximum sequence length\n        \"\"\"\n        # Your implementation here\n        pass\n    \n    def __len__(self):\n        pass\n    \n    def __getitem__(self, idx):\n        # Your implementation here:\n        # 1. Tokenize text\n        # 2. Return input_ids, attention_mask, label\n        pass\n\nclass BERTFailureClassifier(nn.Module):\n    def __init__(self, num_classes, bert_model='bert-base-uncased', dropout=0.3):\n        super().__init__()\n        # Your implementation here:\n        # 1. Load pretrained BERT\n        # 2. Add classification head\n        pass\n    \n    def forward(self, input_ids, attention_mask):\n        # Your implementation here\n        pass\n\ndef train_epoch(model, dataloader, optimizer, device):\n    \"\"\"Train for one epoch.\"\"\"\n    # Your implementation here\n    pass\n\ndef evaluate(model, dataloader, device):\n    \"\"\"Evaluate model.\"\"\"\n    # Your implementation here\n    pass",
+      "difficulty": "medium",
+      "explanation": "BERT fine-tuning for failure report classification: (1) **Tokenization**: Convert text to BERT input format (input_ids, attention_mask). Handle long reports by truncation or chunking. (2) **Model Architecture**: Pretrained BERT encoder + dropout + linear classification layer. [CLS] token representation used for classification. (3) **Training**: Small learning rate (2e-5). Gradual unfreezing (optional). Early stopping based on validation accuracy. (4) **Evaluation**: Multi-class classification metrics (precision, recall, F1 per class). Confusion matrix to identify misclassifications. For semiconductor manufacturing: Train on historical failure reports to automatically classify new failures. Enables: (1) Faster triage. (2) Route to appropriate expert. (3) Identify similar past failures. (4) Trend analysis. Transfer learning from general BERT to semiconductor domain achieves high accuracy with limited labeled data.",
+      "hints": [
+        "Load BERT: model = BertModel.from_pretrained('bert-base-uncased')",
+        "Tokenize: tokenizer.encode_plus(text, max_length=512, padding='max_length', truncation=True)",
+        "Classification head: nn.Linear(bert.config.hidden_size, num_classes)",
+        "Use [CLS] token embedding: outputs = bert(...); cls_embedding = outputs.last_hidden_state[:, 0, :]",
+        "Freeze early layers: for param in bert.embeddings.parameters(): param.requires_grad = False",
+        "Use small learning rate: 2e-5 to 5e-5"
+      ],
+      "id": "m8.2_q009",
+      "points": 4,
+      "question": "Implement a BERT-based classifier for categorizing semiconductor failure reports into multiple failure modes.",
+      "test_cases": [
+        {
+          "description": "BERT fine-tuning for failure classification",
+          "expected_output": "Trained BERT classifier with >85% accuracy on test set",
+          "input": "Failure reports with labels: 0=tool_failure, 1=process_drift, 2=material_defect, 3=contamination"
+        }
+      ],
+      "topic": "failure_report_classification",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import torch\nimport torch.nn as nn\nfrom transformers import BertTokenizerFast, BertForTokenClassification\nfrom torch.utils.data import Dataset\nimport numpy as np\n\n# Entity types: O (outside), B-EQUIP, I-EQUIP, B-PARAM, I-PARAM, B-VALUE, I-VALUE\nENTITY_LABELS = ['O', 'B-EQUIP', 'I-EQUIP', 'B-PARAM', 'I-PARAM', 'B-VALUE', 'I-VALUE']\n\nclass NERDataset(Dataset):\n    def __init__(self, texts, labels, tokenizer, max_length=512):\n        \"\"\"\n        Args:\n            texts: List of sentences (each sentence is list of words)\n            labels: List of label sequences (aligned with words)\n            tokenizer: BERT tokenizer (fast version for word-token alignment)\n        \"\"\"\n        # Your implementation here:\n        # Handle subword tokenization - align labels with subword tokens\n        pass\n    \n    def __len__(self):\n        pass\n    \n    def __getitem__(self, idx):\n        # Your implementation here\n        pass\n\nclass BERTNER(nn.Module):\n    def __init__(self, num_labels=7):\n        super().__init__()\n        # Your implementation here:\n        # Use BertForTokenClassification\n        pass\n    \n    def forward(self, input_ids, attention_mask, labels=None):\n        # Your implementation here\n        pass\n\ndef train_ner_model(model, train_loader, val_loader, epochs=5, lr=3e-5):\n    \"\"\"\n    Train NER model.\n    \"\"\"\n    # Your implementation here\n    pass\n\ndef extract_entities(model, tokenizer, text):\n    \"\"\"\n    Extract entities from text.\n    \n    Returns:\n        List of (entity_text, entity_type, start, end)\n    \"\"\"\n    # Your implementation here:\n    # 1. Tokenize text\n    # 2. Get predictions\n    # 3. Decode entities (handle B-I tags)\n    # 4. Return structured entities\n    pass\n\ndef evaluate_ner(model, test_loader):\n    \"\"\"\n    Evaluate NER model with entity-level F1 score.\n    \"\"\"\n    # Your implementation here\n    pass",
+      "difficulty": "hard",
+      "explanation": "NER for Semiconductor Logs: **Task**: Identify and classify spans of text into categories: EQUIP (equipment names), PARAM (process parameters), VALUE (measurements). **Challenges**: (1) **Subword Tokenization**: Words split into subwords need label alignment. Solution: Assign label to first subword, -100 to others (ignored in loss). (2) **Long Sequences**: Logs often >512 tokens. Solution: Sliding window or hierarchical processing. (3) **Domain Entities**: Standard BERT hasn't seen semiconductor terms. Solution: Fine-tune on domain data. **Training**: (1) Annotate training data (tool-assisted annotation recommended). (2) Convert to BIO format (Begin, Inside, Outside). (3) Fine-tune BertForTokenClassification. (4) Evaluate with entity-level precision/recall/F1 (seqeval). **Applications**: (1) **Structured Data Extraction**: Convert unstructured logs to structured database. (2) **Search & Retrieval**: \"Find all logs mentioning chamber pressure > 10 mTorr\". (3) **Trend Analysis**: Track parameter mentions over time. (4) **Knowledge Graph Construction**: Extract entities + relationships. (5) **Anomaly Detection**: Identify unusual parameter values. For semiconductor fabs: Automate extraction of process parameters, equipment status, and measurements from free-text maintenance logs and failure reports.",
+      "hints": [
+        "Use BertForTokenClassification for sequence labeling",
+        "Handle subword alignment: First subword gets label, subsequent subwords get -100 (ignored in loss)",
+        "Use BertTokenizerFast with return_offsets_mapping=True for span extraction",
+        "Decode B-I tags: B-EQUIP starts entity, I-EQUIP continues, O or different tag ends",
+        "Entity-level F1: Use seqeval library for proper entity-level metrics",
+        "For long logs: Use sliding window with stride to handle >512 tokens"
+      ],
+      "id": "m8.2_q010",
+      "points": 5,
+      "question": "Implement a BERT-based Named Entity Recognition (NER) system to extract equipment names, process parameters, and measurements from semiconductor maintenance logs.",
+      "test_cases": [
+        {
+          "description": "NER extraction from maintenance log",
+          "expected_output": "Entities: [('Etch chamber', 'EQUIP', 0, 12), ('pressure', 'PARAM', 13, 21), ('5 mTorr', 'VALUE', 29, 36), ('temperature', 'PARAM', 38, 49), ('350C', 'VALUE', 50, 54)]",
+          "input": "Text: 'Etch chamber pressure set to 5 mTorr, temperature 350C'"
+        }
+      ],
+      "topic": "named_entity_recognition",
+      "type": "coding_exercise"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Domain-Adaptive Pretraining (DAPT): **Process**: (1) Start with general pretrained model (BERT, RoBERTa). (2) Continue MLM pretraining on large unlabeled domain corpus. (3) Then fine-tune on labeled task data. **Benefits**: (1) Adapts to domain vocabulary (semiconductor jargon, acronyms). (2) Learns domain-specific token patterns. (3) Improves downstream task performance 2-5%. (4) Doesn't require labels - uses abundant unlabeled docs. **When to Use**: (1) Large vocabulary gap between general text and domain (semiconductors: yes!). (2) Abundant unlabeled domain text available (maintenance logs, reports). (3) Multiple downstream tasks benefit from same domain model. (4) Performance gap exists with direct fine-tuning. **For Semiconductors**: Corpus: 100k+ failure reports, maintenance logs, process documentation, SOPs. Pretrain for 1-3 epochs. Then fine-tune on specific tasks (classification, NER, QA). Result: Better understanding of terms like \"PECVD\", \"CMP\", \"RTP\", tool names, parameter ranges. DAPT especially valuable when domain text differs significantly from BERT's original training data (Wikipedia, books).",
+      "id": "m8.2_q011",
+      "options": [
+        "It's not useful",
+        "Continue MLM pretraining on unlabeled domain-specific text before supervised fine-tuning to adapt vocabulary and representations",
+        "Only use labeled data",
+        "Train from scratch on domain data"
+      ],
+      "points": 3,
+      "question": "What is domain-adaptive pretraining and when should it be used for semiconductor NLP applications?",
+      "topic": "domain_adaptive_pretraining",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "Multi-Class vs Multi-Label: **Multi-Class**: Each sample belongs to exactly one class. Example: Failure type is tool_failure OR process_drift OR contamination (mutually exclusive). Output: Softmax over classes, categorical cross-entropy loss. **Multi-Label**: Each sample can belong to multiple classes simultaneously. Example: Failure has tool_failure AND contamination AND process_drift. Output: Sigmoid per class (independent probabilities), binary cross-entropy loss. **Implementation Changes**: (1) **Final Layer**: Multi-class: Linear(hidden, num_classes) \u2192 Softmax. Multi-label: Linear(hidden, num_labels) \u2192 Sigmoid. (2) **Loss Function**: Multi-class: CrossEntropyLoss. Multi-label: BCEWithLogitsLoss. (3) **Prediction**: Multi-class: argmax (single class). Multi-label: threshold (e.g., >0.5) for each label independently. (4) **Metrics**: Multi-class: accuracy, F1 macro/micro. Multi-label: Hamming loss, subset accuracy, F1 per label, macro/micro/samples F1. **For Semiconductor Failure Reports**: Realistic: Failures often have multiple root causes: (1) Tool degradation + contamination. (2) Process drift + material defect. (3) Multiple equipment issues simultaneously. Multi-label classification captures this complexity. Can also use label co-occurrence in training (some combinations common, others impossible).",
+      "id": "m8.2_q012",
+      "options": [
+        "They are the same",
+        "Multi-label allows multiple simultaneous failure modes per report; use sigmoid activation and binary cross-entropy loss instead of softmax",
+        "Multi-label is easier",
+        "Multi-label requires more data"
+      ],
+      "points": 3,
+      "question": "How does multi-label classification differ from multi-class classification for failure reports, and what modifications are needed?",
+      "topic": "multi_label_classification",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Semantic Similarity Search with Transformers: **Approach**: (1) **Encode Historical Reports**: Pass each report through BERT. Extract [CLS] token embedding (768-dim vector). Store embeddings in database/index. (2) **Encode New Report**: Same BERT model, get embedding. (3) **Compute Similarity**: Cosine similarity between new embedding and all historical embeddings. similarity = (v1 \u00b7 v2) / (||v1|| ||v2||). (4) **Retrieve Top-K**: Return k most similar historical reports. **Why Better Than Keywords**: (1) Captures semantic meaning, not just word overlap. (2) \"Equipment failure\" similar to \"tool malfunction\" (different words, same meaning). (3) Handles paraphrasing and synonyms. (4) Context-aware: \"pressure drop\" in different contexts. **Optimization**: For large databases (millions of reports): Use approximate nearest neighbor (ANN) search: FAISS, Annoy, HNSW. Index embeddings for fast retrieval. **For Semiconductors**: New failure report arrives \u2192 find similar past incidents \u2192 review resolutions \u2192 suggest corrective actions. Benefits: (1) Faster troubleshooting. (2) Learn from past solutions. (3) Consistency in response. (4) Knowledge retention. Can also cluster reports to identify common failure patterns.",
+      "id": "m8.2_q013",
+      "options": [
+        "Use word overlap only",
+        "Encode reports with BERT to get embeddings, compute cosine similarity, retrieve top-k most similar historical cases",
+        "Use keyword matching",
+        "Semantic similarity is not possible"
+      ],
+      "points": 3,
+      "question": "How can transformer embeddings be used to find similar historical failure reports for a new incident?",
+      "topic": "semantic_similarity",
+      "type": "multiple_choice"
+    },
+    {
+      "code_template": "import torch\nfrom transformers import BertForQuestionAnswering, BertTokenizerFast\nimport numpy as np\n\nclass TechnicalDocQA:\n    def __init__(self, model_name='bert-base-uncased'):\n        \"\"\"\n        QA system for semiconductor technical documentation.\n        \"\"\"\n        self.tokenizer = BertTokenizerFast.from_pretrained(model_name)\n        self.model = BertForQuestionAnswering.from_pretrained(model_name)\n    \n    def answer_question(self, question, context, top_k=3):\n        \"\"\"\n        Extract answer span from context for given question.\n        \n        Args:\n            question: Question text\n            context: Document/paragraph containing answer\n            top_k: Return top k answer candidates\n        \n        Returns:\n            List of (answer_text, confidence_score, start, end)\n        \"\"\"\n        # Your implementation here:\n        # 1. Tokenize question + context\n        # 2. Get model predictions (start_logits, end_logits)\n        # 3. Find top answer spans\n        # 4. Decode and return answers with scores\n        pass\n    \n    def find_answer_in_documents(self, question, documents):\n        \"\"\"\n        Search for answer across multiple documents.\n        \n        Args:\n            question: Question text\n            documents: List of document texts\n        \n        Returns:\n            Best answer with source document\n        \"\"\"\n        # Your implementation here:\n        # 1. For each document, extract answer\n        # 2. Rank by confidence\n        # 3. Return best answer with source\n        pass\n\ndef fine_tune_on_domain_qa(model, train_qa_pairs, epochs=3):\n    \"\"\"\n    Fine-tune QA model on semiconductor-specific Q&A pairs.\n    \n    Args:\n        train_qa_pairs: List of (question, context, answer_start, answer_end)\n    \"\"\"\n    # Your implementation here\n    pass",
+      "difficulty": "hard",
+      "explanation": "Question Answering for Technical Documentation: **Architecture**: BERT with QA head predicting answer span (start and end positions in context). **Training**: Fine-tune on SQuAD-style data: (question, context, answer span). For semiconductors: Create domain-specific QA dataset from SOPs, manuals, process docs. **Inference**: (1) Tokenize question + context together (special tokens: [CLS] question [SEP] context [SEP]). (2) Model predicts start/end token positions. (3) Extract answer span from context. (4) Confidence = score of start + end predictions. **Applications**: (1) **Interactive Technical Assistant**: Engineers ask questions, system retrieves answers from documentation. (2) **Automated Troubleshooting**: \"What causes pressure fluctuations in CVD?\" \u2192 extract from knowledge base. (3) **Process Optimization**: \"What is recommended temperature range for annealing?\" (4) **Training Support**: New engineers get instant answers. **Challenges**: (1) Long documents: Use retrieval first (semantic search), then QA on relevant passages. (2) No answer present: Add answer verification (classify if answerable). (3) Complex questions: May need multi-hop reasoning. For production: Combine with semantic search (retrieval) + QA (extraction) for robust system.",
+      "hints": [
+        "Use BertForQuestionAnswering.from_pretrained()",
+        "Tokenize: tokenizer(question, context, return_tensors='pt', padding=True, truncation=True)",
+        "Model returns start_logits and end_logits for each token",
+        "Answer span: tokens[start_idx:end_idx+1]",
+        "Score: start_logits[start] + end_logits[end]",
+        "Filter invalid spans: start <= end, length < max_answer_length",
+        "For multiple documents: run QA on each, take highest confidence"
+      ],
+      "id": "m8.2_q014",
+      "points": 5,
+      "question": "Implement a BERT-based question answering system for technical documentation that can answer engineers' queries about processes and equipment.",
+      "test_cases": [
+        {
+          "description": "QA extraction from technical docs",
+          "expected_output": "Answer: '5-7 mTorr', confidence: 0.95",
+          "input": "Q: 'What is the optimal PECVD chamber pressure?' Context: 'Process documentation... optimal PECVD chamber pressure is 5-7 mTorr...'"
+        }
+      ],
+      "topic": "question_answering_system",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "from transformers import pipeline, BartForConditionalGeneration, BartTokenizer\nimport torch\n\nclass FailureReportSummarizer:\n    def __init__(self, model_name='facebook/bart-large-cnn'):\n        \"\"\"\n        Summarize long failure reports.\n        \"\"\"\n        # Your implementation here:\n        # Load summarization model (BART, T5, or Pegasus)\n        pass\n    \n    def summarize(self, report_text, max_length=150, min_length=50):\n        \"\"\"\n        Generate summary of failure report.\n        \n        Args:\n            report_text: Full failure report text\n            max_length: Maximum summary length in tokens\n            min_length: Minimum summary length\n        \n        Returns:\n            Summary text\n        \"\"\"\n        # Your implementation here\n        pass\n    \n    def summarize_long_report(self, report_text, chunk_size=1024):\n        \"\"\"\n        Handle reports longer than model max length.\n        \n        Strategy:\n        - Split into chunks\n        - Summarize each chunk\n        - Combine and summarize again\n        \"\"\"\n        # Your implementation here\n        pass\n    \n    def extract_key_info(self, report_text):\n        \"\"\"\n        Extract structured key information:\n        - Equipment involved\n        - Failure mode\n        - Impact\n        - Actions taken\n        \"\"\"\n        # Your implementation here:\n        # Use combination of summarization + NER + classification\n        pass",
+      "difficulty": "medium",
+      "explanation": "Automated Failure Report Summarization: **Approaches**: (1) **Abstractive**: Generate new summary text (BART, T5, Pegasus). More fluent, may rephrase. (2) **Extractive**: Select important sentences from original (TextRank, BERTSum). More faithful to source. **Implementation**: Use pretrained seq2seq models (BART/T5) fine-tuned on summarization. For long reports: (1) Chunking strategy (sliding window). (2) Hierarchical summarization (chunk summaries \u2192 final summary). (3) Pointer-generator networks for extractive-abstractive hybrid. **Domain Adaptation**: Fine-tune on semiconductor failure report summaries (if labeled pairs available). Focus on: Equipment names, failure modes, impacts, corrective actions. **Benefits**: (1) **Quick Triage**: Engineers scan summaries instead of full reports. (2) **Dashboards**: Display summaries for recent failures. (3) **Reports**: Auto-generate executive summaries. (4) **Search**: Better indexing with summaries. (5) **Knowledge Transfer**: Summaries easier to learn from. **Quality Control**: Human review of summaries initially. Measure ROUGE scores against human summaries. For critical applications: Human-in-the-loop verification.",
+      "hints": [
+        "Use pretrained summarization models: BART, T5, Pegasus",
+        "pipeline('summarization', model='facebook/bart-large-cnn')",
+        "For long texts: split into chunks, summarize hierarchically",
+        "Fine-tune on domain summaries if available",
+        "Extractive alternative: TextRank on sentences",
+        "Combine summarization with entity extraction for structured output"
+      ],
+      "id": "m8.2_q015",
+      "points": 4,
+      "question": "Implement automatic summarization of long failure reports using transformer models for quick review by engineers.",
+      "test_cases": [
+        {
+          "description": "Failure report summarization",
+          "expected_output": "Concise 3-5 sentence summary highlighting key failures and actions",
+          "input": "Long failure report (500+ words) describing equipment failure sequence"
+        }
+      ],
+      "topic": "text_summarization",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import torch\nfrom transformers import BertTokenizer, BertModel\nimport networkx as nx\nimport json\n\nclass KnowledgeGraphExtractor:\n    \"\"\"\n    Extract entities and relationships to build knowledge graph.\n    \"\"\"\n    def __init__(self, ner_model, relation_classifier):\n        self.ner_model = ner_model\n        self.relation_classifier = relation_classifier\n        self.graph = nx.DiGraph()\n    \n    def extract_entities(self, text):\n        \"\"\"\n        Extract entities using NER model.\n        Returns: List of (entity_text, entity_type)\n        \"\"\"\n        # Your implementation here\n        pass\n    \n    def extract_relations(self, text, entities):\n        \"\"\"\n        For each pair of entities, classify relationship.\n        \n        Relation types:\n        - CAUSES (failure causes defect)\n        - USES (process uses equipment)\n        - MEASURED_BY (parameter measured by sensor)\n        - OCCURS_IN (defect occurs in equipment)\n        - FOLLOWS (process follows process)\n        \n        Returns: List of (entity1, relation, entity2, confidence)\n        \"\"\"\n        # Your implementation here:\n        # 1. For each entity pair\n        # 2. Extract sentence context\n        # 3. Classify relationship\n        # 4. Return triples\n        pass\n    \n    def build_graph(self, documents):\n        \"\"\"\n        Process multiple documents to build knowledge graph.\n        \"\"\"\n        # Your implementation here:\n        # 1. Extract entities from all documents\n        # 2. Extract relationships\n        # 3. Add to graph (merge duplicate entities)\n        # 4. Return graph\n        pass\n    \n    def query_graph(self, entity, relationship_type=None, hops=1):\n        \"\"\"\n        Query knowledge graph.\n        \n        Examples:\n        - What causes edge defects? query('edge defect', 'CAUSES')\n        - What equipment uses CVD process? query('CVD', 'USES')\n        \"\"\"\n        # Your implementation here\n        pass\n    \n    def visualize_subgraph(self, central_entity, hops=2):\n        \"\"\"\n        Visualize neighborhood around entity.\n        \"\"\"\n        # Your implementation here\n        pass",
+      "difficulty": "hard",
+      "explanation": "Knowledge Graph for Manufacturing: **Purpose**: Structured representation of domain knowledge from unstructured text. Entities (equipment, processes, parameters, failures) connected by relationships. **Construction Pipeline**: (1) **Entity Extraction**: Use NER to identify equipment, processes, parameters, failures. (2) **Relationship Extraction**: For entity pairs in same sentence: Classify relationship type using BERT-based classifier. Train on labeled (entity1, relation, entity2) triples. (3) **Entity Linking**: Merge equivalent entities (\"etch chamber\" = \"etcher\" = \"RIE tool\"). (4) **Graph Building**: Add nodes (entities) and edges (relationships) to graph database. (5) **Validation**: Domain experts review extracted relationships. **Applications**: (1) **Root Cause Analysis**: Query \"What causes high defect rate?\" \u2192 traverse CAUSES relationships. (2) **Impact Analysis**: \"If CVD chamber fails, what processes affected?\" (3) **Process Optimization**: Identify parameter-outcome relationships. (4) **Training**: Visualize equipment-process-failure relationships for new engineers. (5) **Predictive Maintenance**: \"Equipment X failure often precedes defect Y\" (temporal relationships). **Technology Stack**: NLP: BERT for entity/relationship extraction. Graph: Neo4j, NetworkX, or custom graph database. Visualization: Gephi, Cytoscape, D3.js. For semiconductor fabs: Enables querying decades of tribal knowledge captured in text documents.",
+      "hints": [
+        "Use NER model to extract entities first",
+        "Relation classification: Fine-tune BERT on (entity1, relation, entity2) triples",
+        "Input format: [CLS] entity1 [SEP] sentence [SEP] entity2 [SEP]",
+        "Use NetworkX for graph storage and queries",
+        "Entity linking: Merge equivalent entities (\"CVD chamber\" = \"CVD tool\")",
+        "Confidence threshold: Only add high-confidence relationships",
+        "Visualization: Use networkx with matplotlib or export to Gephi/Neo4j"
+      ],
+      "id": "m8.2_q016",
+      "points": 5,
+      "question": "Implement a system to extract relationships between entities (equipment, processes, failures) from text to build a knowledge graph.",
+      "test_cases": [
+        {
+          "description": "Knowledge graph construction",
+          "expected_output": "Knowledge graph with entities and relationships, queryable for insights",
+          "input": "Corpus of maintenance logs and failure reports"
+        }
+      ],
+      "topic": "knowledge_graph_extraction",
+      "type": "coding_exercise"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "Transfer Learning Value for Semiconductor NLP: **Problem**: Labeling failure reports, maintenance logs requires domain expertise (expensive, time-consuming). May only have 100-1000 labeled samples. Training from scratch requires 10k+ samples. **Transfer Learning Solution**: (1) Pretrained model (BERT) already learned language understanding from millions of general text examples. (2) Fine-tune on small amount of labeled domain data. (3) Achieves strong performance with limited labels. **Specific Benefits**: (1) **Data Efficiency**: 100 labeled semiconductor reports + pretrained BERT > 10,000 labeled reports from scratch. (2) **Better Representations**: BERT's language understanding transfers to technical text. (3) **Faster Convergence**: Start from good initialization, not random. (4) **Reduced Overfitting**: Pretrained weights regularize learning. **For Semiconductors**: Labeling requires: (1) Understanding equipment (specialized knowledge). (2) Failure mode identification (expert-level). (3) Process context (years of experience). Transfer learning enables strong NLP with minimal expert labeling time, crucial for cost-effective deployment in manufacturing.",
+      "id": "m8.2_q017",
+      "options": [
+        "It's faster to train",
+        "Labeled domain data is expensive and scarce; pretrained models provide strong initialization requiring less domain-specific labeled data",
+        "It uses less memory",
+        "It's newer technology"
+      ],
+      "points": 2,
+      "question": "Why is transfer learning particularly valuable for NLP in semiconductor manufacturing?",
+      "topic": "transfer_learning_benefits",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Active Learning for Efficient Labeling: **Strategy**: Don't label data randomly. Intelligently select most informative samples for expert labeling. **Process**: (1) **Initial**: Train model on small labeled set (e.g., 100 samples). (2) **Inference**: Apply model to large unlabeled pool. (3) **Query Strategy**: Select k most informative samples: Uncertainty sampling: Highest prediction uncertainty. Diversity sampling: Diverse, representative samples. Query-by-committee: Disagreement between multiple models. (4) **Expert Labeling**: Domain experts label only selected k samples. (5) **Retrain**: Add labeled samples, retrain model. (6) **Iterate**: Repeat until target performance. **Benefits**: Achieves same performance with 30-50% fewer labels. Focuses expert time on hard/ambiguous cases. **Query Strategies for Semiconductors**: (1) **Least Confident**: model uncertain about failure classification. (2) **Margin Sampling**: Small margin between top two classes. (3) **Entropy**: High entropy in prediction distribution. (4) **Diversity**: Ensure coverage of different failure types, equipment, processes. **Implementation**: Use uncertainty from softmax probabilities. Select 50-100 samples per iteration. Practical: Reduces labeling from 1000 reports \u2192 500-600 reports for same accuracy. Critical when expert time is bottleneck.",
+      "id": "m8.2_q018",
+      "options": [
+        "It doesn't help",
+        "Iteratively select most informative samples for labeling based on model uncertainty, focusing expert effort on challenging cases",
+        "It labels automatically",
+        "It removes the need for any labels"
+      ],
+      "points": 3,
+      "question": "How can active learning reduce the labeling burden for training NLP models on failure reports?",
+      "topic": "active_learning",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "Few-Shot Learning for NLP: **Problem**: New equipment or process introduced \u2192 new failure types. Only 5-10 examples available initially. Standard fine-tuning requires hundreds of samples. **Few-Shot Approaches**: **1. Meta-Learning (MAML, Prototypical Networks)**: Train model to adapt quickly to new tasks with few examples. Model learns how to learn from small datasets. **2. Prompt-Based Learning (GPT-3, GPT-4)**: Provide examples in prompt, model generalizes from context. Example prompt: 'Classify failure reports. Examples: [5 labeled examples]. Now classify: [new report]' No parameter updates needed. **3. Few-Shot Fine-Tuning with Pretrained Models**: Start with BERT pretrained on general + domain text. Fine-tune on few examples with: Small learning rate. Careful regularization (dropout, weight decay). Early stopping. Data augmentation (paraphrasing). **4. Retrieval-Augmented**: For new example, retrieve similar historical examples. Classify based on similarity. **For Semiconductors**: New tool introduced \u2192 5 failure reports. Meta-learned model adapts in minutes. Or: Use GPT-4 with in-context learning (no training). Practical: Enables rapid deployment for new equipment without waiting for large labeled dataset. **Performance**: With 5-10 examples per class: Meta-learning: 60-70% accuracy. GPT-3/4 prompting: 65-75% accuracy. Standard fine-tuning: 40-50% accuracy (overfits). Collect more data over time, retrain periodically.",
+      "id": "m8.2_q019",
+      "options": [
+        "Few-shot learning doesn't work for NLP",
+        "Use meta-learning approaches or prompt-based methods with large language models to learn from minimal examples",
+        "Always need thousands of examples",
+        "Few-shot only works for vision"
+      ],
+      "points": 3,
+      "question": "How can few-shot learning be applied to quickly adapt NLP models to new failure types with only 5-10 examples?",
+      "topic": "few_shot_learning",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Multilingual NLP for Global Manufacturing: **Scenario**: Semiconductor fabs in multiple countries: Taiwan, South Korea, Japan, USA, Germany. Maintenance logs, failure reports in local languages. Need consistent analysis across facilities. **Multilingual Models**: mBERT (multilingual BERT): Pretrained on 104 languages. XLM-RoBERTa: Better multilingual performance. mT5: Multilingual T5 for generation. **Capabilities**: (1) **Zero-Shot Cross-Lingual Transfer**: Train classifier on English failure reports. Apply directly to Japanese reports (no Japanese labels needed). (2) **Cross-Lingual Similarity**: Find similar failures across languages. Japanese report matches English historical case. (3) **Multilingual QA**: Ask questions in English, get answers from Chinese documentation. (4) **Unified Model**: Single model for all languages (vs separate model per language). **Benefits for Semiconductors**: (1) **Knowledge Sharing**: Learn from failures across global fabs. (2) **Consistency**: Same analysis methodology worldwide. (3) **Cost Efficiency**: Label data in one language, use globally. (4) **Real-time Collaboration**: Engineers from different countries collaborate on shared incidents. **Implementation**: Fine-tune mBERT on labeled data from one or more languages. Apply to all facilities. Performance: 80-90% of language-specific models. For high-stakes applications: Combine with human verification. Example: Train on 1000 English + 200 Japanese reports. Achieves 85% accuracy on Korean reports (zero-shot).",
+      "id": "m8.2_q020",
+      "options": [
+        "They are faster",
+        "Handle documentation and reports in multiple languages (Japanese, Chinese, Korean, English) without separate models",
+        "They use less memory",
+        "They are newer"
+      ],
+      "points": 3,
+      "question": "Why might multilingual transformer models be useful for semiconductor manufacturing with global operations?",
+      "topic": "multilingual_models",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Production NLP Pipeline for Semiconductor Manufacturing: **1. Data Ingestion**: Sources: MES (Manufacturing Execution System), maintenance logs, operator notes, sensor alerts. Ingestion: Real-time stream (Kafka) for urgent failures. Batch ETL for historical analysis. Preprocessing: Text cleaning (remove PII, normalize dates/numbers). Language detection (route to appropriate model). Duplicate detection. **2. Preprocessing Pipeline**: Tokenization: Use domain-adapted tokenizer. Sequence length handling: Chunking for long reports (>512 tokens). Metadata extraction: Timestamp, equipment ID, operator, severity. Embedding cache: Pre-compute embeddings for retrieval. **3. Model Serving Architecture**: Real-Time API: FastAPI/Flask serving BERT models. Load balancing: Multiple model replicas. Caching: Cache results for duplicate queries. Timeout handling: Fallback to rule-based system if model slow. Batch Processing: Overnight analysis of all reports. Generate daily summaries and trends. Update knowledge graphs. Models Deployed: Failure classifier (multi-label). NER for entity extraction. Similarity search for historical matching. QA system for engineer queries. Summarization for reporting. **4. Inference Workflow**: Report arrives \u2192 Language detection \u2192 Appropriate model \u2192 Classification + NER + Similarity \u2192 Structured output \u2192 MES integration. **5. Human-in-the-Loop**: Confidence thresholds: High confidence (>0.9): Auto-process. Medium (0.7-0.9): Flag for review. Low (<0.7): Require human classification. Active learning: Uncertain predictions sent to experts. Expert feedback incorporated in retraining. Validation dashboard: Engineers review model predictions. Approve/correct classifications. Track accuracy by failure type. **6. Monitoring & Alerting**: Performance metrics: Prediction latency (<100ms p95). Classification accuracy (compare to human labels). Confidence distribution (drift detection). Data drift: Input token distribution. New vocabulary terms (OOV rate). Domain shift indicators. Model drift: Performance degradation over time. Per-class accuracy trends. Alerts: Accuracy drops below threshold. High uncertainty rate. System errors or timeouts. **7. Model Management**: Versioning: Track model versions (MLflow). A/B testing: Compare new vs old models. Rollback: Quick rollback if issues detected. Retraining: Scheduled: Monthly retraining on new data. Triggered: If performance degrades. Continuous learning: Incorporate expert corrections. **8. Integration**: MES Integration: Push classifications to MES. Trigger workflows (notify experts, escalate). Dashboard: Real-time failure analysis dashboard. Trend visualization. Searchable knowledge base: Indexed historical reports. Semantic search enabled. Reporting: Automated weekly/monthly reports. Failure trend analysis. Equipment-specific insights. **9. Scalability**: Horizontal scaling: Multiple model server replicas. Kubernetes for orchestration. Caching: Redis for embeddings and frequent queries. Async processing: Celery for batch jobs. Load handling: Queue management for bursts. **10. Reliability**: Redundancy: Multi-zone deployment. Fallback: Rule-based system if model unavailable. Data backup: Persistent storage for retraining. Health checks: Continuous service monitoring. **11. Security & Compliance**: Data privacy: Anonymize sensitive information. Access control: Role-based access to system. Audit logs: Track all predictions and user actions. Compliance: Meet industry standards (ISO, FDA if applicable). **Technology Stack**: Ingestion: Apache Kafka, Airflow. Models: PyTorch, Transformers library. Serving: FastAPI, TorchServe, Docker. Monitoring: Prometheus, Grafana, MLflow. Database: PostgreSQL (structured), Elasticsearch (search). Cache: Redis. Orchestration: Kubernetes. For semiconductor fabs: This pipeline enables 24/7 automated failure analysis, reducing response time from hours to minutes while maintaining quality through human oversight.",
+      "hints": [
+        "Think about real-time vs batch processing requirements",
+        "Consider integration with manufacturing execution systems",
+        "Think about model versioning and A/B testing",
+        "Consider edge cases and fallback mechanisms"
+      ],
+      "id": "m8.2_q021",
+      "points": 5,
+      "question": "Design a complete production NLP pipeline for automated failure report analysis in a semiconductor fab. Address data ingestion, preprocessing, model serving, monitoring, and human-in-the-loop validation.",
+      "rubric": [
+        "Describes data ingestion and preprocessing pipeline (2 points)",
+        "Explains model serving architecture for real-time and batch processing (2 points)",
+        "Addresses monitoring for model performance and data drift (2 points)",
+        "Includes human-in-the-loop validation workflow (2 points)",
+        "Discusses scalability, reliability, and integration with existing systems (2 points)"
+      ],
+      "topic": "production_nlp_pipeline",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Explainability for Manufacturing NLP: **Why Critical**: Manufacturing decisions have high stakes (safety, yield, cost). Engineers need to trust and verify model decisions. Regulatory compliance may require explainability. Debugging and improvement need understanding. **1. Attention Visualization**: Method: Visualize attention weights to see which words model focused on. Tools: BertViz, AllenNLP interpret. Benefits: Shows which tokens influenced prediction. Identifies if model using relevant information. Limitations: Attention weights \u2260 causal explanations. Multiple heads complicate interpretation. Doesn't explain why attention pattern chosen. For semiconductors: Verify model attends to equipment names, failure symptoms, not spurious correlations (dates, operator names). **2. LIME (Local Interpretable Model-agnostic Explanations**: Method: Perturb input text (remove words), observe prediction changes. Fit interpretable linear model locally. Shows word importance for specific prediction. Pros: Model-agnostic, works for any classifier. Intuitive word importance scores. Cons: Computational cost (many forward passes). Instability (different perturbations \u2192 different explanations). **3. SHAP (SHapley Additive exPlanations)**: Method: Game-theoretic approach to feature importance. Compute marginal contribution of each word. Unified framework with desirable properties. Pros: Principled, consistent explanations. Word-level importance scores. Cons: Computationally expensive for long texts. Implementation: use shap library. For NLP: KernelSHAP or specialized NLP explainers. **4. Saliency Maps & Gradient-Based**: Method: Compute gradients of prediction w.r.t. input tokens. Integrated gradients for better attributions. Shows which tokens have highest impact. Pros: Fast, built into model. Cons: Can be noisy, requires interpretation. **5. Example-Based Explanations**: Method: Show similar examples from training data. 'Model classified this way because similar to these training examples.' Implemented via: Influence functions. Nearest neighbors in embedding space. Pros: Intuitive for domain experts. Helps identify training data issues. **6. Counterfactual Explanations**: Method: Minimal text edits that change prediction. 'If pressure was 10 mTorr instead of 5 mTorr, classification would change.' Shows decision boundaries. Pros: Actionable insights. Identifies critical features. **7. Domain-Specific Validation**: Checklist: (1) Does model use domain-relevant keywords? (2) Are equipment-failure associations correct? (3) Are temporal relationships respected? (4) No spurious correlations? Expert Review Process: Sample model predictions regularly. Domain experts evaluate correctness and reasoning. Track error types (e.g., confusing similar equipment). Validation Metrics: Agreement with expert classifications. Correct identification of key entities. Logical consistency in reasoning. **8. Confidence Calibration**: Problem: Softmax probabilities often poorly calibrated. Solution: Temperature scaling post-training. Benefit: Confidence scores more reliable. Engineers can trust uncertainty estimates. **9. Human-in-the-Loop Decision Points**: High confidence + clear explanations \u2192 Auto-process. High confidence + unclear explanations \u2192 Flag for review. Low confidence \u2192 Require human decision. Novel patterns \u2192 Expert consultation. Critical failures \u2192 Always human verify. **10. Reporting & Documentation**: Provide with each prediction: Classification + confidence. Key words/phrases influencing decision. Similar historical cases. Attention visualization (optional, for investigation). Metadata: Model version, timestamp. **11. Continuous Monitoring**: Track explanation patterns: Are explanations stable over time? New patterns emerging? Compare predictions + explanations to human decisions. Identify systematic errors. **12. Regulatory & Audit**: Documentation: Model development process. Validation methodology. Performance metrics by failure type. Traceability: Prediction logs with explanations. Version control of models and data. Compliance: Follow industry standards (ISO, IEC). Prepare for audits. **Implementation Recommendations**: (1) **Multi-Level Explanations**: Quick: Confidence score + key terms. Detailed: Attention vis + LIME. Expert: Full analysis with counterfactuals. (2) **Explanation Dashboard**: Integrated with prediction interface. Export explanations for reports. (3) **Computational Budget**: Fast methods (attention, gradients) for real-time. SHAP/LIME for offline analysis or high-stakes decisions. (4) **Validation Cadence**: Weekly expert review of sample predictions. Monthly comprehensive audit. Immediate review for novel patterns. (5) **Feedback Loop**: Collect expert corrections and reasoning. Use to improve both model and explanations. For critical semiconductor applications: Combine multiple explanation methods, require human validation for high-stakes decisions, maintain comprehensive audit trail.",
+      "hints": [
+        "Think about different stakeholders' needs (engineers, managers, auditors)",
+        "Consider computational cost vs interpretability tradeoff",
+        "Think about regulatory requirements",
+        "Consider failure case analysis"
+      ],
+      "id": "m8.2_q022",
+      "points": 5,
+      "question": "Explain how to make transformer-based NLP models more interpretable and trustworthy for critical manufacturing decisions. Discuss attention visualization, LIME, SHAP, and domain-specific validation approaches.",
+      "rubric": [
+        "Describes attention visualization techniques and their limitations (2 points)",
+        "Explains LIME and SHAP for NLP model explanations (2 points)",
+        "Discusses domain-specific validation with experts (2 points)",
+        "Addresses when to require human verification (2 points)",
+        "Provides practical implementation recommendations (2 points)"
+      ],
+      "topic": "explainability_nlp",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Temporal NLP for Manufacturing: **Why Critical**: Manufacturing events have temporal structure: (1) Causality: Event A causes Event B. (2) Sequencing: Procedure steps must follow order. (3) Timing: Delay between symptom and failure critical. (4) Trends: Degradation over time. Standard NLP models struggle with temporal reasoning. **Challenges**: (1) **Explicit Temporal Expressions**: Dates, times (\"Jan 15\", \"3:45 PM\", \"2 hours ago\"). Need extraction and normalization. (2) **Implicit Temporal Relations**: \"Equipment failed before maintenance\" (ordering). \"Pressure dropped during processing\" (coincidence). \"Defect appeared after recipe change\" (causality). (3) **Multiple Timescales**: Seconds (process steps) to months (equipment degradation). (4) **Incomplete Information**: Not all events have explicit timestamps. Must infer from context and surrounding events. **Solutions**: **1. Temporal Expression Recognition**: Task: Extract and normalize time mentions. Tools: SUTime, HeidelTime, custom NER. Normalization: Convert to absolute timestamps. \"2 days ago\" \u2192 \"2025-09-29\". \"Before shift change\" \u2192 \"07:00\". **2. Temporal Relation Classification**: Task: Classify relation between event pairs. Relations (TimeML): BEFORE, AFTER, OVERLAPS, INCLUDES, SIMULTANEOUS. Approach: Fine-tune BERT on event pairs with temporal relation labels. Input: [CLS] event1 [SEP] event2 [SEP] context [SEP]. Output: Relation type. **3. Event Extraction**: Task: Identify events (state changes, actions, failures). Attributes: Event type, time, participants (equipment, operators). Method: Sequence labeling (similar to NER). **4. Timeline Construction**: Process: (1) Extract events from text. (2) Extract temporal expressions. (3) Classify temporal relations between events. (4) Construct event timeline (directed acyclic graph). (5) Resolve conflicts, handle uncertainty. **5. Causal Relationship Identification**: Beyond temporal: \"X happened before Y\" \u2260 \"X caused Y\". Causal signals: Keywords: \"caused\", \"led to\", \"resulted in\", \"due to\". Patterns: Problem-solution structure. Domain knowledge: Known causal chains. Methods: Causal relation extraction (supervised classifier). Counterfactual reasoning (if X didn't happen, would Y?). Knowledge graph of causal relationships. **6. Architectural Enhancements**: Temporal Position Encoding: Extend BERT positional encoding with absolute time. Tokens from same time point get similar encoding. Recurrent Event Encoding: For sequences of events, use LSTM/GRU over event embeddings. Captures temporal dynamics. Time-aware Attention: Attention mechanism considers temporal distance. Events close in time get higher attention. **7. Multi-Modal Temporal Integration**: Combine: (1) Text: Maintenance logs. (2) Time series: Sensor data. (3) Discrete events: Alarms, operator actions. Aligned by timestamp. Transformer over heterogeneous sequence. **Applications**: **1. Root Cause Analysis**: Timeline: Pressure drop (10:15) \u2192 Temperature spike (10:17) \u2192 Defect detected (10:25). Identify causal chain: Pressure drop \u2192 Temperature spike \u2192 Defect. **2. Predictive Maintenance**: Learn temporal patterns preceding failures: \"Increased noise\" 2 days before \u2192 \"Vibration alerts\" 1 day before \u2192 \"Failure\" (predict). **3. Process Compliance**: Verify procedure steps followed in order. Identify deviations from standard timeline. **4. Anomaly Detection**: Detect unusual temporal patterns: Events happening in wrong order. Abnormal time gaps between events. **5. Automated Reporting**: Generate chronological failure narratives: \"At 10:15 AM, pressure dropped in Chamber 3. Two minutes later, temperature spiked. Processing continued for 8 minutes before automatic shutdown triggered at 10:25 AM due to defect detection.\" **Implementation Example**: ```python class TemporalEventExtractor: def __init__(self): self.ner_model = load_ner_model()  # Event extraction self.time_parser = load_time_parser()  # Temporal expression self.relation_classifier = load_relation_model()  # Temporal relations def extract_timeline(self, log_text): # 1. Extract events events = self.ner_model.extract_events(log_text) # 2. Extract and normalize temporal expressions times = self.time_parser.extract_and_normalize(log_text) # 3. Classify temporal relations between event pairs relations = [] for e1, e2 in combinations(events, 2): rel = self.relation_classifier.predict(e1, e2, log_text) relations.append((e1, rel, e2)) # 4. Construct timeline timeline = build_timeline_graph(events, times, relations) return timeline def identify_causal_chain(self, timeline, final_event): # Trace back causes of final_event causes = [] for event in timeline.predecessors(final_event): if timeline.edge_type(event, final_event) == 'CAUSES': causes.append(event) # Recurse causes.extend(self.identify_causal_chain(timeline, event)) return causes ``` **Challenges & Limitations**: (1) **Ambiguity**: \"After processing\" (immediately after? hours after?). (2) **Missing Information**: Events without timestamps. (3) **Complex Causality**: Multiple causes, confounding factors. (4) **Domain Knowledge Required**: Some temporal patterns only make sense with domain expertise. **Best Practices**: (1) Combine NLP with domain knowledge (causal graphs). (2) Use temporal constraints from process definitions. (3) Validate timelines with process engineers. (4) Handle uncertainty (confidence scores, multiple hypotheses). (5) Integrate with quantitative time series for validation. For semiconductor manufacturing: Temporal NLP enables automated root cause analysis, process compliance verification, and predictive maintenance by understanding event sequences and causal relationships in text logs.",
+      "hints": [
+        "Think about event ordering and causal chains",
+        "Consider explicit time mentions vs implicit temporal relations",
+        "Think about long-range temporal dependencies",
+        "Consider integration with time series data"
+      ],
+      "id": "m8.2_q023",
+      "points": 5,
+      "question": "How can NLP models be adapted to understand temporal relationships and event sequences in maintenance logs and failure reports? Discuss challenges and solutions.",
+      "rubric": [
+        "Explains importance of temporal understanding in manufacturing logs (2 points)",
+        "Describes temporal encoding and sequence modeling approaches (2 points)",
+        "Discusses event extraction and timeline construction (2 points)",
+        "Addresses causal relationship identification (2 points)",
+        "Provides practical applications and limitations (2 points)"
+      ],
+      "topic": "temporal_language_models",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Text Data Augmentation for Semiconductor NLP: **Motivation**: Limited labeled failure reports (expensive expert labeling). Augmentation increases training diversity without new labels. Improves model robustness and generalization. **Techniques**: **1. Back-Translation**: Method: Translate text to another language and back to English. English \u2192 Japanese \u2192 English (slightly different phrasing). Pros: Preserves meaning while varying expression. Automatic, no labeled data needed. Cons: May change technical meaning if translator not domain-trained. Computationally expensive. For semiconductors: Risk: Technical terms mistranslated. Mitigation: Use glossary of protected terms (equipment names, parameters). **2. Synonym Replacement (Easy Data Augmentation - EDA)**: Method: Replace words with synonyms from WordNet or word embeddings. \"Equipment failure\" \u2192 \"Tool malfunction\". Random insertion, deletion, swap of words. Pros: Simple, fast. Cons: May replace domain-specific terms incorrectly. Can create unnatural text. For semiconductors: Use domain-specific synonym dictionary. Protect technical terms from replacement. **3. Contextual Word Replacement**: Method: Use BERT to predict masked words based on context. Replace words with plausible alternatives from BERT's predictions. More context-aware than synonym replacement. Pros: Contextually appropriate replacements. Maintains fluency. Cons: May change meaning. Requires computational resources. Implementation: Mask 10-15% of words, fill with BERT predictions. **4. Paraphrasing with Models**: Method: Use T5, GPT, or paraphrase-specific models. Input: \"Chamber pressure increased causing defect.\" Output: \"Defect occurred due to rising chamber pressure.\" Pros: Fluent, natural variations. Preserves meaning well. Cons: Requires large paraphrasing model. May introduce errors. **5. Mixup for Text**: Method: Interpolate embeddings of two examples from same class. Create synthetic examples between original points. Pros: Smooths decision boundaries. Regularization effect. Cons: Interpolated embeddings may not correspond to valid text. **6. Conditional Generation**: Method: Train conditional language model on domain corpus. Generate new failure reports conditioned on failure type. Pros: Can generate unlimited synthetic reports. Domain-adapted if trained on domain corpus. Cons: Requires substantial unlabeled domain data. Quality varies, needs filtering. **7. Domain-Specific Templates**: Method: Create templates with slots for entities. Template: \"[EQUIPMENT] [FAILURE_TYPE] detected at [TIME] in [LOCATION].\" Fill slots with variations. Pros: Guaranteed grammatical and factual. Domain-appropriate. Cons: Less diversity than model-based. Requires manual template creation. For semiconductors: Effective for structured report types. **8. Semi-Supervised Augmentation**: Self-training: Train on labeled data. Predict on unlabeled data. Add high-confidence predictions to training set (pseudo-labels). Consistency regularization: Augment same example multiple ways. Enforce consistent predictions across augmentations. **Domain-Specific Considerations**: **Preserve Critical Information**: Don't augment: Equipment names (specific to fab). Parameter values (5 mTorr \u2260 50 mTorr). Dates, lot numbers (traceability). Can augment: Descriptive text. Explanatory phrases. Sentence structure. **Technical Term Protection**: Maintain glossary of protected terms. Don't replace with synonyms. Ensure translations preserve technical meaning. **Quality Control**: (1) **Automatic Filtering**: Semantic similarity check (augmented vs original >0.8). Length constraints (not too short/long). Duplicate detection. (2) **Expert Sampling**: Review sample of augmented data. Identify problematic patterns. Refine augmentation strategy. (3) **Downstream Performance**: Test: Train model with/without augmentation. If augmentation hurts performance, it's adding noise. Use cross-validation to validate benefit. **Recommendations by Data Size**: <100 labeled: Focus on domain-adaptive pretraining + careful fine-tuning. Light augmentation (templates). 100-500 labeled: Back-translation + paraphrasing. Protect technical terms. Semi-supervised methods. 500-1000 labeled: Contextual word replacement + mixup. Model-based paraphrasing. >1000 labeled: Augmentation less critical. Use primarily for class balance. **Task-Specific Strategies**: Classification: Heavy augmentation safe (label preserved). Synonym replacement, back-translation, paraphrasing. NER: Cautious augmentation (span alignment important). Entity-aware augmentation (keep entity spans intact). Augment context, not entities. QA: Paraphrase questions, augment contexts separately. Ensure answer span preserved. **Implementation Example**: ```python class FailureReportAugmenter: def __init__(self): self.protected_terms = load_equipment_glossary() self.paraphraser = load_paraphrase_model() def augment_report(self, text, label, methods=['paraphrase', 'synonym']): augmented = [] if 'paraphrase' in methods: para = self.paraphrase(text) if self.validate_quality(text, para): augmented.append((para, label)) if 'synonym' in methods: syn = self.synonym_replace(text) if self.validate_quality(text, syn): augmented.append((syn, label)) return augmented def synonym_replace(self, text, n=0.1): words = text.split() # Don't replace protected terms replaceable = [w for w in words if w not in self.protected_terms] n_replace = int(len(replaceable) * n) for word in random.sample(replaceable, n_replace): synonym = get_synonym(word) text = text.replace(word, synonym, 1) return text def validate_quality(self, original, augmented): # Semantic similarity similarity = compute_similarity(original, augmented) if similarity < 0.8: return False # Length check if len(augmented.split()) < 0.5 * len(original.split()): return False return True ``` **Best Practices**: (1) Start with small augmentation ratio (1:1 or 2:1 augmented:original). (2) Monitor validation performance - stop if degrading. (3) Combine multiple augmentation methods. (4) Always protect domain-critical terms. (5) Expert review sample augmented data. (6) Use augmentation primarily for minority classes (balance). For semiconductor manufacturing: Careful, domain-aware augmentation can double effective dataset size while maintaining quality, crucial for NLP deployment with limited labeled data.",
+      "hints": [
+        "Think about preserving technical terminology",
+        "Consider trade-off between diversity and quality",
+        "Think about task-specific augmentation strategies",
+        "Consider semi-supervised and self-supervised approaches"
+      ],
+      "id": "m8.2_q024",
+      "points": 5,
+      "question": "Describe text data augmentation techniques for training NLP models with limited labeled semiconductor failure reports. Compare methods and discuss when each is appropriate.",
+      "rubric": [
+        "Explains back-translation and paraphrasing (2 points)",
+        "Describes synonym replacement and contextual word embeddings (2 points)",
+        "Discusses domain-specific augmentation considerations (2 points)",
+        "Addresses quality control for augmented data (2 points)",
+        "Provides practical recommendations for implementation (2 points)"
+      ],
+      "topic": "data_augmentation_nlp",
+      "type": "conceptual"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "Sentence Embeddings for Similarity: **Process**: (1) **Encode**: Pass each report through BERT/transformer. Extract sentence embedding (typically [CLS] token representation or average of tokens). Result: n-dimensional vector (e.g., 768-dim for BERT-base). (2) **Compute Similarity**: Cosine similarity: sim = (v1 \u00b7 v2) / (||v1|| ||v2||). Range: [-1, 1], higher = more similar. (3) **Application**: Find top-k most similar historical reports for new incident. **Why Better Than Word Overlap**: (1) Semantic understanding: \"Equipment failure\" similar to \"tool malfunction\" (different words, similar meaning). (2) Context-aware: \"Pressure\" means different things in different contexts. (3) Handles paraphrasing naturally. (4) Robust to word order variations. **Specialized Sentence Encoders**: Sentence-BERT (SBERT): Optimized for sentence similarity. Faster inference than BERT. Higher quality similarities. Universal Sentence Encoder: Google's encoder for semantic similarity. **For Semiconductors**: New failure occurs \u2192 encode report \u2192 find 5 most similar historical cases \u2192 review their resolutions \u2192 apply similar solution. Enables knowledge reuse across similar failures. Can also cluster reports to identify common failure patterns.",
+      "id": "m8.2_q025",
+      "options": [
+        "Count word overlap",
+        "Encode sentences to fixed-size vectors, compute cosine similarity between vectors",
+        "Use edit distance",
+        "Embeddings can't measure similarity"
+      ],
+      "points": 2,
+      "question": "How are sentence embeddings from transformers used to measure similarity between failure reports?",
+      "topic": "embedding_similarity",
+      "type": "multiple_choice"
+    },
+    {
+      "code_template": "import torch\nimport faiss\nimport numpy as np\nfrom transformers import AutoTokenizer, AutoModel\n\nclass DensePassageRetrieval:\n    def __init__(self, model_name='sentence-transformers/all-MiniLM-L6-v2'):\n        self.tokenizer = AutoTokenizer.from_pretrained(model_name)\n        self.model = AutoModel.from_pretrained(model_name)\n        self.index = None\n        self.documents = []\n    \n    def encode_texts(self, texts, batch_size=32):\n        \"\"\"\n        Encode texts to dense embeddings.\n        Returns: numpy array of embeddings\n        \"\"\"\n        # Your implementation here\n        pass\n    \n    def build_index(self, documents, index_type='flat'):\n        \"\"\"\n        Build FAISS index from documents.\n        \n        Args:\n            documents: List of text documents\n            index_type: 'flat' (exact) or 'ivf' (approximate)\n        \"\"\"\n        # Your implementation here:\n        # 1. Encode all documents\n        # 2. Create FAISS index\n        # 3. Add embeddings to index\n        pass\n    \n    def search(self, query, top_k=5):\n        \"\"\"\n        Search for most similar documents.\n        \n        Returns: List of (document, score) tuples\n        \"\"\"\n        # Your implementation here\n        pass\n    \n    def save_index(self, path):\n        \"\"\"Save index to disk.\"\"\"\n        faiss.write_index(self.index, path)\n    \n    def load_index(self, path):\n        \"\"\"Load index from disk.\"\"\"\n        self.index = faiss.read_index(path)",
+      "difficulty": "medium",
+      "explanation": "Dense Passage Retrieval with FAISS: **Approach**: Encode documents to dense vectors, index for fast similarity search. **Components**: (1) **Encoder**: Sentence-BERT or similar model trained for semantic similarity. (2) **Index**: FAISS (Facebook AI Similarity Search) for efficient vector search. **Implementation**: Encoding: Convert text to fixed-size embedding (384-768 dim). Indexing: Add embeddings to FAISS index. IndexFlatIP: Exact inner product search (best quality). IndexIVFFlat: Inverted file index (faster, approximate). IndexHNSW: Hierarchical navigable small world (balanced speed/quality). Search: Encode query \u2192 find k nearest neighbors in index. **Benefits for Semiconductors**: Fast: Search millions of logs in milliseconds. Scalable: Handles growing log database. Semantic: Finds relevant logs even with different wording. **Applications**: New failure \u2192 find similar historical cases instantly. Process optimization \u2192 find all logs mentioning similar conditions. Knowledge discovery \u2192 cluster and analyze failure patterns.",
+      "hints": [
+        "Use sentence-transformers for encoding",
+        "FAISS IndexFlatIP for exact cosine similarity",
+        "FAISS IndexIVFFlat for approximate search (faster, large scale)",
+        "Normalize embeddings before indexing",
+        "Batch encoding for efficiency"
+      ],
+      "id": "m8.2_q026",
+      "points": 4,
+      "question": "Implement dense passage retrieval with FAISS indexing for fast semantic search across millions of maintenance logs.",
+      "test_cases": [
+        {
+          "description": "Fast semantic search",
+          "expected_output": "Top 5 relevant maintenance logs retrieved in <100ms",
+          "input": "Query: 'chamber pressure fluctuation', 1M indexed logs"
+        }
+      ],
+      "topic": "dense_passage_retrieval",
+      "type": "coding_exercise"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Bi-Encoder vs Cross-Encoder: **Bi-Encoder (Dual Encoder)**: Encode query and documents independently. Similarity = cosine(query_emb, doc_emb). Pros: Fast - pre-compute document embeddings, compare at search time. Scalable - works with millions of documents. Cons: Limited interaction between query and document. **Cross-Encoder**: Encode query+document together as single input: [CLS] query [SEP] document [SEP]. Model jointly attends to both. Output: relevance score (0-1). Pros: Better quality - full attention between query and document. Captures nuanced relevance. Cons: Slow - must encode each query-document pair. Not scalable to millions of documents. **Hybrid Approach (Best Practice)**: (1) **Stage 1 - Retrieval**: Bi-encoder to retrieve top 100-1000 candidates from full corpus. Fast, scalable. (2) **Stage 2 - Reranking**: Cross-encoder to rerank top candidates. High quality scoring on small set. **For Semiconductors**: Query: 'CVD chamber pressure issues' \u2192 Bi-encoder retrieves 100 potentially relevant logs (fast). \u2192 Cross-encoder reranks to find 5 most relevant (accurate). Result: Best of both worlds - speed + quality. Typical improvement: 5-15% better relevance in top results.",
+      "id": "m8.2_q027",
+      "options": [
+        "Cross-encoders are faster",
+        "Cross-encoders jointly encode query+document for better relevance scoring but are slower; use bi-encoder for initial retrieval then rerank top candidates with cross-encoder",
+        "Cross-encoders don't improve quality",
+        "Cross-encoders require less memory"
+      ],
+      "points": 3,
+      "question": "How does cross-encoder reranking improve retrieval quality compared to bi-encoder (dual encoder) semantic search?",
+      "topic": "cross_encoder_reranking",
+      "type": "multiple_choice"
+    },
+    {
+      "code_template": "import numpy as np\nfrom rank_bm25 import BM25Okapi\nfrom typing import List, Tuple\n\nclass HybridSearch:\n    def __init__(self, semantic_retriever, documents):\n        self.semantic_retriever = semantic_retriever\n        self.documents = documents\n        # Build BM25 index\n        tokenized_docs = [doc.lower().split() for doc in documents]\n        self.bm25 = BM25Okapi(tokenized_docs)\n    \n    def bm25_search(self, query, top_k=100):\n        \"\"\"\n        BM25 keyword search.\n        Returns: List of (doc_idx, score) tuples\n        \"\"\"\n        # Your implementation here\n        pass\n    \n    def semantic_search(self, query, top_k=100):\n        \"\"\"\n        Dense semantic search.\n        Returns: List of (doc_idx, score) tuples\n        \"\"\"\n        # Your implementation here\n        pass\n    \n    def hybrid_search(self, query, top_k=10, alpha=0.5):\n        \"\"\"\n        Combine BM25 and semantic search scores.\n        \n        Args:\n            query: Search query\n            top_k: Number of results to return\n            alpha: Weight for semantic search (1-alpha for BM25)\n                   alpha=0: pure BM25\n                   alpha=1: pure semantic\n                   alpha=0.5: balanced\n        \n        Returns: List of (doc_idx, combined_score, document) tuples\n        \"\"\"\n        # Your implementation here:\n        # 1. Get BM25 scores\n        # 2. Get semantic scores\n        # 3. Normalize both score distributions\n        # 4. Combine: score = alpha * semantic + (1-alpha) * bm25\n        # 5. Return top_k by combined score\n        pass\n    \n    def reciprocal_rank_fusion(self, query, top_k=10, k=60):\n        \"\"\"\n        Alternative fusion: Reciprocal Rank Fusion.\n        \n        score(doc) = sum_method(1 / (k + rank_in_method))\n        \"\"\"\n        # Your implementation here\n        pass",
+      "difficulty": "hard",
+      "explanation": "Hybrid Search Benefits: **Problem**: BM25 (keyword): Great for exact term matching, acronyms, IDs. Fails with synonyms, paraphrasing. Semantic: Great for concepts, paraphrasing. Fails with rare terms, typos. **Solution**: Combine both for robustness. **Fusion Strategies**: (1) **Score Fusion**: Normalize and weight-combine scores. (2) **Reciprocal Rank Fusion**: Combine based on ranks, not scores. More robust. (3) **Learned Fusion**: Train model to combine retrieval results. **For Semiconductors**: Query: 'PECVD tool pressure issue' \u2192 BM25 finds docs with exact 'PECVD' (good). \u2192 Semantic finds docs about 'CVD chamber pressure' (synonyms). \u2192 Hybrid combines both \u2192 best results. Especially useful for: Technical acronyms (BM25 strength). Conceptual queries (semantic strength). Mixed queries. Result: 10-20% improvement over either method alone.",
+      "hints": [
+        "Use rank_bm25 library for BM25",
+        "Normalize scores to [0,1] before combining (min-max or z-score)",
+        "Reciprocal rank fusion often works better than score fusion",
+        "Tune alpha on validation set",
+        "Consider query-specific alpha (keyword queries \u2192 lower alpha)"
+      ],
+      "id": "m8.2_q028",
+      "points": 5,
+      "question": "Implement hybrid search combining BM25 (keyword matching) and semantic search (dense retrieval) for robust document retrieval.",
+      "test_cases": [
+        {
+          "description": "Hybrid search combination",
+          "expected_output": "Better results than either method alone",
+          "input": "Query with both keywords and semantic meaning"
+        }
+      ],
+      "topic": "hybrid_search",
+      "type": "coding_exercise"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "Model Compression for Manufacturing: **Problem**: BERT-base: 110M parameters, ~440MB, slow inference. Real-time requirements: <100ms latency. Edge deployment: Limited compute (factory floor devices). Cost: Large models expensive to serve at scale. **Compression Techniques**: (1) **Distillation**: Train smaller student model to mimic large teacher. DistilBERT: 66M params (40% smaller), 97% performance. (2) **Quantization**: Reduce precision (FP32 \u2192 INT8). 4x smaller, 2-4x faster. <2% accuracy loss. (3) **Pruning**: Remove unimportant weights/neurons. 30-50% reduction possible. (4) **Layer Reduction**: Use fewer transformer layers. 6 layers instead of 12. **Benefits**: Size: 440MB \u2192 110MB (quantized DistilBERT). Latency: 100ms \u2192 25ms (4x speedup). Cost: 4x fewer servers needed. Edge: Deploy on factory devices. **For Semiconductors**: Real-time classification: Need <50ms response. Edge inference: On tool controllers, no cloud latency. Cost efficiency: Thousands of queries per day. Result: Compressed models enable practical deployment without sacrificing much accuracy.",
+      "id": "m8.2_q029",
+      "options": [
+        "It's not important",
+        "Reduces model size and latency for real-time inference on edge devices and cost-effective deployment at scale",
+        "Only for mobile devices",
+        "Compression hurts accuracy too much"
+      ],
+      "points": 2,
+      "question": "Why is model compression important for deploying transformer models in semiconductor manufacturing environments?",
+      "topic": "model_compression",
+      "type": "multiple_choice"
+    },
+    {
+      "code_template": "import torch\nfrom transformers import BertForSequenceClassification, BertTokenizer\nimport onnx\nimport onnxruntime as ort\nfrom torch.quantization import quantize_dynamic\n\nclass OptimizedModelPipeline:\n    def __init__(self, model_path):\n        self.model = BertForSequenceClassification.from_pretrained(model_path)\n        self.tokenizer = BertTokenizer.from_pretrained(model_path)\n    \n    def export_to_onnx(self, output_path, opset_version=14):\n        \"\"\"\n        Export PyTorch model to ONNX format.\n        \"\"\"\n        # Your implementation here:\n        # 1. Create dummy input\n        # 2. Export with torch.onnx.export\n        pass\n    \n    def quantize_model(self):\n        \"\"\"\n        Apply dynamic quantization to model.\n        \"\"\"\n        # Your implementation here\n        quantized_model = quantize_dynamic(\n            self.model,\n            {torch.nn.Linear},\n            dtype=torch.qint8\n        )\n        return quantized_model\n    \n    def benchmark_models(self, test_inputs, num_runs=100):\n        \"\"\"\n        Compare original, quantized, and ONNX inference speed.\n        \n        Returns: Dict with latency statistics\n        \"\"\"\n        # Your implementation here:\n        # 1. Time original PyTorch model\n        # 2. Time quantized model\n        # 3. Time ONNX runtime\n        # 4. Report size and latency\n        pass\n    \n    def create_onnx_inference_session(self, onnx_path):\n        \"\"\"\n        Create optimized ONNX Runtime session.\n        \"\"\"\n        sess_options = ort.SessionOptions()\n        sess_options.graph_optimization_level = ort.GraphOptimizationLevel.ORT_ENABLE_ALL\n        session = ort.InferenceSession(onnx_path, sess_options)\n        return session",
+      "difficulty": "medium",
+      "explanation": "Model Optimization Pipeline: **ONNX Export**: Cross-platform format for neural networks. Optimized runtime (ONNX Runtime) faster than PyTorch. Enables deployment without PyTorch dependency. **Quantization**: Dynamic Quantization: Quantize weights at model load, activations at runtime. Easy, minimal code. 2-3x speedup. Static Quantization: Quantize weights and activations offline. Requires calibration data. 3-4x speedup. **Optimization Workflow**: (1) Train full precision model. (2) Quantize model (INT8). (3) Export to ONNX. (4) Benchmark and validate accuracy. (5) Deploy optimized model. **Results**: Original: 440MB, 100ms latency. Quantized: 110MB, 40ms latency. ONNX+Quantized: 110MB, 25ms latency. Accuracy loss: <1% typically. **Deployment**: Serve with ONNX Runtime (C++/Python). Use GPU/CPU efficiently. Scale horizontally with smaller models. For semiconductors: Enables real-time classification and cost-effective deployment.",
+      "hints": [
+        "Use torch.onnx.export() for ONNX conversion",
+        "Dynamic quantization: torch.quantization.quantize_dynamic",
+        "ONNX Runtime faster than PyTorch for inference",
+        "Measure latency: percentiles (p50, p95, p99)",
+        "Test accuracy after quantization"
+      ],
+      "id": "m8.2_q030",
+      "points": 4,
+      "question": "Implement model optimization pipeline using quantization and ONNX export for fast inference serving.",
+      "test_cases": [
+        {
+          "description": "Model optimization pipeline",
+          "expected_output": "2-4x speedup with minimal accuracy loss",
+          "input": "BERT classification model"
+        }
+      ],
+      "topic": "model_optimization",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Cold Start Problem: **Scenario**: New equipment introduced \u2192 no historical failure data. New process \u2192 no maintenance logs. New fab \u2192 starting from scratch. **Challenge**: ML models need labeled training data. Can't wait months to collect sufficient data. **Strategies**: **1. Transfer Learning**: Pre-train on similar equipment/processes. Fine-tune on limited new equipment data. Example: Train on Etcher A data (10k samples). Apply to new Etcher B with 50 samples fine-tuning. Works when equipment similar enough. **2. Zero-Shot Learning**: Use general language models (GPT-3/4). Prompt with task description and few examples. No training required. Example: 'Classify failure reports into categories: [list]. Report: [text]. Category:' Performance: 60-70% accuracy immediately. **3. Few-Shot Learning**: Meta-learning models trained to learn from few examples. Provide 5-10 examples per class. Quick adaptation. **4. Domain Adaptation**: Use data from related equipment. Domain adaptation techniques to bridge gap. Adversarial domain adaptation. **5. Rule-Based Fallback**: Start with expert-defined rules. Keywords, patterns, heuristics. Gradually transition to ML as data accumulates. Hybrid: ML when confident, rules otherwise. **6. Synthetic Data**: Generate synthetic failure reports using templates. Use data augmentation aggressively. Mix with real data as available. **7. Active Learning**: Start with minimal labeled data. Deploy model, identify uncertain predictions. Prioritize expert labeling of uncertain cases. Rapid improvement with minimal labeling. **8. Cross-Equipment Knowledge Transfer**: Build unified model across all equipment types. New equipment benefits from shared knowledge. Equipment-specific fine-tuning layer. **9. External Data Sources**: Industry failure mode databases. Vendor documentation and manuals. Public datasets (adapted). **10. Progressive Deployment**: Start with high-confidence predictions only. Expand coverage as data accumulates and confidence grows. **Implementation Plan**: Week 1: Deploy zero-shot GPT-4 model or rule-based system. Week 2-4: Collect first 50-100 labeled samples. Apply active learning. Month 2: Fine-tune pretrained model on collected data. Hybrid deployment. Month 3-6: Accumulate 500+ samples. Full ML deployment. Continuous improvement. **For Semiconductors**: New tool installation \u2192 Zero-shot classification immediately. \u2192 Rules + active learning for 1 month. \u2192 Transfer learning from similar tools. \u2192 Full custom model after 3-6 months. Result: Functional system from day 1, improving continuously.",
+      "hints": [
+        "Think about new equipment installations",
+        "Consider leveraging data from similar equipment",
+        "Think about rule-based systems as fallbacks",
+        "Consider active learning for rapid improvement"
+      ],
+      "id": "m8.2_q031",
+      "points": 5,
+      "question": "Discuss strategies to handle the cold start problem when deploying NLP models for new equipment or processes with minimal historical data.",
+      "rubric": [
+        "Explains the cold start problem in manufacturing context (2 points)",
+        "Describes transfer learning and domain adaptation approaches (2 points)",
+        "Discusses few-shot and zero-shot learning strategies (2 points)",
+        "Addresses synthetic data and rule-based fallbacks (2 points)",
+        "Provides practical implementation recommendations (2 points)"
+      ],
+      "topic": "cold_start_problem",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Multi-Modal NLP+Vision for Manufacturing: **Motivation**: Failure reports often incomplete alone. Images show visual defects text can't describe. Text provides context images miss. Combined: Richer understanding. **Architecture Options**: **1. Parallel Encoders**: Text Encoder: BERT for report text \u2192 text embedding. Vision Encoder: ResNet/ViT for defect image \u2192 image embedding. Fusion: Concatenate or combine embeddings. **2. Vision-Language Models**: CLIP: Contrastive learning, text-image alignment. BLIP: Better language-image understanding. Unified model, shared representation space. **Fusion Strategies**: **Early Fusion**: Combine features at input level. Concatenate embeddings early in network. Pros: Maximum interaction between modalities. Cons: Harder to train, requires both modalities always. **Late Fusion**: Process modalities separately. Combine predictions at end. Pros: Modular, handles missing modalities. Cons: Limited cross-modal interaction. **Hybrid Fusion**: Separate encoders + cross-modal attention. Text attends to image features, vice versa. Pros: Flexible, strong performance. Balanced approach. **Cross-Modal Attention**: Text tokens attend to image regions. Image regions attend to text tokens. Identify relevant image areas for text concepts. **Training Strategies**: **1. Contrastive Learning**: Positive pairs: Matching text-image (same failure). Negative pairs: Non-matching text-image. Learn: Align matching pairs, separate non-matching. **2. Supervised Fine-Tuning**: Labeled (text, image, label) triplets. Multi-modal classification/regression. End-to-end training. **3. Self-Supervised Pretraining**: Masked language modeling with images. Image-text matching prediction. Contrastive learning on unlabeled data. **Handling Missing Modalities**: Design for optional inputs. Missing text: Use image-only path. Missing image: Use text-only path. Robust to incomplete data. **Applications for Semiconductors**: **1. Defect Classification**: Text: 'Circular pattern defects on wafer edge'. Image: Visual defect pattern. Combined: More accurate classification than either alone. **2. Severity Assessment**: Text: Description of extent. Image: Visual severity. Combined: Better risk assessment. **3. Root Cause Analysis**: Text: Process conditions, timeline. Image: Defect morphology. Combined: Identify cause (e.g., 'scratch pattern + report mentions tool contact' \u2192 mechanical issue). **4. Automated Reporting**: Input: Defect image. Output: Generated text description using vision-to-language model. Use case: Auto-document defects. **5. Image-Text Retrieval**: Query: 'Find wafers with edge delamination'. Retrieve: Images matching text description. Or reverse: Image query \u2192 find similar text reports. **6. Quality Control**: Operator report: 'Looks normal'. Image: Shows subtle defect. System: Flags discrepancy, prevents miss. **Implementation Example**: ```python class MultiModalFailureAnalyzer: def __init__(self): self.text_encoder = BertModel.from_pretrained('bert-base') self.image_encoder = ViTModel.from_pretrained('vit-base') self.fusion_layer = CrossAttentionFusion(hidden_dim=768) self.classifier = nn.Linear(768, num_failure_types) def forward(self, text_input, image_input): # Encode modalities text_features = self.text_encoder(**text_input).last_hidden_state image_features = self.image_encoder(image_input).last_hidden_state # Cross-modal fusion fused_features = self.fusion_layer(text_features, image_features) # Classification logits = self.classifier(fused_features[:, 0])  # [CLS] token return logits def predict(self, failure_report_text, defect_image): # Handle missing modalities if image is None: return self.text_only_predict(failure_report_text) if failure_report_text is None: return self.image_only_predict(defect_image) # Multi-modal prediction ... ``` **Data Requirements**: Need paired (text, image, label) data. Thousands of examples for training. Can leverage: Unlabeled text-image pairs (contrastive pretraining). Single-modal data (separate text/image datasets). **Challenges**: Data collection: Pairing text with relevant images. Alignment: Ensuring text describes corresponding image. Computational cost: Two encoders more expensive. Missing modality handling at inference. **Benefits for Manufacturing**: 10-20% accuracy improvement over single modality. Better captures complete failure context. Enables visual-semantic search. Automated quality documentation. Human inspectors + AI vision-language assistant. **State of the Art**: CLIP for zero-shot image-text matching. BLIP-2 for image captioning and VQA. Flamingo for few-shot vision-language learning. For semiconductors: Fine-tune on domain data for best results.",
+      "hints": [
+        "Think about CLIP and vision-language models",
+        "Consider when to combine modalities (early vs late fusion)",
+        "Think about missing modality handling",
+        "Consider attention mechanisms across modalities"
+      ],
+      "id": "m8.2_q032",
+      "points": 5,
+      "question": "Design a multi-modal NLP+vision system that combines failure report text with defect images for improved analysis. Discuss architecture, fusion strategies, and applications.",
+      "rubric": [
+        "Describes multi-modal architecture (text encoder + vision encoder) (2 points)",
+        "Explains early, late, and hybrid fusion strategies (2 points)",
+        "Discusses alignment between text and images (2 points)",
+        "Addresses training strategies and data requirements (2 points)",
+        "Provides semiconductor-specific applications and benefits (2 points)"
+      ],
+      "topic": "multi_modal_text_vision",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Continuous Learning for Manufacturing NLP: **Problem**: Language patterns evolve over time. New equipment \u2192 new terminology. New failure modes emerge. Models trained on old data become stale. **Challenge - Catastrophic Forgetting**: Fine-tuning on new data \u2192 forget old patterns. Performance degrades on previously learned tasks. **Continuous Learning Strategies**: **1. Experience Replay**: Store representative samples from old data. When training on new data, mix in old samples. Maintains performance on old tasks. Implementation: Keep buffer of 10-20% historical data. Sample during each training batch. **2. Elastic Weight Consolidation (EWC)**: Identify important weights for old tasks (via Fisher information). Add regularization: prevent important weights from changing too much. Allows learning new tasks without disrupting old. **3. Progressive Neural Networks**: Add new network capacity for new tasks. Keep old networks frozen. Learn lateral connections. No forgetting, but grows in size. **4. Distillation-Based Continual Learning**: Old model is teacher. New model is student. Train new model on: New data (supervised). Old model predictions on new data (distillation). Preserves old knowledge via teacher. **5. Incremental Learning**: Don't replace model completely. Fine-tune with small learning rate. Careful hyperparameter selection. Early stopping to prevent overfitting. **When to Update**: **Scheduled**: Monthly or quarterly retraining. Regular cadence, predictable. **Triggered**: Performance degradation detected. New failure mode threshold reached. Data drift exceeds threshold. **Continuous**: Online learning, continuous updates. Real-time adaptation. **Update Pipeline**: (1) **Data Collection**: Accumulate new labeled data since last update. Include expert corrections. (2) **Validation Set**: Maintain fixed validation set (old + new data). Ensures no degradation on old tasks. (3) **Training**: Mix new data with replay buffer. Use continual learning technique. (4) **Validation**: Test on: Old validation set (check forgetting). New validation set (check new learning). Overall combined performance. (5) **A/B Testing**: Deploy updated model to 10% of traffic. Compare to old model. Gradual rollout if successful. (6) **Monitoring**: Track per-class performance. Watch for degradation. Alert if issues. (7) **Rollback**: Keep old model ready. Quick rollback if problems detected. **Data Management**: **Replay Buffer Strategy**: Store diverse, representative samples. Cover all failure types, equipment, time periods. Update buffer: Remove oldest, add newest. Size: 10-30% of total training data. **New Data Integration**: Prioritize: Novel patterns, misclassified examples, rare classes. Active learning: Label uncertain predictions first. **For Semiconductors**: **Scenario 1 - New Equipment**: New tool installed Week 1. Week 2-4: Collect initial labeled data. Month 2: First incremental update (experience replay). Month 3+: Regular monthly updates. **Scenario 2 - Language Evolution**: Operators start using new terminology. Detected via OOV (out-of-vocabulary) rate increase. Collect labeled samples with new terms. Incremental update to vocabulary and model. **Scenario 3 - New Failure Mode**: Novel defect pattern emerges. Initially flagged as 'uncertain'. Experts label samples. Incremental update adds new class. Validate: Old classes unaffected, new class learned. **Monitoring for Updates**: Track: Classification confidence distribution (decreasing?). New vocabulary terms (OOV rate). Failure type distribution shift. Model performance metrics trend. Trigger update when: Performance drops >5%. New failure mode >50 labeled samples. Monthly scheduled update. **Implementation Example**: ```python class ContinualLearningPipeline: def __init__(self, model, replay_buffer_size=1000): self.model = model self.replay_buffer = ReplayBuffer(replay_buffer_size) self.validator = ModelValidator(old_data, new_data) def incremental_update(self, new_training_data): # Mix new data with replay buffer training_data = new_training_data + self.replay_buffer.sample(len(new_training_data) // 4) # Fine-tune with small learning rate updated_model = self.fine_tune( self.model, training_data, lr=1e-5, epochs=3 ) # Validate performance metrics = self.validator.validate(updated_model) if metrics['old_data_performance'] < self.threshold: return None  # Reject update, too much forgetting if metrics['new_data_performance'] > metrics['baseline']: # Update replay buffer self.replay_buffer.add(new_training_data) return updated_model return None ``` **Best Practices**: Start conservative: Small learning rate, few epochs. Always validate on old data. Maintain diverse replay buffer. Monitor continuously. Have rollback plan ready. Regular scheduled updates better than reactive. Document: What changed, why, performance impact. For semiconductor manufacturing: Continuous learning essential for adapting to evolving processes, equipment, and language while maintaining reliability on established patterns.",
+      "hints": [
+        "Think about balance between learning new patterns and retaining old knowledge",
+        "Consider incremental learning approaches",
+        "Think about data drift detection",
+        "Consider A/B testing for model updates"
+      ],
+      "id": "m8.2_q033",
+      "points": 5,
+      "question": "Explain how to implement continuous learning for NLP models in production to adapt to evolving language patterns, new failure modes, and changing equipment without catastrophic forgetting.",
+      "rubric": [
+        "Explains continuous learning challenges and catastrophic forgetting (2 points)",
+        "Describes strategies to prevent forgetting (replay, regularization) (2 points)",
+        "Discusses when and how to trigger model updates (2 points)",
+        "Addresses validation and deployment of updated models (2 points)",
+        "Provides monitoring and rollback strategies (2 points)"
+      ],
+      "topic": "continuous_learning",
+      "type": "conceptual"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Prompt Engineering for Manufacturing: **Why Important**: LLMs like GPT-4 powerful but require good prompts. No fine-tuning \u2192 prompt is only way to guide behavior. **Effective Strategies**: **1. Few-Shot Prompting**: Provide 3-10 examples in prompt. Examples: (input report, desired output classification). Model learns pattern from examples. More examples \u2192 better performance (up to limit). **2. Clear Task Description**: Explicitly state task: 'You are an expert failure analyzer. Classify failure reports into categories: [list].' Context: Semiconductor manufacturing setting. Constraints: What to avoid, edge cases. **3. Structured Output Format**: Request specific format (JSON, markdown, etc.). 'Output format: {\"failure_type\": \"...\", \"confidence\": 0-1, \"reasoning\": \"...\"}' Easier to parse and integrate. **4. Chain-of-Thought (CoT)**: Ask model to reason step-by-step. 'Let's approach this systematically: 1) Identify key symptoms, 2) Match to known failure patterns, 3) Determine most likely cause.' Improves accuracy, provides explainability. **5. Role-Playing**: 'You are an experienced semiconductor process engineer with 20 years of failure analysis experience.' Activates relevant knowledge. **6. Constraints and Guardrails**: 'If uncertain, output \"uncertain\" rather than guessing.' 'Only use failure types from provided list.' Reduces hallucinations. **Example Prompt**: ``` You are an expert semiconductor failure analyst. Your task is to classify failure reports into one of the following categories: - tool_failure - process_drift - contamination - material_defect - operator_error Here are some examples: Example 1: Report: \"Chamber pressure fluctuated during CVD process. Wafer showed non-uniform deposition.\" Classification: process_drift Reasoning: Pressure instability indicates process control issue. Example 2: Report: \"Found particles on wafer surface after cleaning step.\" Classification: contamination Reasoning: Particles indicate contamination event. Example 3: Report: \"Robot arm positioning error caused wafer misalignment.\" Classification: tool_failure Reasoning: Mechanical equipment malfunction. Now classify this report: [REPORT TEXT] Provide output in JSON format: {\"failure_type\": \"...\", \"confidence\": 0.0-1.0, \"reasoning\": \"...\"} ``` **Benefits**: No training required. Quick deployment. Leverages LLM's broad knowledge. Easy to update (change prompt). **Limitations**: Slower than fine-tuned models. More expensive per query. Less control than fine-tuning. May hallucinate if not constrained. **For Semiconductors**: Use for: Cold start scenarios. Exploratory analysis. Low-volume applications. Supplement to fine-tuned models. Result: 70-85% accuracy with good prompts (vs 85-95% with fine-tuning).",
+      "id": "m8.2_q034",
+      "options": [
+        "Simple one-sentence prompts work best",
+        "Use few-shot prompting with examples, clear task description, structured output format, and chain-of-thought reasoning",
+        "No prompt engineering needed",
+        "Only zero-shot works"
+      ],
+      "points": 3,
+      "question": "For using large language models (GPT-4) for failure analysis without fine-tuning, what prompt engineering strategies are most effective?",
+      "topic": "prompt_engineering",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "Batch vs Real-Time NLP Inference: **Batch Processing**: Process large volume of reports overnight or periodically. Use cases: Daily/weekly failure trend analysis. Historical data mining. Non-urgent report classification. Generating dashboards and reports. Benefits: More efficient (higher throughput). Can use larger models. Lower cost per prediction. Optimize for throughput, not latency. **Real-Time Inference**: Process reports immediately as they arrive. Use cases: Critical failure alerts (immediate escalation). Real-time operator assistance. Inline quality checks (during production). Interactive troubleshooting tools. Benefits: Immediate action possible. Better user experience. Enables real-time decision making. **Hybrid Approach (Common)**: Real-time: Urgent/critical failures flagged immediately. Batch: Bulk processing of routine reports overnight. Priority queue: Critical reports \u2192 real-time, routine \u2192 batch. **For Semiconductors**: Real-Time: Critical equipment failure \u2192 immediate alert to engineers. In-line defect detected \u2192 instant classification and routing. Interactive failure assistant for troubleshooters. Batch: Classify 10,000 maintenance logs nightly. Weekly trend analysis across all reports. Monthly failure pattern mining. **Cost Consideration**: Real-time: More expensive (servers always running, lower utilization). Batch: Cost-effective (run during off-peak, high utilization). **Implementation**: Both use same model, different deployment: Real-time: API server (FastAPI), always-on, <100ms latency. Batch: Scheduled job, process thousands, minutes-hours runtime. Decision: Based on urgency of use case, cost constraints, and latency requirements.",
+      "id": "m8.2_q035",
+      "options": [
+        "Always use real-time",
+        "Batch for daily reports and historical analysis; real-time for urgent failures requiring immediate action",
+        "Always use batch processing",
+        "No difference between them"
+      ],
+      "points": 2,
+      "question": "When should batch processing be used vs real-time inference for NLP analysis of failure reports?",
+      "topic": "batch_vs_realtime",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Regulatory Compliance for Manufacturing NLP: **1. Data Privacy & PII Protection**: **Requirements**: GDPR (EU), CCPA (California) if applicable. Protect personal identifiable information. Employee names, operator IDs, personal notes. **Implementation**: PII Detection: Automatically detect and mask PII in logs. Named entity recognition for person names, IDs. Anonymization: Replace PII with placeholders. Maintain anonymization mapping securely (for audit). Data Retention: Define and enforce retention policies. Delete old data per regulations. Access Control: Role-based access to sensitive data. Audit access logs. **2. Model Validation & Testing**: **Requirements**: Demonstrate model performs as claimed. Validation before deployment. Periodic revalidation. **Implementation**: Validation Protocol: Test on representative dataset. Measure accuracy, precision, recall per failure type. Document test methodology and results. Performance Thresholds: Define minimum acceptable performance. Per-class minimum accuracy (e.g., 85%). Overall system performance. Edge Case Testing: Test on rare failures, unusual inputs. Adversarial examples. Out-of-distribution detection. Bias Testing: Ensure no bias against specific: Equipment types. Shifts (day/night). Facilities. Documentation: Validation report with: Test data characteristics. Performance metrics. Known limitations. Approval signatures. **3. Traceability & Audit Trail**: **Requirements**: Track all model predictions. Ability to audit decisions. Root cause analysis for errors. **Implementation**: Prediction Logging: For each prediction, log: Input text (or hash). Model version. Prediction + confidence. Timestamp, user/system ID. Model Version Control: Track all model versions deployed. Git-like versioning. Ability to reproduce any past prediction. Data Lineage: Track training data provenance. What data used for each model version. Training timestamps, parameters. Decision Trail: Why was prediction made? Attention weights, important tokens. Similar historical examples. Explanation text. Audit Interface: Query historical predictions. Filter by time, equipment, failure type. Export for compliance reviews. **4. Regulatory Standards**: **ISO 9001 (Quality Management)**: Document NLP system in QMS. Standard operating procedures. Change control process. **ISO/IEC 27001 (Information Security)**: Secure data handling. Access controls, encryption. Security audits. **ITAR (International Traffic in Arms Regulations)**: If applicable to defense contractors. Restrict data and model export. Access limited to authorized personnel. **FDA (if applicable)**: For medical device semiconductors. 21 CFR Part 11 compliance. Validation and verification. **Industry-Specific**: Semiconductor: SEMI standards. Automotive: IATF 16949 if automotive chips. **5. Explainability & Interpretability**: **Requirements**: Explain model decisions for critical applications. Audit trail must include reasoning. **Implementation**: Attention Visualization: Show which tokens influenced decision. Highlight key phrases. LIME/SHAP Explanations: Word importance scores. Local interpretability. Similar Examples: Show similar historical cases. \"Model classified this way because similar to these...\" Confidence Scores: Well-calibrated confidence. Uncertainty quantification. **6. Change Control & Validation**: **Process**: Change Request: Document why model update needed. Impact Analysis: What might be affected? Validation Testing: Test updated model thoroughly. Review & Approval: Quality assurance review. Management approval for deployment. Deployment: Controlled rollout (A/B test). Monitor closely. Post-Deployment: Verify performance in production. Document results. **7. Documentation Requirements**: **System Documentation**: Architecture diagram. Data flow. Model specifications (algorithm, hyperparameters). Training procedures. **Validation Documentation**: Test plans and protocols. Test results. Performance summaries. Known limitations. **Operating Procedures**: SOPs for model usage. User training materials. Troubleshooting guides. **Audit Documentation**: Compliance matrix (requirements \u2192 implementation). Audit reports. Corrective actions. **8. Incident Response**: **Plan for**: Model errors or failures. Data breaches. Compliance violations. **Response**: Incident logging and investigation. Root cause analysis. Corrective and preventive actions (CAPA). Documentation and reporting. **9. Training & Competency**: **Requirements**: Users trained on proper system usage. Understanding of limitations. **Implementation**: Training programs. Competency assessments. Training records. **10. Continuous Compliance**: **Ongoing**: Regular audits (internal, external). Compliance monitoring. Updates for regulation changes. **Metrics**: Compliance KPIs. Audit findings trends. Corrective action closure rate. **Practical Implementation**: ```python class ComplianceManager: def __init__(self): self.pii_detector = PIIDetector() self.audit_logger = AuditLogger() def process_report_compliant(self, report, user_id): # 1. PII detection and masking report_cleaned = self.pii_detector.mask_pii(report) # 2. Model inference prediction = self.model.predict(report_cleaned) explanation = self.model.explain(report_cleaned) # 3. Audit logging self.audit_logger.log({ 'timestamp': datetime.now(), 'user_id': user_id, 'input_hash': hash(report), 'prediction': prediction, 'confidence': prediction['confidence'], 'model_version': self.model.version, 'explanation': explanation }) # 4. Compliance checks if prediction['confidence'] < CONFIDENCE_THRESHOLD: # Flag for human review self.flag_for_review(report, prediction) return { 'prediction': prediction, 'audit_id': audit_id, 'explainability': explanation } ``` **For Semiconductor Manufacturing**: Critical: Data security (IP protection). Traceability (quality systems). Validation (reliability). Result: Compliant NLP deployment requires comprehensive governance, documentation, and monitoring beyond just model accuracy.",
+      "hints": [
+        "Think about GDPR and data protection",
+        "Consider industry-specific regulations",
+        "Think about model explainability for audits",
+        "Consider documentation requirements"
+      ],
+      "id": "m8.2_q036",
+      "points": 5,
+      "question": "Discuss regulatory and compliance considerations for deploying NLP models in semiconductor manufacturing, including data privacy, model validation, traceability, and audit requirements.",
+      "rubric": [
+        "Explains data privacy and PII handling requirements (2 points)",
+        "Describes model validation and testing requirements (2 points)",
+        "Discusses traceability and audit trail needs (2 points)",
+        "Addresses regulatory standards (ISO, ITAR, etc.) (2 points)",
+        "Provides practical compliance implementation strategies (2 points)"
+      ],
+      "topic": "regulatory_compliance",
+      "type": "conceptual"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "Handling Specialized Vocabulary: **Problem**: Standard BERT tokenizer trained on general text. Semiconductor terms unknown: 'PECVD' \u2192 ['PE', '##C', '##V', '##D'] (subword splits). 'CMP', 'RTP', 'ALD' split into characters. Inefficient representation, loss of semantic unity. **Solutions**: **1. Vocabulary Expansion**: Add domain terms to tokenizer vocabulary. PECVD becomes single token (not 4 subwords). More efficient, better semantics. Process: Extract frequent domain terms from corpus. Add to vocabulary (typically 1k-10k terms). Re-initialize embeddings for new tokens. Continue pretraining to learn new token embeddings. **2. Domain-Adaptive Pretraining**: Continue MLM pretraining on semiconductor corpus. Model learns: New vocabulary distributions. Domain-specific token relationships. Technical term semantics. **3. Specialized Tokenizer**: Train tokenizer from scratch on domain text. Better subword vocabulary for domain. SentencePiece or WordPiece on domain corpus. **Benefits**: Single tokens for technical terms (faster, more meaningful). Better representation of domain language. Improved downstream task performance (3-7%). **Implementation**: ```python from transformers import BertTokenizerFast, BertForMaskedLM # Add domain vocabulary domain_terms = ['PECVD', 'CMP', 'RTP', 'ALD', 'CVD', ...] tokenizer.add_tokens(domain_terms) model.resize_token_embeddings(len(tokenizer)) # Continue pretraining on domain corpus pretrain_on_domain_corpus(model, tokenizer, semiconductor_texts) ``` **For Semiconductors**: Essential for handling equipment names, process acronyms, parameters. Result: 'PECVD chamber pressure' \u2192 efficient encoding, better understanding.",
+      "id": "m8.2_q037",
+      "options": [
+        "They can't handle specialized vocabulary",
+        "Expand tokenizer vocabulary with domain terms and continue pretraining on domain corpus",
+        "Replace all technical terms with generic terms",
+        "Use only character-level tokenization"
+      ],
+      "points": 2,
+      "question": "How can transformer models be adapted to handle the specialized vocabulary and acronyms common in semiconductor manufacturing?",
+      "topic": "vocabulary_expansion",
+      "type": "multiple_choice"
+    },
+    {
+      "code_template": "from typing import Dict, List\nimport json\nfrom datetime import datetime\n\nclass FailureReportPipeline:\n    def __init__(self, classifier, ner_model, alert_system, database):\n        self.classifier = classifier\n        self.ner_model = ner_model\n        self.alert_system = alert_system\n        self.database = database\n    \n    def process_report(self, report_text, metadata):\n        \"\"\"\n        End-to-end processing of single failure report.\n        \n        Args:\n            report_text: Raw report text\n            metadata: Dict with timestamp, equipment_id, etc.\n        \n        Returns:\n            Processed report with classification and entities\n        \"\"\"\n        # Your implementation here:\n        # 1. Preprocessing\n        # 2. Classification\n        # 3. Entity extraction\n        # 4. Confidence checks\n        # 5. Store results\n        # 6. Trigger alerts if needed\n        pass\n    \n    def preprocess(self, text):\n        \"\"\"\n        Clean and normalize text.\n        \"\"\"\n        # Remove special characters, normalize whitespace, etc.\n        pass\n    \n    def classify_failure(self, text):\n        \"\"\"\n        Classify failure type with confidence.\n        \"\"\"\n        prediction = self.classifier.predict(text)\n        return {\n            'failure_type': prediction['class'],\n            'confidence': prediction['confidence'],\n            'probabilities': prediction['probs']\n        }\n    \n    def extract_entities(self, text):\n        \"\"\"\n        Extract equipment, parameters, values.\n        \"\"\"\n        entities = self.ner_model.predict(text)\n        return {\n            'equipment': [e for e in entities if e['type'] == 'EQUIP'],\n            'parameters': [e for e in entities if e['type'] == 'PARAM'],\n            'values': [e for e in entities if e['type'] == 'VALUE']\n        }\n    \n    def should_alert(self, classification, entities, metadata):\n        \"\"\"\n        Determine if alert needed based on:\n        - Failure criticality\n        - Equipment importance\n        - Confidence level\n        \"\"\"\n        # Your logic here\n        pass\n    \n    def batch_process(self, reports: List[Dict]):\n        \"\"\"\n        Process multiple reports efficiently.\n        \"\"\"\n        # Batch inference for efficiency\n        pass",
+      "difficulty": "medium",
+      "explanation": "End-to-End NLP Pipeline: **Components**: (1) Ingestion: Receive reports from MES, manual entry, etc. (2) Preprocessing: Text cleaning, normalization. (3) Classification: Failure type prediction. (4) NER: Extract entities (equipment, parameters). (5) Storage: Save to database with metadata. (6) Alerting: Notify if critical failure. (7) Monitoring: Track pipeline health. **Design Considerations**: Error Handling: Each step can fail, handle gracefully. Logging: Audit trail for compliance. Efficiency: Batch processing where possible. Scalability: Queue-based architecture for high volume. Reliability: Retry mechanisms, dead letter queues. **For Semiconductors**: Real-time: Critical failures processed immediately. Batch: Routine reports processed in bulk. Alerting: Escalate based on severity and equipment. Integration: Connect with MES, maintenance systems. Result: Automated, reliable failure report processing with human oversight.",
+      "hints": [
+        "Use batch inference for efficiency",
+        "Implement error handling for each step",
+        "Log all processing steps for audit",
+        "Consider async processing for I/O operations",
+        "Implement retry logic for external services"
+      ],
+      "id": "m8.2_q038",
+      "points": 4,
+      "question": "Implement end-to-end NLP pipeline for failure report processing: ingestion, classification, entity extraction, storage, and alerting.",
+      "test_cases": [
+        {
+          "description": "End-to-end pipeline",
+          "expected_output": "Classified, entities extracted, stored, alert triggered",
+          "input": "Failure report with critical equipment failure"
+        }
+      ],
+      "topic": "pipeline_integration",
+      "type": "coding_exercise"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Low-Resource Language NLP: **Challenge**: Fabs in Vietnam, Thailand, Malaysia \u2192 local language reports. Limited or no labeled training data in these languages. **Solutions**: **1. Zero-Shot Cross-Lingual Transfer**: Train classifier on high-resource language (English). Apply directly to low-resource language using multilingual model (mBERT, XLM-R). Works surprisingly well: 70-85% of English performance. No target language labels needed. **2. Machine Translation**: Translate low-resource text to English. Apply English model. Translate output back if needed. Works well for languages with good MT (Google Translate). Latency: Translation adds overhead. **3. Few-Shot Cross-Lingual Fine-Tuning**: Train on high-resource language (English, Chinese). Fine-tune on 50-100 labeled samples in target language. Leverages cross-lingual transfer. **4. Multilingual Joint Training**: Train single model on multiple languages together. Shared representation helps low-resource languages. Requires labels in at least some languages. **5. Hybrid Approach**: Use English model with translation. Collect small labeled dataset over time. Incrementally improve with fine-tuning. **Implementation**: ```python class MultilingualFailureClassifier: def __init__(self): self.multilingual_model = mBERT  # Trained on English self.translator = GoogleTranslator() def classify(self, text, language): if language == 'en': return self.multilingual_model.predict(text) elif language in ['vi', 'th'] and not self.has_language_model(language): # Zero-shot transfer return self.multilingual_model.predict(text) else: # Translation fallback text_en = self.translator.translate(text, target='en') return self.multilingual_model.predict(text_en) ``` **For Semiconductors**: Global fabs in 20+ countries \u2192 Multilingual model handles most languages out-of-box. \u2192 Translation fallback for unsupported languages. \u2192 Collect data, improve incrementally. Result: Global deployment without needing extensive labeled data in every language.",
+      "id": "m8.2_q039",
+      "options": [
+        "Low-resource languages can't be supported",
+        "Use multilingual models with zero-shot transfer, machine translation to high-resource language, or cross-lingual training",
+        "Must collect thousands of labeled samples for each language",
+        "Only English is supported"
+      ],
+      "points": 3,
+      "question": "For global semiconductor operations, how can NLP models be deployed for low-resource languages (e.g., Vietnamese, Thai) where labeled training data is scarce?",
+      "topic": "low_resource_languages",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Production NLP Architecture for Global Manufacturing: **Requirements**: Scale: 10,000+ reports/day across global fabs. Latency: <100ms p95 for real-time, batch for non-urgent. Reliability: 99.9% uptime (8.7 hours downtime/year). Security: Data isolation between fabs, encryption. Global: Deploy in Asia, Americas, Europe. **Architecture Design**: **1. Microservices Architecture**: Services: (a) API Gateway: Entry point, routing, auth, rate limiting. (b) Preprocessing Service: Text cleaning, language detection. (c) Inference Services: Classification, NER, similarity search (separate services for independent scaling). (d) Storage Service: Database interface, caching. (e) Alert Service: Notification and escalation. (f) Monitoring Service: Health checks, metrics. Benefits: Independent scaling, fault isolation, technology flexibility. **2. Containerization & Orchestration**: Docker: Containerize all services. Kubernetes: Orchestration, auto-scaling, self-healing. Helm: Deployment management. **3. Global Deployment**: Multi-Region: Deploy in Asia (Singapore/Taiwan), Americas (US), Europe (Ireland). Benefits: Low latency, data sovereignty, disaster recovery. Regional Routing: Route requests to nearest region. Data Residency: Keep data in originating region (GDPR, local laws). **4. Load Balancing**: Layer 7 Load Balancer: Distribute traffic across service replicas. Route based on: Region, endpoint, request type. Auto-Scaling: Horizontal pod auto-scaler (HPA) in Kubernetes. Scale based on: CPU, memory, request queue length. Target: CPU <70%, latency <100ms p95. **5. Caching Strategy**: Redis Cluster: Cache frequent predictions (duplicate reports). Cache embeddings for similarity search. TTL: 24 hours. Cache Hit Rate: Target 30-50% for common reports. **6. Database Architecture**: Primary: PostgreSQL for structured data (metadata, predictions). Secondary: Elasticsearch for full-text search. Vector DB: Pinecone/Milvus for embeddings. Replication: Multi-region read replicas. Backup: Automated daily backups, point-in-time recovery. **7. Asynchronous Processing**: Message Queue: Kafka/RabbitMQ for async tasks. Workers: Celery workers for: Batch processing. Model retraining. Report generation. Priority Queues: Critical failures \u2192 high priority. Routine reports \u2192 low priority. **8. Model Serving**: Model Server: TorchServe or TensorFlow Serving. Model Registry: MLflow for version management. Deployment: Blue-green deployment for zero-downtime updates. A/B Testing: Gradual rollout (10% \u2192 50% \u2192 100%). Rollback: Quick rollback to previous version if issues. **9. API Design**: RESTful API: POST /api/v1/classify (real-time). POST /api/v1/extract-entities. GET /api/v1/similar-reports. POST /api/v1/batch (batch processing). gRPC: For service-to-service communication (faster). Authentication: API keys, JWT tokens. Rate Limiting: Per-user/per-fab limits. **10. Monitoring & Observability**: Metrics (Prometheus): Request rate, latency (p50, p95, p99). Error rates (5xx, 4xx). Model inference time. Cache hit rate. Queue depth. Logs (ELK Stack): Centralized logging (Elasticsearch, Logstash, Kibana). Structured JSON logs. Log levels: ERROR, WARN, INFO, DEBUG. Tracing (Jaeger): Distributed tracing for request flow. Identify bottlenecks. Alerting (PagerDuty): Latency > 200ms p95. Error rate > 1%. Service down. Model accuracy degradation. Dashboards (Grafana): Real-time operational dashboards. SLA tracking. Business metrics (reports processed, failure trends). **11. Security**: Network: VPC isolation per region. TLS/SSL for all communication. Firewall rules. Authentication & Authorization: OAuth 2.0 / OIDC. Role-based access control (RBAC). Service mesh (Istio) for service-to-service auth. Data Security: Encryption at rest (AES-256). Encryption in transit (TLS 1.3). PII masking/anonymization. Secrets Management: HashiCorp Vault for API keys, DB credentials. Rotate secrets regularly. Audit Logging: Track all access and predictions. Immutable audit logs. **12. Disaster Recovery**: Multi-Region Active-Active: Traffic routed to healthy regions. RTO (Recovery Time Objective): <1 hour. RPO (Recovery Point Objective): <15 minutes. Backups: Database: Daily full, continuous incremental. Models: Versioned in registry, backed up. Configuration: Infrastructure as Code (Terraform), version controlled. Runbooks: Documented procedures for common failures. Regular DR drills. **13. CI/CD Pipeline**: Continuous Integration: GitHub Actions / GitLab CI. Automated tests: Unit, integration, model performance. Continuous Deployment: Automated deployment to staging. Manual approval for production. Canary releases. Testing: Staging environment mirrors production. Automated smoke tests. Load testing before major releases. **14. Data Privacy & Compliance**: GDPR Compliance (Europe): Data minimization, consent, right to deletion. Regional data storage. CCPA (California): Similar to GDPR. ITAR (if applicable): Access restrictions. Audit Trails: Complete prediction history. Model version tracking. **15. Cost Optimization**: Auto-Scaling: Scale down during low-traffic periods. Spot Instances: Use for batch processing (cost savings). Reserved Instances: For base load. Caching: Reduce redundant model inference. Monitoring: Track cost per prediction. Optimize expensive operations. **16. Example Architecture Diagram**: ``` Global Users \u2502 \u251c\u2500\u2500\u2500 API Gateway (Kong/AWS API Gateway) \u2502 \u251c\u2500\u2500\u2500 Load Balancer \u2502 \u251c\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500 \u2502 \u2502 \u2502 \u2502 Preprocessing Classifier NER Similarity \u2502 Service Service Service Search \u2502\u2502 \u2502 \u2502 \u2502 \u2502 \u2514\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500 \u2502 \u251c\u2500\u2500\u2500 Redis Cache \u2502 \u251c\u2500\u2500\u2500 Message Queue (Kafka) \u2502 \u251c\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500 \u2502 \u2502 Database Vector DB (PostgreSQL) (Pinecone) \u2502 \u2514\u2500\u2500\u2500 Monitoring Stack (Prometheus, Grafana, ELK) ``` **17. Implementation Phases**: Phase 1 (Month 1-2): MVP in single region. Basic classifier, storage, API. Phase 2 (Month 3-4): Add NER, similarity search. Monitoring and alerting. Phase 3 (Month 5-6): Multi-region deployment. Caching, optimization. Phase 4 (Month 7+): Advanced features, continuous improvement. **18. Operational Metrics**: Availability: 99.9% uptime. Latency: <100ms p95 for real-time. Throughput: 1000+ requests/second. Accuracy: Monitor and maintain >90%. Cost: <$0.01 per report processed. **Technology Stack**: Orchestration: Kubernetes, Helm. Services: Python (FastAPI), Go (performance-critical). ML: PyTorch, Transformers, ONNX Runtime. Storage: PostgreSQL, Elasticsearch, Redis. Monitoring: Prometheus, Grafana, ELK, Jaeger. Message Queue: Kafka. Cloud: AWS/Azure/GCP (multi-cloud optional). **For Semiconductor Manufacturing**: This architecture provides: Scalable: Handle growth from 10k to 100k+ reports/day. Reliable: Multi-region, fault-tolerant, quick recovery. Secure: Compliance with global regulations. Global: Low-latency worldwide. Observable: Comprehensive monitoring and alerting. Cost-Effective: Optimized resource usage. Result: Production-grade NLP system supporting global semiconductor operations with enterprise requirements.",
+      "hints": [
+        "Think about Kubernetes and container orchestration",
+        "Consider geographic distribution of fabs",
+        "Think about data residency requirements",
+        "Consider disaster recovery"
+      ],
+      "id": "m8.2_q040",
+      "points": 5,
+      "question": "Design a complete production-grade NLP deployment architecture for semiconductor manufacturing that handles 10,000+ reports daily across multiple fabs globally. Address scalability, reliability, monitoring, and security.",
+      "rubric": [
+        "Describes scalable microservices architecture (2 points)",
+        "Explains load balancing and fault tolerance strategies (2 points)",
+        "Discusses global deployment and data sovereignty (2 points)",
+        "Addresses monitoring, logging, and observability (2 points)",
+        "Provides security and access control implementation (2 points)"
+      ],
+      "topic": "production_deployment_architecture",
+      "type": "conceptual"
+    }
+  ],
+  "sub_module": "8.2",
+  "title": "Advanced NLP for Semiconductor Manufacturing",
+  "version": "1.0",
+  "week": 16
+}

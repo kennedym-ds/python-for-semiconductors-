@@ -1,0 +1,451 @@
+{
+  "description": "Assessment covering multilabel classification fundamentals, problem transformation methods, multilabel-specific metrics, threshold optimization, and semiconductor manufacturing applications including multi-defect detection and multi-parameter prediction.",
+  "estimated_time_minutes": 75,
+  "module_id": "module-4.3",
+  "passing_score": 70,
+  "questions": [
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "In multilabel classification, each sample can be assigned multiple labels simultaneously (e.g., a wafer can have both 'scratch' and 'particle' defects). In multiclass classification, each sample belongs to exactly one class. This is a fundamental distinction that affects model architecture and evaluation.",
+      "id": "m4.3_q001",
+      "options": [
+        "Multilabel has more than two classes",
+        "Multilabel allows each sample to belong to multiple classes simultaneously",
+        "Multilabel only works with text data",
+        "Multilabel is faster to train"
+      ],
+      "points": 2,
+      "question": "What distinguishes multilabel classification from multiclass classification?",
+      "topic": "multilabel_basics",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Binary Relevance transforms the multilabel problem into multiple independent binary classification problems (one per label). This is simple and parallelizable but ignores label correlations. Label Powerset treats each unique combination as a class, while Classifier Chains models label dependencies.",
+      "id": "m4.3_q002",
+      "options": [
+        "Label Powerset",
+        "Binary Relevance",
+        "Classifier Chains",
+        "Label Embedding"
+      ],
+      "points": 2,
+      "question": "Which problem transformation method trains one binary classifier for each label independently?",
+      "topic": "problem_transformation",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "Classifier Chains explicitly models label dependencies by feeding predictions from previous classifiers as features to subsequent ones. This captures correlations like 'if particle contamination, then higher probability of post-CMP residue'. Binary Relevance ignores such dependencies, potentially reducing accuracy.",
+      "id": "m4.3_q003",
+      "options": [
+        "Binary Relevance (treats labels independently)",
+        "Classifier Chains (models label dependencies sequentially)",
+        "One-vs-Rest (independent binary classifiers)",
+        "Random Forest (without multilabel adaptation)"
+      ],
+      "points": 3,
+      "question": "In semiconductor manufacturing, 'particle contamination' and 'post-CMP residue' often occur together. Which method best captures this label correlation?",
+      "topic": "label_correlations",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Hamming Loss measures the fraction of labels that are incorrectly predicted (false positives + false negatives). It ranges from 0 (perfect) to 1 (all wrong). Lower is better. It treats all label errors equally, unlike metrics that weight label importance.",
+      "id": "m4.3_q004",
+      "options": [
+        "The percentage of exact label set matches",
+        "The fraction of incorrectly predicted labels",
+        "The average precision across labels",
+        "The correlation between predicted and true labels"
+      ],
+      "points": 2,
+      "question": "What does Hamming Loss measure in multilabel classification?",
+      "topic": "metrics",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 2,
+      "difficulty": "easy",
+      "explanation": "Subset Accuracy is the strictest multilabel metric - it only counts a prediction as correct if ALL labels match exactly. For a wafer with defects ['scratch', 'particle'], predicting only ['scratch'] scores 0. This metric is very strict and often results in low scores, but is important for applications requiring perfect classification.",
+      "id": "m4.3_q005",
+      "options": [
+        "At least one label matches",
+        "The majority of labels match",
+        "All labels must match exactly",
+        "The most important label matches"
+      ],
+      "points": 2,
+      "question": "Subset Accuracy (exact match ratio) requires what condition to count a prediction as correct?",
+      "topic": "metrics",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Micro-average aggregates all true positives, false positives, and false negatives across labels before calculating F1, giving more weight to frequent labels. Macro-average calculates F1 per label then averages, treating all labels equally. Use micro when common labels matter most, macro when rare labels are important.",
+      "id": "m4.3_q006",
+      "options": [
+        "When all labels are equally important",
+        "When you want to weight metrics by label frequency (emphasize common labels)",
+        "When you have only two labels",
+        "Micro and macro are always the same"
+      ],
+      "points": 2,
+      "question": "When should you use micro-averaged F1 instead of macro-averaged F1 in multilabel classification?",
+      "topic": "evaluation",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "Label Powerset treats each unique combination of labels as a separate class. With K labels, there can be up to 2^K combinations. For 10 labels, that's 1024 classes! Many combinations may never appear in training data (class imbalance). This scalability issue limits Label Powerset to problems with few labels or few co-occurring combinations.",
+      "id": "m4.3_q007",
+      "options": [
+        "It cannot handle more than two labels",
+        "The number of classes grows exponentially with the number of labels",
+        "It requires neural networks",
+        "It cannot capture label correlations"
+      ],
+      "points": 3,
+      "question": "What is the main limitation of the Label Powerset method?",
+      "topic": "label_powerset",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 2,
+      "difficulty": "easy",
+      "explanation": "This is multilabel classification because a single wafer can have multiple defect types simultaneously. Binary would be defect/no-defect, multiclass would force choosing one defect type, but multilabel allows detecting all present defects: ['scratch', 'particle', 'edge_chip'].",
+      "id": "m4.3_q008",
+      "options": [
+        "Binary classification",
+        "Multiclass classification",
+        "Multilabel classification",
+        "Regression"
+      ],
+      "points": 2,
+      "question": "A wafer inspection system needs to detect multiple defect types on a single wafer (scratches, particles, discoloration, edge chips). What type of classification problem is this?",
+      "topic": "semiconductor_applications",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "In multilabel problems, different labels often have different frequencies and costs. A rare but critical defect might need a low threshold (high recall), while a common defect might need a high threshold (high precision). Per-label threshold optimization using validation data significantly improves performance.",
+      "id": "m4.3_q009",
+      "options": [
+        "It's not needed - use default 0.5 threshold",
+        "Different labels may have different optimal decision thresholds due to varying class distributions",
+        "It only matters for binary classification",
+        "Thresholds must always be the same across labels"
+      ],
+      "points": 2,
+      "question": "Why is threshold optimization particularly important in multilabel classification?",
+      "topic": "threshold_optimization",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 2,
+      "difficulty": "medium",
+      "explanation": "sklearn's MLPClassifier (neural network) natively supports multilabel classification when the output layer uses sigmoid activation and binary crossentropy loss. Most other sklearn classifiers need MultiOutputClassifier or OneVsRestClassifier wrappers. RandomForest can work with these wrappers but doesn't have native multilabel support.",
+      "id": "m4.3_q010",
+      "options": [
+        "LogisticRegression",
+        "RandomForestClassifier with predict_proba",
+        "MLPClassifier (Multi-layer Perceptron)",
+        "DecisionTreeClassifier"
+      ],
+      "points": 2,
+      "question": "Which sklearn classifier has built-in multilabel support without needing a wrapper?",
+      "topic": "multilabel_algorithms",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Binary Relevance uses MultiOutputClassifier to train one classifier per label independently. This is simple, parallelizable, and works well when labels are independent. Each label gets its own RandomForest model.",
+      "hints": [
+        "Use MultiOutputClassifier(RandomForestClassifier()) as the model",
+        "Call .fit(X_train, y_train) to train",
+        "Use .predict() for binary predictions",
+        "Use .predict_proba() for probabilities (returns list of arrays)",
+        "Return both predictions and model in dict"
+      ],
+      "id": "m4.3_q011",
+      "points": 4,
+      "question": "Implement a Binary Relevance multilabel classifier for wafer defect detection using sklearn's MultiOutputClassifier.",
+      "starter_code": "from sklearn.multioutput import MultiOutputClassifier\nfrom sklearn.ensemble import RandomForestClassifier\nfrom sklearn.metrics import hamming_loss, accuracy_score\nimport numpy as np\nimport pandas as pd\n\ndef train_binary_relevance_classifier(\n    X_train: np.ndarray,\n    y_train: np.ndarray,\n    X_test: np.ndarray\n) -> dict:\n    \"\"\"\n    Train binary relevance multilabel classifier.\n    \n    Args:\n        X_train: Training features (n_samples, n_features)\n        y_train: Training labels (n_samples, n_labels) - binary matrix\n        X_test: Test features\n        \n    Returns:\n        dict with keys: 'predictions' (binary), 'probabilities', 'model'\n    \"\"\"\n    # Your implementation here\n    # Use MultiOutputClassifier with RandomForestClassifier\n    # Train on training data\n    # Predict on test data\n    pass",
+      "test_cases": [
+        {
+          "description": "Train binary relevance model",
+          "expected_output": "dict with predictions shape (n_test, 5)",
+          "input": "X_train (100, 20), y_train (100, 5) with 5 defect types"
+        }
+      ],
+      "topic": "binary_relevance",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Classifier Chains model label dependencies by chaining classifiers. The kth classifier uses original features plus predictions from classifiers 1 to k-1. Label order matters - put most predictive/important labels early in the chain. More accurate than Binary Relevance when labels are correlated.",
+      "hints": [
+        "Use ClassifierChain(LogisticRegression(), order=label_order)",
+        "If label_order is None, use default order",
+        "ClassifierChain feeds previous predictions as features",
+        "The order matters - put most predictive labels first",
+        "Return the chain order used"
+      ],
+      "id": "m4.3_q012",
+      "points": 5,
+      "question": "Implement Classifier Chains to model label dependencies in multi-defect detection.",
+      "starter_code": "from sklearn.multioutput import ClassifierChain\nfrom sklearn.linear_model import LogisticRegression\nimport numpy as np\n\ndef train_classifier_chain(\n    X_train: np.ndarray,\n    y_train: np.ndarray,\n    X_test: np.ndarray,\n    label_order: list = None\n) -> dict:\n    \"\"\"\n    Train classifier chain with label dependencies.\n    \n    Args:\n        X_train: Training features\n        y_train: Training labels (binary matrix)\n        X_test: Test features\n        label_order: Order of labels in chain (None for default)\n        \n    Returns:\n        dict with keys: 'predictions', 'probabilities', 'chain_order'\n    \"\"\"\n    # Your implementation here\n    # Use ClassifierChain with LogisticRegression\n    # Specify label order if provided\n    # Train and predict\n    pass",
+      "test_cases": [
+        {
+          "description": "Chain with custom label order",
+          "expected_output": "Predictions with labels in specified chain order",
+          "input": "X_train (100, 20), y_train (100, 3), label_order=[2, 0, 1]"
+        }
+      ],
+      "topic": "classifier_chains",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Multilabel metrics provide different views: Hamming Loss (label-wise error rate), Subset Accuracy (exact match rate - strict), micro-averaged metrics (emphasize common labels), macro-averaged metrics (treat all labels equally). Use multiple metrics for comprehensive evaluation.",
+      "hints": [
+        "Use hamming_loss(y_true, y_pred) directly",
+        "Subset accuracy = accuracy_score(y_true, y_pred)",
+        "For micro F1: f1_score(y_true, y_pred, average='micro')",
+        "For macro F1: f1_score(y_true, y_pred, average='macro')",
+        "Same pattern for precision and recall with average parameter"
+      ],
+      "id": "m4.3_q013",
+      "points": 4,
+      "question": "Implement a function to calculate comprehensive multilabel classification metrics including Hamming Loss, Subset Accuracy, and micro/macro F1 scores.",
+      "starter_code": "from sklearn.metrics import (\n    hamming_loss, accuracy_score, f1_score,\n    precision_score, recall_score\n)\nimport numpy as np\n\ndef calculate_multilabel_metrics(\n    y_true: np.ndarray,\n    y_pred: np.ndarray\n) -> dict:\n    \"\"\"\n    Calculate multilabel classification metrics.\n    \n    Args:\n        y_true: True labels (n_samples, n_labels) - binary matrix\n        y_pred: Predicted labels (n_samples, n_labels) - binary matrix\n        \n    Returns:\n        dict with metrics: 'hamming_loss', 'subset_accuracy', \n                          'micro_f1', 'macro_f1', 'micro_precision',\n                          'macro_precision', 'micro_recall', 'macro_recall'\n    \"\"\"\n    # Your implementation here\n    pass",
+      "test_cases": [
+        {
+          "description": "Calculate all multilabel metrics",
+          "expected_output": "{'hamming_loss': 0.167, 'subset_accuracy': 0.5, ...}",
+          "input": "y_true=[[1,0,1],[0,1,0]], y_pred=[[1,0,0],[0,1,0]]"
+        }
+      ],
+      "topic": "multilabel_metrics",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Per-label threshold optimization significantly improves multilabel performance. Each label gets its own threshold based on validation data. Rare labels often need lower thresholds (favor recall), common labels may need higher thresholds (favor precision). Grid search over 0.1-0.9 typically works well.",
+      "hints": [
+        "Loop through each label (column)",
+        "For each label, try thresholds from 0.1 to 0.9 in steps of 0.05",
+        "Calculate f1_score for that label at each threshold",
+        "Keep threshold with highest score",
+        "Apply optimized thresholds to get final predictions"
+      ],
+      "id": "m4.3_q014",
+      "points": 5,
+      "question": "Implement per-label threshold optimization to maximize F1 score on validation data.",
+      "starter_code": "import numpy as np\nfrom sklearn.metrics import f1_score\n\ndef optimize_thresholds(\n    y_true: np.ndarray,\n    y_proba: np.ndarray,\n    metric: str = 'f1'\n) -> dict:\n    \"\"\"\n    Find optimal threshold for each label to maximize metric.\n    \n    Args:\n        y_true: True labels (n_samples, n_labels)\n        y_proba: Predicted probabilities (n_samples, n_labels)\n        metric: Metric to optimize ('f1', 'precision', 'recall')\n        \n    Returns:\n        dict with keys: 'thresholds' (array of optimal thresholds),\n                       'optimized_predictions', 'scores_per_label'\n    \"\"\"\n    # Your implementation here\n    # For each label:\n    #   - Try different thresholds (0.1 to 0.9)\n    #   - Calculate metric at each threshold\n    #   - Select threshold with best metric\n    pass",
+      "test_cases": [
+        {
+          "description": "Optimize thresholds for 5 labels",
+          "expected_output": "dict with 5 optimized thresholds, one per label",
+          "input": "y_true (100, 5), y_proba (100, 5)"
+        }
+      ],
+      "topic": "threshold_optimization",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Label Powerset treats each label combination as a single class. This captures all label correlations but creates many classes (2^K for K labels). Works well when: (1) few labels, (2) few co-occurring combinations, (3) enough training data per combination. Fails with sparse combinations.",
+      "hints": [
+        "Convert binary matrix rows to tuples for unique combinations",
+        "Use LabelEncoder or manual mapping for combinations",
+        "Train single RandomForestClassifier on encoded combinations",
+        "Convert predicted combinations back to binary matrix",
+        "Track number of unique combinations seen"
+      ],
+      "id": "m4.3_q015",
+      "points": 4,
+      "question": "Implement Label Powerset transformation that treats each unique label combination as a separate class.",
+      "starter_code": "from sklearn.preprocessing import MultiLabelBinarizer\nfrom sklearn.ensemble import RandomForestClassifier\nimport numpy as np\n\ndef train_label_powerset(\n    X_train: np.ndarray,\n    y_train: np.ndarray,\n    X_test: np.ndarray\n) -> dict:\n    \"\"\"\n    Train Label Powerset multilabel classifier.\n    \n    Args:\n        X_train: Training features\n        y_train: Training labels (binary matrix)\n        X_test: Test features\n        \n    Returns:\n        dict with keys: 'predictions', 'n_unique_combinations',\n                       'combination_counts'\n    \"\"\"\n    # Your implementation here\n    # Convert y_train binary matrix to list of label sets\n    # Train single multiclass classifier on combinations\n    # Convert predictions back to binary matrix\n    pass",
+      "test_cases": [
+        {
+          "description": "Label Powerset on small label set",
+          "expected_output": "Predictions as binary matrix, combination statistics",
+          "input": "y_train with combinations like [1,0,1], [0,1,0], [1,1,0]"
+        }
+      ],
+      "topic": "label_powerset",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Understanding label correlations is crucial for choosing the right multilabel approach. High correlations suggest Classifier Chains or Label Powerset. Low correlations make Binary Relevance sufficient. Co-occurrence analysis reveals which defects commonly appear together, guiding model selection and feature engineering.",
+      "hints": [
+        "Use np.corrcoef(y.T) for correlation matrix",
+        "Co-occurrence: y.T @ y gives label pair counts",
+        "Label frequencies: y.sum(axis=0)",
+        "For combinations: convert rows to tuples, use Counter",
+        "Create DataFrame for better visualization"
+      ],
+      "id": "m4.3_q016",
+      "points": 4,
+      "question": "Implement a function to analyze and visualize label co-occurrence patterns in multilabel data.",
+      "starter_code": "import numpy as np\nimport pandas as pd\nimport matplotlib.pyplot as plt\nimport seaborn as sns\n\ndef analyze_label_correlations(y: np.ndarray, label_names: list) -> dict:\n    \"\"\"\n    Analyze label co-occurrence and correlations.\n    \n    Args:\n        y: Label matrix (n_samples, n_labels)\n        label_names: Names of labels\n        \n    Returns:\n        dict with keys: 'correlation_matrix', 'cooccurrence_matrix',\n                       'label_frequencies', 'most_common_combinations'\n    \"\"\"\n    # Your implementation here\n    # Calculate correlation matrix between labels\n    # Calculate co-occurrence counts\n    # Find label frequencies\n    # Identify most common combinations\n    pass",
+      "test_cases": [
+        {
+          "description": "Analyze 5 defect types",
+          "expected_output": "Correlation matrix showing label dependencies",
+          "input": "y (1000, 5) with label_names=['scratch','particle','discolor','edge','residue']"
+        }
+      ],
+      "topic": "label_correlation",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Ensemble methods combine multiple multilabel approaches to improve robustness. Binary Relevance captures label-specific patterns, Classifier Chains captures dependencies. Soft voting (average probabilities) typically works better than hard voting. Ensemble reduces overfitting and improves generalization.",
+      "hints": [
+        "Create 3 different multilabel models",
+        "Get probabilities from each using predict_proba()",
+        "For soft voting: average probabilities, then threshold at 0.5",
+        "For hard voting: take majority vote per label",
+        "Return individual and ensemble predictions for comparison"
+      ],
+      "id": "m4.3_q017",
+      "points": 5,
+      "question": "Implement an ensemble of multiple multilabel classifiers (Binary Relevance, Classifier Chains) with voting.",
+      "starter_code": "from sklearn.multioutput import MultiOutputClassifier, ClassifierChain\nfrom sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier\nimport numpy as np\n\ndef ensemble_multilabel_classifier(\n    X_train: np.ndarray,\n    y_train: np.ndarray,\n    X_test: np.ndarray,\n    voting: str = 'soft'\n) -> dict:\n    \"\"\"\n    Ensemble of multilabel classifiers with voting.\n    \n    Args:\n        X_train: Training features\n        y_train: Training labels\n        X_test: Test features\n        voting: 'soft' (average probabilities) or 'hard' (majority vote)\n        \n    Returns:\n        dict with keys: 'predictions', 'ensemble_probabilities',\n                       'individual_predictions'\n    \"\"\"\n    # Your implementation here\n    # Train Binary Relevance with RandomForest\n    # Train Classifier Chain with GradientBoosting\n    # Train another Binary Relevance with different params\n    # Combine predictions via voting\n    pass",
+      "test_cases": [
+        {
+          "description": "Ensemble of 3 multilabel models",
+          "expected_output": "Ensemble predictions with voting",
+          "input": "X_train (500, 20), y_train (500, 4), voting='soft'"
+        }
+      ],
+      "topic": "ensemble_multilabel",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Recommendation: Classifier Chains or ensemble approach. Reasoning: (1) Label Powerset is impractical with 15 labels (2^15 = 32K combinations, most won't appear in training), (2) Binary Relevance ignores correlations ('scratch' with 'edge_damage'), leading to suboptimal predictions, (3) Classifier Chains models dependencies sequentially without combinatorial explosion, (4) Order labels by importance/frequency for chain. Alternative: Ensemble of Binary Relevance + Classifier Chain for robustness. Practical: Monitor training time, validate on realistic defect combinations.",
+      "hints": [
+        "Think about the 2^15 = 32,768 possible combinations",
+        "Consider training time and computational requirements",
+        "Think about label dependency modeling",
+        "Consider ensemble approaches"
+      ],
+      "id": "m4.3_q018",
+      "points": 5,
+      "question": "A semiconductor fab has a defect detection system with 15 possible defect types. Analysis shows that defects often co-occur in specific patterns (e.g., 'scratch' with 'edge_damage'). Which multilabel approach would you recommend and why?",
+      "rubric": [
+        {
+          "criteria": "Discusses label correlations and why they matter",
+          "points": 2
+        },
+        {
+          "criteria": "Compares Binary Relevance vs Classifier Chains vs Label Powerset",
+          "points": 2
+        },
+        {
+          "criteria": "Provides clear recommendation with justification",
+          "points": 2
+        },
+        {
+          "criteria": "Considers scalability with 15 labels",
+          "points": 2
+        },
+        {
+          "criteria": "Mentions practical implementation considerations",
+          "points": 2
+        }
+      ],
+      "topic": "method_selection",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Comprehensive evaluation strategy: (1) Multiple metrics - Hamming Loss (overall error rate), per-label F1 (individual defect performance), Subset Accuracy (strict evaluation for critical applications); (2) Per-label analysis - evaluate each defect type separately, especially rare but costly ones; (3) Class-weighted metrics - weight macro-averaged F1 by defect cost/importance; (4) Threshold optimization - optimize per-label thresholds on validation data; (5) Confusion matrix per label - understand error patterns; (6) Business metrics - false alarm rate, detection rate for critical defects, cost of misclassification; (7) Stratified validation - ensure rare defects in validation set. Don't rely on a single metric - use Hamming Loss for overall, macro F1 for balanced evaluation, and per-label F1 for critical defects.",
+      "hints": [
+        "Think about rare but critical defects",
+        "Consider different stakeholder needs",
+        "Think about actionable metrics",
+        "Consider false positive vs false negative costs"
+      ],
+      "id": "m4.3_q019",
+      "points": 5,
+      "question": "Discuss the challenges of evaluating multilabel classifiers and propose a comprehensive evaluation strategy for a semiconductor defect detection system where different defect types have different costs and frequencies.",
+      "rubric": [
+        {
+          "criteria": "Identifies challenges: multiple metrics needed, class imbalance, varying costs",
+          "points": 2
+        },
+        {
+          "criteria": "Discusses metric selection (when to use Hamming, Subset Accuracy, F1, etc.)",
+          "points": 2
+        },
+        {
+          "criteria": "Addresses class imbalance and rare defect evaluation",
+          "points": 2
+        },
+        {
+          "criteria": "Proposes per-label and aggregated evaluation approach",
+          "points": 2
+        },
+        {
+          "criteria": "Suggests cost-sensitive evaluation or business metrics",
+          "points": 2
+        }
+      ],
+      "topic": "evaluation_strategy",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Production deployment considerations: (1) Inference speed - optimize for real-time inspection (milliseconds per wafer), use efficient models (RandomForest over neural nets if similar accuracy), batch predictions when possible; (2) Threshold tuning - monitor per-label performance, adjust thresholds based on false positive/negative costs, A/B test threshold changes; (3) Label imbalance - collect more data for rare defects, use oversampling/SMOTE, set lower thresholds for critical rare defects; (4) Monitoring - track per-label F1 scores over time, alert on degradation, log prediction uncertainties; (5) Model updates - retrain weekly/monthly with new data, validate on recent data before deployment, maintain model versioning; (6) New defects - detect out-of-distribution samples, flag for human review, collect labeled data for model updates; (7) Graceful degradation - fallback to simpler rules if model fails, provide confidence scores with predictions. Balance accuracy, speed, and maintainability.",
+      "hints": [
+        "Think about real-time inspection requirements",
+        "Consider how label distributions shift over time",
+        "Think about feedback loops and data collection",
+        "Consider graceful degradation"
+      ],
+      "id": "m4.3_q020",
+      "points": 5,
+      "question": "You're deploying a multilabel defect classifier to production. Discuss the key considerations beyond model accuracy, including inference speed, threshold tuning, label imbalance, and model maintenance.",
+      "rubric": [
+        {
+          "criteria": "Discusses inference latency requirements and optimization",
+          "points": 2
+        },
+        {
+          "criteria": "Addresses threshold selection and adaptation in production",
+          "points": 2
+        },
+        {
+          "criteria": "Considers monitoring and model degradation",
+          "points": 2
+        },
+        {
+          "criteria": "Discusses handling of new/rare defect types",
+          "points": 2
+        },
+        {
+          "criteria": "Mentions retraining strategy and data collection",
+          "points": 2
+        }
+      ],
+      "topic": "production_deployment",
+      "type": "conceptual"
+    }
+  ],
+  "sub_module": "4.3",
+  "title": "Multilabel Classification",
+  "version": "1.0",
+  "week": 8
+}

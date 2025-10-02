@@ -1,0 +1,519 @@
+{
+  "description": "Assessment covering feature extraction techniques, similarity metrics, wafer pattern matching, clustering algorithms, anomaly detection, spatial analysis, and pattern recognition applications for semiconductor wafer map classification and failure signature analysis.",
+  "estimated_time_minutes": 75,
+  "module_id": "module-7.2",
+  "passing_score": 70,
+  "questions": [
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "Feature extraction converts raw pixel data into compact, meaningful representations that capture pattern characteristics (shape, texture, spatial distribution). Good features make patterns separable and enable effective classification. For wafer maps, features might include: defect density, centroid location, radial distribution, texture descriptors. This dimensionality reduction (from thousands of pixels to tens of features) improves classification performance and computational efficiency.",
+      "id": "m7.2_q001",
+      "options": [
+        "Removing defects from wafers",
+        "Transforming raw wafer images into meaningful numerical representations that capture pattern characteristics",
+        "Extracting physical samples from wafers",
+        "Filtering noise from images"
+      ],
+      "points": 2,
+      "question": "What is feature extraction in the context of wafer map pattern recognition?",
+      "topic": "feature_extraction_basics",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Euclidean distance (L2) is standard for continuous features in moderate dimensions. Cosine similarity is preferred when vector magnitude is less important than direction (normalized features). Manhattan distance (L1) is more robust to outliers. For wafer patterns: Euclidean for shape/texture features, cosine for normalized histograms. Avoid Euclidean in very high dimensions (curse of dimensionality). Hamming is for binary vectors. Chebyshev measures max coordinate difference.",
+      "id": "m7.2_q002",
+      "options": [
+        "Manhattan distance always",
+        "Euclidean distance for continuous features, Cosine similarity for normalized vectors",
+        "Hamming distance for all cases",
+        "Chebyshev distance only"
+      ],
+      "points": 2,
+      "question": "Which distance metric is most appropriate for comparing high-dimensional feature vectors extracted from wafer patterns?",
+      "topic": "similarity_metrics",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "Moran's I measures spatial autocorrelation. Positive I: similar values (defect/no-defect) cluster together - indicates systematic patterns like edge effects or process gradients. Negative I: dissimilar values are neighbors (checkerboard pattern) - rare in wafer maps. Zero I: random distribution. For semiconductor manufacturing, positive autocorrelation suggests process issues affecting localized regions rather than random defects. This guides root cause analysis to specific tools or process steps.",
+      "id": "m7.2_q003",
+      "options": [
+        "Random defect distribution",
+        "Defects tend to cluster together (positive spatial autocorrelation)",
+        "Defects are uniformly distributed",
+        "No defects present"
+      ],
+      "points": 3,
+      "question": "Moran's I statistic is used in wafer map analysis to detect spatial autocorrelation. What does a positive Moran's I value indicate?",
+      "topic": "spatial_autocorrelation",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "K-means requires specifying K in advance and assumes spherical clusters. DBSCAN (Density-Based Spatial Clustering) automatically finds clusters based on density, handling arbitrary shapes (rings, crescents, edges - common in wafer patterns). It also identifies outliers as noise points. This is valuable when you don't know how many defect patterns exist or when patterns have complex geometries typical of semiconductor failure signatures.",
+      "id": "m7.2_q004",
+      "options": [
+        "DBSCAN is always faster",
+        "DBSCAN can find arbitrary-shaped clusters and identify outliers without pre-specifying cluster count",
+        "DBSCAN requires less memory",
+        "DBSCAN only works on wafer data"
+      ],
+      "points": 2,
+      "question": "Why is DBSCAN often preferred over K-means for clustering wafer defect patterns?",
+      "topic": "clustering_algorithms",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "PCA finds linear projections maximizing variance - good for global structure but may miss nonlinear clusters. t-SNE (t-distributed Stochastic Neighbor Embedding) preserves local neighborhoods, revealing clusters and manifold structure - excellent for visualization. Drawbacks: slower, non-deterministic, doesn't preserve distances or density. For wafer patterns: use PCA for dimensionality reduction before classification, t-SNE for exploratory visualization to understand pattern groupings. UMAP is a newer alternative combining benefits of both.",
+      "id": "m7.2_q005",
+      "options": [
+        "When you need linear projections",
+        "When preserving local structure and revealing clusters is more important than global variance",
+        "When features are already low-dimensional",
+        "Never - PCA is always better"
+      ],
+      "points": 3,
+      "question": "When would you use t-SNE instead of PCA for visualizing high-dimensional wafer pattern features?",
+      "topic": "dimensionality_reduction",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "HOG computes gradient orientations in local regions, creating histograms of edge directions. It captures shape and structure while being robust to illumination changes. For wafer maps, HOG can distinguish pattern types: radial defects have gradients radiating from center, edge defects have strong horizontal/vertical gradients at boundaries, scratch patterns have consistent directional gradients. HOG is a classical CV technique still useful for engineered features.",
+      "id": "m7.2_q006",
+      "options": [
+        "Color information",
+        "Edge orientations and local shape information",
+        "Temporal changes",
+        "Frequency domain characteristics"
+      ],
+      "points": 2,
+      "question": "What does the HOG (Histogram of Oriented Gradients) feature descriptor capture?",
+      "topic": "histogram_of_gradients",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "LBP compares each pixel to its neighbors, creating a binary pattern encoding local texture. Rotation-invariant versions exist. LBP histograms provide texture descriptors robust to illumination changes. For wafer maps, different defect patterns have distinct textures: smooth regions, granular patterns, line structures. LBP features combined with classifiers (SVM, Random Forest) can distinguish these textures effectively without requiring deep learning when labeled data is limited.",
+      "id": "m7.2_q007",
+      "options": [
+        "They are computationally expensive",
+        "They encode local texture patterns in a rotation and grayscale invariant manner",
+        "They only work on color images",
+        "They require deep learning"
+      ],
+      "points": 2,
+      "question": "What makes Local Binary Patterns (LBP) useful for texture classification in wafer maps?",
+      "topic": "local_binary_patterns",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "The Radon transform computes line integrals along different angles. Linear features (scratches) produce strong peaks in the transform at the angle perpendicular to the line. This enables detecting and measuring scratch orientation. For wafer maps, Radon peaks reveal: presence of linear defects, their orientations (indicating tool issues), and intensities. Combined with inverse Radon, it can isolate linear patterns from other defect types for separate analysis.",
+      "id": "m7.2_q008",
+      "options": [
+        "It enhances color contrast",
+        "It projects the image along different angles, creating peaks for linear structures at corresponding angles",
+        "It removes noise",
+        "It segments the image"
+      ],
+      "points": 3,
+      "question": "How can the Radon transform help identify linear defect patterns (scratches) on wafers?",
+      "topic": "radon_transform",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Silhouette Score measures how similar a sample is to its own cluster compared to other clusters. Values range from -1 to +1: high values (near +1) indicate well-clustered data, low/negative values suggest poor clustering or wrong number of clusters. For wafer pattern clustering, Silhouette helps validate: (1) Is K-means with K=5 better than K=3? (2) Are patterns well-separated or overlapping? (3) Should outliers be reclassified? Use alongside domain expertise as metrics don't capture semantic meaning.",
+      "id": "m7.2_q009",
+      "options": [
+        "The number of clusters",
+        "How well each sample fits its assigned cluster compared to other clusters",
+        "The computational cost",
+        "The cluster centroids"
+      ],
+      "points": 2,
+      "question": "What does a Silhouette Score measure in clustering validation?",
+      "topic": "silhouette_score",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "Wafers may be loaded into tools at arbitrary orientations. A radial defect pattern looks the same regardless of rotation. Rotation-invariant features ensure the classifier recognizes the same pattern type despite rotation. Techniques: (1) Rotation-invariant HOG/LBP. (2) Radial Fourier descriptors. (3) Data augmentation (train on rotated versions). (4) Polar coordinate representation. Without rotation invariance, the model may treat the same physical pattern at different orientations as different classes, wasting labeling effort and degrading performance.",
+      "id": "m7.2_q010",
+      "options": [
+        "Wafers are always rotated the same way",
+        "Defect patterns can appear at any orientation due to wafer rotation during processing",
+        "Rotation invariance makes features less accurate",
+        "It's not important"
+      ],
+      "points": 3,
+      "question": "Why are rotation-invariant features important for wafer map classification?",
+      "topic": "invariant_features",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Isolation Forest builds random trees by recursively partitioning data. Anomalies, being few and different, are isolated in shallower trees (fewer splits needed). Normal points require deeper trees to isolate. Anomaly score = average path length (shorter = more anomalous). For wafer maps, this unsupervised approach detects novel defect patterns without labeled examples. Useful for continuous monitoring: flag wafers with unusual patterns for expert review, potentially catching new failure modes early.",
+      "id": "m7.2_q011",
+      "options": [
+        "By measuring tree height",
+        "By isolating anomalies through fewer random partitions, as anomalies are easier to separate",
+        "By clustering normal patterns",
+        "By supervised learning"
+      ],
+      "points": 2,
+      "question": "How does Isolation Forest detect anomalous wafer maps?",
+      "topic": "isolation_forest",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "Centroid (center of mass) of defect locations reveals spatial distribution. Center defects have centroid near wafer center (small radial distance). Edge defects have centroid far from center. Other useful spatial features: radial density distribution, angular histogram, distance from center statistics (mean, std). These features enable automatic classification of spatial patterns indicating different root causes (center: hotspot, edge: spin coating issues, etc.).",
+      "id": "m7.2_q012",
+      "options": [
+        "Defect count",
+        "Centroid distance from wafer center",
+        "Defect color",
+        "Timestamp"
+      ],
+      "points": 2,
+      "question": "Which spatial feature is most useful for distinguishing center defects from edge defects on wafers?",
+      "topic": "spatial_features",
+      "type": "multiple_choice"
+    },
+    {
+      "code_template": "import numpy as np\nfrom typing import Dict, Tuple\n\ndef extract_spatial_features(wafer_map: np.ndarray) -> Dict[str, float]:\n    \"\"\"\n    Extract spatial statistical features from binary wafer map.\n    \n    Args:\n        wafer_map: Binary array (H, W) where 1 = defect, 0 = no defect\n        \n    Returns:\n        Dict of features:\n        - centroid_x, centroid_y: Defect centroid (normalized 0-1)\n        - radial_distance: Distance of centroid from wafer center\n        - defect_density: Fraction of defective pixels\n        - spatial_spread: Std dev of defect distances from centroid\n        - edge_density: Defect density in outer 20% of wafer\n    \"\"\"\n    # Your implementation here:\n    # 1. Find defect pixel coordinates\n    # 2. Calculate centroid as mean of coordinates\n    # 3. Calculate radial distance from center\n    # 4. Calculate density metrics\n    # 5. Calculate spread (std of distances from centroid)\n    \n    pass\n\ndef calculate_radial_distribution(wafer_map: np.ndarray, \n                                 num_bins: int = 10) -> np.ndarray:\n    \"\"\"\n    Calculate radial defect density distribution.\n    \n    Returns:\n        Array of density values in concentric rings\n    \"\"\"\n    # Your implementation here\n    pass",
+      "difficulty": "medium",
+      "explanation": "Spatial features encode where defects appear on the wafer, which reveals root causes. Center defects often indicate hotspots or equipment issues. Edge defects suggest spin coating or edge bead removal problems. Radial patterns indicate process gradients. These engineered features enable interpretable classification and guide process engineers to specific problem sources.",
+      "hints": [
+        "Get defect coordinates: y_coords, x_coords = np.where(wafer_map == 1)",
+        "Centroid: (mean(x_coords), mean(y_coords))",
+        "Normalize by wafer dimensions for rotation invariance",
+        "Wafer center: (H/2, W/2)",
+        "Radial distance: sqrt((cx - H/2)^2 + (cy - W/2)^2)",
+        "For radial distribution: bin pixels by distance from center, count defects per bin"
+      ],
+      "id": "m7.2_q013",
+      "points": 4,
+      "question": "Implement functions to extract spatial statistical features from wafer defect maps including centroid, radial distribution, and spatial density.",
+      "test_cases": [
+        {
+          "description": "Center defect pattern",
+          "expected_output": "Features: low radial_distance, low edge_density, high center density",
+          "input": "wafer_map with center defect cluster"
+        },
+        {
+          "description": "Edge defect pattern",
+          "expected_output": "Features: high radial_distance, high edge_density",
+          "input": "wafer_map with edge defects"
+        }
+      ],
+      "topic": "spatial_statistics",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import numpy as np\nfrom typing import List, Tuple\nfrom sklearn.metrics.pairwise import cosine_similarity\n\nclass WaferPatternMatcher:\n    \"\"\"\n    Similarity search for wafer pattern matching.\n    \"\"\"\n    def __init__(self):\n        self.feature_database = []  # List of feature vectors\n        self.wafer_ids = []  # Corresponding wafer IDs\n        self.wafer_maps = []  # Original wafer maps\n    \n    def add_wafer(self, wafer_id: str, features: np.ndarray, \n                  wafer_map: np.ndarray):\n        \"\"\"Add wafer to database.\"\"\"\n        # Your implementation here\n        pass\n    \n    def find_similar(self, query_features: np.ndarray, \n                    k: int = 5, \n                    metric: str = 'cosine') -> List[Tuple[str, float]]:\n        \"\"\"\n        Find k most similar wafers to query.\n        \n        Args:\n            query_features: Feature vector for query wafer\n            k: Number of similar wafers to return\n            metric: 'cosine', 'euclidean', or 'manhattan'\n            \n        Returns:\n            List of (wafer_id, similarity_score) tuples, sorted by similarity\n        \"\"\"\n        # Your implementation here:\n        # 1. Calculate similarity/distance to all wafers in database\n        # 2. Sort by similarity (descending) or distance (ascending)\n        # 3. Return top k matches with wafer IDs and scores\n        pass\n    \n    def visualize_matches(self, query_map: np.ndarray, \n                         top_k_ids: List[str]):\n        \"\"\"Visualize query and top k matches side by side.\"\"\"\n        # Your implementation here\n        pass",
+      "difficulty": "hard",
+      "explanation": "Pattern similarity search enables finding historical wafers with similar defect patterns. Uses: (1) Root cause analysis: find previous occurrences of rare patterns. (2) Process correlation: identify common patterns across lots/tools. (3) Transfer learning: find labeled examples similar to new data. Feature-based matching is more robust and interpretable than pixel-level comparison, handling translation, rotation, and scale variations.",
+      "hints": [
+        "Store features as numpy array for efficient computation",
+        "Cosine similarity: sklearn.metrics.pairwise.cosine_similarity",
+        "Euclidean: np.linalg.norm(query - db_features, axis=1)",
+        "Sort: np.argsort(similarities)[::-1][:k] for descending",
+        "Return list of tuples: [(wafer_id, score), ...]",
+        "For visualization: use matplotlib subplots to show query + matches"
+      ],
+      "id": "m7.2_q014",
+      "points": 5,
+      "question": "Implement a wafer pattern similarity search system that finds the k most similar historical wafer maps to a query wafer using feature-based matching.",
+      "test_cases": [
+        {
+          "description": "Pattern similarity search",
+          "expected_output": "Top 5 wafers with similar center defect patterns",
+          "input": "query_wafer with center defect, database with various patterns"
+        }
+      ],
+      "topic": "similarity_matching",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import numpy as np\nfrom skimage import feature\n\ndef extract_lbp_features(wafer_map: np.ndarray, \n                        num_points: int = 24, \n                        radius: int = 3,\n                        method: str = 'uniform') -> np.ndarray:\n    \"\"\"\n    Extract LBP texture features from wafer map.\n    \n    Args:\n        wafer_map: Grayscale wafer map (H, W)\n        num_points: Number of circularly symmetric neighbor points\n        radius: Radius of circle\n        method: 'uniform' for rotation invariant uniform patterns\n        \n    Returns:\n        Normalized LBP histogram as feature vector\n    \"\"\"\n    # Your implementation here:\n    # 1. Compute LBP image using skimage.feature.local_binary_pattern\n    # 2. Calculate histogram of LBP codes\n    # 3. Normalize histogram to sum to 1 (probability distribution)\n    # 4. Return as feature vector\n    \n    pass\n\ndef compare_textures(wafer1: np.ndarray, wafer2: np.ndarray) -> float:\n    \"\"\"\n    Compare texture similarity using LBP features.\n    \n    Returns:\n        Similarity score (0-1, higher = more similar)\n    \"\"\"\n    # Your implementation here\n    # Extract LBP features for both\n    # Calculate histogram intersection or chi-square distance\n    pass",
+      "difficulty": "medium",
+      "explanation": "LBP encodes local texture by comparing each pixel to its circular neighbors. Uniform patterns (limited transitions in binary code) are rotation-invariant and capture meaningful texture primitives. LBP histograms provide compact texture descriptors useful for classifying wafer patterns with distinct textures: smooth backgrounds, granular contamination, line patterns. Fast to compute and effective with limited training data.",
+      "hints": [
+        "Use skimage.feature.local_binary_pattern(image, num_points, radius, method)",
+        "Method 'uniform' reduces dimensionality and provides rotation invariance",
+        "Histogram: np.histogram(lbp_image, bins=num_bins, range=(0, num_bins))",
+        "Normalize: hist / hist.sum()",
+        "Histogram intersection: np.minimum(hist1, hist2).sum()",
+        "Chi-square: 0.5 * np.sum((hist1 - hist2)**2 / (hist1 + hist2 + 1e-10))"
+      ],
+      "id": "m7.2_q015",
+      "points": 4,
+      "question": "Implement Local Binary Pattern (LBP) feature extraction for wafer map texture classification.",
+      "test_cases": [
+        {
+          "description": "Texture feature extraction",
+          "expected_output": "LBP histogram capturing texture patterns",
+          "input": "wafer_map with granular texture defects"
+        }
+      ],
+      "topic": "texture_features",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import numpy as np\nfrom sklearn.cluster import DBSCAN\nfrom sklearn.preprocessing import StandardScaler\nfrom typing import Dict\n\ndef cluster_wafer_patterns(features: np.ndarray,\n                          eps: float = 0.5,\n                          min_samples: int = 5) -> Dict:\n    \"\"\"\n    Cluster wafer patterns using DBSCAN.\n    \n    Args:\n        features: Feature matrix (n_wafers, n_features)\n        eps: Maximum distance for neighborhood\n        min_samples: Minimum samples to form dense region\n        \n    Returns:\n        Dict with cluster labels, num_clusters, noise_ratio, silhouette_score\n    \"\"\"\n    # Your implementation here:\n    # 1. Standardize features (important for distance-based methods)\n    # 2. Apply DBSCAN clustering\n    # 3. Calculate cluster statistics\n    # 4. Calculate silhouette score for validation\n    # 5. Identify noise points (label = -1)\n    \n    pass\n\ndef optimize_dbscan_params(features: np.ndarray, \n                          eps_range: list,\n                          min_samples_range: list) -> Dict:\n    \"\"\"\n    Grid search to find optimal DBSCAN parameters.\n    \n    Returns:\n        Dict with best eps, min_samples, and silhouette score\n    \"\"\"\n    # Your implementation here\n    pass",
+      "difficulty": "hard",
+      "explanation": "DBSCAN discovers clusters of arbitrary shape based on density. Advantages over K-means: (1) No need to specify K. (2) Finds non-spherical clusters (rings, crescents). (3) Identifies outliers as noise. For wafer patterns, DBSCAN can automatically discover: major pattern categories (center, edge, radial, etc.), subcategories within types, and anomalous patterns (noise points) deserving special attention. Parameter tuning: use silhouette score and domain knowledge.",
+      "hints": [
+        "Standardize: scaler = StandardScaler(); features_scaled = scaler.fit_transform(features)",
+        "DBSCAN: clustering = DBSCAN(eps=eps, min_samples=min_samples).fit(features)",
+        "Labels: clustering.labels_ (noise points have label -1)",
+        "Number of clusters: len(set(labels)) - (1 if -1 in labels else 0)",
+        "Noise ratio: (labels == -1).sum() / len(labels)",
+        "Silhouette: from sklearn.metrics import silhouette_score"
+      ],
+      "id": "m7.2_q016",
+      "points": 5,
+      "question": "Implement DBSCAN clustering to automatically discover groups of similar wafer patterns without pre-specifying the number of clusters.",
+      "test_cases": [
+        {
+          "description": "Unsupervised pattern discovery",
+          "expected_output": "Cluster assignments discovering natural groupings",
+          "input": "features from 100 wafers with 3-4 natural pattern groups"
+        }
+      ],
+      "topic": "dbscan_clustering",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import numpy as np\nfrom scipy import ndimage\nfrom typing import Tuple\n\ndef extract_fourier_descriptors(binary_mask: np.ndarray,\n                               num_descriptors: int = 20) -> np.ndarray:\n    \"\"\"\n    Extract rotation-invariant Fourier descriptors from defect shape.\n    \n    Args:\n        binary_mask: Binary mask of defect region (H, W)\n        num_descriptors: Number of Fourier coefficients to use\n        \n    Returns:\n        Rotation-invariant Fourier descriptor feature vector\n    \"\"\"\n    # Your implementation here:\n    # 1. Find contour of binary mask\n    # 2. Represent contour as complex numbers (x + iy)\n    # 3. Apply FFT to contour coordinates\n    # 4. Take magnitude of Fourier coefficients (rotation invariant)\n    # 5. Normalize by DC component\n    # 6. Return first num_descriptors coefficients\n    \n    pass\n\ndef extract_contour(binary_mask: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:\n    \"\"\"\n    Extract contour coordinates from binary mask.\n    \n    Returns:\n        Tuple of (x_coords, y_coords)\n    \"\"\"\n    # Your implementation here\n    pass\n\ndef compare_shapes(descriptors1: np.ndarray, \n                  descriptors2: np.ndarray) -> float:\n    \"\"\"Calculate shape similarity using Fourier descriptors.\"\"\"\n    # Your implementation here\n    # Use Euclidean distance between normalized descriptors\n    pass",
+      "difficulty": "hard",
+      "explanation": "Fourier descriptors represent shape in frequency domain. Magnitudes of FFT coefficients are rotation-invariant (phase encodes rotation). Low-frequency coefficients capture overall shape, high-frequency capture details. Normalizing by DC component provides scale invariance. For wafer patterns, Fourier descriptors distinguish: circular vs elongated shapes, smooth vs jagged boundaries, radial symmetry. Robust to noise and sampling variations.",
+      "hints": [
+        "Find contour: use opencv findContours or skimage.measure.find_contours",
+        "Complex representation: contour_complex = x_coords + 1j * y_coords",
+        "FFT: fft_coeffs = np.fft.fft(contour_complex)",
+        "Magnitude: np.abs(fft_coeffs) (discards phase = rotation invariant)",
+        "Normalize: descriptors / descriptors[0] (scale invariant)",
+        "Use low-frequency coefficients (capture overall shape)"
+      ],
+      "id": "m7.2_q017",
+      "points": 5,
+      "question": "Implement Fourier descriptors for rotation-invariant shape-based wafer pattern classification.",
+      "test_cases": [
+        {
+          "description": "Shape-based features",
+          "expected_output": "Fourier descriptors invariant to rotation and starting point",
+          "input": "binary_mask of radial defect pattern"
+        }
+      ],
+      "topic": "fourier_descriptors",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import numpy as np\nfrom sklearn.ensemble import IsolationForest\nfrom typing import Dict, List\n\nclass WaferAnomalyDetector:\n    \"\"\"\n    Anomaly detection for wafer patterns using Isolation Forest.\n    \"\"\"\n    def __init__(self, contamination: float = 0.1):\n        \"\"\"\n        Args:\n            contamination: Expected fraction of anomalies in dataset\n        \"\"\"\n        self.contamination = contamination\n        self.model = None\n        self.threshold = None\n    \n    def fit(self, normal_features: np.ndarray):\n        \"\"\"\n        Train anomaly detector on normal wafer patterns.\n        \n        Args:\n            normal_features: Feature matrix of normal wafers (n_wafers, n_features)\n        \"\"\"\n        # Your implementation here:\n        # 1. Create Isolation Forest model\n        # 2. Fit on normal data\n        # 3. Calculate anomaly scores\n        # 4. Determine threshold for flagging\n        pass\n    \n    def predict(self, features: np.ndarray) -> Dict:\n        \"\"\"\n        Predict anomalies in new wafers.\n        \n        Args:\n            features: Feature matrix (n_wafers, n_features)\n            \n        Returns:\n            Dict with predictions (-1 = anomaly, 1 = normal), \n            scores, and flagged_indices\n        \"\"\"\n        # Your implementation here\n        pass\n    \n    def get_anomaly_ranking(self, features: np.ndarray) -> List[int]:\n        \"\"\"Return wafer indices sorted by anomaly score (most anomalous first).\"\"\"\n        # Your implementation here\n        pass",
+      "difficulty": "medium",
+      "explanation": "Isolation Forest is effective for anomaly detection in wafer patterns as it doesn't require labeled anomalies. It identifies patterns that are easy to isolate (few splits in random trees). For semiconductor fabs, this enables: (1) Continuous monitoring for novel failure modes. (2) Catching rare patterns not in training data. (3) Prioritizing wafers for expert review. (4) Early warning of process drift. Contamination parameter controls sensitivity - tune based on expected anomaly rate.",
+      "hints": [
+        "Create model: IsolationForest(contamination=contamination, random_state=42)",
+        "Fit: self.model.fit(normal_features)",
+        "Predict: predictions = self.model.predict(features) (-1 or 1)",
+        "Anomaly scores: self.model.decision_function(features) (negative = more anomalous)",
+        "Ranking: np.argsort(scores) (ascending, so most anomalous first)",
+        "Flag anomalies: predictions == -1"
+      ],
+      "id": "m7.2_q018",
+      "points": 4,
+      "question": "Implement an anomaly detection system using Isolation Forest to identify unusual wafer patterns that may indicate new failure modes.",
+      "test_cases": [
+        {
+          "description": "Unsupervised anomaly detection",
+          "expected_output": "Correctly identifies anomalous patterns",
+          "input": "Train on 100 normal wafers, test on 20 normal + 5 anomalous"
+        }
+      ],
+      "topic": "anomaly_detection",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import numpy as np\nfrom sklearn.ensemble import RandomForestClassifier\nfrom sklearn.model_selection import cross_val_score\nfrom sklearn.metrics import classification_report, confusion_matrix\nfrom typing import Dict\n\nclass WaferPatternClassifier:\n    \"\"\"\n    Complete pipeline for wafer pattern classification.\n    \"\"\"\n    def __init__(self):\n        self.feature_extractor = None\n        self.scaler = None\n        self.classifier = None\n        self.class_names = None\n    \n    def extract_features(self, wafer_map: np.ndarray) -> np.ndarray:\n        \"\"\"\n        Extract comprehensive features from wafer map.\n        Combine spatial, texture, and shape features.\n        \"\"\"\n        # Your implementation here:\n        # Extract multiple feature types:\n        # - Spatial statistics (centroid, density, spread)\n        # - Texture features (LBP)\n        # - Shape features (moments, compactness)\n        # Concatenate into single feature vector\n        pass\n    \n    def train(self, wafer_maps: list, labels: np.ndarray):\n        \"\"\"\n        Train classifier on labeled wafer maps.\n        \n        Args:\n            wafer_maps: List of wafer map arrays\n            labels: Array of class labels\n        \"\"\"\n        # Your implementation here:\n        # 1. Extract features from all wafers\n        # 2. Standardize features\n        # 3. Train Random Forest classifier\n        # 4. Store class names\n        pass\n    \n    def predict(self, wafer_maps: list) -> np.ndarray:\n        \"\"\"Predict classes for new wafer maps.\"\"\"\n        # Your implementation here\n        pass\n    \n    def evaluate(self, wafer_maps: list, labels: np.ndarray) -> Dict:\n        \"\"\"\n        Evaluate classifier performance.\n        \n        Returns:\n            Dict with accuracy, precision, recall, F1, confusion matrix\n        \"\"\"\n        # Your implementation here\n        pass",
+      "difficulty": "hard",
+      "explanation": "A complete classification pipeline integrates multiple feature types for robust performance. Spatial features capture location patterns, texture features capture appearance, shape features capture morphology. Random Forest is effective for engineered features: handles mixed feature types, provides feature importance, robust to outliers, no hyperparameter tuning needed. For production use, this pipeline enables automated wafer pattern classification, guiding engineers to root causes.",
+      "hints": [
+        "Use functions from previous questions: extract_spatial_features, extract_lbp_features",
+        "Concatenate features: np.concatenate([spatial_feats, texture_feats, shape_feats])",
+        "Standardize: from sklearn.preprocessing import StandardScaler",
+        "Random Forest: RandomForestClassifier(n_estimators=100, random_state=42)",
+        "Metrics: from sklearn.metrics import accuracy_score, precision_recall_fscore_support",
+        "Cross-validation: cross_val_score(classifier, X, y, cv=5)"
+      ],
+      "id": "m7.2_q019",
+      "points": 5,
+      "question": "Implement a complete pattern classification pipeline that extracts features, trains a classifier, and evaluates performance on wafer maps.",
+      "test_cases": [
+        {
+          "description": "End-to-end classification pipeline",
+          "expected_output": "Trained classifier with >85% accuracy",
+          "input": "100 labeled wafer maps with 5 pattern types"
+        }
+      ],
+      "topic": "pattern_classification_pipeline",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import numpy as np\nfrom sklearn.decomposition import PCA\nfrom sklearn.manifold import TSNE\nimport matplotlib.pyplot as plt\nfrom typing import Tuple\n\ndef apply_pca(features: np.ndarray, n_components: int = 2) -> Tuple[np.ndarray, float]:\n    \"\"\"\n    Apply PCA to reduce feature dimensionality.\n    \n    Args:\n        features: Feature matrix (n_samples, n_features)\n        n_components: Number of principal components\n        \n    Returns:\n        Tuple of (transformed_features, explained_variance_ratio)\n    \"\"\"\n    # Your implementation here:\n    # 1. Create and fit PCA model\n    # 2. Transform features\n    # 3. Return transformed features and variance explained\n    pass\n\ndef apply_tsne(features: np.ndarray, \n              perplexity: int = 30,\n              random_state: int = 42) -> np.ndarray:\n    \"\"\"\n    Apply t-SNE for visualization.\n    \n    Args:\n        features: Feature matrix (n_samples, n_features)\n        perplexity: Perplexity parameter (5-50)\n        \n    Returns:\n        2D embedding (n_samples, 2)\n    \"\"\"\n    # Your implementation here\n    pass\n\ndef visualize_embeddings(pca_2d: np.ndarray, \n                        tsne_2d: np.ndarray,\n                        labels: np.ndarray):\n    \"\"\"\n    Visualize PCA and t-SNE embeddings side by side.\n    \n    Args:\n        pca_2d: PCA embedding (n_samples, 2)\n        tsne_2d: t-SNE embedding (n_samples, 2)\n        labels: Cluster labels for coloring\n    \"\"\"\n    # Your implementation here\n    # Create 1x2 subplot comparing PCA vs t-SNE\n    pass",
+      "difficulty": "medium",
+      "explanation": "Dimensionality reduction enables visualizing high-dimensional wafer pattern features in 2D. PCA (linear) preserves global variance structure - useful for understanding major variation sources. t-SNE (nonlinear) preserves local neighborhoods - reveals cluster structure even when clusters aren't linearly separable. For semiconductor applications: (1) Exploratory analysis: visualize pattern groupings. (2) Quality check: verify clusters match expected pattern types. (3) Anomaly detection: outliers visible in 2D space. (4) Feature validation: if patterns don't separate, features may need refinement. Both techniques complement each other: PCA for interpretable axes (e.g., PC1 = spatial spread), t-SNE for discovering subgroups.",
+      "hints": [
+        "PCA: model = PCA(n_components=n_components); transformed = model.fit_transform(features)",
+        "Explained variance: model.explained_variance_ratio_.sum()",
+        "t-SNE: tsne = TSNE(n_components=2, perplexity=perplexity, random_state=random_state)",
+        "Standardize features before t-SNE: from sklearn.preprocessing import StandardScaler",
+        "For visualization: plt.scatter(embedding[:, 0], embedding[:, 1], c=labels, cmap='tab10')",
+        "Add colorbar and axis labels for clarity"
+      ],
+      "id": "m7.2_q020",
+      "points": 4,
+      "question": "Implement PCA and t-SNE dimensionality reduction for visualizing high-dimensional wafer pattern features in 2D space to reveal cluster structure.",
+      "test_cases": [
+        {
+          "description": "Dimensionality reduction comparison",
+          "expected_output": "2D PCA preserves global variance structure, t-SNE reveals local clusters",
+          "input": "high_dimensional_features (100 wafers, 50 features) with 4 pattern types"
+        }
+      ],
+      "topic": "dimensionality_reduction_visualization",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Wafer map spatial patterns reveal root causes: (1) Center defects: Temperature hot spot in center, ion implantation focus issue, etching non-uniformity at center. Check: heater calibration, plasma source. (2) Edge defects: Spin coating edge effects, etch rate differences at edge, edge bead removal issues. Check: spin parameters, edge bead removal tool. (3) Radial patterns: Plasma density gradients, temperature gradients, gas flow non-uniformity. Check: plasma source, gas flow system, heating elements. (4) Ring patterns: Process step-specific effects at certain radii, often etch or deposition tools. (5) Scratch patterns (linear): Wafer handling damage, tool contact points. Check: handling robots, load locks. (6) Random scattered: Particle contamination, inconsistent material. Check: cleanroom, chemical purity. Troubleshooting workflow: (1) Classify pattern type. (2) Correlate with process step (which tool made this pattern?). (3) Check tool-specific parameters. (4) Verify with Design of Experiments. Spatial analysis is the first step in failure analysis.",
+      "hints": [
+        "Think about process physics",
+        "Consider equipment geometry",
+        "Think about tool-specific issues",
+        "Consider systematic vs random defects"
+      ],
+      "id": "m7.2_q021",
+      "points": 5,
+      "question": "For a semiconductor process engineer, explain how different spatial patterns on wafer maps (center, edge, radial, random) indicate specific root causes and guide troubleshooting.",
+      "rubric": [
+        "Describes center pattern and causes (hotspot, temperature gradient) (2 points)",
+        "Describes edge pattern and causes (spin coating, etch uniformity) (2 points)",
+        "Describes radial pattern and causes (plasma uniformity, gas flow) (2 points)",
+        "Describes random pattern and causes (particle contamination) (2 points)",
+        "Discusses systematic troubleshooting approach (2 points)"
+      ],
+      "topic": "spatial_pattern_interpretation",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Validation approaches: (1) Elbow method: Plot inertia (within-cluster sum of squares) vs K. Look for 'elbow' where diminishing returns begin. Not always clear. (2) Silhouette score: Measures cluster cohesion and separation. Higher = better. Compare K=3, 4, 5, 6. (3) Gap statistic: Compares inertia to random data. (4) Domain validation: Visualize cluster centroids and sample wafers. Do clusters correspond to known pattern types (center, edge, radial)? (5) Stability: Run clustering multiple times with different initializations. Stable clusters give similar results. (6) Downstream task: Does K=5 improve defect prediction or root cause analysis compared to K=3? (7) Process engineer feedback: Are clusters actionable? Too few clusters may merge distinct failure modes. Too many may split coherent patterns. For semiconductors, balance statistical metrics with domain interpretability. 'Optimal' K is often a business decision based on how patterns are used.",
+      "hints": [
+        "Think about quantitative metrics",
+        "Consider qualitative/domain validation",
+        "Think about practical utility",
+        "Consider alternative K values"
+      ],
+      "id": "m7.2_q022",
+      "points": 5,
+      "question": "You've used K-means clustering to group wafer patterns into K=5 clusters. How would you validate that K=5 is the optimal number and that the clusters are meaningful?",
+      "rubric": [
+        "Discusses elbow method and inertia (2 points)",
+        "Mentions silhouette score (2 points)",
+        "Explains domain validation (do clusters match known patterns?) (2 points)",
+        "Suggests comparing multiple K values (2 points)",
+        "Considers business/practical constraints (2 points)"
+      ],
+      "topic": "clustering_validation",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Imbalance strategies: (1) Resampling: Oversample minority classes (duplicate examples) or undersample majority class. Risk: overfitting minority or losing majority information. (2) SMOTE: Generate synthetic minority examples by interpolating between existing samples. Effective for continuous features. (3) Class weights: Assign higher misclassification cost to minority classes. Most classifiers support class_weight parameter. (4) Ensemble methods: Use Random Forest with balanced_subsample or EasyEnsemble. (5) Anomaly detection: Treat rare patterns as anomalies, use one-class SVM or Isolation Forest. (6) Active learning: Selectively label similar examples to rare classes. (7) Data augmentation: Apply transformations (rotation, flips) to minority classes. (8) Evaluation: Don't use accuracy. Use per-class precision/recall, F1-score, or cost-weighted metrics. For rare defects: Prioritize recall (don't miss rare failures) even if more false positives. (9) Two-stage: Binary classifier (defect/no-defect), then multi-class for defect types. For semiconductors, imbalance is common - rare defects are often the most critical. Invest in acquiring more rare examples through targeted data collection.",
+      "hints": [
+        "Think about data-level solutions",
+        "Consider algorithm-level solutions",
+        "Think about evaluation",
+        "Consider the practical cost of errors"
+      ],
+      "id": "m7.2_q023",
+      "points": 5,
+      "question": "Your wafer pattern dataset has severe class imbalance: 1000 'normal' patterns, 50 'center defects', 20 'edge defects', and 5 'rare defects'. Discuss strategies to handle this imbalance for effective classification.",
+      "rubric": [
+        "Discusses resampling techniques (oversampling minority, undersampling majority) (2 points)",
+        "Mentions SMOTE or synthetic data generation (2 points)",
+        "Explains cost-sensitive learning and class weights (2 points)",
+        "Considers evaluation metrics (precision, recall, F1 vs accuracy) (2 points)",
+        "Addresses active learning or anomaly detection for rare classes (2 points)"
+      ],
+      "topic": "imbalanced_patterns",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Temporal pattern analysis: (1) Trend detection: Track prevalence of pattern types over time. Increasing edge defects may indicate spin coater degradation. Plot pattern frequency vs time. (2) Process drift: Gradual shift from normal to center defect pattern indicates slow temperature drift. Use control charts with pattern-based statistics. (3) Predictive maintenance: Sudden appearance of new pattern type precedes tool failure by hours/days. Learn failure signatures. (4) Lot-to-lot correlation: Patterns correlated across lots suggest systematic tool issues vs random. Use time-series clustering. (5) Sequential patterns: Sequence 'normal \u2192 slight edge \u2192 strong edge' indicates progressive failure. Mine frequent sequences. (6) Early warning: Statistical process control on pattern features. Alert when feature distributions shift before visible pattern change. (7) Tool matching: Compare pattern evolution across identical tools to identify outliers. (8) Recipe optimization: Track pattern changes after process parameter adjustments. Implementation: Store pattern classifications and features in time-series database. Build dashboards showing pattern trends. Alert on anomalies. For semiconductors, temporal analysis enables proactive maintenance vs reactive response to failures.",
+      "hints": [
+        "Think about how patterns change over time",
+        "Consider tool degradation",
+        "Think about early warning signals",
+        "Consider sequential patterns"
+      ],
+      "id": "m7.2_q024",
+      "points": 5,
+      "question": "Discuss how temporal analysis of wafer pattern sequences (tracking how patterns evolve over time or across lots) can provide insights beyond single-wafer classification.",
+      "rubric": [
+        "Explains trend detection (gradual pattern changes) (2 points)",
+        "Discusses lot-to-lot correlation and process drift (2 points)",
+        "Mentions predictive maintenance opportunities (2 points)",
+        "Considers time-series clustering or sequential pattern mining (2 points)",
+        "Addresses actionable insights and early warning systems (2 points)"
+      ],
+      "topic": "temporal_pattern_analysis",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Multimodal fusion strategies: (1) Early fusion: Extract features from each modality (optical \u2192 CNN features, measurements \u2192 engineered features), concatenate into single vector, train classifier. Simple but assumes all modalities equally important. (2) Late fusion: Train separate classifiers per modality, combine predictions (voting, averaging, stacking). Robust to missing modalities. (3) Intermediate fusion: Fuse at hidden layers of neural networks. Learn optimal combination. (4) Attention-based fusion: Learn weights indicating which modality is most informative for each sample. Transformer architectures excel here. (5) Modality-specific processing: Optical images \u2192 CNN, EM images \u2192 different CNN (higher resolution), measurements \u2192 MLP. Challenges: (1) Different scales/units: normalize features. (2) Missing modalities: train with random modality dropout to handle missing data at inference. (3) Computational cost: some modalities expensive (EM imaging). Use optical for screening, EM for detailed analysis. (4) Alignment: ensure modalities captured from same wafer location. Benefits for semiconductors: (1) Optical shows macroscale patterns. (2) EM reveals nanoscale defects. (3) Measurements confirm physical properties. (4) Combining improves accuracy and provides complementary information. Implementation: Start with early fusion (simple), progress to attention-based for best performance with sufficient data.",
+      "hints": [
+        "Think about how to combine different data types",
+        "Consider fusion strategies",
+        "Think about handling missing data",
+        "Consider computational constraints"
+      ],
+      "id": "m7.2_q025",
+      "points": 5,
+      "question": "Modern semiconductor inspection generates multiple data modalities: optical images, electron microscope images, and measurement data (thickness, electrical properties). Discuss how to leverage multimodal data for improved pattern recognition.",
+      "rubric": [
+        "Explains early fusion (concatenate features from all modalities) (2 points)",
+        "Discusses late fusion (separate models, combine predictions) (2 points)",
+        "Mentions attention mechanisms or learned fusion (2 points)",
+        "Considers modality-specific preprocessing and feature extraction (2 points)",
+        "Addresses practical challenges (missing modalities, computational cost) (2 points)"
+      ],
+      "topic": "multimodal_pattern_recognition",
+      "type": "conceptual"
+    }
+  ],
+  "sub_module": "7.2",
+  "title": "Pattern Recognition and Wafer Map Analysis",
+  "version": "1.0",
+  "week": 14
+}

@@ -1,0 +1,79 @@
+{
+  "code_quality_score": 7.36,
+  "execution_errors": [],
+  "execution_successful": true,
+  "exercise_scores": [
+    {
+      "earned_points": 9.0,
+      "errors": [
+        "\u274c Exercise 1.1 cell not found"
+      ],
+      "exercise_id": "Exercise 1",
+      "feedback": [
+        "\u2705 Visualization code implemented"
+      ],
+      "max_points": 20,
+      "percentage": 45.0,
+      "warnings": []
+    },
+    {
+      "earned_points": 15.0,
+      "errors": [],
+      "exercise_id": "Exercise 2",
+      "feedback": [
+        "\u2705 Model training code implemented",
+        "\u2705 ROC curve visualization implemented",
+        "\u2705 Multiple models visualized"
+      ],
+      "max_points": 30,
+      "percentage": 50.0,
+      "warnings": []
+    },
+    {
+      "earned_points": 19.0,
+      "errors": [],
+      "exercise_id": "Exercise 3",
+      "feedback": [
+        "\u2705 Cost calculation implemented",
+        "\u2705 Confusion matrix calculated",
+        "\u2705 Threshold optimization implemented",
+        "\u2705 Threshold sweep implemented",
+        "\u2705 Cost calculated per threshold",
+        "\u2705 Optimal threshold identified"
+      ],
+      "max_points": 25,
+      "percentage": 76.0,
+      "warnings": []
+    },
+    {
+      "earned_points": 11.0,
+      "errors": [],
+      "exercise_id": "Exercise 4",
+      "feedback": [
+        "\u2705 Model saving code implemented",
+        "\u2705 Model loading code implemented",
+        "\u2705 Using WaferDefectPipeline.load() method",
+        "\u2705 Round-trip verification implemented"
+      ],
+      "max_points": 15,
+      "percentage": 73.3,
+      "warnings": []
+    }
+  ],
+  "feedback_summary": [
+    "\ud83d\udcda Additional work needed. Please review the tutorial and solution notebook.",
+    "Documentation: 100.0% of cells have comments (3.0/3 pts)",
+    "Code style: 6 violations (2.4/3 pts)",
+    "Error handling: 0 cells with error handling (0.0/2 pts)",
+    "\u2705 Descriptive variable names used",
+    "\u2705 Constants defined",
+    "\u26a0\ufe0f Focus on improving Exercise 1 (9.0/20 pts)",
+    "\u26a0\ufe0f Focus on improving Exercise 2 (15.0/30 pts)"
+  ],
+  "letter_grade": "D-",
+  "max_score": 100,
+  "notebook_path": "projects\\starter\\wafer_defect_classifier\\wafer_defect_solution.ipynb",
+  "percentage": 61.4,
+  "student_name": null,
+  "total_score": 61.36
+}

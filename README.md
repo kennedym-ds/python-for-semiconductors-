@@ -1,10 +1,21 @@
-# Machine Learning for Semiconductor Engineers: 20-Week Learning Series
+# Machine Learning for Semiconductor Engineers: 22-Week Learning Series
 
 [![CI](https://github.com/kennedym-ds/python-for-semiconductors-/actions/workflows/ci.yml/badge.svg)](https://github.com/kennedym-ds/python-for-semiconductors-/actions/workflows/ci.yml)
 
-## 🚀 Project Overview
+## � Repository Status
 
-Welcome to the most comprehensive **Machine Learning for Semiconductor Engineers** learning pathway available! This 20-week program transforms semiconductor professionals into ML-powered engineers, bridging traditional semiconductor expertise with cutting-edge AI/ML technologies.
+**Current Status**: Core content complete, supporting features in development
+
+- ✅ **Modules 1-11**: All content complete and ready to use
+- 🔄 **Assessments**: In development (ETA: 6 weeks)
+- ✅ **Community**: Available via external platforms (contact for access)
+- 🔄 **Advanced Features**: Gamification, interactive widgets (ETA: 12 weeks)
+
+See [Gap Analysis](docs/REPOSITORY_GAP_ANALYSIS.md) for detailed status.
+
+## �🚀 Project Overview
+
+Welcome to the most comprehensive **Machine Learning for Semiconductor Engineers** learning pathway available! This 22-week program transforms semiconductor professionals into ML-powered engineers, bridging traditional semiconductor expertise with cutting-edge AI/ML technologies.
 
 ### What Makes This Special
 
@@ -64,7 +75,7 @@ Welcome to the most comprehensive **Machine Learning for Semiconductor Engineers
 - 7.2: Pattern Recognition for wafer maps
 - **Deliverables**: Automated optical inspection, pattern classification
 
-### 🚀 Cutting-Edge Series (Weeks 13-16)
+### 🚀 Cutting-Edge Series (Weeks 13-18)
 
 **Module 8: Generative AI & Advanced Applications**
 
@@ -76,9 +87,16 @@ Welcome to the most comprehensive **Machine Learning for Semiconductor Engineers
 
 - 9.1: Model Deployment (APIs, containers)
 - 9.2: Monitoring & Maintenance
+- 9.3: Real-time Inference Systems
 - **Deliverables**: Deployable model template, MLOps starter kit
 
-### 🎯 Project Development Series (Weeks 17-20)
+**Module 11: Edge AI for Inline Inspection**
+
+- 11.1: TensorFlow Lite & Edge Optimization
+- 11.2: Real-time Wafer Inspection at the Edge
+- **Deliverables**: Optimized edge model, inline inspection system
+
+### 🎯 Project Development Series (Weeks 19-22)
 
 **Module 10: Production-Ready ML Projects**
 
@@ -217,11 +235,11 @@ python -c "import sys, sklearn, numpy; print(sys.executable); print(sklearn.__ve
 python-for-semiconductors-/
 ├── README.md
 ├── docs/                    # Documentation and guides
-├── modules/                 # All 10 modules with 4 content types each
+├── modules/                 # All 11 modules with 4 content types each
 │   ├── foundation/         # Modules 1-3
 │   ├── intermediate/       # Modules 4-5
 │   ├── advanced/          # Modules 6-7
-│   ├── cutting-edge/      # Modules 8-9
+│   ├── cutting-edge/      # Modules 8-9, 11
 │   └── project-dev/       # Module 10
 ├── projects/              # 4 starter + 4 advanced projects
 │   ├── starter/

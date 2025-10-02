@@ -1,0 +1,497 @@
+{
+  "description": "Assessment covering unsupervised learning techniques including K-means, hierarchical clustering, DBSCAN, GMM, anomaly detection, dimensionality reduction (t-SNE, UMAP), and cluster validation for semiconductor manufacturing applications",
+  "estimated_time_minutes": 75,
+  "module_id": "module-4.2",
+  "passing_score": 70,
+  "questions": [
+    {
+      "correct_answer": 0,
+      "difficulty": "easy",
+      "explanation": "Unsupervised learning excels at discovering hidden patterns in unlabeled data. For new defect types or unknown failure modes, clustering can reveal patterns that weren't previously categorized.",
+      "id": "m4.2_q001",
+      "options": [
+        "To discover unknown defect patterns without requiring labeled data",
+        "Because it's faster than supervised learning",
+        "To reduce the number of features",
+        "To improve prediction accuracy on labeled data"
+      ],
+      "points": 2,
+      "question": "Why would you use unsupervised learning for wafer defect pattern analysis?",
+      "topic": "clustering_basics",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "medium",
+      "explanation": "In high-dimensional spaces (500 features), distance metrics become unreliable as all points appear equidistant. Solution: Apply PCA or feature selection before clustering to reduce dimensionality to ~20-50 features.",
+      "id": "m4.2_q002",
+      "options": [
+        "Curse of dimensionality - distances become meaningless in high dimensions",
+        "Not enough data points",
+        "K is set too high",
+        "The random initialization is wrong"
+      ],
+      "points": 2,
+      "question": "K-means clustering on 500 features from wafer sensors keeps converging to poor solutions. What's the most likely cause?",
+      "topic": "kmeans",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "hard",
+      "explanation": "K-means' objective function (minimize total within-cluster sum of squares) implicitly prefers balanced clusters. Rare defects get absorbed into larger clusters. Solutions: Use DBSCAN (density-based) or GMM with appropriate priors, or weight samples inversely by class frequency.",
+      "id": "m4.2_q003",
+      "options": [
+        "K-means minimizes within-cluster variance, biasing toward equal-sized clusters",
+        "K-means doesn't support different cluster densities",
+        "The random initialization favored large clusters",
+        "Small clusters are statistical noise"
+      ],
+      "points": 3,
+      "question": "You're clustering wafer defect patterns. Some clusters have 1000 samples, others have 10. K-means fails to identify small rare-defect clusters. Why?",
+      "topic": "kmeans_limitations",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "medium",
+      "explanation": "Hierarchical clustering creates a tree (dendrogram) showing nested clusters at all levels. You can explore the hierarchy and cut at different heights to find meaningful groupings. K-means requires specifying K beforehand.",
+      "id": "m4.2_q004",
+      "options": [
+        "Produces a dendrogram showing relationships at all granularities without specifying K upfront",
+        "Faster computation for large datasets",
+        "Better handling of non-spherical clusters",
+        "Automatically determines optimal number of clusters"
+      ],
+      "points": 2,
+      "question": "What advantage does hierarchical clustering have over K-means for exploring wafer defect patterns?",
+      "topic": "hierarchical_clustering",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "hard",
+      "explanation": "DBSCAN tuning: (1) k-distance plot (sorted distance to kth neighbor) shows elbow suggesting eps; (2) min_samples \u2248 2*dimensions prevents spurious clusters; (3) Euclidean works for spatial/physical measurements. Grid search is expensive and may overfit.",
+      "id": "m4.2_q005",
+      "options": [
+        "Plot k-distance graph to find elbow for eps; set min_samples based on dimensionality (2*dim); use Euclidean for spatial data",
+        "Try all combinations via grid search",
+        "Use default parameters - they work universally",
+        "Set eps to standard deviation and min_samples to 5"
+      ],
+      "points": 3,
+      "question": "DBSCAN identifies wafer defects in spatial coordinates (x, y positions). You have 3 parameters to tune: eps, min_samples, and distance metric. How should you approach this?",
+      "topic": "dbscan",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "medium",
+      "explanation": "Silhouette score (range [-1, 1]) measures how similar points are to their own cluster vs. nearest other cluster. Works without labels. Accuracy, F1, and AUC all require ground truth labels.",
+      "id": "m4.2_q006",
+      "options": [
+        "Silhouette score - measures separation and cohesion without labels",
+        "Accuracy - compares predictions to true labels",
+        "F1-score - balances precision and recall",
+        "ROC-AUC - evaluates class discrimination"
+      ],
+      "points": 2,
+      "question": "Which metric should you use to evaluate clustering quality when you don't have ground-truth labels?",
+      "topic": "cluster_validation",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "easy",
+      "explanation": "A smooth curve without an elbow suggests gradual structure rather than distinct clusters. The data may be continuously distributed or have fuzzy boundaries. Consider: (1) alternative clustering methods, (2) dimensionality reduction visualization, (3) domain knowledge about expected groups.",
+      "id": "m4.2_q007",
+      "options": [
+        "The data may not have well-separated natural clusters",
+        "K-means is implemented incorrectly",
+        "You need to increase K further",
+        "The features need scaling"
+      ],
+      "points": 2,
+      "question": "You plot K-means inertia vs. K and see a smooth curve without a clear elbow. What does this suggest?",
+      "topic": "elbow_method",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "hard",
+      "explanation": "GMM assigns probability distributions, useful when: (1) boundaries are fuzzy (wafer partly in spec, partly degraded), (2) multiple failure modes coexist, (3) you need uncertainty quantification. K-means forces hard boundaries inappropriate for ambiguous cases.",
+      "id": "m4.2_q008",
+      "options": [
+        "When wafers may exhibit multiple overlapping failure modes or transitional states",
+        "When you need faster computation",
+        "When clusters are perfectly separated",
+        "When you have categorical features"
+      ],
+      "points": 3,
+      "question": "Gaussian Mixture Models (GMM) find probabilistic cluster assignments while K-means gives hard assignments. When is GMM's soft clustering advantageous for semiconductor data?",
+      "topic": "gmm",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "medium",
+      "explanation": "Isolation Forest is optimized for anomaly detection: isolates outliers in fewer splits. Fast inference (O(log n)), handles high dimensions, no assumption of data distribution. K-means/hierarchical are general clustering (not anomaly-focused), t-SNE is for visualization.",
+      "id": "m4.2_q009",
+      "options": [
+        "Isolation Forest - fast, handles high dimensions, designed for anomaly detection",
+        "K-means - general clustering",
+        "Hierarchical clustering - too slow for real-time",
+        "t-SNE - visualization only"
+      ],
+      "points": 2,
+      "question": "For real-time equipment anomaly detection, which unsupervised method is most appropriate?",
+      "topic": "anomaly_detection",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "hard",
+      "explanation": "t-SNE optimizes local neighborhood preservation, sometimes at the expense of global structure. Cluster sizes and inter-cluster distances in t-SNE plots can be misleading. Always validate clustering on original/PCA-reduced data, not just t-SNE visualization. t-SNE is for exploration, not analysis.",
+      "id": "m4.2_q010",
+      "options": [
+        "t-SNE emphasizes local structure and can distort global relationships; clusters in 2D may be artifacts",
+        "K-means is implemented incorrectly",
+        "The 200D data has no clusters",
+        "t-SNE perfectly preserves all structure"
+      ],
+      "points": 3,
+      "question": "You apply t-SNE to visualize 200-dimensional process data in 2D. The plot shows beautiful clusters, but when you use K-means on original 200D data, results differ. What's happening?",
+      "topic": "dimensionality_reduction",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "medium",
+      "explanation": "K-means uses Euclidean distance, which is scale-dependent. Without standardization, pressure (range 40000) dominates temperature (range 80), making temperature irrelevant. StandardScaler ensures equal feature influence. PCA can help but doesn't replace scaling.",
+      "id": "m4.2_q011",
+      "options": [
+        "Standardize features to zero mean and unit variance so scales don't dominate distance",
+        "No preprocessing needed - K-means handles different scales",
+        "Only remove missing values",
+        "Apply PCA first"
+      ],
+      "points": 2,
+      "question": "Before K-means clustering on mixed sensor data (temperature in \u00b0C: 20-100, pressure in Pa: 10000-50000), what preprocessing is essential?",
+      "topic": "feature_scaling",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "easy",
+      "explanation": "UMAP advantages over t-SNE: (1) preserves more global structure, (2) faster on large datasets, (3) supports more distance metrics. Both are stochastic; UMAP better for downstream tasks. t-SNE remains popular for visualization.",
+      "id": "m4.2_q012",
+      "options": [
+        "When you need to preserve global structure better or have large datasets (UMAP is faster)",
+        "When you have fewer than 100 samples",
+        "When you only need 3D visualization",
+        "When data is already low-dimensional"
+      ],
+      "points": 2,
+      "question": "When should you choose UMAP over t-SNE for dimensionality reduction?",
+      "topic": "umap",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "easy",
+      "hints": [
+        "Use KMeans with random_state=42 for reproducibility",
+        "Set n_init=10 for multiple initializations",
+        "Store inertia_ attribute after fitting",
+        "Optimal K is where rate of decrease slows (elbow)",
+        "Can use second derivative to automate elbow detection"
+      ],
+      "id": "m4.2_q013",
+      "points": 5,
+      "question": "Implement K-means clustering and determine optimal K using elbow method.",
+      "solution": "from sklearn.cluster import KMeans\nimport numpy as np\nimport matplotlib.pyplot as plt\n\ndef find_optimal_k(X, k_range=range(2, 11)):\n    inertias = []\n    k_values = list(k_range)\n    \n    # Calculate inertia for each K\n    for k in k_values:\n        kmeans = KMeans(n_clusters=k, random_state=42, n_init=10)\n        kmeans.fit(X)\n        inertias.append(kmeans.inertia_)\n    \n    # Simple elbow detection (largest second derivative)\n    if len(inertias) >= 3:\n        second_derivatives = np.diff(np.diff(inertias))\n        optimal_k = k_values[np.argmax(second_derivatives) + 1]\n    else:\n        optimal_k = k_values[0]\n    \n    return {\n        'inertias': inertias,\n        'k_values': k_values,\n        'optimal_k': optimal_k\n    }",
+      "starter_code": "from sklearn.cluster import KMeans\nimport numpy as np\nimport matplotlib.pyplot as plt\n\ndef find_optimal_k(X, k_range=range(2, 11)):\n    \"\"\"\n    Find optimal K using elbow method.\n    \n    Args:\n        X: Feature matrix\n        k_range: Range of K values to test\n    \n    Returns:\n        dict: {'inertias': list, 'k_values': list, 'optimal_k': int}\n    \"\"\"\n    # Your code here\n    pass",
+      "test_cases": [
+        {
+          "description": "Elbow method identifies natural cluster count",
+          "expected_output": "Inertia values decreasing, optimal K near 3",
+          "input": "100 samples with 3 natural clusters"
+        }
+      ],
+      "topic": "kmeans_basic",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "hints": [
+        "Use NearestNeighbors to compute k-distances for eps tuning",
+        "Label -1 indicates noise points",
+        "eps should capture local density (90th percentile of k-distances works)",
+        "min_samples \u2248 2*dimensions is a good starting point",
+        "DBSCAN doesn't require specifying number of clusters"
+      ],
+      "id": "m4.2_q014",
+      "points": 6,
+      "question": "Implement DBSCAN for spatial defect clustering and identify noise points.",
+      "solution": "from sklearn.cluster import DBSCAN\nfrom sklearn.neighbors import NearestNeighbors\nimport numpy as np\nimport pandas as pd\n\ndef cluster_spatial_defects(coordinates, eps=None, min_samples=5):\n    # Auto-tune eps using k-distance graph if not provided\n    if eps is None:\n        # Find distance to kth nearest neighbor\n        neighbors = NearestNeighbors(n_neighbors=min_samples)\n        neighbors.fit(coordinates)\n        distances, indices = neighbors.kneighbors(coordinates)\n        \n        # Sort k-distances\n        k_distances = np.sort(distances[:, -1])\n        \n        # Use 90th percentile as heuristic for eps\n        eps = np.percentile(k_distances, 90)\n    \n    # Apply DBSCAN\n    dbscan = DBSCAN(eps=eps, min_samples=min_samples)\n    labels = dbscan.fit_predict(coordinates)\n    \n    # Calculate metrics\n    n_clusters = len(set(labels)) - (1 if -1 in labels else 0)\n    noise_ratio = np.sum(labels == -1) / len(labels)\n    \n    return {\n        'labels': labels,\n        'n_clusters': n_clusters,\n        'noise_ratio': noise_ratio,\n        'eps_used': eps\n    }",
+      "starter_code": "from sklearn.cluster import DBSCAN\nimport numpy as np\nimport pandas as pd\n\ndef cluster_spatial_defects(coordinates, eps=None, min_samples=5):\n    \"\"\"\n    Cluster defects using DBSCAN.\n    \n    Args:\n        coordinates: Nx2 array of (x, y) positions\n        eps: Maximum distance between points (auto-tune if None)\n        min_samples: Minimum cluster size\n    \n    Returns:\n        dict: {'labels': array, 'n_clusters': int, 'noise_ratio': float, 'eps_used': float}\n    \"\"\"\n    # Your code here\n    pass",
+      "test_cases": [
+        {
+          "description": "DBSCAN identifies clusters and noise",
+          "expected_output": "Cluster labels with -1 for noise points",
+          "input": "Spatial coordinates with dense clusters and outliers"
+        }
+      ],
+      "topic": "dbscan_implementation",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "hints": [
+        "Lower BIC indicates better model (penalizes complexity)",
+        "Use covariance_type='full' for maximum flexibility",
+        "Set n_init=10 for multiple initializations",
+        "predict_proba returns probability for each component",
+        "BIC = -2*log_likelihood + k*log(n) where k is parameters"
+      ],
+      "id": "m4.2_q015",
+      "points": 8,
+      "question": "Implement Gaussian Mixture Model with BIC for model selection.",
+      "solution": "from sklearn.mixture import GaussianMixture\nimport numpy as np\n\ndef gmm_with_model_selection(X, max_components=10):\n    bic_scores = []\n    models = []\n    \n    # Test different numbers of components\n    for n in range(1, max_components + 1):\n        gmm = GaussianMixture(\n            n_components=n,\n            covariance_type='full',\n            random_state=42,\n            n_init=10\n        )\n        gmm.fit(X)\n        bic = gmm.bic(X)\n        \n        bic_scores.append(bic)\n        models.append(gmm)\n    \n    # Select model with lowest BIC\n    best_idx = np.argmin(bic_scores)\n    best_model = models[best_idx]\n    n_components = best_idx + 1\n    \n    # Get probabilistic assignments\n    probabilities = best_model.predict_proba(X)\n    \n    return {\n        'best_model': best_model,\n        'n_components': n_components,\n        'bic_scores': bic_scores,\n        'probabilities': probabilities\n    }",
+      "starter_code": "from sklearn.mixture import GaussianMixture\nimport numpy as np\n\ndef gmm_with_model_selection(X, max_components=10):\n    \"\"\"\n    Fit GMM and select optimal components using BIC.\n    \n    Args:\n        X: Feature matrix\n        max_components: Maximum number of components to test\n    \n    Returns:\n        dict: {'best_model': GMM, 'n_components': int, 'bic_scores': list, 'probabilities': array}\n    \"\"\"\n    # Your code here\n    pass",
+      "test_cases": [
+        {
+          "description": "BIC selects optimal number of Gaussian components",
+          "expected_output": "Best GMM model and soft cluster assignments",
+          "input": "Data with overlapping clusters"
+        }
+      ],
+      "topic": "gmm_clustering",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "hints": [
+        "silhouette_score gives overall average",
+        "silhouette_samples gives per-point scores",
+        "Scores range from -1 (wrong cluster) to +1 (perfect)",
+        "Negative scores indicate likely misassignments",
+        "Compare average scores across clusters to find unbalanced clustering"
+      ],
+      "id": "m4.2_q016",
+      "points": 6,
+      "question": "Calculate silhouette scores to evaluate clustering quality.",
+      "solution": "from sklearn.metrics import silhouette_score, silhouette_samples\nimport numpy as np\nimport pandas as pd\n\ndef evaluate_clustering_quality(X, labels):\n    # Overall silhouette score\n    overall_score = silhouette_score(X, labels)\n    \n    # Per-sample silhouette scores\n    sample_scores = silhouette_samples(X, labels)\n    \n    # Average score per cluster\n    unique_labels = np.unique(labels)\n    cluster_scores = {}\n    \n    for label in unique_labels:\n        if label == -1:  # Skip noise if present\n            continue\n        mask = labels == label\n        cluster_scores[int(label)] = float(np.mean(sample_scores[mask]))\n    \n    # Identify poorly assigned points (negative silhouette)\n    poor_assignments = np.where(sample_scores < 0)[0]\n    \n    return {\n        'overall_score': overall_score,\n        'cluster_scores': cluster_scores,\n        'poor_assignments': poor_assignments\n    }",
+      "starter_code": "from sklearn.metrics import silhouette_score, silhouette_samples\nimport numpy as np\nimport pandas as pd\n\ndef evaluate_clustering_quality(X, labels):\n    \"\"\"\n    Evaluate clustering using silhouette analysis.\n    \n    Returns:\n        dict: {'overall_score': float, 'cluster_scores': dict, 'poor_assignments': indices}\n    \"\"\"\n    # Your code here\n    pass",
+      "test_cases": [
+        {
+          "description": "Silhouette analysis identifies clustering quality",
+          "expected_output": "Overall score, per-cluster scores, poorly assigned points",
+          "input": "Clustered data with labels"
+        }
+      ],
+      "topic": "silhouette_analysis",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "hints": [
+        "contamination is expected outlier proportion",
+        "Labels: 1=normal, -1=anomaly",
+        "score_samples gives anomaly scores (lower=more anomalous)",
+        "n_estimators=100 provides good balance",
+        "Isolation Forest doesn't require clean training data"
+      ],
+      "id": "m4.2_q017",
+      "points": 6,
+      "question": "Implement anomaly detection using Isolation Forest for equipment sensors.",
+      "solution": "from sklearn.ensemble import IsolationForest\nimport numpy as np\nimport pandas as pd\n\ndef detect_equipment_anomalies(sensor_data, contamination=0.05):\n    # Train Isolation Forest\n    iso_forest = IsolationForest(\n        contamination=contamination,\n        random_state=42,\n        n_estimators=100\n    )\n    \n    # Fit and predict\n    # Returns 1 for inliers, -1 for outliers\n    anomaly_labels = iso_forest.fit_predict(sensor_data)\n    \n    # Get anomaly scores (more negative = more anomalous)\n    anomaly_scores = iso_forest.score_samples(sensor_data)\n    \n    # Get indices of anomalies\n    anomaly_indices = np.where(anomaly_labels == -1)[0].tolist()\n    \n    return {\n        'anomaly_labels': anomaly_labels,\n        'anomaly_scores': anomaly_scores,\n        'anomaly_indices': anomaly_indices\n    }",
+      "starter_code": "from sklearn.ensemble import IsolationForest\nimport numpy as np\nimport pandas as pd\n\ndef detect_equipment_anomalies(sensor_data, contamination=0.05):\n    \"\"\"\n    Detect anomalies in equipment sensor data.\n    \n    Args:\n        sensor_data: DataFrame with sensor readings\n        contamination: Expected proportion of outliers\n    \n    Returns:\n        dict: {'anomaly_labels': array, 'anomaly_scores': array, 'anomaly_indices': list}\n    \"\"\"\n    # Your code here\n    pass",
+      "test_cases": [
+        {
+          "description": "Isolation Forest identifies outliers",
+          "expected_output": "Binary labels and anomaly scores",
+          "input": "Sensor data with 5% anomalies"
+        }
+      ],
+      "topic": "isolation_forest",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "id": "m4.2_q018",
+      "keywords": [
+        "K-means",
+        "DBSCAN",
+        "GMM",
+        "spatial clustering",
+        "arbitrary shapes",
+        "noise detection",
+        "density-based"
+      ],
+      "points": 8,
+      "question": "Compare K-means, DBSCAN, and GMM for wafer defect pattern clustering. For each method, describe: (1) when to use it, (2) key advantage, (3) main limitation. Which would you choose for spatial defect clustering on wafer maps? (8 points)",
+      "rubric": {
+        "justification": 1,
+        "method_comparison": 3,
+        "spatial_recommendation": 2,
+        "use_cases": 2
+      },
+      "sample_answer": "**K-means:**\n\n*When to use:*\n- Known number of defect types (K)\n- Spherical, evenly-sized clusters expected\n- Large datasets (scales well)\n- Initial exploration\n\n*Key advantage:*\n- Fast, simple, scalable to millions of points\n- Easy to interpret (cluster centers)\n- Well-understood and widely supported\n\n*Main limitation:*\n- Assumes spherical clusters with similar sizes\n- Sensitive to initialization\n- Must specify K upfront\n- Struggles with varying densities\n\n**DBSCAN:**\n\n*When to use:*\n- Unknown number of defect patterns\n- Clusters have arbitrary shapes\n- Varying cluster densities\n- Noise points expected (isolated defects)\n\n*Key advantage:*\n- Finds arbitrarily-shaped clusters\n- Identifies noise/outliers explicitly\n- No need to specify K\n- Robust to outliers\n\n*Main limitation:*\n- Sensitive to eps and min_samples tuning\n- Struggles with varying density clusters\n- Not effective in high dimensions\n- Slower than K-means\n\n**Gaussian Mixture Model (GMM):**\n\n*When to use:*\n- Overlapping defect patterns\n- Need probabilistic assignments\n- Elliptical clusters\n- Uncertainty quantification required\n\n*Key advantage:*\n- Soft clustering (probabilities)\n- Flexible cluster shapes (elliptical)\n- Principled statistical framework\n- BIC/AIC for model selection\n\n*Main limitation:*\n- Computationally expensive (EM algorithm)\n- Assumes Gaussian distributions\n- Can overfit with many components\n- Requires specifying number of components\n\n**For Spatial Defect Clustering on Wafer Maps: DBSCAN**\n\n*Recommendation: DBSCAN*\n\nRationale:\n1. **Spatial Nature**: Defects often form irregular shapes (scratches, contamination spots, edge effects) - DBSCAN handles arbitrary shapes\n2. **Unknown Patterns**: New defect types emerge constantly - don't need to specify K\n3. **Noise Handling**: Wafer maps contain isolated random defects - DBSCAN's noise detection is valuable\n4. **Density Variation**: Defects cluster at different densities (dense contamination vs sparse scratches)\n\n*Implementation:*\n- Use (x, y) coordinates from wafer map\n- Tune eps using k-distance graph\n- Set min_samples \u2248 4-6 for 2D spatial data\n- Noise points flagged for separate inspection\n\n*When to reconsider:*\n- If defect types are known \u2192 K-means faster\n- If overlapping patterns common \u2192 GMM better\n- If real-time required \u2192 K-means for speed",
+      "topic": "clustering_comparison",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "id": "m4.2_q019",
+      "keywords": [
+        "PCA",
+        "t-SNE",
+        "UMAP",
+        "dimensionality reduction",
+        "global structure",
+        "local structure",
+        "interpretability",
+        "computational cost"
+      ],
+      "points": 10,
+      "question": "You have 500-dimensional equipment sensor data to visualize. Compare PCA, t-SNE, and UMAP for this task. Discuss: (1) how each handles dimensionality, (2) what structure each preserves, (3) computational cost, (4) interpretability. Which combination would you use for exploratory analysis and why? (10 points)",
+      "rubric": {
+        "comparison_depth": 2,
+        "pca_explanation": 2,
+        "tsne_explanation": 2,
+        "umap_explanation": 2,
+        "workflow_recommendation": 2
+      },
+      "sample_answer": "**PCA (Principal Component Analysis):**\n\n*How it handles dimensionality:*\n- Linear projection to maximize variance\n- Finds orthogonal axes (principal components)\n- Typically reduce to 2-50 components\n- Deterministic (same result every run)\n\n*Structure preserved:*\n- **Global structure**: Preserves large-scale relationships\n- Linear relationships and variance\n- Distances in high-D approximately preserved in PC space\n- Not effective for nonlinear manifolds\n\n*Computational cost:*\n- O(min(n\u00b2p, np\u00b2)) for n samples, p features\n- Fast: seconds for 10K samples \u00d7 500 features\n- Scales well to large datasets\n\n*Interpretability:*\n- Excellent: Each PC is weighted combination of original features\n- Can identify which sensors contribute most\n- PC loadings show feature importance\n- Example: PC1 might represent \"overall equipment temperature\"\n\n**t-SNE (t-Distributed Stochastic Neighbor Embedding):**\n\n*How it handles dimensionality:*\n- Nonlinear manifold learning\n- Converts distances to probabilities\n- Minimizes divergence between high-D and low-D distributions\n- Stochastic (different runs vary)\n\n*Structure preserved:*\n- **Local structure**: Preserves neighborhoods (nearby points stay close)\n- Reveals nonlinear manifolds and clusters\n- Cluster shapes/sizes/distances may be distorted\n- Poor global structure preservation\n\n*Computational cost:*\n- O(n\u00b2 log n) with tree methods\n- Slow: minutes to hours for large datasets\n- Memory intensive\n- Doesn't scale beyond ~10K samples well\n\n*Interpretability:*\n- Poor: Axes have no meaning\n- Can't interpret coordinates\n- Only useful for visualization\n- Can't project new points easily\n\n**UMAP (Uniform Manifold Approximation and Projection):**\n\n*How it handles dimensionality:*\n- Topological data analysis approach\n- Builds graph of high-D structure\n- Optimizes low-D layout\n- Stochastic but more stable than t-SNE\n\n*Structure preserved:*\n- **Both local and global** structure (better than t-SNE)\n- Preserves more faithful distances\n- Cluster separation more meaningful\n- Better represents manifold topology\n\n*Computational cost:*\n- O(n^1.14) approximately\n- Much faster than t-SNE\n- Scales to 100K+ samples\n- Can project new points\n\n*Interpretability:*\n- Poor: Like t-SNE, axes meaningless\n- Better for downstream ML than t-SNE\n- Can be used for preprocessing\n- Hyperparameters more intuitive (n_neighbors, min_dist)\n\n**Recommended Combination for 500-D Sensor Data:**\n\n**Step 1: PCA for preprocessing (reduce 500D \u2192 50D)**\n\n*Why:*\n- Remove noise and collinearity\n- Speed up subsequent methods\n- Identify key variance sources\n- Interpretable components\n\n*Analysis:*\n- Examine scree plot (explained variance)\n- Interpret top PCs (which sensors matter?)\n- Check if first 50 PCs capture >95% variance\n\n**Step 2: UMAP for visualization (50D \u2192 2D)**\n\n*Why:*\n- Faster than t-SNE on this scale\n- Better global structure than t-SNE\n- More stable results\n- Can tune n_neighbors (15 for global, 5 for local)\n\n*Analysis:*\n- Identify cluster structures\n- Detect anomalies (outliers)\n- Visualize temporal evolution if timestamps available\n\n**Step 3 (Optional): t-SNE for publication figures (50D \u2192 2D)**\n\n*Why:*\n- Often produces \"prettier\" visualizations\n- Better for presentations if UMAP unclear\n- Run with perplexity=30-50\n\n*Caution:*\n- Don't use t-SNE visualization for quantitative analysis\n- Only for qualitative cluster exploration\n\n**Full Workflow:**\n\n```python\n# 1. PCA preprocessing\nfrom sklearn.decomposition import PCA\nfrom sklearn.preprocessing import StandardScaler\n\n# Scale first\nscaler = StandardScaler()\nX_scaled = scaler.fit_transform(X_500d)\n\n# PCA to 50D\npca = PCA(n_components=50)\nX_50d = pca.fit_transform(X_scaled)\n\nprint(f\"Variance explained: {pca.explained_variance_ratio_.sum():.2%}\")\n\n# Interpret top components\ntop_features = np.abs(pca.components_[0]).argsort()[-10:][::-1]\nprint(f\"Top sensors in PC1: {feature_names[top_features]}\")\n\n# 2. UMAP visualization\nimport umap\n\nreducer = umap.UMAP(\n    n_neighbors=15,  # Balance local/global\n    min_dist=0.1,\n    random_state=42\n)\nX_2d = reducer.fit_transform(X_50d)\n\n# 3. Cluster analysis\nfrom sklearn.cluster import DBSCAN\ndbscan = DBSCAN(eps=0.5, min_samples=5)\nclusters = dbscan.fit_predict(X_2d)\n\n# Visualize\nplt.scatter(X_2d[:, 0], X_2d[:, 1], c=clusters, cmap='viridis')\nplt.title('Equipment States (PCA+UMAP)')\n```\n\n**Why This Combination:**\n1. PCA provides interpretability (what sensors vary?)\n2. UMAP provides visualization (what patterns exist?)\n3. PCA speeds up UMAP significantly\n4. Maintains both global and local structure\n5. Computationally feasible for large datasets\n\n**Alternative:** If dataset <5K samples, skip PCA and use UMAP directly on scaled data. If seeking purely linear insights, PCA alone may suffice.",
+      "topic": "dimensionality_reduction_comparison",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "id": "m4.2_q020",
+      "keywords": [
+        "silhouette",
+        "domain expert",
+        "temporal stability",
+        "interpretability",
+        "robustness",
+        "validation"
+      ],
+      "points": 8,
+      "question": "You've clustered wafer data into 5 groups using K-means. Before deploying this clustering in production, what validation steps would you take? List 5 specific checks and explain why each is important. (8 points)",
+      "rubric": {
+        "importance_explanation": 2,
+        "practical_implementation": 2,
+        "validation_methods": 4
+      },
+      "sample_answer": "**Validation Checklist for Production Clustering:**\n\n**1. Silhouette Analysis**\n\n*Check:*\n- Calculate overall silhouette score\n- Examine per-cluster silhouette scores\n- Identify samples with negative silhouette\n\n*Why important:*\n- Verifies clusters are well-separated and cohesive\n- Score >0.5 indicates good clustering\n- Negative scores identify misassigned wafers\n- Can detect if K=5 is appropriate\n\n*Action:*\n```python\nfrom sklearn.metrics import silhouette_score, silhouette_samples\nscore = silhouette_score(X, labels)\nif score < 0.4:\n    # Clustering quality questionable\n    # Consider different K or algorithm\n```\n\n**2. Domain Expert Review**\n\n*Check:*\n- Show sample wafers from each cluster to process engineers\n- Ask: \"Do these groupings make physical sense?\"\n- Verify clusters align with known process conditions\n\n*Why important:*\n- Statistical validation \u2260 physical meaning\n- Clusters might be artifacts of preprocessing\n- Engineers can identify if clusters correspond to:\n  * Different equipment states\n  * Process recipes\n  * Failure modes\n\n*Action:*\n- Create cluster profile reports (mean values per feature)\n- Highlight distinguishing characteristics\n- Get sign-off before deployment\n\n**3. Stability Analysis (Temporal Validation)**\n\n*Check:*\n- Split data by time (e.g., month 1 vs month 2)\n- Train clustering on month 1, assign month 2 wafers\n- Verify cluster distributions remain stable\n\n*Why important:*\n- Production data drifts over time\n- Clusters might be specific to training period\n- Equipment aging, recipe changes affect patterns\n\n*Action:*\n```python\n# Train on early data\nkmeans_train = KMeans(n_clusters=5, random_state=42)\nkmeans_train.fit(X_train_early)\n\n# Predict on later data\nlabels_later = kmeans_train.predict(X_train_later)\n\n# Compare distributions\nfrom scipy.stats import chi2_contingency\n# Check if cluster proportions significantly different\n```\n\n**4. Cluster Interpretability**\n\n*Check:*\n- Calculate feature means/medians per cluster\n- Identify distinguishing features for each cluster\n- Create decision rules: \"Cluster 3 = high temp + low pressure\"\n\n*Why important:*\n- Operators need to understand cluster assignments\n- Enables root cause analysis\n- Validates clusters aren't driven by noise\n- Required for actionable insights\n\n*Action:*\n- Build interpretable profiles\n- Example: \"Cluster 2 (Heating Issues): Temp +2\u03c3 above mean, 15% of wafers\"\n- If can't interpret, clustering may not be useful\n\n**5. Robustness to Initialization**\n\n*Check:*\n- Run K-means with 50+ different random seeds\n- Calculate adjusted Rand index between runs\n- Verify results are stable\n\n*Why important:*\n- K-means is sensitive to initialization\n- Unstable results indicate poor natural clustering\n- Production deployment requires consistency\n\n*Action:*\n```python\nfrom sklearn.metrics import adjusted_rand_score\n\nlabels_list = []\nfor seed in range(50):\n    km = KMeans(n_clusters=5, random_state=seed, n_init=1)\n    labels = km.fit_predict(X)\n    labels_list.append(labels)\n\n# Compare all pairs\nari_scores = []\nfor i in range(len(labels_list)-1):\n    ari = adjusted_rand_score(labels_list[i], labels_list[i+1])\n    ari_scores.append(ari)\n\nif np.mean(ari_scores) < 0.8:\n    # Unstable clustering - use n_init=50 or try different algorithm\n```\n\n**Bonus Checks:**\n\n**6. Class Imbalance Check**\n- Verify no cluster <5% of data (might be noise)\n- Very small clusters may not be statistically significant\n\n**7. Prediction Confidence**\n- Calculate distance to cluster centers\n- Flag wafers far from all centers (ambiguous)\n- Use GMM for probability-based confidence\n\n**8. Sensitivity Analysis**\n- Test clustering with \u00b110% feature perturbation\n- Robust clusters shouldn't change drastically\n\n**Production Deployment Decision:**\n\nDeploy if:\n- \u2705 Silhouette >0.4\n- \u2705 Domain experts validate\n- \u2705 Temporally stable\n- \u2705 Interpretable profiles\n- \u2705 Robust to initialization (ARI >0.8)\n\nOtherwise: Refine approach, try different K, or use supervised learning if labels available.",
+      "topic": "cluster_validation",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "hints": [
+        "Use linkage with method='ward' for minimum variance",
+        "Inconsistency coefficient helps find natural cuts",
+        "Look for large jumps in merge distances",
+        "fcluster with criterion='distance' cuts at specific height",
+        "Ward's method minimizes within-cluster variance"
+      ],
+      "id": "m4.2_q021",
+      "points": 8,
+      "question": "Implement agglomerative hierarchical clustering with dendrogram visualization and automatic cut height selection.",
+      "solution": "from scipy.cluster.hierarchy import dendrogram, linkage, fcluster\nfrom scipy.spatial.distance import pdist, inconsistent\nimport numpy as np\nimport matplotlib.pyplot as plt\n\ndef hierarchical_clustering_analysis(X, max_clusters=10):\n    # Compute linkage matrix using Ward's method\n    Z = linkage(X, method='ward')\n    \n    # Calculate inconsistency for each merge\n    inconsist = inconsistent(Z, d=2)\n    \n    # Find optimal cut height using inconsistency\n    # Look for large jump in inconsistency\n    inconsist_values = inconsist[:, 3]  # Inconsistency coefficient\n    \n    # Use elbow in last few merges\n    last_merges = min(max_clusters, len(inconsist_values))\n    recent_inconsist = inconsist_values[-last_merges:]\n    \n    # Find largest increase (elbow)\n    if len(recent_inconsist) > 1:\n        diffs = np.diff(recent_inconsist)\n        cut_idx = len(inconsist_values) - last_merges + np.argmax(diffs)\n        cut_height = Z[cut_idx, 2]\n        optimal_clusters = len(Z) - cut_idx\n    else:\n        cut_height = Z[-3, 2] if len(Z) >= 3 else Z[-1, 2]\n        optimal_clusters = 3\n    \n    # Get cluster labels\n    labels = fcluster(Z, t=cut_height, criterion='distance')\n    \n    return {\n        'linkage_matrix': Z,\n        'optimal_clusters': min(optimal_clusters, max_clusters),\n        'labels': labels,\n        'cut_height': cut_height\n    }",
+      "starter_code": "from scipy.cluster.hierarchy import dendrogram, linkage, fcluster\nfrom scipy.spatial.distance import pdist\nimport numpy as np\nimport matplotlib.pyplot as plt\n\ndef hierarchical_clustering_analysis(X, max_clusters=10):\n    \"\"\"\n    Perform hierarchical clustering with automatic cluster selection.\n    \n    Returns:\n        dict: {'linkage_matrix': array, 'optimal_clusters': int, 'labels': array, 'cut_height': float}\n    \"\"\"\n    # Your code here\n    pass",
+      "test_cases": [
+        {
+          "description": "Hierarchical clustering with automatic cut selection",
+          "expected_output": "Linkage matrix, optimal cluster count, labels",
+          "input": "Data with hierarchical structure"
+        }
+      ],
+      "topic": "hierarchical_clustering",
+      "type": "coding_exercise"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "medium",
+      "explanation": "In high dimensions, the ratio of distances to nearest/farthest points approaches 1 - everything seems equally far apart. This breaks distance-based methods. Solution: Apply PCA or feature selection to reduce to 20-100 meaningful dimensions first.",
+      "id": "m4.2_q022",
+      "options": [
+        "Distance concentration: all points become equidistant, making similarity meaningless",
+        "Too many data points required",
+        "Computational cost increases",
+        "Visualization becomes impossible"
+      ],
+      "points": 2,
+      "question": "Why does the curse of dimensionality particularly affect distance-based clustering (K-means, DBSCAN) in semiconductor datasets with 500+ features?",
+      "topic": "curse_dimensionality",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "hard",
+      "explanation": "Manufacturing processes drift (equipment aging, recipe changes, seasonal effects). Clustering trained on old data becomes obsolete. Solution: Implement periodic retraining (monthly/quarterly), monitor cluster stability metrics, use online clustering algorithms, or retrain when drift detected.",
+      "id": "m4.2_q023",
+      "options": [
+        "Concept drift: data distribution changed; retrain clustering monthly with recent data",
+        "Implementation bug",
+        "K-means degrades over time",
+        "Cluster centers corrupted"
+      ],
+      "points": 3,
+      "question": "You deployed K-means clustering for wafer classification. Over 6 months, cluster assignments become less meaningful. What's the most likely cause and solution?",
+      "topic": "production_monitoring",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "easy",
+      "id": "m4.2_q024",
+      "keywords": [
+        "semi-supervised",
+        "clustering",
+        "pseudo-labeling",
+        "label propagation",
+        "hybrid approach"
+      ],
+      "points": 6,
+      "question": "Your fab has 100K unlabeled wafer records and 500 labeled defect examples. Describe a hybrid approach combining unsupervised and supervised learning to build a defect classifier. (6 points)",
+      "rubric": {
+        "approach_description": 3,
+        "rationale": 1,
+        "steps_clarity": 2
+      },
+      "sample_answer": "**Hybrid Semi-Supervised Approach:**\n\n**Step 1: Unsupervised Clustering on All Data**\n- Apply K-means or DBSCAN to all 100K wafers\n- Identify natural groupings in the data\n- Purpose: Discover structure in unlabeled data\n\n**Step 2: Label Propagation**\n- Assign labeled examples (500 defects) to clusters\n- Check which clusters contain defects\n- Infer that similar unlabeled wafers in same cluster may be defects\n\n**Step 3: Pseudo-Labeling**\n- Assign pseudo-labels to high-confidence unlabeled examples\n- Example: If cluster contains 80% known defects, label all in cluster as defects\n- This expands training set from 500 to potentially thousands\n\n**Step 4: Train Supervised Classifier**\n- Use expanded labeled set (real + pseudo labels)\n- Train Random Forest or XGBoost\n- Supervised model typically more accurate than clustering alone\n\n**Step 5: Iterative Refinement**\n- Use classifier predictions to refine pseudo-labels\n- Retrain with updated labels\n- Repeat until convergence\n\n**Benefits:**\n- Leverages large unlabeled dataset\n- Better than supervised learning on 500 samples alone\n- Better than pure clustering (has ground truth guidance)\n\n**Alternative: Use Clustering as Features**\n- Create cluster assignment as feature\n- Train classifier on 500 labeled + cluster membership\n- Cluster captures unsupervised patterns, classifier adds supervision",
+      "topic": "unsupervised_vs_supervised",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "id": "m4.2_q025",
+      "keywords": [
+        "drift detection",
+        "monitoring",
+        "silhouette score",
+        "retraining",
+        "alert thresholds",
+        "automation",
+        "production ML"
+      ],
+      "points": 10,
+      "question": "Design a monitoring system to detect when deployed clustering model needs retraining in production. Include: (1) what metrics to track, (2) alert thresholds, (3) automated response actions. (10 points)",
+      "rubric": {
+        "automation_workflow": 3,
+        "metrics_definition": 3,
+        "practical_implementation": 2,
+        "threshold_design": 2
+      },
+      "sample_answer": "**Production Clustering Monitoring System:**\n\n**1. Metrics to Track**\n\n**A. Cluster Stability Metrics:**\n\n*Cluster Assignment Volatility:*\n- Track week-over-week change in cluster memberships\n- Metric: % of wafers changing clusters between weeks\n- Baseline: <10% change expected\n- Alert: >25% change indicates drift\n\n*Cluster Size Distribution:*\n```python\nweekly_cluster_sizes = [cluster_counts[i] / total for i in range(K)]\n# Compare to baseline distribution via chi-square test\nfrom scipy.stats import chisquare\nstat, p_value = chisquare(current_dist, baseline_dist)\nif p_value < 0.01:\n    alert(\"Cluster distribution shifted\")\n```\n\n**B. Distance-Based Metrics:**\n\n*Average Distance to Cluster Center:*\n- Track mean distance of points to assigned centers\n- Increasing distance suggests data moving away from original clusters\n```python\navg_distance = np.mean([np.linalg.norm(X[i] - centers[labels[i]]) \n                        for i in range(len(X))])\nif avg_distance > baseline_distance * 1.3:\n    alert(\"Data drifting from cluster centers\")\n```\n\n*Silhouette Score Degradation:*\n- Weekly silhouette score calculation\n- Declining score indicates clusters losing cohesion\n- Alert if drops >15% from baseline\n\n**C. Anomaly Rate:**\n\n*Outlier Percentage:*\n- Track % of wafers far from all cluster centers\n- Use isolation forest or distance thresholds\n- Baseline: 2-5% outliers normal\n- Alert: >15% suggests new patterns not captured by clusters\n\n**D. Business Metrics:**\n\n*Cluster-Outcome Correlation:*\n- If clusters used for quality prediction, track correlation\n- Example: Cluster 3 traditionally has 80% good yield\n- If correlation weakens, clustering no longer predictive\n```python\nfor cluster in range(K):\n    cluster_yield = wafers[labels == cluster]['yield'].mean()\n    if abs(cluster_yield - historical_yield[cluster]) > 0.1:\n        alert(f\"Cluster {cluster} yield pattern changed\")\n```\n\n**2. Alert Thresholds (Traffic Light System)**\n\n**Green (Normal Operation):**\n- Assignment volatility <10%\n- Silhouette score within 10% of baseline\n- Average distance within 20% of baseline\n- Anomaly rate <8%\n- **Action:** Routine monitoring\n\n**Yellow (Warning):**\n- Assignment volatility 10-25%\n- Silhouette score dropped 10-20%\n- Average distance increased 20-40%\n- Anomaly rate 8-20%\n- **Action:** \n  * Increase monitoring frequency\n  * Review recent process changes\n  * Prepare retraining data\n  * Schedule expert review\n\n**Red (Critical - Retrain Required):**\n- Assignment volatility >25%\n- Silhouette score dropped >20%\n- Average distance increased >40%\n- Anomaly rate >20%\n- **Action:**\n  * Trigger automated retraining\n  * Notify data science team\n  * Compare old vs new clusters\n  * Staged rollout of new model\n\n**3. Automated Response Actions**\n\n**A. Data Collection Pipeline:**\n```python\nclass ClusterMonitor:\n    def __init__(self, model, baseline_metrics):\n        self.model = model\n        self.baseline = baseline_metrics\n        self.alert_history = []\n    \n    def evaluate_batch(self, X_new, y_new=None):\n        # Predict clusters\n        labels = self.model.predict(X_new)\n        \n        # Calculate metrics\n        metrics = {\n            'silhouette': silhouette_score(X_new, labels),\n            'avg_distance': self._avg_distance_to_center(X_new, labels),\n            'cluster_dist': np.bincount(labels) / len(labels),\n            'timestamp': datetime.now()\n        }\n        \n        # Check thresholds\n        alert_level = self._check_thresholds(metrics)\n        \n        if alert_level == 'red':\n            self.trigger_retraining(X_new)\n        elif alert_level == 'yellow':\n            self.increase_monitoring()\n        \n        return metrics, alert_level\n```\n\n**B. Automated Retraining Workflow:**\n\n*Trigger Conditions:*\n- Red alert sustained for 2+ weeks\n- Manual trigger by engineer\n- Scheduled quarterly retraining\n\n*Retraining Process:*\n1. **Collect Recent Data**: Last 3 months of production wafers\n2. **Validate Data Quality**: Check for completeness, outliers\n3. **Feature Engineering**: Apply same preprocessing as original\n4. **Retrain Clustering**:\n   ```python\n   # Use recent data\n   X_recent = get_recent_wafers(months=3)\n   \n   # Determine K (may change)\n   best_k = find_optimal_k(X_recent, k_range=range(3, 10))\n   \n   # Retrain\n   new_model = KMeans(n_clusters=best_k, random_state=42, n_init=50)\n   new_model.fit(X_recent)\n   ```\n5. **Validation**: Compare old vs new clustering\n6. **Staged Rollout**: A/B test 10% traffic before full deployment\n7. **Documentation**: Log changes, update baselines\n\n**C. Alert Notification System:**\n```python\ndef send_alert(level, metrics, details):\n    if level == 'yellow':\n        # Email to team\n        send_email(\n            to='ml-team@company.com',\n            subject='Clustering Model Warning',\n            body=f\"Metrics: {metrics}\\nAction: Review recommended\"\n        )\n    elif level == 'red':\n        # PagerDuty + Slack\n        trigger_page('ml-oncall')\n        post_slack(\n            channel='#ml-alerts',\n            message=f\"\ud83d\udea8 Clustering model critical degradation\\nTriggering retraining\\nMetrics: {metrics}\"\n        )\n        # Create Jira ticket for tracking\n        create_jira_ticket('Clustering Model Retrain', details)\n```\n\n**D. Rollback Mechanism:**\n- Keep last 3 model versions\n- If new model performs worse, automatic rollback\n```python\nif new_model_silhouette < old_model_silhouette - 0.05:\n    logger.warning(\"New model worse, rolling back\")\n    deploy_model(previous_model)\n    alert_team(\"Rollback executed\")\n```\n\n**4. Dashboard (Real-Time Monitoring)**\n\nStreamlit/Grafana dashboard showing:\n- Current silhouette score (trend line)\n- Cluster size distribution (bar chart)\n- Average distance to centers (line chart)\n- Anomaly rate (gauge)\n- Alert status (traffic light)\n- Time since last retrain\n\n**Key Takeaway:** Clustering models degrade silently. Proactive monitoring with automated retraining ensures production reliability without manual intervention.",
+      "topic": "cluster_drift_monitoring",
+      "type": "conceptual"
+    }
+  ],
+  "sub_module": "4.2",
+  "title": "Unsupervised Learning",
+  "version": "1.0",
+  "week": 8
+}

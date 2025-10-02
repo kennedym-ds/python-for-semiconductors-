@@ -1,0 +1,598 @@
+{
+  "description": "Assessment covering neural network fundamentals, backpropagation, activation functions, optimization algorithms, regularization techniques, and deep learning applications in semiconductor manufacturing including yield prediction and process modeling.",
+  "estimated_time_minutes": 90,
+  "module_id": "module-6.1",
+  "passing_score": 70,
+  "questions": [
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "Deep neural networks excel at automatically learning hierarchical feature representations from raw data. Lower layers learn simple features (edges, textures), while higher layers combine these into complex patterns. This eliminates manual feature engineering, which is especially valuable for complex semiconductor data with subtle patterns.",
+      "id": "m6.1_q001",
+      "options": [
+        "They always train faster",
+        "They can automatically learn hierarchical feature representations",
+        "They require less data",
+        "They never overfit"
+      ],
+      "points": 2,
+      "question": "What is the primary advantage of deep neural networks over traditional machine learning models?",
+      "topic": "neural_network_basics",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 3,
+      "difficulty": "easy",
+      "explanation": "Each of the 50 neurons connects to all 100 input features, requiring 50 \u00d7 100 = 5,000 weight parameters. Plus 50 bias terms gives 5,050 total parameters. This multiplicative growth is why deep networks have millions of parameters.",
+      "id": "m6.1_q002",
+      "options": [
+        "50",
+        "100",
+        "150",
+        "5,000"
+      ],
+      "points": 2,
+      "question": "In a fully connected neural network layer, if the input has 100 features and the layer has 50 neurons, how many weight parameters does this layer have (excluding bias)?",
+      "topic": "neural_network_architecture",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "ReLU (Rectified Linear Unit) addresses the vanishing gradient problem that plagues sigmoid/tanh in deep networks. For positive inputs, ReLU has a constant gradient of 1, allowing gradients to flow freely during backpropagation. Sigmoid gradients become very small for extreme values, making deep network training difficult.",
+      "id": "m6.1_q003",
+      "options": [
+        "ReLU is more complex to compute",
+        "ReLU helps mitigate the vanishing gradient problem",
+        "ReLU always produces outputs between 0 and 1",
+        "ReLU cannot produce negative values"
+      ],
+      "points": 2,
+      "question": "Why is the ReLU activation function preferred over sigmoid in deep networks?",
+      "topic": "activation_functions",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 2,
+      "difficulty": "hard",
+      "explanation": "Softmax is the correct choice for multi-class classification. It converts raw logits into a probability distribution over all classes (summing to 1), making it ideal for mutually exclusive categories. Sigmoid is for binary classification, ReLU for hidden layers, and tanh is rarely used for outputs.",
+      "id": "m6.1_q004",
+      "options": [
+        "ReLU",
+        "Sigmoid",
+        "Softmax",
+        "Tanh"
+      ],
+      "points": 3,
+      "question": "Which activation function should you use for the output layer of a multi-class wafer defect classification problem with 8 defect types?",
+      "topic": "activation_functions",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Backpropagation uses the chain rule of calculus to efficiently compute gradients of the loss function with respect to all network weights. These gradients indicate how to adjust weights to reduce the loss. It propagates error backwards from output to input layers, hence the name.",
+      "id": "m6.1_q005",
+      "options": [
+        "To make forward predictions",
+        "To calculate gradients of the loss with respect to all weights",
+        "To initialize network weights",
+        "To select the best activation function"
+      ],
+      "points": 2,
+      "question": "What is the purpose of backpropagation in neural network training?",
+      "topic": "backpropagation",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "Adam (Adaptive Moment Estimation) combines adaptive learning rates per parameter with momentum-like behavior. It maintains running averages of gradients (first moment) and squared gradients (second moment), allowing it to navigate complex loss landscapes more effectively than standard SGD. This often leads to faster convergence and better performance.",
+      "id": "m6.1_q006",
+      "options": [
+        "Adam is faster to compute",
+        "Adam adapts learning rates per parameter and uses momentum",
+        "Adam requires no hyperparameters",
+        "Adam always finds the global minimum"
+      ],
+      "points": 3,
+      "question": "Why is Adam optimizer often preferred over standard SGD in deep learning?",
+      "topic": "optimization",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "The learning rate controls how much we adjust weights in the direction of the negative gradient. A learning rate of 0.01 means we move 1% of the gradient distance. Too large causes overshooting/divergence, too small causes slow convergence. It's one of the most critical hyperparameters.",
+      "id": "m6.1_q007",
+      "options": [
+        "The speed at which data is loaded",
+        "The step size for weight updates",
+        "The number of epochs to train",
+        "The batch size"
+      ],
+      "points": 2,
+      "question": "What is a learning rate in gradient descent optimization?",
+      "topic": "optimization",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Dropout randomly 'drops' (sets to zero) a fraction of neurons during each training step, forcing the network to learn robust features that don't rely on specific neurons. This prevents co-adaptation of neurons and acts as an ensemble method. At test time, all neurons are active but scaled appropriately.",
+      "id": "m6.1_q008",
+      "options": [
+        "It removes features from the dataset",
+        "It randomly sets a fraction of neurons to zero in each training step",
+        "It reduces the learning rate over time",
+        "It stops training early"
+      ],
+      "points": 2,
+      "question": "How does dropout regularization work during training?",
+      "topic": "regularization",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "hard",
+      "explanation": "L1 regularization (Lasso) penalizes the absolute values of weights, encouraging many weights to become exactly zero. This provides automatic feature selection and sparse models. L2 (Ridge) penalizes squared weights, shrinking them toward zero but rarely making them exactly zero. L1 is preferred when you want interpretability and believe many features are irrelevant.",
+      "id": "m6.1_q009",
+      "options": [
+        "When you want feature selection and sparse weights",
+        "When you want to prevent all overfitting",
+        "When you have a large learning rate",
+        "When using CNNs"
+      ],
+      "points": 3,
+      "question": "When would you use L1 regularization instead of L2 regularization?",
+      "topic": "regularization",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "medium",
+      "explanation": "Batch normalization addresses internal covariate shift - the phenomenon where the distribution of layer inputs changes during training as parameters update. By normalizing layer inputs to have zero mean and unit variance, batch norm stabilizes training, allows higher learning rates, and acts as a regularizer.",
+      "id": "m6.1_q010",
+      "options": [
+        "Slow training due to internal covariate shift",
+        "Insufficient training data",
+        "Wrong activation functions",
+        "Poor weight initialization only"
+      ],
+      "points": 2,
+      "question": "What problem does batch normalization address in deep networks?",
+      "topic": "batch_normalization",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "Binary cross-entropy (BCE) is the standard loss for binary classification. It measures the difference between predicted probabilities and true labels (0 or 1). BCE is derived from maximum likelihood estimation and provides strong gradients for confident misclassifications while allowing the model to express uncertainty.",
+      "id": "m6.1_q011",
+      "options": [
+        "Mean Squared Error (MSE)",
+        "Binary Cross-Entropy",
+        "Mean Absolute Error (MAE)",
+        "Hinge Loss"
+      ],
+      "points": 2,
+      "question": "Which loss function is appropriate for binary classification problems?",
+      "topic": "loss_functions",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "This is classic overfitting - the model has memorized the training data but fails to generalize. The large gap between training and validation performance indicates the model is too complex or trained too long. Solutions: add regularization (dropout, L2), reduce model capacity, get more data, or use early stopping.",
+      "id": "m6.1_q012",
+      "options": [
+        "Underfitting",
+        "Overfitting",
+        "Poor data quality",
+        "Wrong optimizer"
+      ],
+      "points": 2,
+      "question": "Your deep learning model achieves 99% accuracy on training data but only 70% on validation data. What is the most likely problem?",
+      "topic": "overfitting",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "Proper initialization (e.g., He initialization for ReLU, Xavier for tanh) ensures activations and gradients remain in reasonable ranges throughout the network. Poor initialization can cause vanishing gradients (preventing learning in early layers) or exploding gradients (causing instability). Good initialization is critical for deep network convergence.",
+      "id": "m6.1_q013",
+      "options": [
+        "It determines the final accuracy directly",
+        "It prevents vanishing/exploding gradients and ensures effective training",
+        "It's not important - random initialization always works",
+        "It only matters for CNNs"
+      ],
+      "points": 3,
+      "question": "Why is proper weight initialization important in deep networks?",
+      "topic": "weight_initialization",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 2,
+      "difficulty": "medium",
+      "explanation": "A Multi-Layer Perceptron (MLP) - fully connected feedforward network - is appropriate for tabular data with many features. CNNs are for spatial data (images), RNNs for sequences, and GANs for generation. An MLP can model complex nonlinear relationships between process parameters and yield.",
+      "id": "m6.1_q014",
+      "options": [
+        "Convolutional Neural Network (CNN)",
+        "Recurrent Neural Network (RNN)",
+        "Fully connected feedforward network (MLP)",
+        "Generative Adversarial Network (GAN)"
+      ],
+      "points": 2,
+      "question": "For predicting semiconductor yield from 500 process parameters, which neural network architecture would be most appropriate as a starting point?",
+      "topic": "semiconductor_applications",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 2,
+      "difficulty": "hard",
+      "explanation": "Bayesian optimization builds a probabilistic model of the objective function and uses it to select the most promising hyperparameters to try next. It balances exploration (trying new regions) with exploitation (focusing on good regions). This is more efficient than grid/random search, especially for expensive model training in semiconductor applications.",
+      "id": "m6.1_q015",
+      "options": [
+        "Grid search only",
+        "Random search only",
+        "Bayesian optimization",
+        "Manual tuning"
+      ],
+      "points": 3,
+      "question": "When tuning hyperparameters for a yield prediction model, which search strategy balances exploration and exploitation effectively?",
+      "topic": "hyperparameter_tuning",
+      "type": "multiple_choice"
+    },
+    {
+      "code_template": "import torch\nimport torch.nn as nn\n\nclass YieldPredictor(nn.Module):\n    \"\"\"\n    MLP for semiconductor yield prediction.\n    \n    Architecture:\n    - Input: process parameters (n_features)\n    - Hidden layer 1: 128 neurons, ReLU\n    - Hidden layer 2: 64 neurons, ReLU\n    - Output: 1 neuron (yield value)\n    \"\"\"\n    def __init__(self, n_features: int):\n        super(YieldPredictor, self).__init__()\n        # Your implementation here\n        pass\n    \n    def forward(self, x: torch.Tensor) -> torch.Tensor:\n        # Your implementation here\n        pass",
+      "difficulty": "medium",
+      "explanation": "An MLP consists of stacked fully connected layers with nonlinear activations. For regression, the output layer has no activation. ReLU is standard for hidden layers. This architecture can model complex relationships between hundreds of process parameters and yield.",
+      "hints": [
+        "Use nn.Linear for fully connected layers",
+        "Apply nn.ReLU() activation after hidden layers",
+        "No activation on output layer for regression",
+        "Use nn.Sequential or chain operations in forward()"
+      ],
+      "id": "m6.1_q016",
+      "points": 4,
+      "question": "Implement a multi-layer perceptron (MLP) using PyTorch for yield prediction from process parameters. The network should have 2 hidden layers with ReLU activation.",
+      "test_cases": [
+        {
+          "description": "Batch of 32 samples with 500 features",
+          "expected_output": "output shape: (32, 1)",
+          "input": "model = YieldPredictor(n_features=500); x = torch.randn(32, 500)"
+        }
+      ],
+      "topic": "building_mlp",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import torch\nimport torch.nn as nn\nimport torch.optim as optim\nfrom typing import Tuple\n\ndef train_epoch(model: nn.Module, dataloader, \n                optimizer: optim.Optimizer, \n                criterion: nn.Module) -> Tuple[float, float]:\n    \"\"\"\n    Train model for one epoch.\n    \n    Args:\n        model: Neural network model\n        dataloader: DataLoader with (features, labels) batches\n        optimizer: Optimizer (e.g., Adam)\n        criterion: Loss function (e.g., MSELoss)\n        \n    Returns:\n        Tuple of (average_loss, average_mae)\n    \"\"\"\n    model.train()\n    total_loss = 0.0\n    total_mae = 0.0\n    num_batches = 0\n    \n    # Your implementation here\n    # For each batch:\n    #   1. Zero gradients\n    #   2. Forward pass\n    #   3. Compute loss\n    #   4. Backward pass\n    #   5. Update weights\n    #   6. Track metrics\n    \n    pass",
+      "difficulty": "hard",
+      "explanation": "The training loop is the core of deep learning: forward pass generates predictions, loss measures error, backward pass computes gradients via backpropagation, and optimizer updates weights. This cycle repeats for all batches in each epoch.",
+      "hints": [
+        "Use optimizer.zero_grad() before each batch",
+        "Call loss.backward() to compute gradients",
+        "Call optimizer.step() to update weights",
+        "Use torch.no_grad() for MAE calculation",
+        "Accumulate and average metrics across batches"
+      ],
+      "id": "m6.1_q017",
+      "points": 5,
+      "question": "Implement a complete training loop for the yield prediction model including forward pass, loss computation, backpropagation, and optimization.",
+      "test_cases": [
+        {
+          "description": "Full training epoch",
+          "expected_output": "Returns (loss_value, mae_value) as floats",
+          "input": "model, dataloader with 100 samples, Adam optimizer, MSE loss"
+        }
+      ],
+      "topic": "training_loop",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import torch\nimport torch.nn as nn\nfrom typing import Tuple\n\ndef validate_model(model: nn.Module, dataloader, \n                   criterion: nn.Module) -> Tuple[float, float]:\n    \"\"\"\n    Evaluate model on validation set.\n    \n    Args:\n        model: Trained neural network\n        dataloader: Validation DataLoader\n        criterion: Loss function\n        \n    Returns:\n        Tuple of (val_loss, val_mae)\n    \"\"\"\n    # Your implementation here\n    # Set model to eval mode\n    # Disable gradient computation\n    # Compute predictions and metrics\n    pass",
+      "difficulty": "medium",
+      "explanation": "Validation evaluates model performance on unseen data without updating weights. model.eval() disables dropout and batch norm training behavior. torch.no_grad() saves memory by not tracking gradients. These metrics guide hyperparameter tuning and early stopping.",
+      "hints": [
+        "Use model.eval() to set evaluation mode",
+        "Use torch.no_grad() context to disable gradients",
+        "Compute metrics but don't call backward() or optimizer.step()",
+        "Remember to average metrics across all batches"
+      ],
+      "id": "m6.1_q018",
+      "points": 4,
+      "question": "Implement a validation function that evaluates the model on a validation set without updating weights, computing both loss and MAE.",
+      "test_cases": [
+        {
+          "description": "Validation without weight updates",
+          "expected_output": "(val_loss, val_mae) as floats",
+          "input": "trained_model, val_dataloader with 50 samples"
+        }
+      ],
+      "topic": "evaluation",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "class EarlyStopping:\n    \"\"\"\n    Early stopping to prevent overfitting.\n    Stops training if validation loss doesn't improve for patience epochs.\n    \"\"\"\n    def __init__(self, patience: int = 5, min_delta: float = 0.0):\n        \"\"\"\n        Args:\n            patience: Number of epochs to wait for improvement\n            min_delta: Minimum change to qualify as improvement\n        \"\"\"\n        self.patience = patience\n        self.min_delta = min_delta\n        # Your initialization here\n    \n    def __call__(self, val_loss: float) -> bool:\n        \"\"\"\n        Check if training should stop.\n        \n        Args:\n            val_loss: Current validation loss\n            \n        Returns:\n            True if training should stop, False otherwise\n        \"\"\"\n        # Your implementation here\n        pass\n    \n    def save_checkpoint(self, model, path: str) -> None:\n        \"\"\"Save model checkpoint.\"\"\"\n        # Your implementation here\n        pass",
+      "difficulty": "hard",
+      "explanation": "Early stopping monitors validation loss and stops training when it stops improving, preventing overfitting. It saves the best model (lowest validation loss) and restores it at the end. This is crucial for semiconductor models where overfitting to training data can hurt production predictions.",
+      "hints": [
+        "Track best validation loss seen so far",
+        "Count epochs without improvement",
+        "Return True when counter exceeds patience",
+        "Reset counter when loss improves by more than min_delta",
+        "Save model checkpoint at best validation loss"
+      ],
+      "id": "m6.1_q019",
+      "points": 5,
+      "question": "Implement early stopping to prevent overfitting by monitoring validation loss and stopping when it stops improving.",
+      "test_cases": [
+        {
+          "description": "Stop when validation loss stops improving",
+          "expected_output": "Returns True after 3 non-improving epochs",
+          "input": "patience=3, losses=[1.0, 0.9, 0.95, 0.96, 0.97]"
+        }
+      ],
+      "topic": "early_stopping",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import torch.nn as nn\n\nclass YieldPredictorWithDropout(nn.Module):\n    \"\"\"\n    MLP with dropout for regularization.\n    \"\"\"\n    def __init__(self, n_features: int, dropout_rate: float = 0.5):\n        super(YieldPredictorWithDropout, self).__init__()\n        # Your implementation here\n        # Add dropout layers between hidden layers\n        pass\n    \n    def forward(self, x: torch.Tensor) -> torch.Tensor:\n        # Your implementation here\n        pass",
+      "difficulty": "medium",
+      "explanation": "Dropout randomly zeroes neurons during training, forcing the network to learn robust features. It's placed after activation functions in hidden layers. PyTorch automatically handles the difference between train and eval modes - dropout is active during training, disabled during evaluation.",
+      "hints": [
+        "Use nn.Dropout(p=dropout_rate) after each hidden layer",
+        "Dropout is applied after activation functions",
+        "Dropout behaves differently in train() vs eval() mode",
+        "No dropout after output layer"
+      ],
+      "id": "m6.1_q020",
+      "points": 4,
+      "question": "Add dropout regularization to the yield prediction MLP to prevent overfitting.",
+      "test_cases": [
+        {
+          "description": "MLP with dropout regularization",
+          "expected_output": "Model with dropout layers, different outputs in train vs eval mode",
+          "input": "model = YieldPredictorWithDropout(500, dropout_rate=0.3)"
+        }
+      ],
+      "topic": "dropout_implementation",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import torch.optim as optim\n\ndef train_with_lr_scheduling(model, train_loader, val_loader, \n                             epochs: int = 50) -> dict:\n    \"\"\"\n    Train model with learning rate scheduling.\n    \n    Args:\n        model: Neural network\n        train_loader: Training DataLoader\n        val_loader: Validation DataLoader\n        epochs: Number of training epochs\n        \n    Returns:\n        dict with training history\n    \"\"\"\n    optimizer = optim.Adam(model.parameters(), lr=0.001)\n    criterion = nn.MSELoss()\n    \n    # Create learning rate scheduler\n    # Reduce LR when validation loss plateaus\n    scheduler = # Your implementation here\n    \n    history = {'train_loss': [], 'val_loss': [], 'lr': []}\n    \n    for epoch in range(epochs):\n        # Train and validate\n        # Update learning rate based on validation loss\n        # Record metrics\n        pass\n    \n    return history",
+      "difficulty": "hard",
+      "explanation": "Learning rate scheduling adapts the learning rate during training. ReduceLROnPlateau reduces LR when validation loss stops improving, allowing fine-tuning. This often leads to better final performance and more stable convergence, especially important for complex semiconductor models.",
+      "hints": [
+        "Use optim.lr_scheduler.ReduceLROnPlateau",
+        "Call scheduler.step(val_loss) after each epoch",
+        "Monitor validation loss, not training loss",
+        "Typical reduction factor: 0.5 or 0.1",
+        "Track learning rate: optimizer.param_groups[0]['lr']"
+      ],
+      "id": "m6.1_q021",
+      "points": 5,
+      "question": "Implement learning rate scheduling to reduce the learning rate when validation loss plateaus, improving convergence.",
+      "test_cases": [
+        {
+          "description": "Training with adaptive learning rate",
+          "expected_output": "history dict with decreasing learning rate when val_loss plateaus",
+          "input": "model, dataloaders, epochs=50"
+        }
+      ],
+      "topic": "learning_rate_scheduling",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import torch.nn as nn\n\nclass YieldPredictorWithBatchNorm(nn.Module):\n    \"\"\"\n    MLP with batch normalization.\n    \"\"\"\n    def __init__(self, n_features: int):\n        super(YieldPredictorWithBatchNorm, self).__init__()\n        # Your implementation here\n        # Add BatchNorm1d after linear layers, before activation\n        pass\n    \n    def forward(self, x: torch.Tensor) -> torch.Tensor:\n        # Your implementation here\n        pass",
+      "difficulty": "medium",
+      "explanation": "Batch normalization normalizes layer inputs to have zero mean and unit variance, stabilizing training. It's placed after linear layers but before activations. Batch norm reduces sensitivity to weight initialization, allows higher learning rates, and acts as regularization.",
+      "hints": [
+        "Use nn.BatchNorm1d(num_features) for 1D data",
+        "Place batch norm after linear layer, before activation",
+        "Batch norm has learnable parameters (gamma, beta)",
+        "Behaves differently in train vs eval mode"
+      ],
+      "id": "m6.1_q022",
+      "points": 4,
+      "question": "Add batch normalization layers to improve training stability and performance.",
+      "test_cases": [
+        {
+          "description": "MLP with batch normalization",
+          "expected_output": "Model with batch norm layers",
+          "input": "model = YieldPredictorWithBatchNorm(500)"
+        }
+      ],
+      "topic": "batch_normalization",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import torch\nimport torch.nn as nn\n\nclass AsymmetricMSELoss(nn.Module):\n    \"\"\"\n    Asymmetric MSE loss that penalizes underestimation more heavily.\n    Useful when predicting high yields is critical to avoid production issues.\n    \"\"\"\n    def __init__(self, alpha: float = 2.0):\n        \"\"\"\n        Args:\n            alpha: Penalty multiplier for negative errors (underestimation)\n        \"\"\"\n        super(AsymmetricMSELoss, self).__init__()\n        self.alpha = alpha\n    \n    def forward(self, predictions: torch.Tensor, \n                targets: torch.Tensor) -> torch.Tensor:\n        \"\"\"\n        Compute asymmetric MSE loss.\n        \n        Args:\n            predictions: Model predictions\n            targets: True yield values\n            \n        Returns:\n            Scalar loss value\n        \"\"\"\n        # Your implementation here\n        # If prediction < target: apply alpha penalty\n        # If prediction >= target: standard squared error\n        pass",
+      "difficulty": "hard",
+      "explanation": "Custom loss functions encode domain knowledge. In semiconductor manufacturing, underestimating yield (predicting high when actual is low) can cause production issues. Asymmetric loss penalizes this more heavily, making the model more conservative. This is an example of incorporating business constraints into ML.",
+      "hints": [
+        "Compute error = predictions - targets",
+        "Separate positive and negative errors",
+        "Apply alpha multiplier to negative errors (underestimation)",
+        "Square all errors and compute mean",
+        "Use torch.where() or boolean indexing"
+      ],
+      "id": "m6.1_q023",
+      "points": 5,
+      "question": "Implement a custom loss function for yield prediction that penalizes underestimation more heavily than overestimation (asymmetric loss).",
+      "test_cases": [
+        {
+          "description": "Asymmetric penalty for underestimation",
+          "expected_output": "Higher loss for underestimating critical yields",
+          "input": "predictions=[0.9, 0.85], targets=[0.95, 0.95]"
+        }
+      ],
+      "topic": "custom_loss",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import torch\nfrom pathlib import Path\n\ndef save_model(model: nn.Module, optimizer: optim.Optimizer, \n               epoch: int, loss: float, path: Path) -> None:\n    \"\"\"\n    Save complete model checkpoint.\n    \n    Args:\n        model: Trained model\n        optimizer: Optimizer state\n        epoch: Current epoch number\n        loss: Current validation loss\n        path: Save path\n    \"\"\"\n    # Your implementation here\n    # Save model state, optimizer state, and metadata\n    pass\n\ndef load_model(path: Path, model: nn.Module, \n               optimizer: optim.Optimizer = None) -> dict:\n    \"\"\"\n    Load model checkpoint.\n    \n    Args:\n        path: Checkpoint path\n        model: Model instance to load weights into\n        optimizer: Optional optimizer to restore state\n        \n    Returns:\n        dict with epoch and loss info\n    \"\"\"\n    # Your implementation here\n    pass",
+      "difficulty": "medium",
+      "explanation": "Proper model checkpointing saves both model weights and optimizer state, allowing training to resume from any point. This is critical for long semiconductor model training runs that may be interrupted. State dicts are portable and can be loaded into models on different devices.",
+      "hints": [
+        "Use torch.save() with a dict containing all components",
+        "Save: model.state_dict(), optimizer.state_dict(), epoch, loss",
+        "Use torch.load() to read checkpoint",
+        "Call model.load_state_dict() to restore weights",
+        "Save as .pth or .pt file"
+      ],
+      "id": "m6.1_q024",
+      "points": 4,
+      "question": "Implement functions to save and load trained models including both architecture and learned weights.",
+      "test_cases": [
+        {
+          "description": "Full model checkpoint save/load",
+          "expected_output": "Saved checkpoint, loadable to restore exact state",
+          "input": "trained_model, optimizer, epoch=10, loss=0.05"
+        }
+      ],
+      "topic": "model_saving",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import torch\nimport torch.nn as nn\n\ndef train_with_gradient_clipping(model: nn.Module, dataloader,\n                                 optimizer, criterion,\n                                 max_grad_norm: float = 1.0) -> float:\n    \"\"\"\n    Train for one epoch with gradient clipping.\n    \n    Args:\n        model: Neural network\n        dataloader: Training DataLoader\n        optimizer: Optimizer\n        criterion: Loss function\n        max_grad_norm: Maximum gradient norm\n        \n    Returns:\n        Average loss for epoch\n    \"\"\"\n    model.train()\n    total_loss = 0.0\n    \n    for batch_features, batch_labels in dataloader:\n        optimizer.zero_grad()\n        \n        # Forward pass\n        outputs = model(batch_features)\n        loss = criterion(outputs, batch_labels)\n        \n        # Backward pass\n        loss.backward()\n        \n        # Gradient clipping\n        # Your implementation here\n        \n        # Optimizer step\n        optimizer.step()\n        \n        total_loss += loss.item()\n    \n    return total_loss / len(dataloader)",
+      "difficulty": "hard",
+      "explanation": "Gradient clipping prevents exploding gradients by scaling down gradients whose norm exceeds a threshold. This stabilizes training of deep networks, especially with high learning rates or difficult data. It's particularly useful for semiconductor models with highly variable input scales.",
+      "hints": [
+        "Use torch.nn.utils.clip_grad_norm_()",
+        "Call it after loss.backward(), before optimizer.step()",
+        "Clips gradients if their norm exceeds max_grad_norm",
+        "Parameters: model.parameters() and max_norm",
+        "Returns the total norm of parameters"
+      ],
+      "id": "m6.1_q025",
+      "points": 5,
+      "question": "Implement gradient clipping to prevent exploding gradients during training of deep yield prediction models.",
+      "test_cases": [
+        {
+          "description": "Training with gradient clipping",
+          "expected_output": "Training completes without gradient explosion",
+          "input": "model, dataloader, optimizer, criterion, max_grad_norm=1.0"
+        }
+      ],
+      "topic": "gradient_clipping",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Architecture design is both art and science. Start with a simple 2-3 layer MLP, then increase complexity if underfitting. More data supports larger networks. For 500 features with modest data, try [500 \u2192 256 \u2192 128 \u2192 1]. Use ReLU activation. Monitor train/val loss gap to detect overfitting. Consider regularization (dropout, L2) before making network larger. For semiconductors, interpretability may favor moderate-sized networks.",
+      "hints": [
+        "Think about the bias-variance tradeoff",
+        "Consider how much data you have",
+        "Think about computational constraints",
+        "Consider interpretability requirements"
+      ],
+      "id": "m6.1_q026",
+      "points": 5,
+      "question": "You're designing a neural network to predict wafer yield from 500 process parameters. Discuss how you would determine the appropriate network architecture (number of layers, neurons per layer, activation functions).",
+      "rubric": [
+        "Discusses starting simple and increasing complexity based on performance (2 points)",
+        "Mentions considering the dataset size (more data supports larger networks) (2 points)",
+        "Explains trade-offs between capacity and overfitting (2 points)",
+        "Suggests using validation set for architecture selection (2 points)",
+        "Provides specific recommendations for the semiconductor use case (2 points)"
+      ],
+      "topic": "architecture_design",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Systematic debugging: (1) Overfit small dataset (10-100 samples) - if can't, architecture/implementation issue. (2) Check data: proper scaling (normalize inputs), correct labels, no data leakage. (3) Verify learning rate: try 1e-4, 1e-3, 1e-2. (4) Check gradients: print grad norms, ensure not vanishing/exploding. (5) Simplify: remove regularization, reduce layers. (6) Use proper initialization. (7) Check loss function matches task. For semiconductors, verify process parameters are properly scaled.",
+      "hints": [
+        "Think about what could prevent gradient descent from working",
+        "Consider starting with a simple sanity check",
+        "Think about numerical issues",
+        "Consider the learning rate"
+      ],
+      "id": "m6.1_q027",
+      "points": 5,
+      "question": "Your deep learning model for yield prediction isn't converging - the loss remains high and doesn't decrease. Describe a systematic debugging process to identify and fix the problem.",
+      "rubric": [
+        "Checks data issues (scaling, labels, loading) (2 points)",
+        "Verifies model architecture (forward pass, activation functions) (2 points)",
+        "Examines learning rate (too high causes divergence, too low causes slow progress) (2 points)",
+        "Suggests using smaller dataset to verify model can overfit (sanity check) (2 points)",
+        "Discusses gradient flow (vanishing/exploding gradients) (2 points)"
+      ],
+      "topic": "debugging_training",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Transfer learning for semiconductors: (1) Pre-train model on abundant data from existing process. (2) Freeze early layers (general parameter relationships) and fine-tune later layers on new process data. (3) If new process is very similar, fine-tune only the last layer. (4) If quite different, fine-tune all layers with small learning rate. (5) Transfer works best when processes share physics (e.g., both etch tools). Benefits: faster convergence, better performance with limited data. Risk: negative transfer if processes too different.",
+      "hints": [
+        "Think about what knowledge transfers between similar processes",
+        "Consider which parts of the model learn general vs specific features",
+        "Think about how much new data you have",
+        "Consider domain similarity"
+      ],
+      "id": "m6.1_q028",
+      "points": 5,
+      "question": "Explain how transfer learning could be applied to semiconductor yield prediction when you have limited data for a new process but abundant data from a similar existing process.",
+      "rubric": [
+        "Explains transfer learning concept (pre-training on related task) (2 points)",
+        "Discusses which layers to freeze vs fine-tune (2 points)",
+        "Mentions the importance of task similarity (2 points)",
+        "Suggests specific approach for semiconductor use case (2 points)",
+        "Discusses when transfer learning helps vs hurts (2 points)"
+      ],
+      "topic": "transfer_learning",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Interpretation techniques: (1) Permutation importance: shuffle each feature, measure performance drop. (2) SHAP values: game-theoretic feature attribution. (3) Partial dependence plots: show effect of varying one parameter. (4) Layer activation analysis: visualize what hidden layers learn. (5) Attention mechanisms if applicable. For semiconductors, interpretability aids troubleshooting and trust. Compare to interpretable baseline (linear regression, XGBoost with feature importance). Trade-off: complex deep networks may be less interpretable but more accurate for subtle patterns.",
+      "hints": [
+        "Think about post-hoc interpretation methods",
+        "Consider what semiconductor engineers need to know",
+        "Think about regulatory or business requirements",
+        "Consider simpler interpretable models as baselines"
+      ],
+      "id": "m6.1_q029",
+      "points": 5,
+      "question": "Deep neural networks are often criticized as 'black boxes'. Discuss techniques to interpret what your yield prediction model has learned and identify the most important process parameters.",
+      "rubric": [
+        "Mentions feature importance techniques (permutation importance, SHAP) (3 points)",
+        "Discusses gradient-based methods (saliency maps, integrated gradients) (2 points)",
+        "Explains limitations of interpretability for deep networks (2 points)",
+        "Suggests practical approach for semiconductor engineers (2 points)",
+        "Considers when interpretability vs accuracy trade-off matters (1 point)"
+      ],
+      "topic": "interpretability",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Production deployment considerations: (1) Serving: Use PyTorch TorchServe or ONNX Runtime for low-latency predictions (<100ms). (2) Monitoring: Track prediction distribution drift, input feature statistics, model accuracy on recent data. Alert when drift detected. (3) Retraining: Retrain monthly with latest data, or trigger when performance drops. Use automated pipelines (MLflow, Kubeflow). (4) Version control: Track model versions, training data, hyperparameters. (5) Integration: API interface to MES, SCADA. Handle missing data gracefully. (6) Validation: Shadow mode before full deployment. (7) Rollback: Keep previous model version for quick rollback. Critical: ensure model training is reproducible.",
+      "hints": [
+        "Think about real-time requirements",
+        "Consider what can go wrong in production",
+        "Think about how processes change over time",
+        "Consider the full ML lifecycle"
+      ],
+      "id": "m6.1_q030",
+      "points": 5,
+      "question": "Discuss the key considerations and challenges when deploying a deep learning yield prediction model to production in a semiconductor fab, including model serving, monitoring, and retraining strategies.",
+      "rubric": [
+        "Discusses model serving infrastructure (latency, throughput requirements) (2 points)",
+        "Explains monitoring for distribution drift and performance degradation (3 points)",
+        "Suggests retraining strategy (periodic, triggered, online learning) (2 points)",
+        "Addresses version control and reproducibility (2 points)",
+        "Considers integration with existing fab systems (MES, SCADA) (1 point)"
+      ],
+      "topic": "production_deployment",
+      "type": "conceptual"
+    }
+  ],
+  "sub_module": "6.1",
+  "title": "Deep Learning Foundations",
+  "version": "1.0",
+  "week": 11
+}

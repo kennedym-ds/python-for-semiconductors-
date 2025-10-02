@@ -1,0 +1,891 @@
+{
+  "description": "Assessment covering Python basics, pandas fundamentals, NumPy operations, data types, indexing, memory efficiency, performance optimization, broadcasting, groupby, and best practices",
+  "estimated_time_minutes": 60,
+  "module_id": "module-1.1",
+  "passing_score": 70,
+  "questions": [
+    {
+      "correct_answer": 0,
+      "difficulty": "easy",
+      "explanation": "NumPy provides vectorized operations that are implemented in C, making them much faster than Python loops when processing large arrays of numerical data. For wafer measurements with thousands of data points, this performance difference is critical.",
+      "hints": [
+        "Think about how NumPy handles mathematical operations on entire arrays",
+        "Consider the performance difference between loops and vectorized operations"
+      ],
+      "id": "m1.1_q001",
+      "options": [
+        "Better performance for numerical operations through vectorization",
+        "Built-in plotting capabilities",
+        "Automatic data cleaning and outlier removal",
+        "Native JSON serialization support"
+      ],
+      "points": 2,
+      "question": "What is the primary advantage of using NumPy arrays over Python lists for wafer measurement data?",
+      "tags": [
+        "python",
+        "numpy",
+        "performance",
+        "arrays"
+      ],
+      "topic": "python_basics",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "The describe() method provides count, mean, std, min, quartiles, and max for numerical columns, giving a comprehensive statistical overview of the data. The info() method shows data types and missing values but not statistics.",
+      "hints": [
+        "This method returns count, mean, std, min, and percentiles",
+        "It's one of the first methods you'd use for exploratory data analysis"
+      ],
+      "id": "m1.1_q002",
+      "options": [
+        "df.summary()",
+        "df.describe()",
+        "df.statistics()",
+        "df.info()"
+      ],
+      "points": 2,
+      "question": "Which pandas method would you use to get a quick statistical summary of a wafer dataset?",
+      "tags": [
+        "pandas",
+        "eda",
+        "statistics"
+      ],
+      "topic": "pandas_basics",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 2,
+      "difficulty": "medium",
+      "explanation": "Wafer IDs are categorical identifiers, not quantitative values. Storing them as strings (object type) prevents accidental arithmetic operations and makes the data semantically correct. While category type could work, object is more flexible for IDs that may not repeat.",
+      "hints": [
+        "Consider whether you would ever add or subtract wafer IDs",
+        "Think about what the numbers represent semantically"
+      ],
+      "id": "m1.1_q003",
+      "options": [
+        "int64 - since they're numbers",
+        "float64 - to allow for missing values",
+        "object (string) - since IDs are categorical identifiers",
+        "category - for memory efficiency with repeated values"
+      ],
+      "points": 3,
+      "question": "You have a wafer ID column stored as integers (e.g., 12345). What's the most appropriate pandas data type for this column?",
+      "tags": [
+        "pandas",
+        "data_types",
+        "categorical"
+      ],
+      "topic": "data_types",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 3,
+      "difficulty": "medium",
+      "explanation": "Both boolean indexing with & operator (option B) and the query() method (option C) work correctly. Option A fails because 'and' doesn't work element-wise with pandas Series. When using boolean operators, parentheses are required around each condition.",
+      "hints": [
+        "Python's 'and' keyword doesn't work element-wise with arrays",
+        "Both traditional indexing and query() methods are valid"
+      ],
+      "id": "m1.1_q004",
+      "options": [
+        "df[df['yield'] < 90 and df['defects'] > 10]",
+        "df[(df['yield'] < 90) & (df['defects'] > 10)]",
+        "df.query('yield < 90 and defects > 10')",
+        "Both B and C are correct"
+      ],
+      "points": 3,
+      "question": "Which pandas indexing method should you use to select rows where yield is below 90% AND defect count is above 10?",
+      "tags": [
+        "pandas",
+        "boolean_indexing",
+        "filtering"
+      ],
+      "topic": "indexing",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Using chunksize loads and processes the file in manageable chunks, preventing memory overflow. This is essential for large datasets. Option C only samples data and option D makes the problem worse as Excel files are less efficient than CSV.",
+      "hints": [
+        "Think about processing data incrementally rather than all at once",
+        "Consider memory constraints when working with large files"
+      ],
+      "id": "m1.1_q005",
+      "options": [
+        "pd.read_csv('data.csv') - load everything at once",
+        "pd.read_csv('data.csv', chunksize=10000) - process in chunks",
+        "pd.read_csv('data.csv', nrows=1000) - sample the data",
+        "Convert to Excel first, then load"
+      ],
+      "points": 3,
+      "question": "You need to load a 10GB wafer measurement CSV file. Which approach is most memory-efficient?",
+      "tags": [
+        "pandas",
+        "memory",
+        "large_data"
+      ],
+      "topic": "memory_efficiency",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "Array broadcasting (option B) leverages NumPy's vectorized operations for maximum efficiency. Computing mean and std along axis=0 gives feature-wise statistics, and broadcasting automatically applies them across all rows without explicit loops.",
+      "hints": [
+        "NumPy broadcasting automatically aligns array dimensions",
+        "axis=0 operates along rows (feature-wise for each column)"
+      ],
+      "id": "m1.1_q006",
+      "options": [
+        "Loop through each column and normalize individually",
+        "Use array broadcasting: (data - data.mean(axis=0)) / data.std(axis=0)",
+        "Convert to pandas DataFrame and use apply()",
+        "Flatten the array, normalize, then reshape"
+      ],
+      "points": 4,
+      "question": "You have a 2D NumPy array of wafer measurements (100 wafers \u00d7 500 features) and want to normalize each feature to z-scores. What's the most efficient approach?",
+      "tags": [
+        "numpy",
+        "broadcasting",
+        "normalization",
+        "vectorization"
+      ],
+      "topic": "broadcasting",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 2,
+      "difficulty": "hard",
+      "explanation": "Row-wise apply with axis=1 is slowest because it essentially loops through each row in Python, losing vectorization benefits. Vectorized operations (A, D) and even groupby (B) are much faster as they're optimized in C/Cython.",
+      "hints": [
+        "Operations that loop through rows in Python are slower than vectorized operations",
+        "axis=1 means operating across columns for each row"
+      ],
+      "id": "m1.1_q007",
+      "options": [
+        "df['new_col'] = df['col1'] + df['col2'] (vectorized addition)",
+        "df.groupby('tool').mean() (group aggregation)",
+        "df.apply(lambda row: custom_function(row), axis=1) (row-wise apply)",
+        "df[df['yield'] > 90] (boolean filtering)"
+      ],
+      "points": 4,
+      "question": "Which operation is SLOWEST when working with a large pandas DataFrame of wafer data?",
+      "tags": [
+        "pandas",
+        "performance",
+        "apply",
+        "vectorization"
+      ],
+      "topic": "performance",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "df.isnull() returns a boolean DataFrame marking missing values, and .sum() counts True values per column. This gives the count of missing values for each column.",
+      "hints": [
+        "The method returns a boolean DataFrame first",
+        "You need to count the True values"
+      ],
+      "id": "m1.1_q008",
+      "options": [
+        "df.missing()",
+        "df.isnull().sum()",
+        "df.check_na()",
+        "df.find_nulls()"
+      ],
+      "points": 2,
+      "question": "How do you check for missing values in a pandas DataFrame?",
+      "tags": [
+        "pandas",
+        "missing_data",
+        "data_quality"
+      ],
+      "topic": "missing_data",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "medium",
+      "explanation": "Option A correctly groups by multiple columns (as a list) and then selects the yield column. Option B is incorrect syntax, C has wrong method names, and D creates a pivot table which has different structure than simple grouped means.",
+      "hints": [
+        "You can pass multiple columns to groupby as a list",
+        "Select the specific column after aggregation"
+      ],
+      "id": "m1.1_q009",
+      "options": [
+        "df.groupby(['tool', 'lot']).mean()['yield']",
+        "df.groupby('tool').groupby('lot').mean()['yield']",
+        "df.group(['tool', 'lot']).aggregate('mean', 'yield')",
+        "df.pivot_table(values='yield', index='tool', columns='lot')"
+      ],
+      "points": 3,
+      "question": "You want to calculate the average yield per tool and lot combination. Which is correct?",
+      "tags": [
+        "pandas",
+        "groupby",
+        "aggregation"
+      ],
+      "topic": "groupby",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "Option B follows reproducibility best practices: relative paths make code portable, parameterized dates allow automation, random seeds ensure reproducible results with stochastic methods, and version control tracks changes over time.",
+      "hints": [
+        "Think about what makes code portable and reproducible",
+        "Consider automation, reproducibility, and maintainability"
+      ],
+      "id": "m1.1_q010",
+      "options": [
+        "Hard-code file paths and manually update analysis dates",
+        "Use relative paths, parameterize dates, set random seeds, and version control",
+        "Store all data in Excel with embedded formulas",
+        "Copy-paste code for each analysis day"
+      ],
+      "points": 4,
+      "question": "You're analyzing production data updated daily. Which approach follows best practices for reproducible analysis?",
+      "tags": [
+        "best_practices",
+        "reproducibility",
+        "version_control"
+      ],
+      "topic": "best_practices",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "easy",
+      "explanation": "Solution: total_dies = df['total_dies'].sum(); defective = df['defective_dies'].sum(); yield_pct = ((total_dies - defective) / total_dies) * 100; return round(yield_pct, 2). The key is to sum across all wafers first, then calculate the ratio.",
+      "hints": [
+        "Sum all total_dies and all defective_dies across all wafers first",
+        "Good dies = total_dies - defective_dies",
+        "Convert to percentage by multiplying by 100"
+      ],
+      "id": "m1.1_q011",
+      "points": 5,
+      "question": "Write a function that calculates the overall yield percentage from wafer defect data. The function should accept a pandas DataFrame with columns 'total_dies' and 'defective_dies', and return the overall yield percentage (0-100).",
+      "starter_code": "import pandas as pd\nimport numpy as np\n\ndef calculate_yield(df: pd.DataFrame) -> float:\n    \"\"\"\n    Calculate overall yield percentage from wafer defect data.\n    \n    Args:\n        df: DataFrame with columns ['total_dies', 'defective_dies']\n    \n    Returns:\n        Yield percentage (0-100)\n    \"\"\"\n    # YOUR CODE HERE\n    pass",
+      "tags": [
+        "pandas",
+        "yield_calculation",
+        "aggregation"
+      ],
+      "test_cases": [
+        {
+          "description": "Two wafers: 8 defects out of 200 total dies = 96% yield",
+          "expected_output": 96.0,
+          "input": {
+            "data": [
+              {
+                "defective_dies": 5,
+                "total_dies": 100
+              },
+              {
+                "defective_dies": 3,
+                "total_dies": 100
+              }
+            ]
+          }
+        },
+        {
+          "description": "Three wafers: 50 defects out of 1500 total",
+          "expected_output": 96.67,
+          "input": {
+            "data": [
+              {
+                "defective_dies": 25,
+                "total_dies": 500
+              },
+              {
+                "defective_dies": 15,
+                "total_dies": 500
+              },
+              {
+                "defective_dies": 10,
+                "total_dies": 500
+              }
+            ]
+          }
+        },
+        {
+          "description": "Perfect yield: no defects",
+          "expected_output": 100.0,
+          "input": {
+            "data": [
+              {
+                "defective_dies": 0,
+                "total_dies": 1000
+              }
+            ]
+          }
+        }
+      ],
+      "topic": "yield_calculation",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Solution: return df[(df['tool'] == tool) & (df['yield'] >= min_yield)]. This uses boolean indexing with multiple conditions. If the tool doesn't exist, the result is naturally an empty DataFrame.",
+      "hints": [
+        "Use boolean indexing with & operator",
+        "Remember to use parentheses around each condition",
+        "An empty DataFrame is returned automatically if no rows match"
+      ],
+      "id": "m1.1_q012",
+      "points": 6,
+      "question": "Write a function that filters a wafer dataset to return only wafers from a specific tool with yield above a threshold. The function should handle the case where the tool doesn't exist.",
+      "starter_code": "import pandas as pd\n\ndef filter_wafers(df: pd.DataFrame, tool: str, min_yield: float) -> pd.DataFrame:\n    \"\"\"\n    Filter wafers by tool and minimum yield.\n    \n    Args:\n        df: DataFrame with columns ['wafer_id', 'tool', 'yield']\n        tool: Tool name to filter\n        min_yield: Minimum yield threshold (0-100)\n    \n    Returns:\n        Filtered DataFrame, empty if tool doesn't exist\n    \"\"\"\n    # YOUR CODE HERE\n    pass",
+      "tags": [
+        "pandas",
+        "filtering",
+        "boolean_indexing"
+      ],
+      "test_cases": [
+        {
+          "description": "Tool A with yield >= 93: should return 1 wafer (W001)",
+          "expected_output": 1,
+          "input": {
+            "data": [
+              {
+                "tool": "A",
+                "wafer_id": "W001",
+                "yield": 95.0
+              },
+              {
+                "tool": "A",
+                "wafer_id": "W002",
+                "yield": 92.0
+              },
+              {
+                "tool": "B",
+                "wafer_id": "W003",
+                "yield": 97.0
+              }
+            ],
+            "min_yield": 93.0,
+            "tool": "A"
+          }
+        },
+        {
+          "description": "Tool C doesn't exist: should return empty DataFrame",
+          "expected_output": 0,
+          "input": {
+            "data": [
+              {
+                "tool": "A",
+                "wafer_id": "W001",
+                "yield": 95.0
+              },
+              {
+                "tool": "A",
+                "wafer_id": "W002",
+                "yield": 92.0
+              }
+            ],
+            "min_yield": 90.0,
+            "tool": "C"
+          }
+        }
+      ],
+      "topic": "data_filtering",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Solution: stats = df.groupby('tool')['yield'].agg(['mean', 'std', 'min', 'max']); return {tool: row.to_dict() for tool, row in stats.iterrows()}. Use agg() with multiple functions, then convert to dictionary format.",
+      "hints": [
+        "Use groupby().agg() with a list of functions",
+        "Convert the resulting DataFrame to a dictionary",
+        "Consider using to_dict() or iterrows()"
+      ],
+      "id": "m1.1_q013",
+      "points": 7,
+      "question": "Write a function that calculates summary statistics (mean, std, min, max yield) grouped by tool. Return results as a dictionary.",
+      "starter_code": "import pandas as pd\n\ndef tool_yield_summary(df: pd.DataFrame) -> dict:\n    \"\"\"\n    Calculate yield statistics by tool.\n    \n    Args:\n        df: DataFrame with columns ['tool', 'yield']\n    \n    Returns:\n        Dictionary with tool as key, stats dict as value\n        Example: {'A': {'mean': 95.0, 'std': 2.0, 'min': 92.0, 'max': 98.0}}\n    \"\"\"\n    # YOUR CODE HERE\n    pass",
+      "tags": [
+        "pandas",
+        "groupby",
+        "aggregation",
+        "statistics"
+      ],
+      "test_cases": [
+        {
+          "description": "Two tools with different yield profiles",
+          "expected_output": {
+            "A": {
+              "max": 95.0,
+              "mean": 94.0,
+              "min": 93.0,
+              "std": 1.41
+            },
+            "B": {
+              "max": 97.0,
+              "mean": 97.0,
+              "min": 97.0,
+              "std": 0.0
+            }
+          },
+          "input": {
+            "data": [
+              {
+                "tool": "A",
+                "yield": 95.0
+              },
+              {
+                "tool": "A",
+                "yield": 93.0
+              },
+              {
+                "tool": "B",
+                "yield": 97.0
+              }
+            ]
+          }
+        }
+      ],
+      "topic": "groupby_aggregation",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Solution: return df.pivot(index='wafer_id', columns='parameter', values='value'). The pivot method automatically handles missing values by inserting NaN. Alternative: use pivot_table() if you need aggregation.",
+      "hints": [
+        "Use the pivot() method",
+        "Specify index, columns, and values parameters",
+        "Missing combinations automatically become NaN"
+      ],
+      "id": "m1.1_q014",
+      "points": 8,
+      "question": "Write a function that pivots wafer data from long format (one row per measurement) to wide format (one row per wafer, columns for each parameter). Handle missing measurements gracefully.",
+      "starter_code": "import pandas as pd\n\ndef pivot_wafer_data(df: pd.DataFrame) -> pd.DataFrame:\n    \"\"\"\n    Pivot wafer measurements from long to wide format.\n    \n    Args:\n        df: Long format with columns ['wafer_id', 'parameter', 'value']\n    \n    Returns:\n        Wide format DataFrame with wafer_id as index, parameters as columns\n    \"\"\"\n    # YOUR CODE HERE\n    pass",
+      "tags": [
+        "pandas",
+        "pivot",
+        "reshape",
+        "data_transformation"
+      ],
+      "test_cases": [
+        {
+          "description": "Basic pivot with some missing values (W002 has no pressure)",
+          "expected_output": "DataFrame with wafer_id as index, temp and pressure columns",
+          "input": {
+            "data": [
+              {
+                "parameter": "temp",
+                "value": 350,
+                "wafer_id": "W001"
+              },
+              {
+                "parameter": "pressure",
+                "value": 100,
+                "wafer_id": "W001"
+              },
+              {
+                "parameter": "temp",
+                "value": 352,
+                "wafer_id": "W002"
+              }
+            ]
+          }
+        }
+      ],
+      "topic": "data_transformation",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Solution: z_scores = np.abs((measurements - np.mean(measurements)) / np.std(measurements)); return z_scores > threshold. Calculate z-scores using vectorized operations, then apply threshold.",
+      "hints": [
+        "Calculate mean and standard deviation first",
+        "Compute z-scores: (value - mean) / std",
+        "Use absolute values and compare to threshold"
+      ],
+      "id": "m1.1_q015",
+      "points": 8,
+      "question": "Write a function that identifies wafers with parameter measurements more than 3 standard deviations from the mean (outliers) using NumPy vectorized operations. Return a boolean array.",
+      "starter_code": "import numpy as np\n\ndef find_outliers(measurements: np.ndarray, threshold: float = 3.0) -> np.ndarray:\n    \"\"\"\n    Identify outliers using z-score method.\n    \n    Args:\n        measurements: 1D NumPy array of measurements\n        threshold: Number of standard deviations for outlier threshold\n    \n    Returns:\n        Boolean array (True for outliers)\n    \"\"\"\n    # YOUR CODE HERE\n    pass",
+      "tags": [
+        "numpy",
+        "outlier_detection",
+        "z_score",
+        "vectorization"
+      ],
+      "test_cases": [
+        {
+          "description": "Value 150 is an outlier, others are not",
+          "expected_output": [
+            false,
+            false,
+            false,
+            false,
+            true,
+            false
+          ],
+          "input": {
+            "measurements": [
+              100,
+              102,
+              98,
+              101,
+              150,
+              99
+            ],
+            "threshold": 3.0
+          }
+        }
+      ],
+      "topic": "advanced_numpy",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Strong answer should mention: NumPy for: (1) Wafer map images (homogeneous 2D arrays of pixel values), (2) Large-scale numerical computations on sensor readings. Pandas for: (1) Mixed-type production data (wafer IDs, timestamps, measurements), (2) Time-series analysis with dates and grouping by tool/lot. Justification should mention performance vs. convenience tradeoffs.",
+      "hints": [
+        "Consider the data types and structure of your data",
+        "Think about whether you need labels and heterogeneous types",
+        "Consider the operations you'll perform most frequently"
+      ],
+      "id": "m1.1_q016",
+      "points": 10,
+      "question": "Explain when you would use a NumPy array versus a pandas DataFrame for semiconductor manufacturing data. Provide at least two scenarios for each and justify your choice.",
+      "rubric": [
+        {
+          "criteria": "Identifies appropriate use cases for NumPy arrays",
+          "keywords": [
+            "numerical operations",
+            "matrix operations",
+            "homogeneous data",
+            "performance",
+            "mathematical computations",
+            "image data"
+          ],
+          "points": 3
+        },
+        {
+          "criteria": "Identifies appropriate use cases for pandas DataFrames",
+          "keywords": [
+            "heterogeneous data",
+            "labeled data",
+            "time series",
+            "groupby",
+            "missing values",
+            "data cleaning",
+            "mixed types"
+          ],
+          "points": 3
+        },
+        {
+          "criteria": "Provides clear justification for choices",
+          "keywords": [
+            "efficiency",
+            "readability",
+            "functionality",
+            "data structure"
+          ],
+          "points": 2
+        },
+        {
+          "criteria": "Uses semiconductor-specific examples",
+          "keywords": [
+            "wafer",
+            "measurements",
+            "process parameters",
+            "yield",
+            "defects",
+            "sensors"
+          ],
+          "points": 2
+        }
+      ],
+      "tags": [
+        "data_structures",
+        "numpy",
+        "pandas",
+        "design_decisions"
+      ],
+      "topic": "data_structures",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Strong answer: (1) Vectorization instead of iterrows - 100x+ speedup; (2) Use categorical dtypes for repeated strings - 50% memory reduction; (3) Process in chunks to reduce memory pressure; (4) Use appropriate data types (int32 vs int64). Should explain that iterrows is Python-level looping vs C-optimized vectorized operations.",
+      "hints": [
+        "Think about the difference between Python loops and vectorized operations",
+        "Consider memory usage and data types",
+        "Think about parallel processing possibilities"
+      ],
+      "id": "m1.1_q017",
+      "points": 10,
+      "question": "You're analyzing 1 million wafer records daily. Your current pandas code using iterrows() takes 30 minutes. Explain at least three strategies to optimize performance and estimate the expected improvement for each.",
+      "rubric": [
+        {
+          "criteria": "Identifies vectorization as primary optimization",
+          "keywords": [
+            "vectorization",
+            "avoid loops",
+            "broadcasting",
+            "apply",
+            "numpy operations"
+          ],
+          "points": 3
+        },
+        {
+          "criteria": "Suggests appropriate alternative methods",
+          "keywords": [
+            "vectorized operations",
+            "groupby",
+            "transform",
+            "map",
+            "categorical"
+          ],
+          "points": 3
+        },
+        {
+          "criteria": "Provides realistic performance estimates",
+          "keywords": [
+            "10x",
+            "100x",
+            "order of magnitude",
+            "benchmark"
+          ],
+          "points": 2
+        },
+        {
+          "criteria": "Mentions additional optimizations",
+          "keywords": [
+            "chunking",
+            "data types",
+            "memory",
+            "parallel",
+            "dask",
+            "caching"
+          ],
+          "points": 2
+        }
+      ],
+      "tags": [
+        "performance",
+        "optimization",
+        "pandas",
+        "best_practices"
+      ],
+      "topic": "performance_optimization",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Strong answer should include: (1) Basic structure checks (column names, data types); (2) Completeness (missing values, required fields); (3) Validity (ranges, e.g., yield 0-100%, temperature within physical limits); (4) Consistency (cross-field checks, e.g., defects \u2264 total dies); (5) Duplicates. Order matters: structural checks first, then deeper validation.",
+      "hints": [
+        "Start with basic structural checks before detailed validations",
+        "Consider what makes semiconductor data valid",
+        "Think about dependencies between validation steps"
+      ],
+      "id": "m1.1_q018",
+      "points": 10,
+      "question": "Describe a systematic approach to validate wafer production data before analysis. What checks would you implement and in what order? Explain your reasoning.",
+      "rubric": [
+        {
+          "criteria": "Identifies data quality dimensions to check",
+          "keywords": [
+            "completeness",
+            "consistency",
+            "accuracy",
+            "validity",
+            "missing values",
+            "duplicates",
+            "ranges"
+          ],
+          "points": 3
+        },
+        {
+          "criteria": "Proposes logical sequence of validation steps",
+          "keywords": [
+            "order",
+            "sequence",
+            "pipeline",
+            "first",
+            "then",
+            "dependencies"
+          ],
+          "points": 3
+        },
+        {
+          "criteria": "Includes semiconductor-specific validations",
+          "keywords": [
+            "physical constraints",
+            "process limits",
+            "specification limits",
+            "yield range",
+            "temperature range"
+          ],
+          "points": 2
+        },
+        {
+          "criteria": "Explains reasoning for approach",
+          "keywords": [
+            "rationale",
+            "because",
+            "ensures",
+            "prevents",
+            "catches"
+          ],
+          "points": 2
+        }
+      ],
+      "tags": [
+        "data_quality",
+        "validation",
+        "best_practices",
+        "data_engineering"
+      ],
+      "topic": "data_quality",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Strong answer: Class WaferDataManager with methods: __init__(filepath), load_data(), validate_data(), calculate_yield(), filter_by_tool(), export_summary(). Should mention: type hints, docstrings, error handling, property decorators for computed values, separation of I/O from logic, configuration through parameters, and potential inheritance structure for different data types.",
+      "hints": [
+        "Think about the lifecycle of data: load, validate, transform, analyze, export",
+        "Consider separation of concerns - keep different responsibilities separate",
+        "Think about how others will use and extend your class"
+      ],
+      "id": "m1.1_q019",
+      "points": 10,
+      "question": "Design a reusable Python class for managing wafer production data that follows software engineering best practices. Describe the key methods, properties, and design principles you would implement.",
+      "rubric": [
+        {
+          "criteria": "Identifies appropriate class structure and methods",
+          "keywords": [
+            "__init__",
+            "load",
+            "validate",
+            "clean",
+            "analyze",
+            "export",
+            "methods"
+          ],
+          "points": 3
+        },
+        {
+          "criteria": "Applies SOLID principles or similar design patterns",
+          "keywords": [
+            "single responsibility",
+            "encapsulation",
+            "modularity",
+            "separation of concerns",
+            "DRY"
+          ],
+          "points": 3
+        },
+        {
+          "criteria": "Includes error handling and validation",
+          "keywords": [
+            "try-except",
+            "validation",
+            "error handling",
+            "assertions",
+            "type hints"
+          ],
+          "points": 2
+        },
+        {
+          "criteria": "Considers reusability and extensibility",
+          "keywords": [
+            "inheritance",
+            "composition",
+            "interface",
+            "abstract",
+            "configurable",
+            "flexible"
+          ],
+          "points": 2
+        }
+      ],
+      "tags": [
+        "software_engineering",
+        "oop",
+        "design_patterns",
+        "best_practices"
+      ],
+      "topic": "code_design",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Strong answer: (1) Create minimal reproducible example with known output; (2) Add print statements or use debugger to check intermediate values; (3) Validate with manual calculation on small dataset; (4) Check edge cases (empty data, zeros, NaN); (5) Add unit tests to prevent regression. Should mention specific tools like pdb, logging, or IDE debuggers.",
+      "hints": [
+        "Start with the simplest possible test case",
+        "Verify each step of your calculation independently",
+        "Use tools to inspect intermediate values"
+      ],
+      "id": "m1.1_q020",
+      "points": 10,
+      "question": "You've written a Python script to analyze wafer data, but it's producing incorrect yield calculations. Describe a systematic debugging approach you would use to identify and fix the issue.",
+      "rubric": [
+        {
+          "criteria": "Proposes systematic debugging methodology",
+          "keywords": [
+            "reproduce",
+            "isolate",
+            "test cases",
+            "print statements",
+            "debugger",
+            "systematic",
+            "step-by-step"
+          ],
+          "points": 3
+        },
+        {
+          "criteria": "Includes verification strategies",
+          "keywords": [
+            "manual calculation",
+            "small dataset",
+            "known output",
+            "unit tests",
+            "validation"
+          ],
+          "points": 3
+        },
+        {
+          "criteria": "Mentions debugging tools and techniques",
+          "keywords": [
+            "pdb",
+            "breakpoints",
+            "logging",
+            "assertions",
+            "ipdb",
+            "print debugging"
+          ],
+          "points": 2
+        },
+        {
+          "criteria": "Suggests preventive measures",
+          "keywords": [
+            "unit tests",
+            "test-driven",
+            "code review",
+            "documentation",
+            "type hints"
+          ],
+          "points": 2
+        }
+      ],
+      "tags": [
+        "debugging",
+        "testing",
+        "best_practices",
+        "problem_solving"
+      ],
+      "topic": "debugging",
+      "type": "conceptual"
+    }
+  ],
+  "sub_module": "1.1",
+  "title": "Python for Engineers",
+  "version": "1.0",
+  "week": 1
+}

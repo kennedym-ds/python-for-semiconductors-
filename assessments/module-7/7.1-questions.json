@@ -1,0 +1,522 @@
+{
+  "description": "Assessment covering advanced object detection architectures including YOLO, Faster R-CNN, RetinaNet, semantic segmentation with U-Net and DeepLab, instance segmentation, and applications to semiconductor wafer inspection including die-level defect localization and pattern detection.",
+  "estimated_time_minutes": 75,
+  "module_id": "module-7.1",
+  "passing_score": 70,
+  "questions": [
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "Image classification assigns a single label to an entire image ('defect' or 'no defect'). Object detection goes further by localizing each object with bounding boxes and classifying them. For semiconductor inspection, object detection can identify multiple defects per wafer and provide their precise locations for targeted repair or analysis.",
+      "id": "m7.1_q001",
+      "options": [
+        "Classification is faster",
+        "Object detection identifies what objects are present AND where they are located",
+        "Classification requires more data",
+        "Object detection only works on grayscale images"
+      ],
+      "points": 2,
+      "question": "What is the main difference between image classification and object detection?",
+      "topic": "object_detection_basics",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "YOLO is a single-stage detector that predicts bounding boxes and class probabilities directly in one pass. Two-stage detectors like Faster R-CNN first generate region proposals, then classify each proposal separately. YOLO's unified architecture enables real-time detection (30+ FPS), making it suitable for high-throughput wafer inspection lines.",
+      "id": "m7.1_q002",
+      "options": [
+        "YOLO uses fewer parameters",
+        "YOLO performs detection in a single forward pass instead of separate region proposal and classification stages",
+        "YOLO only detects one object per image",
+        "YOLO doesn't use convolutional layers"
+      ],
+      "points": 2,
+      "question": "What makes YOLO (You Only Look Once) faster than two-stage detectors like Faster R-CNN?",
+      "topic": "yolo_architecture",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "hard",
+      "explanation": "IoU = (Area of Intersection) / (Area of Union) between predicted and ground truth bounding boxes. Values range from 0 (no overlap) to 1 (perfect overlap). IoU \u2265 0.5 is commonly used as the threshold for 'correct' detection. Higher thresholds (0.75, 0.9) demand more precise localization. For semiconductor defects, precise localization is critical, so higher IoU thresholds may be required.",
+      "id": "m7.1_q003",
+      "options": [
+        "Overlap between prediction and ground truth boxes; threshold 0.5",
+        "Distance between box centers; threshold 10 pixels",
+        "Area of detected defect; threshold 100 pixels\u00b2",
+        "Confidence score; threshold 0.9"
+      ],
+      "points": 3,
+      "question": "In object detection evaluation, what does IoU (Intersection over Union) measure, and what threshold is commonly used for 'correct' detections?",
+      "topic": "iou_metric",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Anchor boxes (also called prior boxes or default boxes) are predefined bounding boxes of various shapes and scales. The model predicts offsets to adjust these anchors to fit actual objects. This makes learning easier than predicting arbitrary box coordinates from scratch. For wafer defects with varying sizes (small scratches to large pattern defects), multiple anchor scales are essential.",
+      "id": "m7.1_q004",
+      "options": [
+        "To increase model size",
+        "To provide prior shapes/scales that the model refines to fit actual objects",
+        "To reduce training time",
+        "To eliminate the need for bounding box predictions"
+      ],
+      "points": 2,
+      "question": "What is the purpose of anchor boxes in object detection models?",
+      "topic": "anchor_boxes",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "One-stage detectors evaluate thousands of candidate locations per image, with very few containing objects (extreme imbalance: ~1:1000). Standard cross-entropy loss is dominated by easy negatives. Focal Loss down-weights easy examples, focusing learning on hard examples. This enables RetinaNet to match two-stage detector accuracy at one-stage speed - ideal for semiconductor inspection requiring both speed and precision.",
+      "id": "m7.1_q005",
+      "options": [
+        "To make training faster",
+        "To address the extreme foreground-background class imbalance in one-stage detectors",
+        "To eliminate anchor boxes",
+        "To reduce model parameters"
+      ],
+      "points": 3,
+      "question": "Why was Focal Loss introduced in RetinaNet for object detection?",
+      "topic": "focal_loss_detection",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "Object detectors often produce multiple overlapping bounding boxes for the same object. NMS keeps the box with highest confidence and suppresses (removes) boxes that significantly overlap with it (IoU > threshold, typically 0.5). This ensures each defect is detected once, not multiple times, which is critical for accurate defect counting in semiconductor quality control.",
+      "id": "m7.1_q006",
+      "options": [
+        "To train the model faster",
+        "To eliminate duplicate detections of the same object",
+        "To increase detection accuracy",
+        "To resize images"
+      ],
+      "points": 2,
+      "question": "What is the purpose of Non-Maximum Suppression (NMS) in object detection?",
+      "topic": "nms",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Semantic segmentation classifies every pixel (e.g., all pixels are 'defect' or 'background') without distinguishing individual defect instances. Instance segmentation identifies and separates each individual defect. For wafer inspection, instance segmentation is crucial when multiple defects of the same type appear - you need to count them separately and analyze each one individually.",
+      "id": "m7.1_q007",
+      "options": [
+        "Semantic segmentation is faster",
+        "Semantic segmentation assigns a class to each pixel but doesn't distinguish between different instances of the same class",
+        "Instance segmentation only works on natural images",
+        "There is no difference"
+      ],
+      "points": 2,
+      "question": "What is the key difference between semantic segmentation and instance segmentation?",
+      "topic": "semantic_segmentation",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "U-Net's U-shaped architecture has an encoder (downsampling) path and decoder (upsampling) path. Skip connections concatenate encoder features with decoder features at each level, preserving fine spatial details lost during downsampling. This enables precise pixel-level segmentation critical for delineating defect boundaries on wafers. The architecture is especially effective with limited training data.",
+      "id": "m7.1_q008",
+      "options": [
+        "Using only convolutional layers",
+        "Skip connections between encoder and decoder that preserve spatial details",
+        "Eliminating pooling layers",
+        "Using very deep networks (100+ layers)"
+      ],
+      "points": 3,
+      "question": "What is the key architectural innovation in U-Net that makes it effective for segmentation tasks?",
+      "topic": "unet_architecture",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Atrous convolutions insert gaps (dilation) between filter elements, expanding the receptive field without increasing parameters or reducing resolution through pooling. A 3\u00d73 filter with dilation=2 covers a 5\u00d75 area. DeepLab uses Atrous Spatial Pyramid Pooling (ASPP) with multiple dilation rates to capture multi-scale context. This is valuable for semiconductor defects that vary in size and require both local detail and global context.",
+      "id": "m7.1_q009",
+      "options": [
+        "Faster training",
+        "Larger receptive field without losing resolution or increasing parameters",
+        "Fewer parameters",
+        "Better gradient flow"
+      ],
+      "points": 2,
+      "question": "What advantage do atrous (dilated) convolutions provide in DeepLab for segmentation?",
+      "topic": "atrous_convolution",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "Average Precision (AP) is the area under the precision-recall curve for one class. mAP averages AP across all classes, providing a single metric for overall detection performance. mAP@0.5 uses IoU threshold 0.5, while mAP@[0.5:0.95] (COCO metric) averages over IoU thresholds 0.5 to 0.95 in 0.05 increments, rewarding more precise localization. For semiconductors, mAP per defect type reveals which defects are hardest to detect.",
+      "id": "m7.1_q010",
+      "options": [
+        "Average inference speed",
+        "Mean of Average Precision across all classes, summarizing detection performance",
+        "Maximum detection confidence",
+        "Model parameter count"
+      ],
+      "points": 3,
+      "question": "What does mAP (mean Average Precision) measure in object detection?",
+      "topic": "map_metric",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Mask R-CNN adds a third branch to Faster R-CNN that predicts a binary mask for each detected object (in addition to class and bounding box). The mask branch is a small FCN applied to each RoI, predicting pixel-level segmentation. This enables precise defect boundaries on wafers, not just rectangular boxes - critical for measuring defect size, shape, and morphology for failure analysis.",
+      "id": "m7.1_q011",
+      "options": [
+        "By making it faster",
+        "By adding a mask prediction branch parallel to classification and bounding box regression",
+        "By removing the RPN",
+        "By using only convolutional layers"
+      ],
+      "points": 2,
+      "question": "How does Mask R-CNN extend Faster R-CNN for instance segmentation?",
+      "topic": "mask_rcnn",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "easy",
+      "explanation": "When augmenting object detection data, both images AND annotations (bounding boxes, masks) must be transformed consistently. Flips, rotations, and translations require updating box coordinates accordingly. For wafer images, geometric augmentations (flips, rotations) are appropriate as defects look similar in any orientation. Never randomly change labels or remove annotations as this creates incorrect training data.",
+      "id": "m7.1_q012",
+      "options": [
+        "Random horizontal/vertical flips with corresponding bounding box adjustments",
+        "Randomly removing bounding boxes",
+        "Changing defect classes randomly",
+        "Distorting bounding box shapes"
+      ],
+      "points": 2,
+      "question": "Which augmentation is appropriate for object detection training on wafer images?",
+      "topic": "data_augmentation_detection",
+      "type": "multiple_choice"
+    },
+    {
+      "code_template": "import numpy as np\nfrom typing import Tuple\n\ndef calculate_iou(box1: Tuple[float, float, float, float],\n                 box2: Tuple[float, float, float, float]) -> float:\n    \"\"\"\n    Calculate IoU between two bounding boxes.\n    \n    Args:\n        box1: (x1, y1, x2, y2) where (x1,y1) is top-left, (x2,y2) is bottom-right\n        box2: (x1, y1, x2, y2) in same format\n        \n    Returns:\n        IoU value between 0 and 1\n    \"\"\"\n    # Your implementation here:\n    # 1. Calculate intersection rectangle coordinates\n    # 2. Calculate intersection area\n    # 3. Calculate areas of both boxes\n    # 4. Calculate union area = area1 + area2 - intersection\n    # 5. Return IoU = intersection / union\n    \n    pass",
+      "difficulty": "medium",
+      "explanation": "IoU is the standard metric for bounding box overlap. It's used both during training (matching predictions to ground truth) and evaluation (determining correct detections). IoU = 1 means perfect overlap, IoU = 0 means no overlap. Typical thresholds: 0.5 for 'correct' detection, 0.75 for 'tight' detection. For semiconductor defects requiring precise localization, higher IoU thresholds ensure quality.",
+      "hints": [
+        "Intersection x_left = max(box1[0], box2[0])",
+        "Intersection x_right = min(box1[2], box2[2])",
+        "Similar for y coordinates",
+        "Check if intersection is valid: x_right > x_left and y_bottom > y_top",
+        "Handle no-overlap case: return 0.0 if no intersection"
+      ],
+      "id": "m7.1_q013",
+      "points": 3,
+      "question": "Implement the IoU (Intersection over Union) calculation for evaluating object detection performance.",
+      "test_cases": [
+        {
+          "description": "Partially overlapping boxes",
+          "expected_output": "IoU = 0.142857 (25 / 175)",
+          "input": "box1=(0, 0, 10, 10), box2=(5, 5, 15, 15)"
+        },
+        {
+          "description": "Identical boxes",
+          "expected_output": "IoU = 1.0 (perfect overlap)",
+          "input": "box1=(0, 0, 10, 10), box2=(0, 0, 10, 10)"
+        },
+        {
+          "description": "Non-overlapping boxes",
+          "expected_output": "IoU = 0.0 (no overlap)",
+          "input": "box1=(0, 0, 5, 5), box2=(10, 10, 15, 15)"
+        }
+      ],
+      "topic": "iou_implementation",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import numpy as np\nfrom typing import List, Tuple\n\ndef non_maximum_suppression(boxes: np.ndarray, scores: np.ndarray,\n                           iou_threshold: float = 0.5) -> List[int]:\n    \"\"\"\n    Apply NMS to remove duplicate detections.\n    \n    Args:\n        boxes: Array of bounding boxes (N, 4) in format (x1, y1, x2, y2)\n        scores: Array of confidence scores (N,)\n        iou_threshold: IoU threshold for suppression\n        \n    Returns:\n        List of indices of boxes to keep\n    \"\"\"\n    # Your implementation here:\n    # 1. Sort boxes by score (descending)\n    # 2. Initialize list of boxes to keep\n    # 3. For each box (highest score first):\n    #    a. Add to keep list\n    #    b. Calculate IoU with remaining boxes\n    #    c. Remove boxes with IoU > threshold\n    # 4. Return indices of kept boxes\n    \n    pass",
+      "difficulty": "hard",
+      "explanation": "NMS is critical for object detection as models generate many overlapping predictions for each object. The algorithm keeps the highest-confidence detection and suppresses nearby detections. For wafer inspection, proper NMS ensures accurate defect counts - each physical defect is reported exactly once, not multiple times with slightly different bounding boxes.",
+      "hints": [
+        "Sort by score: order = scores.argsort()[::-1]",
+        "Use calculate_iou() function from previous question",
+        "Process boxes in descending score order",
+        "Maintain list of remaining box indices",
+        "Remove overlapping boxes with IoU > threshold",
+        "Return indices in original array order"
+      ],
+      "id": "m7.1_q014",
+      "points": 4,
+      "question": "Implement Non-Maximum Suppression (NMS) to eliminate duplicate detections.",
+      "test_cases": [
+        {
+          "description": "Suppress duplicate detections",
+          "expected_output": "Keep only highest scoring box (index 0)",
+          "input": "3 overlapping boxes with scores [0.9, 0.8, 0.7], IoU > 0.5"
+        }
+      ],
+      "topic": "nms_implementation",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import torch\nimport torch.nn as nn\nfrom typing import Dict\n\nclass YOLOLoss(nn.Module):\n    \"\"\"\n    YOLO loss function combining:\n    - Coordinate loss (MSE for box predictions)\n    - Objectness loss (BCE for object confidence)\n    - Classification loss (CE for class predictions)\n    \"\"\"\n    def __init__(self, lambda_coord: float = 5.0, lambda_noobj: float = 0.5):\n        super(YOLOLoss, self).__init__()\n        self.lambda_coord = lambda_coord  # Weight for coordinate loss\n        self.lambda_noobj = lambda_noobj  # Weight for no-object confidence\n    \n    def forward(self, predictions: torch.Tensor, \n                targets: torch.Tensor) -> Dict[str, torch.Tensor]:\n        \"\"\"\n        Compute YOLO loss.\n        \n        Args:\n            predictions: Model predictions (batch, grid_h, grid_w, num_anchors, 5 + num_classes)\n                        Format: [x, y, w, h, objectness, class_probs...]\n            targets: Ground truth (same format)\n            \n        Returns:\n            Dict with total_loss and component losses\n        \"\"\"\n        # Your implementation here:\n        # 1. Separate predictions into components (xy, wh, obj, classes)\n        # 2. Create masks for cells containing/not containing objects\n        # 3. Coordinate loss: MSE for xy and wh (only for object cells)\n        # 4. Objectness loss: BCE (weighted differently for obj/noobj)\n        # 5. Classification loss: CE for classes (only for object cells)\n        # 6. Combine with weights\n        \n        pass",
+      "difficulty": "hard",
+      "explanation": "YOLO's loss balances three objectives: (1) Accurate bounding boxes (coordinate loss with high weight). (2) Confident predictions for object presence/absence (objectness loss with reduced weight for no-object to prevent overwhelming by empty cells). (3) Correct classification (class loss). The weighting (lambda_coord=5.0, lambda_noobj=0.5) emphasizes localization accuracy, critical for precise defect localization in semiconductor inspection.",
+      "hints": [
+        "Extract components: pred_xy = predictions[..., 0:2]",
+        "Object mask: obj_mask = targets[..., 4] == 1",
+        "Coordinate loss: MSE between predicted and true boxes (where objects exist)",
+        "Objectness has two cases: object cells (weight 1.0) and no-object cells (weight lambda_noobj)",
+        "Classification loss: only compute for cells containing objects",
+        "Combine: total = lambda_coord * coord + obj + noobj + class"
+      ],
+      "id": "m7.1_q015",
+      "points": 5,
+      "question": "Implement the training loop for a YOLO-style object detector including loss computation for bounding box coordinates, objectness, and class predictions.",
+      "test_cases": [
+        {
+          "description": "YOLO multi-component loss",
+          "expected_output": "Dict with total_loss, coord_loss, obj_loss, class_loss",
+          "input": "predictions and targets for batch of wafer images with defects"
+        }
+      ],
+      "topic": "yolo_training",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import torch\nimport torch.nn as nn\n\nclass UNet(nn.Module):\n    \"\"\"\n    U-Net architecture for defect segmentation.\n    \n    Encoder: 4 downsampling blocks\n    Decoder: 4 upsampling blocks with skip connections\n    \"\"\"\n    def __init__(self, in_channels: int = 1, num_classes: int = 2):\n        super(UNet, self).__init__()\n        \n        # Encoder (downsampling)\n        # Your implementation here\n        # Block structure: Conv3x3 -> BN -> ReLU -> Conv3x3 -> BN -> ReLU\n        # Then MaxPool2x2 for downsampling\n        \n        # Bottleneck\n        # Your implementation here\n        \n        # Decoder (upsampling)\n        # Your implementation here\n        # Block structure: UpConv2x2 -> concat with skip connection -> Conv3x3 -> BN -> ReLU -> Conv3x3 -> BN -> ReLU\n        \n        # Final classification layer\n        # Your implementation here\n        \n        pass\n    \n    def forward(self, x: torch.Tensor) -> torch.Tensor:\n        \"\"\"\n        Forward pass.\n        \n        Args:\n            x: Input tensor (batch, 1, H, W)\n            \n        Returns:\n            Segmentation logits (batch, num_classes, H, W)\n        \"\"\"\n        # Your implementation here\n        # Remember to save encoder outputs for skip connections\n        pass",
+      "difficulty": "medium",
+      "explanation": "U-Net's skip connections are key to its success. The encoder extracts hierarchical features while downsampling. The decoder reconstructs spatial resolution while using skip connections to recover fine details lost during downsampling. This enables precise defect boundary segmentation. For semiconductor applications, accurate segmentation allows measuring defect size, shape metrics, and spatial distribution on wafers.",
+      "hints": [
+        "Encoder blocks: Conv(in, 64), Conv(64, 128), Conv(128, 256), Conv(256, 512)",
+        "Use nn.MaxPool2d(2) for downsampling",
+        "Save encoder outputs: enc1, enc2, enc3, enc4 for skip connections",
+        "Decoder: nn.ConvTranspose2d for upsampling",
+        "Concatenate: torch.cat([upsampled, skip], dim=1)",
+        "Final layer: nn.Conv2d(64, num_classes, kernel_size=1)"
+      ],
+      "id": "m7.1_q016",
+      "points": 4,
+      "question": "Implement a U-Net architecture for semantic segmentation of wafer defects.",
+      "test_cases": [
+        {
+          "description": "U-Net forward pass",
+          "expected_output": "output shape: (4, 2, 256, 256) # Binary segmentation",
+          "input": "x = torch.randn(4, 1, 256, 256) # Batch of 4 wafer images"
+        }
+      ],
+      "topic": "unet_implementation",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import torch\nimport torch.nn as nn\nimport torch.nn.functional as F\n\nclass DiceLoss(nn.Module):\n    \"\"\"\n    Dice Loss for segmentation.\n    Dice = 2 * |X \u2229 Y| / (|X| + |Y|)\n    Dice Loss = 1 - Dice\n    \n    Robust to class imbalance (small defects on large wafers).\n    \"\"\"\n    def __init__(self, smooth: float = 1.0):\n        \"\"\"\n        Args:\n            smooth: Smoothing constant to avoid division by zero\n        \"\"\"\n        super(DiceLoss, self).__init__()\n        self.smooth = smooth\n    \n    def forward(self, predictions: torch.Tensor, \n                targets: torch.Tensor) -> torch.Tensor:\n        \"\"\"\n        Compute Dice loss.\n        \n        Args:\n            predictions: Model predictions (batch, num_classes, H, W) - logits\n            targets: Ground truth masks (batch, num_classes, H, W) - one-hot encoded\n            \n        Returns:\n            Scalar Dice loss\n        \"\"\"\n        # Your implementation here:\n        # 1. Apply softmax to predictions\n        # 2. Flatten spatial dimensions\n        # 3. Calculate intersection: sum(pred * target)\n        # 4. Calculate union: sum(pred) + sum(target)\n        # 5. Dice coefficient: (2 * intersection + smooth) / (union + smooth)\n        # 6. Dice loss: 1 - Dice\n        # 7. Average over classes and batch\n        \n        pass",
+      "difficulty": "hard",
+      "explanation": "Dice Loss directly optimizes the Dice coefficient (also called F1 score), which is robust to class imbalance. For wafer segmentation where defects occupy <1% of pixels, cross-entropy loss is dominated by background pixels. Dice Loss equally weights foreground and background regardless of their pixel counts. The smooth constant prevents division by zero when no defects are present in a batch.",
+      "hints": [
+        "Apply softmax: probs = F.softmax(predictions, dim=1)",
+        "Flatten: probs.view(batch, num_classes, -1)",
+        "Intersection: (probs * targets).sum(dim=2)",
+        "Union: probs.sum(dim=2) + targets.sum(dim=2)",
+        "Dice per class: (2 * intersection + smooth) / (union + smooth)",
+        "Average: dice_loss = 1 - dice_coeff.mean()"
+      ],
+      "id": "m7.1_q017",
+      "points": 5,
+      "question": "Implement Dice Loss for training segmentation models, especially effective for imbalanced segmentation tasks.",
+      "test_cases": [
+        {
+          "description": "Dice loss for segmentation",
+          "expected_output": "Scalar loss value between 0 and 1",
+          "input": "predictions (logits), targets (one-hot masks)"
+        }
+      ],
+      "topic": "dice_loss",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import numpy as np\nfrom typing import List, Dict\n\ndef calculate_ap(recalls: np.ndarray, precisions: np.ndarray) -> float:\n    \"\"\"\n    Calculate Average Precision using 11-point interpolation.\n    \n    Args:\n        recalls: Array of recall values\n        precisions: Array of precision values\n        \n    Returns:\n        Average Precision value\n    \"\"\"\n    # Your implementation here\n    pass\n\ndef calculate_map(predictions: List[Dict], ground_truths: List[Dict],\n                 iou_threshold: float = 0.5, num_classes: int = 8) -> Dict[str, float]:\n    \"\"\"\n    Calculate mAP across all classes.\n    \n    Args:\n        predictions: List of predictions per image\n                    Each dict: {'boxes': array (N,4), 'scores': array (N,), 'labels': array (N,)}\n        ground_truths: List of ground truth per image\n                      Each dict: {'boxes': array (M,4), 'labels': array (M,)}\n        iou_threshold: IoU threshold for correct detection\n        num_classes: Number of defect classes\n        \n    Returns:\n        Dict with mAP and per-class AP values\n    \"\"\"\n    # Your implementation here:\n    # 1. For each class:\n    #    a. Collect all predictions and ground truths for that class\n    #    b. Sort predictions by confidence (descending)\n    #    c. For each prediction, check if it matches a ground truth (IoU > threshold)\n    #    d. Calculate TP, FP at each confidence threshold\n    #    e. Calculate precision-recall curve\n    #    f. Calculate AP\n    # 2. Average AP across all classes for mAP\n    \n    pass",
+      "difficulty": "hard",
+      "explanation": "mAP is the standard object detection metric. For each class, it plots precision vs recall as confidence threshold varies, then calculates area under curve (AP). mAP averages AP across classes. Higher mAP = better detection. For semiconductor inspection, per-class AP reveals which defect types are well-detected vs problematic. Tracking mAP over time monitors model quality as new data is added.",
+      "hints": [
+        "Match predictions to ground truths using IoU",
+        "Each ground truth can match only one prediction (highest IoU)",
+        "Track which ground truths have been matched",
+        "Precision = TP / (TP + FP), Recall = TP / (TP + FN)",
+        "11-point interpolation: average max precision at recall [0, 0.1, 0.2, ..., 1.0]",
+        "Handle case where class has no ground truths or predictions"
+      ],
+      "id": "m7.1_q018",
+      "points": 5,
+      "question": "Implement mAP (mean Average Precision) calculation for evaluating object detection performance.",
+      "test_cases": [
+        {
+          "description": "Object detection mAP",
+          "expected_output": "Dict with 'mAP' and per-class AP values",
+          "input": "predictions and ground_truths for validation set"
+        }
+      ],
+      "topic": "map_calculation",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import numpy as np\nfrom typing import List, Tuple\n\ndef generate_anchor_boxes(image_size: Tuple[int, int],\n                          feature_stride: int,\n                          scales: List[float],\n                          aspect_ratios: List[float]) -> np.ndarray:\n    \"\"\"\n    Generate anchor boxes for object detection.\n    \n    Args:\n        image_size: (height, width) of input image\n        feature_stride: Stride of feature map relative to input (e.g., 16 for VGG)\n        scales: List of anchor scales (e.g., [64, 128, 256] pixels)\n        aspect_ratios: List of width/height ratios (e.g., [0.5, 1.0, 2.0])\n        \n    Returns:\n        Array of anchors (num_anchors, 4) in format (x1, y1, x2, y2)\n    \"\"\"\n    # Your implementation here:\n    # 1. Calculate feature map size\n    # 2. Generate grid of anchor centers\n    # 3. For each center, create anchors with all scale/aspect_ratio combinations\n    # 4. Convert from center-based (cx, cy, w, h) to corner-based (x1, y1, x2, y2)\n    # 5. Clip to image boundaries\n    \n    pass",
+      "difficulty": "medium",
+      "explanation": "Anchor boxes provide priors for object locations and shapes. Multiple scales handle objects of different sizes (small scratches to large pattern defects). Multiple aspect ratios handle objects of different shapes (round particles vs elongated scratches). The model learns to refine these anchors to fit actual defects. For wafer inspection, anchor design should reflect typical defect sizes and shapes in your data.",
+      "hints": [
+        "Feature map size = image_size / feature_stride",
+        "Anchor centers: cx = stride/2 + col * stride, cy = stride/2 + row * stride",
+        "For each scale and aspect ratio: w = scale * sqrt(ratio), h = scale / sqrt(ratio)",
+        "Convert: x1 = cx - w/2, y1 = cy - h/2, x2 = cx + w/2, y2 = cy + h/2",
+        "Clip: x1 = max(0, x1), y1 = max(0, y1), x2 = min(width, x2), y2 = min(height, y2)"
+      ],
+      "id": "m7.1_q019",
+      "points": 4,
+      "question": "Implement anchor box generation for object detection with multiple scales and aspect ratios.",
+      "test_cases": [
+        {
+          "description": "Generate multi-scale anchor boxes",
+          "expected_output": "Array of anchors covering the image at multiple scales and ratios",
+          "input": "image_size=(512, 512), feature_stride=16, scales=[64, 128], aspect_ratios=[0.5, 1.0, 2.0]"
+        }
+      ],
+      "topic": "anchor_generation",
+      "type": "coding_exercise"
+    },
+    {
+      "code_template": "import numpy as np\nimport matplotlib.pyplot as plt\nimport matplotlib.patches as patches\nfrom typing import List, Dict\n\ndef visualize_detections(image: np.ndarray, \n                        detections: Dict,\n                        class_names: List[str],\n                        conf_threshold: float = 0.5,\n                        figsize: tuple = (12, 12)):\n    \"\"\"\n    Visualize object detection results.\n    \n    Args:\n        image: Input image (H, W, C) or (H, W) for grayscale\n        detections: Dict with 'boxes' (N, 4), 'scores' (N,), 'labels' (N,)\n                   Boxes in format (x1, y1, x2, y2)\n        class_names: List of class names\n        conf_threshold: Only show detections above this confidence\n        figsize: Figure size\n    \"\"\"\n    # Your implementation here:\n    # 1. Create figure and axis\n    # 2. Display image\n    # 3. For each detection above threshold:\n    #    a. Draw bounding box rectangle\n    #    b. Add label text with class name and confidence\n    #    c. Use different colors for different classes\n    # 4. Add legend\n    \n    pass\n\ndef draw_comparison(image: np.ndarray,\n                   ground_truth: Dict,\n                   predictions: Dict,\n                   class_names: List[str]):\n    \"\"\"\n    Show ground truth vs predictions side by side.\n    \"\"\"\n    # Your implementation here\n    pass",
+      "difficulty": "medium",
+      "explanation": "Visualization is critical for validating detection models and debugging failures. Bounding boxes show localization quality, confidence scores reveal model certainty, and side-by-side comparisons (ground truth vs predictions) quickly reveal systematic errors. For semiconductor fabs, visual inspection by process engineers builds trust in automated systems and identifies problematic defect types or image conditions.",
+      "hints": [
+        "Use plt.subplots() to create figure",
+        "Use plt.imshow() for image",
+        "Create rectangle: rect = patches.Rectangle((x1, y1), w, h, ...)",
+        "Add rectangle: ax.add_patch(rect)",
+        "Add text: ax.text(x1, y1, f'{class_name}: {score:.2f}', ...)",
+        "Use different colors: matplotlib.colors.TABLEAU_COLORS"
+      ],
+      "id": "m7.1_q020",
+      "points": 4,
+      "question": "Implement visualization functions to display object detection results with bounding boxes, class labels, and confidence scores on wafer images.",
+      "test_cases": [
+        {
+          "description": "Visualize detection results",
+          "expected_output": "Image with bounding boxes, labels, and confidence scores",
+          "input": "wafer_image, detections with boxes/scores/labels, defect_class_names"
+        }
+      ],
+      "topic": "detection_visualization",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Small object detection challenges: (1) Pooling reduces resolution, losing small objects. (2) Insufficient features for classification. (3) Low IoU from small localization errors. Solutions: (1) Multi-scale features: FPN combines high-resolution (detail) and low-resolution (semantics). Small objects detected on high-res layers. (2) Higher input resolution: 1024\u00d71024 instead of 512\u00d7512 preserves small defect details. (3) Small anchor sizes: Include 16\u00d716, 32\u00d732 anchors. (4) Reduce feature stride: Use atrous convolutions to maintain resolution. (5) Hard negative mining: Focus on false positives near small objects. (6) Data augmentation: Copy-paste small defects to create more examples. (7) Evaluation: Report small-object mAP separately (COCO does this). For semiconductors, invest in high-resolution imaging if small defects are critical.",
+      "hints": [
+        "Think about how pooling affects small objects",
+        "Consider resolution and receptive field trade-offs",
+        "Think about anchor scales",
+        "Consider class imbalance"
+      ],
+      "id": "m7.1_q021",
+      "points": 5,
+      "question": "Small defects (few pixels) are notoriously difficult to detect. Discuss techniques to improve small object detection performance in semiconductor inspection where defects may be 5-10 pixels.",
+      "rubric": [
+        "Discusses multi-scale feature pyramids (FPN, PANet) (2 points)",
+        "Mentions high-resolution inputs and feature maps (2 points)",
+        "Explains appropriate anchor design for small objects (2 points)",
+        "Considers data augmentation and hard example mining (2 points)",
+        "Addresses evaluation metrics specific to small objects (2 points)"
+      ],
+      "topic": "small_object_detection",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Weakly supervised detection strategies: (1) Multiple Instance Learning: Treat image as bag of regions. Image-level label ('defect present') supervises. Model learns to localize most discriminative regions. (2) CAM-based: Train classifier, use CAM/Grad-CAM to generate pseudo bounding boxes, refine detector. (3) Pseudo-labeling: Train detector on limited labeled data, predict on unlabeled data, use high-confidence predictions as training data (self-training). (4) Semi-supervised: Combine few labeled examples with many unlabeled using consistency regularization. (5) Active learning: Model suggests most uncertain/diverse samples for annotation. (6) Human-in-loop: Model generates proposals, humans verify/correct. Challenges: Lower quality than fully supervised, false positives in pseudo-labels, drift errors. For semiconductors: Cost-benefit analysis - if labeling 1000 boxes costs $X but weakly supervised achieves 90% of performance, may be worthwhile. Validate carefully on fully-annotated test set.",
+      "hints": [
+        "Think about learning from image-level labels only",
+        "Consider iterative refinement approaches",
+        "Think about which samples to annotate",
+        "Consider validation and quality control"
+      ],
+      "id": "m7.1_q022",
+      "points": 5,
+      "question": "Bounding box annotation is expensive. Explain how weakly supervised or semi-supervised approaches could leverage image-level labels or a small set of bounding box annotations for wafer defect detection.",
+      "rubric": [
+        "Explains multiple instance learning (MIL) approach (2 points)",
+        "Discusses pseudo-labeling and self-training (2 points)",
+        "Mentions active learning for selective annotation (2 points)",
+        "Considers combining strong and weak supervision (2 points)",
+        "Addresses quality and reliability challenges (2 points)"
+      ],
+      "topic": "weakly_supervised_detection",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Semantic segmentation: All pixels of class 'scratch' labeled as scratch, but individual scratches not distinguished. If 3 scratches are present, they appear as one connected region or separate regions requiring post-processing (connected components) to count. Instance segmentation: Each scratch gets a unique instance ID. Directly provides count, bounding box, and mask for each defect. Benefits for semiconductors: (1) Accurate defect counting for yield statistics. (2) Individual defect metrics: size, shape, orientation. (3) Spatial analysis: defect clustering, distribution patterns. (4) Failure analysis: Track specific defects through process. (5) No ambiguity with touching/overlapping defects. Use semantic for simple binary masks (defect/no-defect), instance when you need per-defect information.",
+      "hints": [
+        "Think about what happens with overlapping or nearby defects",
+        "Consider post-processing needs",
+        "Think about quality metrics per defect",
+        "Consider failure analysis requirements"
+      ],
+      "id": "m7.1_q023",
+      "points": 5,
+      "question": "For a wafer with multiple defects of the same type, explain why instance segmentation is preferred over semantic segmentation for counting and individual defect analysis.",
+      "rubric": [
+        "Explains semantic segmentation merges all instances of a class (2 points)",
+        "Describes instance segmentation separates each individual defect (2 points)",
+        "Discusses practical implications for defect counting (2 points)",
+        "Considers downstream analysis (size, shape of individual defects) (2 points)",
+        "Provides specific semiconductor use cases (2 points)"
+      ],
+      "topic": "semantic_vs_instance",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Edge deployment challenges: Limited GPU/CPU, memory constraints, power budget, thermal limits. Strategies: (1) Efficient architectures: YOLOv5s, EfficientDet-D0 with depthwise separable convolutions, designed for edge. (2) Quantization: INT8 instead of FP32 (4\u00d7 speedup, 4\u00d7 memory reduction). PTQ (post-training) or QAT (quantization-aware training). (3) Pruning: Remove unimportant weights (50-80% sparsity often possible). (4) Knowledge distillation: Train small model to mimic large model. (5) TensorRT/ONNX Runtime: Optimize model graph, kernel fusion, memory layout. (6) Resolution reduction: 416\u00d7416 instead of 640\u00d7640 if acceptable. (7) Hardware: Use devices with inference accelerators (Jetson Xavier, Coral TPU). Validation: Profile on target hardware, test thermal stability over hours, compare edge vs cloud accuracy. For fabs: Balance edge (low latency, privacy) vs cloud (higher accuracy, easier updates). May use edge for screening, cloud for detailed analysis.",
+      "hints": [
+        "Think about resource constraints on edge devices",
+        "Consider model compression techniques",
+        "Think about inference frameworks and optimization",
+        "Consider accuracy vs speed vs power trade-offs"
+      ],
+      "id": "m7.1_q024",
+      "points": 5,
+      "question": "Discuss the challenges and strategies for deploying a real-time object detection model (50+ FPS) for wafer inspection on edge devices with limited compute (e.g., embedded systems at inspection stations).",
+      "rubric": [
+        "Identifies computational constraints (memory, compute, power) (2 points)",
+        "Discusses model optimization techniques (quantization, pruning, distillation) (3 points)",
+        "Considers efficient architectures (MobileNet, EfficientDet) (2 points)",
+        "Addresses deployment frameworks (TensorRT, ONNX) (2 points)",
+        "Discusses validation and monitoring on edge (1 point)"
+      ],
+      "topic": "edge_deployment_detection",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Interpretability for defect detection: (1) Visualizations: Show bounding boxes + confidence scores. Overlay segmentation masks on original images. Grad-CAM heatmaps showing which pixels influenced detection. (2) Explanations: 'Detected as scratch (87% confidence) due to elongated high-contrast pattern in region X.' Highlight similar defects from training data. (3) Uncertainty: Ensemble predictions with confidence intervals. Flag uncertain detections for human review (e.g., <80% confidence). (4) Human-in-loop: Detections with 50-80% confidence go to expert review. Engineers validate, provide feedback. (5) Failure analysis: Log false positives/negatives. Analyze patterns (lighting conditions, defect types). (6) Model cards: Document training data, performance metrics, known limitations. (7) A/B testing: Shadow mode comparing model vs human for period before full deployment. (8) Continuous monitoring: Track prediction distributions, alert on drift. For semiconductors: Trust is earned through consistent performance, transparent limitations, and responsive failure handling. Engineers should understand model is a tool requiring oversight, not black box making final decisions.",
+      "hints": [
+        "Think about what engineers need to know to trust the system",
+        "Consider visualization techniques",
+        "Think about failure modes and edge cases",
+        "Consider the human-AI collaboration workflow"
+      ],
+      "id": "m7.1_q025",
+      "points": 5,
+      "question": "For a semiconductor fab deploying automated defect detection, explain how to make the model's detections interpretable and trustworthy for process engineers who need to understand why certain regions were flagged as defects.",
+      "rubric": [
+        "Discusses attention/saliency visualization techniques (2 points)",
+        "Mentions confidence scores and uncertainty quantification (2 points)",
+        "Explains the role of model explanations in building trust (2 points)",
+        "Considers human-in-the-loop validation workflows (2 points)",
+        "Addresses failure case analysis and continuous improvement (2 points)"
+      ],
+      "topic": "defect_localization_interpretability",
+      "type": "conceptual"
+    }
+  ],
+  "sub_module": "7.1",
+  "title": "Advanced Defect Detection",
+  "version": "1.0",
+  "week": 13
+}

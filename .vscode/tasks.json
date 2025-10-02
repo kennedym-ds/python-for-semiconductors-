@@ -60,6 +60,239 @@
       "label": "Env: Recreate Full (Force)",
       "problemMatcher": [],
       "type": "shell"
+    },
+    {
+      "args": [
+        "-m",
+        "pytest",
+        "projects/starter/wafer_defect_classifier/test_evaluate_submission.py",
+        "-v"
+      ],
+      "command": ".venv/Scripts/python.exe",
+      "group": "test",
+      "isBackground": false,
+      "label": "Test Grading Script",
+      "problemMatcher": [],
+      "type": "shell"
+    },
+    {
+      "args": [
+        "projects/starter/wafer_defect_classifier/evaluate_submission.py",
+        "--notebook",
+        "projects/starter/wafer_defect_classifier/wafer_defect_solution.ipynb",
+        "--verbose",
+        "--output-json",
+        "projects/starter/wafer_defect_classifier/solution_grade.json"
+      ],
+      "command": ".venv/Scripts/python.exe",
+      "label": "Grade Solution Notebook",
+      "type": "shell"
+    },
+    {
+      "args": [
+        "projects/starter/wafer_defect_classifier/fix_notebook.py"
+      ],
+      "command": ".venv/Scripts/python.exe",
+      "group": "none",
+      "label": "Fix Solution Notebook Bug",
+      "type": "shell"
+    },
+    {
+      "args": [
+        "projects/starter/wafer_defect_classifier/fix_notebook.py"
+      ],
+      "command": ".venv/Scripts/python.exe",
+      "group": "none",
+      "label": "Fix Solution Notebook Bug v2",
+      "type": "shell"
+    },
+    {
+      "args": [
+        "evaluate_submission.py",
+        "--notebook",
+        "wafer_defect_solution.ipynb",
+        "--verbose",
+        "--output-json",
+        "solution_grade_fixed.json"
+      ],
+      "command": ".venv/Scripts/python.exe",
+      "group": "none",
+      "label": "Grade Fixed Solution",
+      "type": "shell"
+    },
+    {
+      "args": [
+        "projects/starter/wafer_defect_classifier/check_fix.py"
+      ],
+      "command": ".venv/Scripts/python.exe",
+      "group": "none",
+      "label": "Check Notebook Fix",
+      "type": "shell"
+    },
+    {
+      "args": [
+        "projects/starter/wafer_defect_classifier/run_fresh_grade.py"
+      ],
+      "command": ".venv/Scripts/python.exe",
+      "group": "none",
+      "label": "Run Fresh Grading",
+      "type": "shell"
+    },
+    {
+      "args": [
+        "projects/starter/wafer_defect_classifier/verify_fix.py"
+      ],
+      "command": ".venv/Scripts/python.exe",
+      "group": "none",
+      "label": "Verify Notebook Fix",
+      "type": "shell"
+    },
+    {
+      "args": [
+        "projects/starter/wafer_defect_classifier/grade_no_cache.py"
+      ],
+      "command": ".venv/Scripts/python.exe",
+      "group": "none",
+      "label": "Grade No Cache",
+      "type": "shell"
+    },
+    {
+      "args": [
+        "projects/starter/wafer_defect_classifier/clear_notebook_cache.py"
+      ],
+      "command": ".venv/Scripts/python.exe",
+      "group": "none",
+      "label": "Clear Notebook Cache",
+      "type": "shell"
+    },
+    {
+      "args": [
+        "projects/starter/wafer_defect_classifier/evaluate_submission.py",
+        "--notebook",
+        "projects/starter/wafer_defect_classifier/wafer_defect_solution.ipynb",
+        "--output-json",
+        "projects/starter/wafer_defect_classifier/solution_grade_clean.json",
+        "--verbose"
+      ],
+      "command": ".venv/Scripts/python.exe",
+      "group": "none",
+      "label": "Grade Clean Notebook",
+      "type": "shell"
+    },
+    {
+      "args": [
+        "projects/starter/wafer_defect_classifier/fix_roc_curve.py"
+      ],
+      "command": ".venv/Scripts/python.exe",
+      "group": "none",
+      "label": "Fix ROC Curve",
+      "type": "shell"
+    },
+    {
+      "args": [
+        "projects/starter/wafer_defect_classifier/clear_notebook_cache.py"
+      ],
+      "command": ".venv/Scripts/python.exe",
+      "group": "none",
+      "label": "Clear Cache Again",
+      "type": "shell"
+    },
+    {
+      "args": [
+        "projects/starter/wafer_defect_classifier/fix_all_predict_proba.py"
+      ],
+      "command": ".venv/Scripts/python.exe",
+      "group": "none",
+      "label": "Fix All predict_proba Calls",
+      "type": "shell"
+    },
+    {
+      "args": [
+        "projects/starter/wafer_defect_classifier/clear_notebook_cache.py"
+      ],
+      "command": ".venv/Scripts/python.exe",
+      "group": "none",
+      "label": "Clear Cache Final",
+      "type": "shell"
+    },
+    {
+      "args": [
+        "projects/starter/wafer_defect_classifier/evaluate_submission.py",
+        "--notebook",
+        "projects/starter/wafer_defect_classifier/wafer_defect_solution.ipynb",
+        "--output-json",
+        "projects/starter/wafer_defect_classifier/solution_final_grade.json"
+      ],
+      "command": ".venv/Scripts/python.exe",
+      "group": "none",
+      "label": "Grade Final Solution",
+      "type": "shell"
+    },
+    {
+      "args": [
+        "projects/starter/wafer_defect_classifier/evaluate_submission.py",
+        "--notebook",
+        "projects/starter/wafer_defect_classifier/wafer_defect_solution_FRESH.ipynb",
+        "--output-json",
+        "projects/starter/wafer_defect_classifier/solution_FRESH_grade.json"
+      ],
+      "command": ".venv/Scripts/python.exe",
+      "group": "none",
+      "label": "Grade FRESH Copy",
+      "type": "shell"
+    },
+    {
+      "args": [
+        "projects/starter/wafer_defect_classifier/grade_with_fresh_kernel.py",
+        "--notebook",
+        "projects/starter/wafer_defect_classifier/wafer_defect_solution.ipynb",
+        "--output-json",
+        "projects/starter/wafer_defect_classifier/solution_fresh_kernel_grade.json"
+      ],
+      "command": ".venv/Scripts/python.exe",
+      "group": "none",
+      "label": "Grade with Fresh Kernel",
+      "type": "shell"
+    },
+    {
+      "args": [
+        "projects/starter/wafer_defect_classifier/inspect_notebook.py"
+      ],
+      "command": "python",
+      "group": "none",
+      "label": "Inspect Notebook Structure",
+      "type": "shell"
+    },
+    {
+      "args": [
+        "projects/starter/wafer_defect_classifier/inspect_notebook.py"
+      ],
+      "command": "python",
+      "group": "none",
+      "label": "Inspect Notebook Structure v2",
+      "type": "shell"
+    },
+    {
+      "args": [
+        "projects/starter/wafer_defect_classifier/deep_clear_outputs.py"
+      ],
+      "command": "python",
+      "group": "none",
+      "label": "Deep Clear Notebook",
+      "type": "shell"
+    },
+    {
+      "args": [
+        "projects/starter/wafer_defect_classifier/evaluate_submission.py",
+        "--notebook",
+        "projects/starter/wafer_defect_classifier/wafer_defect_solution.ipynb",
+        "--output-json",
+        "projects/starter/wafer_defect_classifier/solution_deep_cleared.json"
+      ],
+      "command": "python",
+      "group": "none",
+      "label": "Grade After Deep Clear",
+      "type": "shell"
     }
   ],
   "version": "2.0.0"

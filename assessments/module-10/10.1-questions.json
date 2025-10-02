@@ -1,0 +1,674 @@
+{
+  "description": "Assessment covering ML project architecture, modular design patterns, configuration management, dependency injection, code organization, and best practices for production-ready semiconductor ML systems.",
+  "estimated_time_minutes": 90,
+  "module_id": "module-10.1",
+  "passing_score": 70,
+  "questions": [
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "Separating code (src/), data (data/), trained models (models/), and exploratory work (notebooks/) enforces separation of concerns. This makes code more maintainable, testable, and easier for teams to collaborate. Each directory has a clear purpose, reducing confusion about where files belong.",
+      "id": "m10.1_q001",
+      "options": [
+        "It makes the repository look more professional",
+        "It enforces separation of concerns and improves maintainability",
+        "It's required by Python package managers",
+        "It reduces the total file size"
+      ],
+      "points": 2,
+      "question": "What is the primary benefit of organizing an ML project with separate directories for src/, data/, models/, and notebooks/?",
+      "topic": "project_structure",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Modular design with separate modules/classes for preprocessing, feature extraction, training, and evaluation follows the Single Responsibility Principle. Each module has one clear purpose, making the code testable, reusable, and maintainable. Clear interfaces between modules allow independent development and testing.",
+      "id": "m10.1_q002",
+      "options": [
+        "Put all code in a single 5000-line script",
+        "Create separate modules/classes for each concern with clear interfaces",
+        "Use only Jupyter notebooks for everything",
+        "Duplicate code across multiple files"
+      ],
+      "points": 2,
+      "question": "In a semiconductor defect detection system, you have preprocessing, feature extraction, model training, and evaluation logic. What design pattern should you use?",
+      "topic": "modular_design",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "Storing hyperparameters in configuration files (YAML, JSON, TOML) separates configuration from code. This allows experimenting with different parameters without code changes, makes experiments reproducible (by versioning configs), and enables non-programmers to adjust parameters. It's a key MLOps practice.",
+      "id": "m10.1_q003",
+      "options": [
+        "Configuration files are faster to execute",
+        "It allows parameter changes without modifying code, improving reproducibility",
+        "Python doesn't allow hardcoded values",
+        "Configuration files use less memory"
+      ],
+      "points": 2,
+      "question": "Why should ML model hyperparameters be stored in a configuration file rather than hardcoded in the training script?",
+      "topic": "configuration_management",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Using requirements.txt with pinned versions (e.g., pandas==1.5.0) ensures identical dependencies across environments. Docker containerization provides complete environment isolation, including OS-level dependencies. This combination guarantees reproducible deployments and eliminates 'works on my machine' problems.",
+      "id": "m10.1_q004",
+      "options": [
+        "Manually install packages on each server",
+        "Use requirements.txt with pinned versions and Docker for environment isolation",
+        "Only document which packages are needed",
+        "Use different Python versions on each server"
+      ],
+      "points": 2,
+      "question": "A semiconductor fab needs to deploy your yield prediction model to multiple production servers with identical environments. What's the best approach?",
+      "topic": "dependency_management",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "Dependency injection passes dependencies (like data loaders, preprocessors, models) to components rather than having them create their own. This reduces coupling, makes components testable in isolation (by injecting mocks), and allows easy swapping of implementations (e.g., switching from XGBoost to LightGBM without changing pipeline code).",
+      "id": "m10.1_q005",
+      "options": [
+        "It makes code run faster",
+        "It reduces coupling and makes components easily swappable and testable",
+        "It automatically generates documentation",
+        "It eliminates the need for configuration files"
+      ],
+      "points": 3,
+      "question": "What is the main advantage of dependency injection in ML pipeline design?",
+      "topic": "dependency_injection",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 0,
+      "difficulty": "medium",
+      "explanation": "In Python 3.3+, __init__.py files are technically optional (namespace packages), but are still best practice. They mark directories as packages, can define what's exported (using __all__), run package initialization code, and make imports cleaner. For ML projects, they help organize modules into a proper package structure.",
+      "id": "m10.1_q006",
+      "options": [
+        "They are required for Python to recognize directories as packages",
+        "They automatically generate documentation",
+        "They compile Python code to bytecode",
+        "They are only needed for Python 2.x compatibility"
+      ],
+      "points": 2,
+      "question": "What is the purpose of __init__.py files in a Python package?",
+      "topic": "package_structure",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "easy",
+      "explanation": "Utility functions should be centralized in a utils/ or helpers/ module. This promotes code reuse, makes testing easier, and provides a single source of truth. Common utilities include data loaders, plotting functions, metric calculators, and file I/O helpers. This avoids code duplication and inconsistencies.",
+      "id": "m10.1_q007",
+      "options": [
+        "Scattered across multiple notebooks",
+        "In a dedicated utils/ or helpers/ module",
+        "Copied into every script that needs them",
+        "Only in the main training script"
+      ],
+      "points": 2,
+      "question": "Where should utility functions (like data loading helpers, plotting functions) be placed in a well-structured ML project?",
+      "topic": "code_organization",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Python's logging module provides structured logging with levels (DEBUG, INFO, WARNING, ERROR, CRITICAL), configurable outputs (console, files, remote servers), and filtering. This is essential for production systems to troubleshoot issues, monitor performance, and track model behavior without cluttering code with print() statements.",
+      "id": "m10.1_q008",
+      "options": [
+        "Use print() statements throughout the code",
+        "Use Python's logging module with appropriate levels (DEBUG, INFO, WARNING, ERROR)",
+        "Don't log anything to improve performance",
+        "Only log to console, never to files"
+      ],
+      "points": 2,
+      "question": "For a production semiconductor ML system, which logging approach is most appropriate?",
+      "topic": "logging",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "hard",
+      "explanation": "Maintaining environment-specific config files (dev.yaml, test.yaml, prod.yaml) with a config loader class is the cleanest approach. Load the appropriate config based on an environment variable (e.g., ENV=prod). This separates environment concerns, makes configs version-controllable, and prevents accidentally running production code on test data.",
+      "id": "m10.1_q009",
+      "options": [
+        "Use if/else statements checking environment variables throughout the code",
+        "Maintain separate config files (dev.yaml, test.yaml, prod.yaml) with a config loader",
+        "Hardcode everything and change manually when deploying",
+        "Use different Git branches for each environment"
+      ],
+      "points": 3,
+      "question": "Your ML project needs different configurations for development, testing, and production (different data paths, model parameters, logging levels). What's the best pattern?",
+      "topic": "configuration_patterns",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": 1,
+      "difficulty": "medium",
+      "explanation": "Version control should include: source code, configuration files, requirements.txt, documentation, tests, and small datasets. Exclude: trained models (use model registries like MLflow), large datasets (use DVC or data versioning tools), virtual environments, and cached files. This keeps the repo lean while maintaining reproducibility.",
+      "id": "m10.1_q010",
+      "options": [
+        "Only the Python source code",
+        "Code, configs, requirements.txt, documentation, and small datasets",
+        "Code and trained model files (*.pkl, *.h5)",
+        "Everything including large datasets and virtual environments"
+      ],
+      "points": 2,
+      "question": "What should be version-controlled in Git for an ML project?",
+      "topic": "versioning",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Configuration loaders centralize parameter management. Using YAML allows hierarchical configs, comments, and easy editing. Attribute-style access (config.learning_rate) is more readable than dictionary access (config['learning_rate']). This pattern is used in frameworks like Hydra and OmegaConf.",
+      "hints": [
+        "Use yaml.safe_load() to load the YAML file",
+        "Store loaded config in self._config dictionary",
+        "Use __getattr__ to allow attribute-style access (config.learning_rate)",
+        "Implement get() method to return self._config.get(key, default)"
+      ],
+      "id": "m10.1_q011",
+      "points": 4,
+      "question": "Implement a configuration loader class that reads hyperparameters from a YAML file and provides them as attributes.",
+      "starter_code": "import yaml\nfrom pathlib import Path\nfrom typing import Any\n\nclass ConfigLoader:\n    \"\"\"\n    Load configuration from YAML file.\n    \n    Usage:\n        config = ConfigLoader('config.yaml')\n        print(config.learning_rate)\n        print(config.batch_size)\n    \"\"\"\n    \n    def __init__(self, config_path: str):\n        \"\"\"\n        Load config from YAML file.\n        \n        Args:\n            config_path: Path to YAML configuration file\n        \"\"\"\n        # Your implementation here\n        pass\n    \n    def get(self, key: str, default: Any = None) -> Any:\n        \"\"\"\n        Get configuration value with optional default.\n        \n        Args:\n            key: Configuration key\n            default: Default value if key not found\n            \n        Returns:\n            Configuration value or default\n        \"\"\"\n        # Your implementation here\n        pass",
+      "test_cases": [
+        {
+          "description": "Load basic config parameters",
+          "expected_output": "config.learning_rate == 0.001, config.batch_size == 32",
+          "input": "config.yaml with: learning_rate: 0.001, batch_size: 32"
+        },
+        {
+          "description": "Get config value by key",
+          "expected_output": "0.001",
+          "input": "config.get('learning_rate')"
+        },
+        {
+          "description": "Return default for missing key",
+          "expected_output": "42",
+          "input": "config.get('nonexistent', default=42)"
+        }
+      ],
+      "topic": "config_management",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Standardized project structure improves consistency across projects and teams. This structure follows Python best practices: src/ for source code, tests/ for unit tests, data/ for datasets, models/ for trained models, configs/ for parameters, and docs/ for documentation. Automation ensures no directories are forgotten.",
+      "hints": [
+        "Use Path() for cross-platform path handling",
+        "Use Path.mkdir(parents=True, exist_ok=True) to create directories",
+        "Create __init__.py files in Python package directories",
+        "Create placeholder README.md and requirements.txt files",
+        "Return a dict with project_path and list of created directories"
+      ],
+      "id": "m10.1_q012",
+      "points": 4,
+      "question": "Create a function to initialize a standardized ML project structure with all necessary directories and files.",
+      "starter_code": "from pathlib import Path\nfrom typing import List\n\ndef create_project_structure(project_name: str, base_path: str = '.') -> dict:\n    \"\"\"\n    Create a standardized ML project directory structure.\n    \n    Structure:\n    project_name/\n    \u251c\u2500\u2500 src/\n    \u2502   \u251c\u2500\u2500 __init__.py\n    \u2502   \u251c\u2500\u2500 data/\n    \u2502   \u251c\u2500\u2500 models/\n    \u2502   \u2514\u2500\u2500 utils/\n    \u251c\u2500\u2500 notebooks/\n    \u251c\u2500\u2500 tests/\n    \u251c\u2500\u2500 data/\n    \u2502   \u251c\u2500\u2500 raw/\n    \u2502   \u2514\u2500\u2500 processed/\n    \u251c\u2500\u2500 models/\n    \u251c\u2500\u2500 configs/\n    \u251c\u2500\u2500 docs/\n    \u251c\u2500\u2500 requirements.txt\n    \u2514\u2500\u2500 README.md\n    \n    Args:\n        project_name: Name of the project\n        base_path: Base directory to create project in\n        \n    Returns:\n        dict with 'project_path' and 'created_dirs' (list of created paths)\n    \"\"\"\n    # Your implementation here\n    pass",
+      "test_cases": [
+        {
+          "description": "Initialize complete project structure",
+          "expected_output": "Creates all directories and returns dict with paths",
+          "input": "create_project_structure('wafer_yield_predictor')"
+        }
+      ],
+      "topic": "project_structure",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Proper logging configuration is crucial for production systems. Console logging shows important messages during development, while file logging captures detailed debug information for troubleshooting. Different levels (DEBUG for file, INFO for console) balance verbosity with usability.",
+      "hints": [
+        "Get logger using logging.getLogger(__name__)",
+        "Set logger level to DEBUG to capture all messages",
+        "Create StreamHandler for console and FileHandler for file",
+        "Set appropriate levels on each handler",
+        "Use logging.Formatter for message formatting",
+        "Default format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'"
+      ],
+      "id": "m10.1_q013",
+      "points": 5,
+      "question": "Implement a logging configuration function that sets up both console and file logging with appropriate formats and levels.",
+      "starter_code": "import logging\nfrom pathlib import Path\nfrom typing import Optional\n\ndef setup_logging(\n    log_file: Optional[str] = None,\n    console_level: str = 'INFO',\n    file_level: str = 'DEBUG',\n    log_format: Optional[str] = None\n) -> logging.Logger:\n    \"\"\"\n    Configure logging with console and file handlers.\n    \n    Args:\n        log_file: Path to log file (if None, only console logging)\n        console_level: Logging level for console (DEBUG, INFO, WARNING, ERROR)\n        file_level: Logging level for file\n        log_format: Custom log format (if None, use default)\n        \n    Returns:\n        Configured logger instance\n        \n    Example:\n        logger = setup_logging('app.log', console_level='INFO', file_level='DEBUG')\n        logger.info('Training started')\n        logger.debug('Batch 1 loss: 0.5')\n    \"\"\"\n    # Your implementation here\n    pass",
+      "test_cases": [
+        {
+          "description": "Setup dual logging",
+          "expected_output": "Logger with console handler at INFO and file handler at DEBUG",
+          "input": "setup_logging('test.log', console_level='INFO', file_level='DEBUG')"
+        },
+        {
+          "description": "Log message at INFO level",
+          "expected_output": "Message appears in both console and file",
+          "input": "logger.info('test message')"
+        }
+      ],
+      "topic": "logging_setup",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Dependency injection containers manage object creation and dependencies. This decouples components: instead of creating its own preprocessor, a pipeline resolves it from the container. This makes testing easier (inject mocks), enables configuration-driven component selection, and improves code organization.",
+      "hints": [
+        "Store service info in self._services[name] = {'cls': cls, 'kwargs': kwargs}",
+        "In resolve(), get service info and instantiate: cls(**kwargs)",
+        "Raise KeyError if service not registered",
+        "Consider caching instances for singleton pattern (optional)",
+        "This is a simplified version - production DI containers are more complex"
+      ],
+      "id": "m10.1_q014",
+      "points": 5,
+      "question": "Implement a simple dependency injection container for managing ML pipeline components.",
+      "starter_code": "from typing import Any, Callable, Dict, Type\n\nclass DIContainer:\n    \"\"\"\n    Simple dependency injection container.\n    \n    Usage:\n        container = DIContainer()\n        container.register('preprocessor', StandardScaler)\n        container.register('model', XGBClassifier, n_estimators=100)\n        \n        preprocessor = container.resolve('preprocessor')\n        model = container.resolve('model')\n    \"\"\"\n    \n    def __init__(self):\n        self._services: Dict[str, Dict[str, Any]] = {}\n    \n    def register(self, name: str, cls: Type, **kwargs):\n        \"\"\"\n        Register a service with optional constructor arguments.\n        \n        Args:\n            name: Service name\n            cls: Class to instantiate\n            **kwargs: Constructor arguments\n        \"\"\"\n        # Your implementation here\n        pass\n    \n    def resolve(self, name: str) -> Any:\n        \"\"\"\n        Resolve and instantiate a registered service.\n        \n        Args:\n            name: Service name\n            \n        Returns:\n            Instance of the registered class\n        \"\"\"\n        # Your implementation here\n        pass",
+      "test_cases": [
+        {
+          "description": "Register service with parameters",
+          "expected_output": "Service registered",
+          "input": "container.register('model', XGBClassifier, n_estimators=100)"
+        },
+        {
+          "description": "Resolve and instantiate service",
+          "expected_output": "XGBClassifier instance with n_estimators=100",
+          "input": "model = container.resolve('model')"
+        }
+      ],
+      "topic": "dependency_injection",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "__init__.py defines a package's public API. By importing classes and listing them in __all__, you enable clean imports (from ml_package import WaferClassifier). This hides internal implementation details, provides a stable API surface, and makes the package more user-friendly.",
+      "hints": [
+        "Import the classes/functions you want to export",
+        "Define __all__ list with public names",
+        "Use relative imports: from .models.classifier import WaferClassifier",
+        "Don't include ConfigLoader in __all__ (internal use only)",
+        "Define __version__ string for package version"
+      ],
+      "id": "m10.1_q015",
+      "points": 4,
+      "question": "Create an __init__.py file that properly exports the public API of a machine learning package.",
+      "starter_code": "# File: src/ml_package/__init__.py\n# Your package contains:\n# - models/classifier.py with WaferClassifier class\n# - models/regressor.py with YieldPredictor class  \n# - preprocessing/scaler.py with RobustScaler class\n# - utils/metrics.py with calculate_metrics function\n# - config/loader.py with ConfigLoader class (internal, not exported)\n\n# Implement the __init__.py to export only the public API\n\n# Your implementation here\n",
+      "test_cases": [
+        {
+          "description": "Import public class",
+          "expected_output": "Successfully imports WaferClassifier",
+          "input": "from ml_package import WaferClassifier"
+        },
+        {
+          "description": "Cannot import internal class",
+          "expected_output": "ImportError - not in __all__",
+          "input": "from ml_package import ConfigLoader"
+        },
+        {
+          "description": "Package exports only public API",
+          "expected_output": "Shows only exported names in __all__",
+          "input": "import ml_package; print(dir(ml_package))"
+        }
+      ],
+      "topic": "package_init",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Modular pipeline design with abstract interfaces and dependency injection allows swapping components without changing pipeline code. Want to try a different preprocessor? Just inject a different implementation. This follows SOLID principles, makes testing easier (inject mocks), and enables experimentation.",
+      "hints": [
+        "Store components in __init__: self.preprocessor, self.feature_engineer, self.model",
+        "In fit(): preprocess data, engineer features, fit model - chain operations",
+        "In predict(): apply same transformations, then model.predict()",
+        "Each component is swappable thanks to abstract interfaces",
+        "Consider adding fit_transform() helper method"
+      ],
+      "id": "m10.1_q016",
+      "points": 5,
+      "question": "Design a modular ML pipeline with separate, swappable components for preprocessing, feature engineering, and modeling.",
+      "starter_code": "from abc import ABC, abstractmethod\nfrom typing import Any\nimport pandas as pd\nimport numpy as np\nfrom sklearn.base import BaseEstimator\n\nclass Preprocessor(ABC):\n    \"\"\"Abstract preprocessor interface.\"\"\"\n    \n    @abstractmethod\n    def fit(self, X: pd.DataFrame) -> 'Preprocessor':\n        pass\n    \n    @abstractmethod\n    def transform(self, X: pd.DataFrame) -> pd.DataFrame:\n        pass\n\nclass FeatureEngineer(ABC):\n    \"\"\"Abstract feature engineer interface.\"\"\"\n    \n    @abstractmethod\n    def fit(self, X: pd.DataFrame, y: np.ndarray = None) -> 'FeatureEngineer':\n        pass\n    \n    @abstractmethod\n    def transform(self, X: pd.DataFrame) -> pd.DataFrame:\n        pass\n\nclass MLPipeline:\n    \"\"\"\n    Modular ML pipeline with dependency injection.\n    \n    Usage:\n        pipeline = MLPipeline(\n            preprocessor=StandardPreprocessor(),\n            feature_engineer=WaferFeatureEngineer(),\n            model=XGBClassifier()\n        )\n        pipeline.fit(X_train, y_train)\n        predictions = pipeline.predict(X_test)\n    \"\"\"\n    \n    def __init__(self, \n                 preprocessor: Preprocessor,\n                 feature_engineer: FeatureEngineer,\n                 model: BaseEstimator):\n        # Your implementation here\n        pass\n    \n    def fit(self, X: pd.DataFrame, y: np.ndarray) -> 'MLPipeline':\n        \"\"\"Fit the complete pipeline.\"\"\"\n        # Your implementation here\n        pass\n    \n    def predict(self, X: pd.DataFrame) -> np.ndarray:\n        \"\"\"Make predictions.\"\"\"\n        # Your implementation here\n        pass",
+      "test_cases": [
+        {
+          "description": "Fit complete pipeline",
+          "expected_output": "Fits preprocessor, feature engineer, and model in sequence",
+          "input": "pipeline.fit(X_train, y_train)"
+        },
+        {
+          "description": "Make predictions",
+          "expected_output": "Transforms X_test through pipeline and returns predictions",
+          "input": "predictions = pipeline.predict(X_test)"
+        }
+      ],
+      "topic": "modular_pipeline",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Environment-based configuration is essential for deploying ML systems. Development uses local data paths and verbose logging, testing uses small datasets and strict checks, production uses optimized settings and error alerting. This pattern prevents accidentally running production code on test data.",
+      "hints": [
+        "Use os.environ.get('ENV', 'dev') to get environment with default",
+        "Construct config path: Path(config_dir) / f'{env}.yaml'",
+        "Load YAML: yaml.safe_load(file)",
+        "Raise FileNotFoundError if config file doesn't exist",
+        "Consider validating environment value (must be dev/test/prod)"
+      ],
+      "id": "m10.1_q017",
+      "points": 4,
+      "question": "Implement a function that detects the current environment (development, testing, production) and loads the appropriate configuration.",
+      "starter_code": "import os\nimport yaml\nfrom pathlib import Path\nfrom typing import Dict, Any\n\ndef load_environment_config(config_dir: str = 'configs') -> Dict[str, Any]:\n    \"\"\"\n    Load configuration based on environment.\n    \n    Reads ENV environment variable (default: 'dev').\n    Loads config from {config_dir}/{env}.yaml.\n    \n    Environment variable ENV can be: 'dev', 'test', 'prod'\n    \n    Args:\n        config_dir: Directory containing config files\n        \n    Returns:\n        Dictionary of configuration parameters\n        \n    Example:\n        # Set environment\n        os.environ['ENV'] = 'prod'\n        # Load prod config\n        config = load_environment_config()\n    \"\"\"\n    # Your implementation here\n    pass",
+      "test_cases": [
+        {
+          "description": "Load development config",
+          "expected_output": "Loads configs/dev.yaml",
+          "input": "os.environ['ENV'] = 'dev'; load_environment_config()"
+        },
+        {
+          "description": "Load production config",
+          "expected_output": "Loads configs/prod.yaml",
+          "input": "os.environ['ENV'] = 'prod'; load_environment_config()"
+        },
+        {
+          "description": "Default to dev environment",
+          "expected_output": "Defaults to configs/dev.yaml",
+          "input": "load_environment_config() (no ENV set)"
+        }
+      ],
+      "topic": "environment_detection",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Factory pattern centralizes object creation logic. Instead of if/else chains, configuration drives model selection. This makes adding new models easy (just register them), enables experimentation via config changes, and supports A/B testing of different models without code changes.",
+      "hints": [
+        "Extract model_type from config",
+        "Look up model class in _models registry",
+        "Raise ValueError if model_type not found",
+        "Create copy of config and remove 'model_type' key",
+        "Instantiate model with remaining config as **kwargs",
+        "In register_model(), add to _models dictionary"
+      ],
+      "id": "m10.1_q018",
+      "points": 5,
+      "question": "Implement a factory pattern for creating different types of ML models based on configuration.",
+      "starter_code": "from typing import Dict, Any\nfrom sklearn.base import BaseEstimator\nfrom sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier\nfrom sklearn.linear_model import LogisticRegression\n\nclass ModelFactory:\n    \"\"\"\n    Factory for creating ML models from configuration.\n    \n    Usage:\n        config = {'model_type': 'random_forest', 'n_estimators': 100}\n        model = ModelFactory.create_model(config)\n    \"\"\"\n    \n    # Registry of available models\n    _models = {\n        'logistic_regression': LogisticRegression,\n        'random_forest': RandomForestClassifier,\n        'gradient_boosting': GradientBoostingClassifier,\n    }\n    \n    @classmethod\n    def create_model(cls, config: Dict[str, Any]) -> BaseEstimator:\n        \"\"\"\n        Create model instance from configuration.\n        \n        Args:\n            config: Must contain 'model_type' key, optional model parameters\n            \n        Returns:\n            Instantiated model\n            \n        Example:\n            config = {\n                'model_type': 'random_forest',\n                'n_estimators': 100,\n                'max_depth': 10,\n                'random_state': 42\n            }\n            model = ModelFactory.create_model(config)\n        \"\"\"\n        # Your implementation here\n        pass\n    \n    @classmethod\n    def register_model(cls, name: str, model_class: type):\n        \"\"\"\n        Register a new model type.\n        \n        Args:\n            name: Model identifier\n            model_class: Model class to register\n        \"\"\"\n        # Your implementation here\n        pass",
+      "test_cases": [
+        {
+          "description": "Create random forest from config",
+          "expected_output": "RandomForestClassifier(n_estimators=100)",
+          "input": "ModelFactory.create_model({'model_type': 'random_forest', 'n_estimators': 100})"
+        },
+        {
+          "description": "Register custom model",
+          "expected_output": "Registers XGBoost for future use",
+          "input": "ModelFactory.register_model('xgboost', XGBClassifier)"
+        }
+      ],
+      "topic": "factory_pattern",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Key architectural decisions: (1) Modular design - separate data ingestion, preprocessing, model inference, and reporting; (2) Configuration-driven - fab-specific parameters in YAML files, not hardcoded; (3) Adapter pattern - equipment-specific preprocessors implementing common interface; (4) Containerization - Docker for consistent deployment; (5) CI/CD pipeline for automated testing and deployment; (6) Structured logging and monitoring for troubleshooting across fabs. This architecture maximizes code reuse while accommodating site-specific variations.",
+      "hints": [
+        "Think about what varies between fabs vs. what's common",
+        "Consider how to handle equipment-specific preprocessing",
+        "Think about deployment and updates across multiple sites",
+        "Consider debugging and troubleshooting in production"
+      ],
+      "id": "m10.1_q019",
+      "points": 5,
+      "question": "You're designing the architecture for a semiconductor defect detection system that will be deployed across multiple fabs with different equipment types. Discuss the key architectural decisions you'd make to ensure maintainability, extensibility, and ease of deployment.",
+      "rubric": [
+        {
+          "criteria": "Discusses modular design with clear separation of concerns",
+          "points": 2
+        },
+        {
+          "criteria": "Mentions configuration-driven approach for fab-specific parameters",
+          "points": 2
+        },
+        {
+          "criteria": "Addresses code reusability and equipment-specific adapters",
+          "points": 2
+        },
+        {
+          "criteria": "Discusses deployment strategy (containerization, CI/CD)",
+          "points": 2
+        },
+        {
+          "criteria": "Considers monitoring, logging, and error handling",
+          "points": 2
+        }
+      ],
+      "topic": "architecture_decisions",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Design for horizontal scalability: (1) Stateless services - no shared state between instances, enables adding servers; (2) Distributed processing - design for batch processing, use message queues (e.g., RabbitMQ) for work distribution; (3) Database design - partition data by date/fab, use read replicas; (4) Caching - cache model predictions for repeated inputs, use Redis; (5) Async processing - don't block on I/O; (6) Monitoring from day one - profile performance, identify bottlenecks early; (7) Load balancing - distribute requests across instances. Starting with this architecture means scaling is operational, not requiring rewrites.",
+      "hints": [
+        "Think about adding more servers vs. buying bigger servers",
+        "Consider how to partition work across multiple instances",
+        "Think about database bottlenecks and caching",
+        "Consider how to identify performance bottlenecks early"
+      ],
+      "id": "m10.1_q020",
+      "points": 5,
+      "question": "A wafer yield prediction system initially processes 100 wafers/day but needs to scale to 10,000 wafers/day. Discuss how project architecture should be designed from day one to accommodate this 100x growth without major rewrites.",
+      "rubric": [
+        {
+          "criteria": "Discusses designing for horizontal scalability from the start",
+          "points": 2
+        },
+        {
+          "criteria": "Mentions stateless service design and avoiding shared state",
+          "points": 2
+        },
+        {
+          "criteria": "Addresses data pipeline design (batch vs. streaming, partitioning)",
+          "points": 2
+        },
+        {
+          "criteria": "Discusses caching strategies and database design",
+          "points": 2
+        },
+        {
+          "criteria": "Considers monitoring and performance profiling infrastructure",
+          "points": 2
+        }
+      ],
+      "topic": "scalability_design",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Monolithic package: Best for small teams, early-stage projects, tightly coupled components. Simple to develop and deploy, easy to refactor across boundaries. Use for single-fab deployments. Microservices: Best for large teams, independent services (e.g., data ingestion, model serving, reporting). Enables independent deployment, language diversity, and scaling of specific components. Use when different services have different scaling/update needs. Monorepo: Middle ground - multiple packages in one repo. Shared utilities, atomic cross-package changes, but can deploy packages independently. Use for multi-model systems with shared infrastructure. For most semiconductor ML projects, start with monolithic, evolve to monorepo as complexity grows.",
+      "hints": [
+        "Think about team size and structure",
+        "Consider deployment frequency and independence",
+        "Think about code sharing and dependency management",
+        "Consider operational complexity"
+      ],
+      "id": "m10.1_q021",
+      "points": 5,
+      "question": "Compare the trade-offs between organizing ML project code as: (1) a single monolithic package, (2) multiple microservices, and (3) a monorepo with multiple packages. When would you choose each approach for a semiconductor ML system?",
+      "rubric": [
+        {
+          "criteria": "Discusses advantages of monolithic package (simplicity, easier refactoring)",
+          "points": 2
+        },
+        {
+          "criteria": "Discusses microservices benefits (independent deployment, team autonomy)",
+          "points": 2
+        },
+        {
+          "criteria": "Explains monorepo approach (shared code, atomic changes across packages)",
+          "points": 2
+        },
+        {
+          "criteria": "Provides clear decision criteria for each approach",
+          "points": 2
+        },
+        {
+          "criteria": "Gives specific semiconductor manufacturing examples",
+          "points": 2
+        }
+      ],
+      "topic": "code_organization_tradeoffs",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Refactoring strategy: (1) Understand first - document what notebook does, identify dependencies; (2) Add tests - create integration tests that capture current behavior (golden dataset); (3) Extract incrementally - start with pure functions (utils), then data loading, preprocessing, training; (4) Create modules - move extracted code to proper package structure; (5) Parallel operation - run both notebook and new system, compare outputs; (6) Migrate gradually - replace notebook cells with module calls; (7) Add unit tests - test individual components; (8) Documentation - explain new architecture; (9) Knowledge transfer - pair programming, code reviews. This approach minimizes risk, maintains business continuity, and builds confidence in the refactored system.",
+      "hints": [
+        "Think about how to avoid breaking existing functionality",
+        "Consider the strangler fig pattern (gradually replace old system)",
+        "Think about how to prove new system produces same results",
+        "Consider team knowledge and learning curve"
+      ],
+      "id": "m10.1_q022",
+      "points": 5,
+      "question": "Your team inherited a semiconductor ML system that's a 10,000-line Jupyter notebook with no structure. Outline a strategy to refactor this into a production-ready, well-architected system while maintaining business continuity.",
+      "rubric": [
+        {
+          "criteria": "Discusses incremental refactoring strategy, not big bang rewrite",
+          "points": 2
+        },
+        {
+          "criteria": "Mentions establishing test coverage before refactoring",
+          "points": 2
+        },
+        {
+          "criteria": "Outlines specific refactoring steps (extract functions, create modules, etc.)",
+          "points": 2
+        },
+        {
+          "criteria": "Addresses risk mitigation and parallel operation of old/new systems",
+          "points": 2
+        },
+        {
+          "criteria": "Discusses documentation and knowledge transfer",
+          "points": 2
+        }
+      ],
+      "topic": "refactoring_legacy",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "API design principles: (1) Consistency - follow established patterns (fit/predict like scikit-learn), consistent naming; (2) Simplicity - common cases should be easy, complex cases possible; (3) Intuitive defaults - sensible defaults, required parameters only when necessary; (4) Clear documentation - docstrings, examples, tutorials; (5) Fail fast - validate inputs early, clear error messages; (6) Backward compatibility - use deprecation warnings before removing features, maintain compatibility for major version; (7) Semantic versioning - major.minor.patch, signal breaking changes; (8) Type hints - clear expectations for parameters and returns. Good API design reduces support burden and increases adoption.",
+      "hints": [
+        "Think about how popular libraries (scikit-learn, pandas) design APIs",
+        "Consider what makes an API easy to learn and hard to misuse",
+        "Think about evolution - how to add features without breaking users",
+        "Consider documentation from the user's perspective"
+      ],
+      "id": "m10.1_q023",
+      "points": 5,
+      "question": "You're designing the public API for a semiconductor ML library that other teams will use. Discuss the key principles you'd follow to create a clean, intuitive, and stable API.",
+      "rubric": [
+        {
+          "criteria": "Discusses consistency in naming conventions and patterns",
+          "points": 2
+        },
+        {
+          "criteria": "Mentions principle of least surprise and intuitive defaults",
+          "points": 2
+        },
+        {
+          "criteria": "Addresses backward compatibility and deprecation strategy",
+          "points": 2
+        },
+        {
+          "criteria": "Discusses documentation and examples",
+          "points": 2
+        },
+        {
+          "criteria": "Mentions versioning and semantic versioning",
+          "points": 2
+        }
+      ],
+      "topic": "interface_design",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "hard",
+      "explanation": "Configuration management strategies: (1) Hierarchical configs - base.yaml with common params, environment-specific files (dev.yaml, prod.yaml) override base; (2) Config composition - separate concerns (model.yaml, data.yaml, training.yaml), compose at runtime; (3) Validation - use schema validation (Pydantic, Cerberus) to catch errors early; (4) Templating - use variables for related parameters; (5) Tools - use Hydra for composition and CLI overrides, OmegaConf for structured configs; (6) Experiment tracking - integrate with MLflow/W&B to log configs with runs; (7) Documentation - explain each parameter, provide examples; (8) Sensible defaults - minimize required parameters. Tools like Hydra enable powerful composition while keeping configs maintainable.",
+      "hints": [
+        "Think about how to avoid duplicating common parameters",
+        "Consider how to catch configuration errors early",
+        "Think about how to organize hundreds of experiments",
+        "Consider integration with experiment tracking systems"
+      ],
+      "id": "m10.1_q024",
+      "points": 5,
+      "question": "As an ML project grows, configuration files can become complex with hundreds of parameters across multiple environments and experiments. Discuss strategies to manage configuration complexity without sacrificing flexibility.",
+      "rubric": [
+        {
+          "criteria": "Discusses hierarchical configuration and inheritance",
+          "points": 2
+        },
+        {
+          "criteria": "Mentions configuration validation and schemas",
+          "points": 2
+        },
+        {
+          "criteria": "Addresses environment-specific overrides and defaults",
+          "points": 2
+        },
+        {
+          "criteria": "Discusses configuration management tools (Hydra, OmegaConf)",
+          "points": 2
+        },
+        {
+          "criteria": "Mentions experiment tracking integration",
+          "points": 2
+        }
+      ],
+      "topic": "configuration_complexity",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "explanation": "Supporting experimentation-to-production: (1) Clear separation - notebooks/ for exploration, src/ for production code; (2) Progressive formalization - notebook \u2192 script \u2192 module \u2192 package; (3) Shared foundation - production data loading and preprocessing used in notebooks (ensures reproducibility); (4) Abstraction - research findings become configurable modules; (5) Testing discipline - production code requires tests, research code doesn't; (6) Feature flags - deploy research models behind flags for A/B testing; (7) Model registry - MLflow for tracking experiments, promoting models to production; (8) Clear handoff process - research deliverable is not just model, but documented code and evaluation. This approach balances research speed with production quality.",
+      "hints": [
+        "Think about the tension between research speed and production quality",
+        "Consider how to preserve research flexibility while building production assets",
+        "Think about the handoff between data scientists and engineers",
+        "Consider how to test research insights in production safely"
+      ],
+      "id": "m10.1_q025",
+      "points": 5,
+      "question": "Describe how you would architect an ML project to support experimentation in early stages while ensuring a smooth transition to production. What patterns enable this flexibility?",
+      "rubric": [
+        {
+          "criteria": "Discusses separation of research and production code",
+          "points": 2
+        },
+        {
+          "criteria": "Mentions abstracting research findings into production modules",
+          "points": 2
+        },
+        {
+          "criteria": "Addresses code quality standards and testing",
+          "points": 2
+        },
+        {
+          "criteria": "Discusses gradual formalization (notebooks \u2192 scripts \u2192 packages)",
+          "points": 2
+        },
+        {
+          "criteria": "Mentions integration with production infrastructure",
+          "points": 2
+        }
+      ],
+      "topic": "architecture_evolution",
+      "type": "conceptual"
+    }
+  ],
+  "sub_module": "10.1",
+  "title": "Project Architecture & Structure",
+  "version": "1.0",
+  "week": 19
+}

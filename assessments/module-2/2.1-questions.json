@@ -1,0 +1,533 @@
+{
+  "description": "Assessment covering data cleaning, validation, missing data handling, and quality assurance for semiconductor datasets",
+  "estimated_time_minutes": 75,
+  "module_id": "module-2",
+  "passing_score": 80.0,
+  "questions": [
+    {
+      "correct_answer": "B",
+      "difficulty": "medium",
+      "explanation": "Before applying any imputation strategy, it's crucial to verify the missingness mechanism. Statistical tests (like Little's MCAR test) can confirm whether data is truly MCAR, which determines the most appropriate handling strategy.",
+      "id": "m2.1_q001",
+      "options": [
+        "Delete all rows with missing values immediately",
+        "Perform statistical tests to verify the MCAR assumption",
+        "Replace all missing values with the mean thickness",
+        "Use forward-fill to propagate the last known value"
+      ],
+      "points": 1,
+      "question": "In a semiconductor dataset with 10,000 wafer measurements, you discover that 15% of thickness readings are missing. The data appears to be Missing Completely At Random (MCAR). What is the most appropriate first step?",
+      "topic": "missing_data_analysis",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": "B",
+      "difficulty": "easy",
+      "explanation": "A sentinel value (or magic number) is a special value used to indicate missing or invalid data. Common examples include -999, -1, 9999, or NaN. These must be identified and replaced with proper missing value indicators (NaN) before analysis.",
+      "id": "m2.1_q002",
+      "options": [
+        "Structural missing data",
+        "Sentinel value",
+        "MNAR (Missing Not At Random)",
+        "Systematic missing data"
+      ],
+      "points": 1,
+      "question": "You're analyzing production data where sensor readings are occasionally -999, which is a placeholder for measurement failures. What type of missing data indicator is this?",
+      "topic": "data_quality",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": "B",
+      "difficulty": "medium",
+      "explanation": "Mean imputation artificially reduces variance by replacing missing values with the average, pulling all imputed values toward the center. This can weaken correlations, distort distributions, and lead to overly confident statistical tests. More sophisticated methods (KNN, multiple imputation) are often preferable.",
+      "id": "m2.1_q003",
+      "options": [
+        "It increases the dataset size unnecessarily",
+        "It reduces variance and can distort relationships between variables",
+        "It only works for normally distributed data",
+        "It introduces bias towards higher values"
+      ],
+      "points": 1,
+      "question": "In semiconductor manufacturing, what is the primary risk of using mean imputation for missing process parameters?",
+      "topic": "imputation_methods",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": "C",
+      "difficulty": "hard",
+      "explanation": "This is MNAR because the probability of missingness depends on the unobserved values themselves. The tool likely fails to measure problematic wafers (low yield), meaning the missingness is related to the missing value itself. This is the hardest type to handle and may require domain knowledge or sensitivity analysis.",
+      "id": "m2.1_q004",
+      "options": [
+        "MCAR (Missing Completely At Random)",
+        "MAR (Missing At Random)",
+        "MNAR (Missing Not At Random)",
+        "Structural missingness"
+      ],
+      "points": 1,
+      "question": "A wafer test dataset shows that yield measurements are missing specifically for wafers from one problematic tool. What type of missingness is this?",
+      "topic": "missing_data_analysis",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": "A",
+      "difficulty": "easy",
+      "explanation": "Range validation checks whether values fall within acceptable min/max bounds. For physical measurements like thickness, temperature, or pressure, there are often hard physical constraints (e.g., thickness > 0) that must be enforced.",
+      "id": "m2.1_q005",
+      "options": [
+        "Range validation",
+        "Type validation",
+        "Pattern validation",
+        "Referential integrity"
+      ],
+      "points": 1,
+      "question": "When validating incoming wafer metrology data, you want to detect measurements that are physically impossible (e.g., negative thickness). What type of validation rule is this?",
+      "topic": "data_validation",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": "C",
+      "difficulty": "medium",
+      "explanation": "Duplicates require domain knowledge to resolve. In semiconductor manufacturing, some duplicates are legitimate (rework, re-measurement) while others are errors. Business rules based on timestamps, process steps, or quality flags help distinguish between them.",
+      "id": "m2.1_q006",
+      "options": [
+        "Delete all duplicate entries automatically",
+        "Keep only the first occurrence of each wafer ID",
+        "Investigate the source and apply business rules (e.g., keep latest timestamp for rework)",
+        "Average all measurements for duplicate IDs"
+      ],
+      "points": 1,
+      "question": "You discover duplicate wafer IDs in your production dataset. Some appear to be legitimate reprocessed wafers, others are data entry errors. What's the best approach?",
+      "topic": "data_cleaning",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": "B",
+      "difficulty": "easy",
+      "explanation": "Periodic readings of exactly 0\u00b0C (or other default values) in a high-temperature process indicate sensor dropouts or communication failures where the system defaults to zero. These should be flagged as invalid and treated as missing data.",
+      "id": "m2.1_q007",
+      "options": [
+        "Calibration drift",
+        "Sensor failure/dropout",
+        "Systematic bias",
+        "Random measurement error"
+      ],
+      "points": 1,
+      "question": "A temperature sensor occasionally reports values of exactly 0\u00b0C in a chamber that operates at 400-600\u00b0C. What data quality issue is this most likely?",
+      "topic": "data_quality",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": "B",
+      "difficulty": "medium",
+      "explanation": "IQR is a robust statistic based on quartiles (Q1, Q3), making it resistant to extreme values. It doesn't assume a normal distribution, unlike z-scores which require normality. This makes IQR particularly useful for skewed or heavy-tailed distributions common in manufacturing data.",
+      "id": "m2.1_q008",
+      "options": [
+        "IQR is faster to compute",
+        "IQR is less sensitive to extreme values and doesn't assume normality",
+        "IQR can detect multivariate outliers",
+        "IQR works better with small sample sizes"
+      ],
+      "points": 1,
+      "question": "When applying outlier detection to process parameters, what is the advantage of using IQR (Interquartile Range) method over z-score method?",
+      "topic": "outlier_detection",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": "C",
+      "difficulty": "easy",
+      "explanation": "Regular expressions are ideal for validating structured text patterns like lot numbers, serial numbers, or formatted IDs. A regex like `^LOT-\\d{4}-\\d{4}$` can precisely validate the format and flag any non-conforming entries.",
+      "id": "m2.1_q009",
+      "options": [
+        "Range validation",
+        "Type checking",
+        "Regular expression (regex) validation",
+        "Referential integrity check"
+      ],
+      "points": 1,
+      "question": "You're validating lot numbers in a dataset. Valid lot numbers follow the pattern 'LOT-YYYY-NNNN' (e.g., 'LOT-2024-0157'). What validation technique is most appropriate?",
+      "topic": "data_validation",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": "B",
+      "difficulty": "medium",
+      "explanation": "For time-series data, forward fill (propagating the last known value) or interpolation (linear, polynomial, or spline) respects the temporal structure. These methods leverage the sequential nature of data, which is lost with general imputation methods like mean or KNN.",
+      "id": "m2.1_q010",
+      "options": [
+        "Mean imputation across all timestamps",
+        "Forward fill or interpolation (linear/spline)",
+        "K-nearest neighbors based on static features",
+        "Delete all rows with missing timestamps"
+      ],
+      "points": 1,
+      "question": "A dataset contains both timestamp-based features (sensor readings over time) and static features (wafer specifications). Some timestamps have missing sensor data. What imputation method is most appropriate for the time-series data?",
+      "topic": "imputation_methods",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "easy",
+      "hints": [
+        "Use pandas replace() method with the sentinel values list",
+        "Replace with np.nan, not None",
+        "Make a copy to avoid modifying the original DataFrame"
+      ],
+      "id": "m2.1_q011",
+      "points": 3,
+      "question": "Implement a function to detect and flag sentinel values in a dataset. Semiconductor data often uses special codes like -999, -1, or 9999 to indicate invalid measurements.",
+      "solution": "import pandas as pd\nimport numpy as np\n\ndef flag_sentinel_values(df: pd.DataFrame, \n                          sentinel_values: list = [-999, -1, 9999]) -> pd.DataFrame:\n    \"\"\"\n    Flag sentinel values by replacing them with NaN.\n    \n    Args:\n        df: DataFrame with potential sentinel values\n        sentinel_values: List of sentinel values to replace\n    \n    Returns:\n        DataFrame with sentinel values replaced by NaN\n    \"\"\"\n    df_clean = df.copy()\n    df_clean = df_clean.replace(sentinel_values, np.nan)\n    return df_clean",
+      "starter_code": "import pandas as pd\nimport numpy as np\n\ndef flag_sentinel_values(df: pd.DataFrame, \n                          sentinel_values: list = [-999, -1, 9999]) -> pd.DataFrame:\n    \"\"\"\n    Flag sentinel values by replacing them with NaN.\n    \n    Args:\n        df: DataFrame with potential sentinel values\n        sentinel_values: List of sentinel values to replace\n    \n    Returns:\n        DataFrame with sentinel values replaced by NaN\n    \"\"\"\n    # YOUR CODE HERE\n    pass",
+      "test_cases": [
+        {
+          "description": "Replace multiple sentinel values across columns",
+          "expected_output": "3 NaN values total",
+          "input": {
+            "df": "pd.DataFrame({'temp': [100, -999, 105, -1], 'pressure': [50, 51, 9999, 52]})",
+            "sentinel_values": [
+              -999,
+              -1,
+              9999
+            ]
+          }
+        }
+      ],
+      "topic": "data_quality",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "hints": [
+        "Use df.isnull().sum() for missing counts",
+        "Use df.duplicated().sum() for duplicate count",
+        "Check for columns where all values are null"
+      ],
+      "id": "m2.1_q012",
+      "points": 4,
+      "question": "Create a function to generate a data quality report for a semiconductor dataset, including missing value statistics, duplicate counts, and basic validation checks.",
+      "solution": "import pandas as pd\nimport numpy as np\n\ndef generate_quality_report(df: pd.DataFrame) -> dict:\n    \"\"\"\n    Generate comprehensive data quality report.\n    \n    Args:\n        df: Input DataFrame\n    \n    Returns:\n        Dictionary with quality metrics\n    \"\"\"\n    missing_counts = df.isnull().sum().to_dict()\n    missing_pcts = (df.isnull().sum() / len(df) * 100).to_dict()\n    \n    report = {\n        'total_rows': len(df),\n        'total_columns': len(df.columns),\n        'missing_counts': missing_counts,\n        'missing_percentages': {k: round(v, 2) for k, v in missing_pcts.items()},\n        'duplicate_rows': df.duplicated().sum(),\n        'columns_all_missing': [col for col in df.columns if df[col].isnull().all()]\n    }\n    return report",
+      "starter_code": "import pandas as pd\nimport numpy as np\n\ndef generate_quality_report(df: pd.DataFrame) -> dict:\n    \"\"\"\n    Generate comprehensive data quality report.\n    \n    Args:\n        df: Input DataFrame\n    \n    Returns:\n        Dictionary with quality metrics:\n        - total_rows\n        - total_columns\n        - missing_counts (per column)\n        - missing_percentages (per column)\n        - duplicate_rows\n        - columns_all_missing\n    \"\"\"\n    # YOUR CODE HERE\n    pass",
+      "test_cases": [
+        {
+          "description": "Report on dataset with missing values and duplicates",
+          "expected_output": {
+            "columns_all_missing": [
+              "C"
+            ],
+            "duplicate_rows": 1,
+            "total_rows": 4
+          },
+          "input": {
+            "df": "pd.DataFrame({'A': [1, 2, np.nan, 1], 'B': [4, np.nan, np.nan, 4], 'C': [np.nan, np.nan, np.nan, np.nan]})"
+          }
+        }
+      ],
+      "topic": "data_quality",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "hints": [
+        "Calculate Q1 (25th percentile) and Q3 (75th percentile)",
+        "IQR = Q3 - Q1",
+        "Outliers are below Q1 - 1.5*IQR or above Q3 + 1.5*IQR",
+        "Return boolean mask, not the outlier values themselves"
+      ],
+      "id": "m2.1_q013",
+      "points": 3,
+      "question": "Implement a function to detect outliers using the IQR (Interquartile Range) method. This is a robust method for semiconductor process data that may contain non-normal distributions.",
+      "solution": "import pandas as pd\nimport numpy as np\n\ndef detect_outliers_iqr(data: pd.Series, multiplier: float = 1.5) -> pd.Series:\n    \"\"\"\n    Detect outliers using IQR method.\n    \n    Args:\n        data: Series of numerical values\n        multiplier: IQR multiplier for bounds (typically 1.5 or 3.0)\n    \n    Returns:\n        Boolean series (True for outliers)\n    \"\"\"\n    Q1 = data.quantile(0.25)\n    Q3 = data.quantile(0.75)\n    IQR = Q3 - Q1\n    \n    lower_bound = Q1 - multiplier * IQR\n    upper_bound = Q3 + multiplier * IQR\n    \n    outliers = (data < lower_bound) | (data > upper_bound)\n    return outliers",
+      "starter_code": "import pandas as pd\nimport numpy as np\n\ndef detect_outliers_iqr(data: pd.Series, multiplier: float = 1.5) -> pd.Series:\n    \"\"\"\n    Detect outliers using IQR method.\n    \n    Args:\n        data: Series of numerical values\n        multiplier: IQR multiplier for bounds (typically 1.5 or 3.0)\n    \n    Returns:\n        Boolean series (True for outliers)\n    \"\"\"\n    # YOUR CODE HERE\n    pass",
+      "test_cases": [
+        {
+          "description": "Detect extreme outlier in otherwise consistent data",
+          "expected_output": "1 outlier (value 100)",
+          "input": {
+            "data": "pd.Series([10, 12, 11, 13, 12, 100, 11, 12])",
+            "multiplier": 1.5
+          }
+        }
+      ],
+      "topic": "outlier_detection",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "hints": [
+        "Use re.match() to check if string matches pattern",
+        "Handle NaN and non-string types explicitly",
+        "Return detailed error messages for different failure modes"
+      ],
+      "id": "m2.1_q014",
+      "points": 3,
+      "question": "Write a function to validate wafer IDs against a specific format pattern and return validation results with detailed error messages.",
+      "solution": "import pandas as pd\nimport re\n\ndef validate_wafer_ids(ids: pd.Series, pattern: str = r'^W\\d{4}-[A-Z]\\d{2}$') -> pd.DataFrame:\n    \"\"\"\n    Validate wafer IDs against a regex pattern.\n    \n    Args:\n        ids: Series of wafer ID strings\n        pattern: Regex pattern for valid IDs (default: W####-A##)\n    \n    Returns:\n        DataFrame with columns: 'wafer_id', 'is_valid', 'error_message'\n    \"\"\"\n    def validate_id(wid):\n        if pd.isna(wid):\n            return False, 'Missing wafer ID'\n        elif not isinstance(wid, str):\n            return False, 'Invalid type (not string)'\n        elif not re.match(pattern, wid):\n            return False, f'Does not match pattern {pattern}'\n        else:\n            return True, 'Valid'\n    \n    results = ids.apply(lambda x: validate_id(x))\n    \n    return pd.DataFrame({\n        'wafer_id': ids,\n        'is_valid': results.apply(lambda x: x[0]),\n        'error_message': results.apply(lambda x: x[1])\n    })",
+      "starter_code": "import pandas as pd\nimport re\n\ndef validate_wafer_ids(ids: pd.Series, pattern: str = r'^W\\d{4}-[A-Z]\\d{2}$') -> pd.DataFrame:\n    \"\"\"\n    Validate wafer IDs against a regex pattern.\n    \n    Args:\n        ids: Series of wafer ID strings\n        pattern: Regex pattern for valid IDs (default: W####-A##)\n    \n    Returns:\n        DataFrame with columns: 'wafer_id', 'is_valid', 'error_message'\n    \"\"\"\n    # YOUR CODE HERE\n    pass",
+      "test_cases": [
+        {
+          "description": "Mix of valid and invalid wafer IDs",
+          "expected_output": "2 valid, 2 invalid IDs",
+          "input": {
+            "ids": "pd.Series(['W1234-A01', 'W5678-B99', 'INVALID', 'W123-A1'])"
+          }
+        }
+      ],
+      "topic": "data_validation",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "hints": [
+        "Sort by group_col and time_col first",
+        "Use groupby().ffill() to forward fill within groups",
+        "Make a copy to avoid modifying original DataFrame"
+      ],
+      "id": "m2.1_q015",
+      "points": 4,
+      "question": "Implement a function to perform forward fill imputation for time-series sensor data, respecting group boundaries (e.g., different tools or lots).",
+      "solution": "import pandas as pd\n\ndef forward_fill_by_group(df: pd.DataFrame, \n                           time_col: str,\n                           value_col: str,\n                           group_col: str) -> pd.DataFrame:\n    \"\"\"\n    Forward fill missing values within groups, respecting temporal order.\n    \n    Args:\n        df: DataFrame with time-series data\n        time_col: Name of timestamp column\n        value_col: Name of column to impute\n        group_col: Name of grouping column\n    \n    Returns:\n        DataFrame with forward-filled values\n    \"\"\"\n    df_filled = df.copy()\n    # Sort by group and time to ensure correct order\n    df_filled = df_filled.sort_values([group_col, time_col])\n    # Forward fill within each group\n    df_filled[value_col] = df_filled.groupby(group_col)[value_col].ffill()\n    return df_filled",
+      "starter_code": "import pandas as pd\n\ndef forward_fill_by_group(df: pd.DataFrame, \n                           time_col: str,\n                           value_col: str,\n                           group_col: str) -> pd.DataFrame:\n    \"\"\"\n    Forward fill missing values within groups, respecting temporal order.\n    \n    Args:\n        df: DataFrame with time-series data\n        time_col: Name of timestamp column\n        value_col: Name of column to impute\n        group_col: Name of grouping column (e.g., 'tool_id', 'lot_id')\n    \n    Returns:\n        DataFrame with forward-filled values\n    \"\"\"\n    # YOUR CODE HERE\n    pass",
+      "test_cases": [
+        {
+          "description": "Forward fill respects group boundaries",
+          "expected_output": "Missing values filled using previous value in same tool group",
+          "input": {
+            "df": "DataFrame with tool_id groups and timestamp-ordered temperature readings with gaps"
+          }
+        }
+      ],
+      "topic": "imputation_methods",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "medium",
+      "hints": [
+        "Use DataFrame.duplicated() method",
+        "The 'subset' parameter specifies which columns to check",
+        "keep='first' marks second+ occurrences as duplicates"
+      ],
+      "id": "m2.1_q016",
+      "points": 3,
+      "question": "Create a function to detect and flag duplicate rows in a dataset, with options to keep first, last, or mark all duplicates based on specific columns.",
+      "solution": "import pandas as pd\n\ndef find_duplicates(df: pd.DataFrame, \n                    subset: list = None,\n                    keep: str = 'first') -> pd.DataFrame:\n    \"\"\"\n    Find and flag duplicate rows.\n    \n    Args:\n        df: Input DataFrame\n        subset: List of columns to consider for duplicates\n        keep: 'first', 'last', or False (mark all duplicates)\n    \n    Returns:\n        DataFrame with 'is_duplicate' column\n    \"\"\"\n    df_flagged = df.copy()\n    df_flagged['is_duplicate'] = df.duplicated(subset=subset, keep=keep)\n    return df_flagged",
+      "starter_code": "import pandas as pd\n\ndef find_duplicates(df: pd.DataFrame, \n                    subset: list = None,\n                    keep: str = 'first') -> pd.DataFrame:\n    \"\"\"\n    Find and flag duplicate rows.\n    \n    Args:\n        df: Input DataFrame\n        subset: List of columns to consider for duplicates (None = all columns)\n        keep: 'first', 'last', or False (mark all duplicates)\n    \n    Returns:\n        DataFrame with additional 'is_duplicate' boolean column\n    \"\"\"\n    # YOUR CODE HERE\n    pass",
+      "test_cases": [
+        {
+          "description": "Detect duplicates based on wafer_id column",
+          "expected_output": "Second W1 marked as duplicate",
+          "input": {
+            "df": "pd.DataFrame({'wafer_id': ['W1', 'W1', 'W2'], 'value': [10, 10, 15]})",
+            "keep": "first",
+            "subset": [
+              "wafer_id"
+            ]
+          }
+        }
+      ],
+      "topic": "data_cleaning",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "easy",
+      "hints": [
+        "Use df.isnull().sum() for counts",
+        "Calculate percentage as (count / len(df) * 100)",
+        "Filter to only columns with missing > 0",
+        "Sort by missing_percentage descending"
+      ],
+      "id": "m2.1_q017",
+      "points": 3,
+      "question": "Implement a function to calculate the percentage of missing data for each column and visualize the top 10 columns with most missing data.",
+      "solution": "import pandas as pd\nimport numpy as np\n\ndef missing_data_summary(df: pd.DataFrame, top_n: int = 10) -> pd.DataFrame:\n    \"\"\"\n    Calculate missing data percentages and return top N columns.\n    \n    Args:\n        df: Input DataFrame\n        top_n: Number of top columns to return\n    \n    Returns:\n        DataFrame with missing data statistics\n    \"\"\"\n    missing_count = df.isnull().sum()\n    missing_pct = (missing_count / len(df) * 100).round(2)\n    \n    summary = pd.DataFrame({\n        'column_name': missing_count.index,\n        'missing_count': missing_count.values,\n        'missing_percentage': missing_pct.values\n    })\n    \n    summary = summary[summary['missing_count'] > 0].sort_values(\n        'missing_percentage', ascending=False\n    ).head(top_n).reset_index(drop=True)\n    \n    return summary",
+      "starter_code": "import pandas as pd\nimport numpy as np\n\ndef missing_data_summary(df: pd.DataFrame, top_n: int = 10) -> pd.DataFrame:\n    \"\"\"\n    Calculate missing data percentages and return top N columns.\n    \n    Args:\n        df: Input DataFrame\n        top_n: Number of top columns to return\n    \n    Returns:\n        DataFrame with columns: 'column_name', 'missing_count', 'missing_percentage'\n        sorted by missing percentage (descending)\n    \"\"\"\n    # YOUR CODE HERE\n    pass",
+      "test_cases": [
+        {
+          "description": "Identify columns with most missing data",
+          "expected_output": "Top 3 columns by missing percentage",
+          "input": {
+            "df": "pd.DataFrame with 5 columns, varying missing percentages",
+            "top_n": 3
+          }
+        }
+      ],
+      "topic": "missing_data_analysis",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "id": "m2.1_q018",
+      "keywords": [
+        "MCAR",
+        "MAR",
+        "MNAR",
+        "missingness mechanism",
+        "imputation",
+        "bias",
+        "listwise deletion"
+      ],
+      "points": 4,
+      "question": "Explain the difference between Missing Completely At Random (MCAR), Missing At Random (MAR), and Missing Not At Random (MNAR) in the context of semiconductor manufacturing data. Provide an example of each and discuss implications for analysis.",
+      "rubric": [
+        "Correctly defines MCAR, MAR, and MNAR (1.5 points)",
+        "Provides relevant semiconductor manufacturing examples for each (1 point)",
+        "Discusses analytical implications and handling strategies (1 point)",
+        "Identifies common patterns in manufacturing context (0.5 points)"
+      ],
+      "sample_answer": "**Missing Completely At Random (MCAR)**:\nThe probability of missingness is unrelated to any observed or unobserved data.\n\n*Example*: A measurement system randomly crashes due to software bugs, losing data for arbitrary wafers regardless of their properties.\n\n*Implications*: Safest case - listwise deletion or simple imputation doesn't introduce bias, just reduces statistical power.\n\n**Missing At Random (MAR)**:\nThe probability of missingness depends on observed data but not on the unobserved values themselves.\n\n*Example*: Older fabrication tools lack certain sensors, so some process parameters are missing for older tools but not newer ones. The missingness depends on tool age (observed) but not on the missing parameter values.\n\n*Implications*: Can be handled with sophisticated methods (multiple imputation, maximum likelihood) that condition on observed data. Simple deletion may introduce bias.\n\n**Missing Not At Random (MNAR)**:\nThe probability of missingness depends on the unobserved values themselves.\n\n*Example*: A metrology tool fails to measure extreme outliers (very thin or thick wafers), so missing thickness data indicates problematic values.\n\n*Implications*: Most problematic - standard imputation methods will be biased. Requires domain knowledge, sensitivity analysis, or specialized modeling to account for the missingness mechanism.\n\n**Manufacturing Impact**:\nIn semiconductor manufacturing, MNAR is common because measurement failures often correlate with abnormal process conditions. Ignoring this can lead to overestimating process capability or missing quality issues.",
+      "topic": "missing_data_analysis",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "id": "m2.1_q019",
+      "keywords": [
+        "schema validation",
+        "format validation",
+        "range validation",
+        "consistency check",
+        "outlier detection",
+        "completeness",
+        "duplicate detection",
+        "referential integrity"
+      ],
+      "points": 3,
+      "question": "In a semiconductor fab, you need to establish data quality rules for incoming process data. Describe a comprehensive data validation framework covering different types of checks. What order should these checks be performed?",
+      "rubric": [
+        "Identifies 5+ types of validation checks (1 point)",
+        "Provides correct order with justification (0.75 points)",
+        "Includes specific semiconductor examples (0.75 points)",
+        "Discusses implementation best practices (0.5 points)"
+      ],
+      "sample_answer": "**Comprehensive Data Validation Framework** (ordered by priority):\n\n**1. Schema Validation** (First)\n- Check data types (integers, floats, strings, datetimes)\n- Verify required columns are present\n- Ensure no unexpected columns appear\n*Reason*: Must establish data structure before content checks\n\n**2. Format Validation**\n- Validate ID patterns (wafer IDs, lot numbers) using regex\n- Check timestamp formats are consistent\n- Verify categorical values are from allowed sets\n*Example*: Wafer IDs must match 'W####-A##' pattern\n\n**3. Range/Constraint Validation**\n- Physical constraints (temperature > 0K, pressure > 0)\n- Process specification limits (temp 400-600\u00b0C)\n- Logical constraints (start_time < end_time)\n*Example*: Etch rate between 10-500 nm/min\n\n**4. Consistency/Cross-Field Validation**\n- Check relationships between fields\n- Verify calculated fields match raw data\n- Ensure process step sequences are valid\n*Example*: If process_step='etch', etch_time must not be null\n\n**5. Statistical/Outlier Detection**\n- Flag extreme values (z-score > 3 or IQR method)\n- Check for impossibly constant values (sensor stuck)\n- Detect suspicious patterns\n*Example*: All temperatures identical for 100 consecutive wafers\n\n**6. Completeness Checks**\n- Identify missing values\n- Calculate missingness patterns\n- Flag records with excessive missingness\n\n**7. Duplicate Detection**\n- Check for duplicate primary keys\n- Identify near-duplicates with small differences\n- Verify legitimate rework vs errors\n\n**8. Referential Integrity** (if applicable)\n- Verify foreign keys exist in reference tables\n- Check that lot IDs, tool IDs exist in master data\n\n**Best Practices**:\n- Implement as progressive pipeline\n- Log all validation failures with timestamps\n- Define action thresholds (warning vs reject)\n- Provide feedback to data source\n- Re-validate after any data transformations",
+      "topic": "data_validation",
+      "type": "conceptual"
+    },
+    {
+      "difficulty": "medium",
+      "id": "m2.1_q020",
+      "keywords": [
+        "listwise deletion",
+        "bias",
+        "MCAR",
+        "statistical power",
+        "complete case analysis",
+        "missing data"
+      ],
+      "points": 3,
+      "question": "Explain why simple listwise deletion (removing all rows with any missing values) can be problematic in semiconductor manufacturing datasets. Under what conditions might it be acceptable?",
+      "rubric": [
+        "Identifies 3+ problems with listwise deletion (1 point)",
+        "Discusses bias and representativeness issues (0.75 points)",
+        "Specifies conditions where deletion is acceptable (0.75 points)",
+        "Provides semiconductor-specific context (0.5 points)"
+      ],
+      "sample_answer": "**Problems with Listwise Deletion**:\n\n**1. Severe Data Loss**\n- Semiconductor datasets often have many columns (100+ process parameters)\n- Even 1-2% missing per column can result in losing 30-50% of rows\n- Loss of statistical power makes analysis unreliable\n*Example*: With 100 parameters each 2% missing independently, ~87% of rows lost\n\n**2. Biased Results**\n- If missingness is not MCAR, deletion creates unrepresentative sample\n- May systematically exclude problematic wafers/tools\n- Can overestimate process capability or yield\n*Example*: Deleting wafers with missing measurements might remove defective units\n\n**3. Loss of Temporal Information**\n- Time-series gaps disrupt continuity\n- Can miss process drifts or trends\n- Reduces ability to model dynamics\n\n**4. Loss of Rare Events**\n- Manufacturing datasets often have class imbalance\n- Deleting rows may disproportionately affect minority class\n*Example*: Defect analysis where defective wafers more likely to have missing data\n\n**When Listwise Deletion IS Acceptable**:\n\n**1. Very Low Missing Rate**\n- <5% of rows affected AND data is MCAR\n- Statistical power remains adequate\n- Missingness verified to be random\n\n**2. Complete Case Analysis is Required**\n- Certain algorithms absolutely require complete data\n- As a baseline comparison for imputation methods\n- Regulatory requirements for specific analyses\n\n**3. Exploratory Phase**\n- Initial data exploration and visualization\n- Quick prototyping before implementing sophisticated imputation\n- Understanding patterns in complete cases\n\n**4. Missingness Carries Information**\n- When missing itself indicates a quality issue\n- Justified business rule (e.g., incomplete records are invalid)\n- Part of a larger quality control process\n\n**Best Practice**: Always compare results with and without deletion, document assumptions, and consider multiple imputation methods before final analysis.",
+      "topic": "missing_data_analysis",
+      "type": "conceptual"
+    },
+    {
+      "correct_answer": "D",
+      "difficulty": "hard",
+      "explanation": "Mixed units often create bimodal or suspicious distributions. For example, temperatures in both \u00b0C (400-600) and K (673-873) would show two distinct clusters. Summary statistics (histogram, box plot) can reveal this. Options A-C won't detect numeric values with wrong units.",
+      "id": "m2.1_q021",
+      "options": [
+        "Check data types to ensure all are numeric",
+        "Apply range validation with separate thresholds for expected units",
+        "Use regular expressions to find unit indicators in string values",
+        "Calculate summary statistics and look for bimodal distributions"
+      ],
+      "points": 1,
+      "question": "When cleaning a dataset with unit inconsistencies (some temperatures in \u00b0C, others in K), what is the best validation approach to detect this issue?",
+      "topic": "data_validation",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": "D",
+      "difficulty": "medium",
+      "explanation": "This is structural missingness - yield data cannot exist yet for wafers still in production. It's by design, not random. This is different from the three missingness mechanisms (MCAR/MAR/MNAR) which describe unintended data loss.",
+      "id": "m2.1_q022",
+      "options": [
+        "MCAR - purely random system issue",
+        "MAR - depends on observed process stage",
+        "MNAR - depends on the (unknown) yield value",
+        "Structural - inherent to data collection design"
+      ],
+      "points": 1,
+      "question": "In a production dataset, you find that 30% of wafers have missing yield data, but all other parameters are complete. Investigation shows these are wafers still in progress. What type of missing data is this?",
+      "topic": "missing_data_analysis",
+      "type": "multiple_choice"
+    },
+    {
+      "correct_answer": "D",
+      "difficulty": "easy",
+      "explanation": "Referential integrity ensures that foreign keys (wafer IDs in test data) match primary keys (wafer IDs in process data). Without this, joins fail or produce incorrect results. The other dimensions matter but are secondary to being able to link records correctly.",
+      "id": "m2.1_q023",
+      "options": [
+        "Completeness",
+        "Accuracy",
+        "Consistency",
+        "Referential integrity"
+      ],
+      "points": 1,
+      "question": "Which data quality dimension is most critical when joining wafer test data with process parameter data by wafer ID?",
+      "topic": "data_quality",
+      "type": "multiple_choice"
+    },
+    {
+      "difficulty": "hard",
+      "hints": [
+        "Iterate through rows and evaluate each rule's condition",
+        "Collect all violated rules for each row",
+        "Use try-except to handle rule evaluation errors",
+        "Return empty DataFrame if no violations found"
+      ],
+      "id": "m2.1_q024",
+      "points": 4,
+      "question": "Implement a function to detect impossible value combinations in semiconductor data (e.g., high etch rate with low RF power, which is physically unlikely).",
+      "solution": "import pandas as pd\nimport numpy as np\n\ndef detect_impossible_combinations(df: pd.DataFrame, \n                                   rules: list) -> pd.DataFrame:\n    \"\"\"\n    Detect rows violating domain knowledge rules.\n    \n    Args:\n        df: Input DataFrame\n        rules: List of rule dictionaries\n    \n    Returns:\n        DataFrame with violations\n    \"\"\"\n    violations = []\n    \n    for idx, row in df.iterrows():\n        row_violations = []\n        for rule in rules:\n            try:\n                if rule['condition'](row):\n                    row_violations.append(rule['description'])\n            except Exception:\n                pass  # Skip if rule can't be evaluated\n        \n        if row_violations:\n            violations.append({\n                'row_index': idx,\n                'violated_rules': '; '.join(row_violations)\n            })\n    \n    return pd.DataFrame(violations) if violations else pd.DataFrame(columns=['row_index', 'violated_rules'])",
+      "starter_code": "import pandas as pd\nimport numpy as np\n\ndef detect_impossible_combinations(df: pd.DataFrame, \n                                   rules: list) -> pd.DataFrame:\n    \"\"\"\n    Detect rows violating domain knowledge rules.\n    \n    Args:\n        df: Input DataFrame\n        rules: List of dicts with 'condition' (lambda) and 'description' (str)\n               Example: {'condition': lambda row: row['temp'] > 500 and row['pressure'] < 10,\n                        'description': 'High temp requires high pressure'}\n    \n    Returns:\n        DataFrame with columns: row_index, violated_rules\n    \"\"\"\n    # YOUR CODE HERE\n    pass",
+      "test_cases": [
+        {
+          "description": "Detect physically impossible parameter combination",
+          "expected_output": "1 violation detected for row 0",
+          "input": {
+            "df": "pd.DataFrame({'temp': [500, 300], 'pressure': [5, 50]})",
+            "rules": [
+              {
+                "condition": "lambda row: row['temp'] > 450 and row['pressure'] < 10",
+                "description": "Impossible: high temp with low pressure"
+              }
+            ]
+          }
+        }
+      ],
+      "topic": "data_validation",
+      "type": "coding_exercise"
+    },
+    {
+      "difficulty": "hard",
+      "id": "m2.1_q025",
+      "keywords": [
+        "imputation",
+        "real-time decision",
+        "criticality",
+        "missing rate threshold",
+        "flag",
+        "uncertainty",
+        "root cause"
+      ],
+      "points": 3,
+      "question": "Describe a systematic approach for deciding whether to impute, delete, or flag missing data in a real-time semiconductor manufacturing environment where immediate decisions are required.",
+      "rubric": [
+        "Provides systematic decision framework (1 point)",
+        "Distinguishes between criticality levels (0.75 points)",
+        "Addresses real-time constraints with time-based tiers (0.75 points)",
+        "Includes practical implementation details (0.5 points)"
+      ],
+      "sample_answer": "**Real-Time Missing Data Decision Framework**:\n\n**Step 1: Classify Criticality**\n- **Critical parameters** (safety, quality gates): Cannot proceed with missing data\n- **Important parameters** (process control): Impact decisions but alternatives exist  \n- **Nice-to-have parameters** (monitoring only): Missing values acceptable\n\n**Step 2: Assess Missingness Rate**\n- **<5% missing**: Imputation usually safe\n- **5-20% missing**: Careful imputation with uncertainty quantification\n- **>20% missing**: Consider data invalid, investigate root cause\n\n**Step 3: Determine Missingness Pattern**\n- **Single random values**: Forward fill or linear interpolation (time-series) or KNN\n- **Entire sensor failure**: Flag and use redundant sensor or escalate\n- **Systematic pattern**: Investigate root cause, may indicate equipment issue\n\n**Decision Matrix**:\n\n**IMPUTE when**:\n- Missing rate <10% AND parameter is non-critical or important\n- Time-series data with short gaps (<5 consecutive points)\n- Historical patterns strong (high autocorrelation)\n- Redundant measurements available for cross-validation\n*Action*: Use forward fill (time-series) or KNN (cross-sectional), flag as imputed\n\n**DELETE/SKIP when**:\n- Missing rate >20% for that wafer/batch\n- Critical parameter missing (yield prediction, qualification)\n- Missingness indicates quality issue (MNAR case)\n- Real-time decision can be delayed for complete data\n*Action*: Quarantine wafer/lot, request re-measurement if possible\n\n**FLAG and PROCEED when**:\n- Non-critical parameter for monitoring only\n- Imputation would be unreliable but decision must be made\n- Multiple parameters missing, creating compounding uncertainty\n*Action*: Mark record as \"low confidence,\" proceed with caution, trigger alert\n\n**Real-Time Implementation**:\n1. **Immediate (<1 sec)**: Apply rule-based decisions (impute if <5%, flag if >20%)\n2. **Short-term (1-60 sec)**: Check redundant sensors, simple imputation methods\n3. **Medium-term (1-10 min)**: Advanced imputation if needed, engineering notification\n4. **Long-term**: Root cause analysis, sensor maintenance, process improvement\n\n**Key Principles**:\n- Err on side of caution for safety/quality parameters\n- Always document imputation methods and flag imputed values\n- Maintain imputation uncertainty estimates\n- Trigger alarms for unusual missing patterns\n- Continuous learning: compare imputed vs actual (when later measured)",
+      "topic": "missing_data_analysis",
+      "type": "conceptual"
+    }
+  ],
+  "sub_module": "2.1",
+  "title": "Data Quality and Validation for Semiconductor Manufacturing",
+  "week": 4
+}

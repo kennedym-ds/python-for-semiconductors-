@@ -1,0 +1,74 @@
+{
+  "metadata": {
+    "author": "Your Name",
+    "created_date": "2025-09-30",
+    "description": "Example conceptual question",
+    "updated_date": "2025-09-30"
+  },
+  "module_id": "module-X.Y",
+  "questions": [
+    {
+      "difficulty": "hard",
+      "explanation": "A strong answer should mention: (1) Unsupervised learning approaches like isolation forests or autoencoders since normal patterns may vary; (2) Semiconductor-specific factors like tool-to-tool variation, recipe changes requiring model adaptation, and the cost of false alarms halting production; (3) Deployment considerations including model retraining frequency, integration with existing MES systems, and establishing appropriate alert thresholds to balance detection vs. false positives.",
+      "hints": [
+        "Consider that you may not have labeled examples of all anomaly types",
+        "Think about the cost of stopping production for a false alarm",
+        "Remember that semiconductor processes drift slowly over time"
+      ],
+      "id": "mX.Y_q003",
+      "points": 10,
+      "question": "Explain how you would approach detecting anomalous wafer patterns in a production environment. Discuss at least three considerations specific to semiconductor manufacturing that would influence your choice of algorithm and deployment strategy.",
+      "rubric": [
+        {
+          "criteria": "Identifies appropriate ML algorithms for anomaly detection",
+          "keywords": [
+            "isolation forest",
+            "autoencoder",
+            "one-class svm",
+            "clustering",
+            "statistical process control"
+          ],
+          "points": 3
+        },
+        {
+          "criteria": "Discusses semiconductor-specific considerations",
+          "keywords": [
+            "process variation",
+            "tool drift",
+            "recipe changes",
+            "false positives",
+            "production impact",
+            "real-time constraints"
+          ],
+          "points": 3
+        },
+        {
+          "criteria": "Addresses deployment and operational challenges",
+          "keywords": [
+            "model retraining",
+            "threshold tuning",
+            "alert fatigue",
+            "integration",
+            "monitoring",
+            "feedback loop"
+          ],
+          "points": 2
+        },
+        {
+          "criteria": "Provides clear, logical reasoning",
+          "keywords": [],
+          "points": 2
+        }
+      ],
+      "tags": [
+        "anomaly_detection",
+        "deployment",
+        "semiconductor_operations",
+        "ml_strategy"
+      ],
+      "topic": "ml_application",
+      "type": "conceptual"
+    }
+  ],
+  "version": "1.0"
+}
