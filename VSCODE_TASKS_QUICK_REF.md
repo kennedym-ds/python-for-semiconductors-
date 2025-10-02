@@ -7,8 +7,8 @@ Press `Ctrl+Shift+P` → `Tasks: Run Task` (or `Ctrl+Shift+B`)
 | Task | Purpose | When to Use |
 |------|---------|-------------|
 | **Streamlit: Run Assessment App** | Launch interactive assessment system | Taking assessments, viewing progress |
+| **Jupyter: Start Lab** | Launch JupyterLab | Working with notebooks |
 | **Env: Setup Full** | Install all dependencies | First-time setup |
-| **Env: Install Streamlit Requirements** | Install only Streamlit dependencies | Quick setup for assessments only |
 | **Assessment: Validate All** | Check all assessment files | After editing assessments |
 | **Database: Backup Assessment Results** | Save progress data | Before major changes |
 
@@ -61,10 +61,13 @@ Assessment: Validate Specific Module  → Check one module (pick from list)
 
 ---
 
-## 🧪 Testing
+## 🧪 Testing & Jupyter
 
 ```
-Test Grading Script                   → Run pytest on grading system
+Jupyter: Start Lab                    → Launch JupyterLab
+Jupyter: Start Notebook               → Launch classic Jupyter Notebook
+Tests: Run All                        → Run all tests with pytest
+Tests: Run with Coverage              → Run tests with coverage report
 ```
 
 ---
