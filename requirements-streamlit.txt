@@ -1,3 +1,7 @@
 # Additional requirements for Streamlit Assessment App
+# These packages are also included in requirements-full.txt
+# Install with: pip install -r requirements-streamlit.txt
+
 streamlit>=1.28.0
 plotly>=5.17.0
+pandas>=2.0.0

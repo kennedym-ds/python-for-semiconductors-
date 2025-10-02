@@ -38,4 +38,5 @@ repos:
       - id: check-ast
       - id: pretty-format-json
         args: [--autofix]
+        exclude: ^\.vscode/tasks\.json$  # VS Code tasks.json uses JSONC format (JSON with comments)
       - id: detect-private-key

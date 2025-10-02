@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added - VS Code Tasks & Workflow Automation
+
+- **Enhanced VS Code tasks** (`.vscode/tasks.json`) with 20+ tasks
+  * **Environment Setup** (10 tasks): Virtual env creation, dependency installation, tier management
+  * **Streamlit App** (3 tasks): Launch assessment app, auto-reload mode, fresh start with cleared cache
+  * **Database Management** (2 tasks): Backup and clear assessment results with timestamps
+  * **Assessment Validation** (2 tasks): Validate all modules or specific module (interactive picker)
+  * **Pipeline Scripts** (1+ tasks): Run production ML pipelines with examples
+  * **Testing** (Multiple tasks): Existing grading and test tasks preserved
+- **Task documentation**
+  * **Complete guide** (`.vscode/TASKS_README.md`) - 300+ lines covering all tasks, workflows, troubleshooting
+  * **Quick reference** (`VSCODE_TASKS_QUICK_REF.md`) - One-page cheat sheet for common tasks
+  * Includes quick start workflows, keyboard shortcuts, pro tips
+- **Updated requirements** (`requirements-streamlit.txt`)
+  * Added pandas>=2.0.0 (required for Streamlit app)
+  * Added installation instructions comment
+
 ### Added - Interactive Streamlit Assessment Application
 
 - **Created Streamlit web app** (`assessments/assessment_app.py`) for taking assessments

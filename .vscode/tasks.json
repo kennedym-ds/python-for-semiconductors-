@@ -1,5 +1,8 @@
 {
   "tasks": [
+    // ============================================================
+    // Environment Setup Tasks
+    // ============================================================
     {
       "args": [
         "env_setup.py",
@@ -61,6 +64,214 @@
       "problemMatcher": [],
       "type": "shell"
     },
+    {
+      "label": "Env: Create Virtual Environment",
+      "type": "shell",
+      "command": "python",
+      "args": ["-m", "venv", ".venv"],
+      "group": "none",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Env: Activate Virtual Environment (Info)",
+      "type": "shell",
+      "command": "echo",
+      "windows": {
+        "args": [
+          "To activate the virtual environment, run: .venv\\Scripts\\Activate.ps1 (PowerShell) or .venv\\Scripts\\activate.bat (CMD)"
+        ]
+      },
+      "linux": {
+        "args": ["To activate the virtual environment, run: source .venv/bin/activate"]
+      },
+      "osx": {
+        "args": ["To activate the virtual environment, run: source .venv/bin/activate"]
+      },
+      "group": "none",
+      "problemMatcher": []
+    },
+    {
+      "label": "Env: Install Streamlit Requirements",
+      "type": "shell",
+      "command": "python",
+      "args": ["-m", "pip", "install", "-r", "requirements-streamlit.txt"],
+      "group": "none",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Env: Install All Requirements",
+      "type": "shell",
+      "command": "python",
+      "args": ["-m", "pip", "install", "-r", "requirements-full.txt"],
+      "group": "none",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Env: Upgrade pip",
+      "type": "shell",
+      "command": "python",
+      "args": ["-m", "pip", "install", "--upgrade", "pip"],
+      "group": "none",
+      "problemMatcher": []
+    },
+    // ============================================================
+    // Streamlit Assessment App Tasks
+    // ============================================================
+    {
+      "label": "Streamlit: Run Assessment App",
+      "type": "shell",
+      "command": "streamlit",
+      "args": ["run", "assessments/assessment_app.py"],
+      "group": "none",
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "focus": true
+      }
+    },
+    {
+      "label": "Streamlit: Run Assessment App (with auto-reload)",
+      "type": "shell",
+      "command": "streamlit",
+      "args": [
+        "run",
+        "assessments/assessment_app.py",
+        "--server.runOnSave=true"
+      ],
+      "group": "none",
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "focus": true
+      }
+    },
+    {
+      "label": "Streamlit: Clear Cache and Run",
+      "type": "shell",
+      "command": "streamlit",
+      "args": [
+        "run",
+        "assessments/assessment_app.py",
+        "--server.runOnSave=true"
+      ],
+      "group": "none",
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "focus": true
+      },
+      "dependsOn": ["Database: Clear Assessment Results"]
+    },
+    // ============================================================
+    // Database Management Tasks
+    // ============================================================
+    {
+      "label": "Database: Clear Assessment Results",
+      "type": "shell",
+      "windows": {
+        "command": "if (Test-Path 'assessments/assessment_results.db') { Remove-Item 'assessments/assessment_results.db'; Write-Host 'Database cleared successfully' } else { Write-Host 'No database file found' }"
+      },
+      "linux": {
+        "command": "rm -f assessments/assessment_results.db && echo 'Database cleared successfully' || echo 'No database file found'"
+      },
+      "osx": {
+        "command": "rm -f assessments/assessment_results.db && echo 'Database cleared successfully' || echo 'No database file found'"
+      },
+      "group": "none",
+      "problemMatcher": []
+    },
+    {
+      "label": "Database: Backup Assessment Results",
+      "type": "shell",
+      "windows": {
+        "command": "if (Test-Path 'assessments/assessment_results.db') { Copy-Item 'assessments/assessment_results.db' \"assessments/assessment_results_backup_$(Get-Date -Format 'yyyyMMdd_HHmmss').db\"; Write-Host 'Database backed up successfully' } else { Write-Host 'No database file found' }"
+      },
+      "linux": {
+        "command": "[ -f assessments/assessment_results.db ] && cp assessments/assessment_results.db \"assessments/assessment_results_backup_$(date +%Y%m%d_%H%M%S).db\" && echo 'Database backed up successfully' || echo 'No database file found'"
+      },
+      "osx": {
+        "command": "[ -f assessments/assessment_results.db ] && cp assessments/assessment_results.db \"assessments/assessment_results_backup_$(date +%Y%m%d_%H%M%S).db\" && echo 'Database backed up successfully' || echo 'No database file found'"
+      },
+      "group": "none",
+      "problemMatcher": []
+    },
+    // ============================================================
+    // Assessment Validation Tasks
+    // ============================================================
+    {
+      "label": "Assessment: Validate All",
+      "type": "shell",
+      "command": "python",
+      "args": ["assessments/validation/validate_all.py", "--verbose"],
+      "group": "test",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Assessment: Validate Specific Module",
+      "type": "shell",
+      "command": "python",
+      "args": [
+        "assessments/validation/validate_all.py",
+        "--module",
+        "${input:moduleId}",
+        "--verbose"
+      ],
+      "group": "test",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    // ============================================================
+    // Pipeline Script Tasks
+    // ============================================================
+    {
+      "label": "Pipeline: Run Module 3.1 Regression",
+      "type": "shell",
+      "command": "python",
+      "args": [
+        "modules/foundation/module-3/3.1-regression-pipeline.py",
+        "train",
+        "--data",
+        "datasets/secom/secom.data",
+        "--labels",
+        "datasets/secom/secom_labels.data",
+        "--output",
+        "models/regression_model.pkl"
+      ],
+      "group": "none",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    // ============================================================
+    // Testing Tasks
+    // ============================================================
     {
       "args": [
         "-m",
@@ -295,5 +506,26 @@
       "type": "shell"
     }
   ],
-  "version": "2.0.0"
+  "version": "2.0.0",
+  "inputs": [
+    {
+      "id": "moduleId",
+      "type": "pickString",
+      "description": "Select module to validate",
+      "options": [
+        "module-1",
+        "module-2",
+        "module-3",
+        "module-4",
+        "module-5",
+        "module-6",
+        "module-7",
+        "module-8",
+        "module-9",
+        "module-10",
+        "module-11"
+      ],
+      "default": "module-1"
+    }
+  ]
 }
