@@ -75,18 +75,21 @@ Tests: Run with Coverage              → Run tests with coverage report
 ## 🎯 Quick Workflows
 
 ### First Time User
+
 1. `Env: Create Virtual Environment`
 2. Activate environment in terminal
 3. `Env: Install Streamlit Requirements`
 4. `Streamlit: Run Assessment App`
 
 ### Developer
+
 1. Activate `.venv`
 2. `Streamlit: Run Assessment App (with auto-reload)`
 3. Edit files → auto-reload
 4. `Assessment: Validate All`
 
 ### Fresh Start
+
 1. `Database: Backup Assessment Results`
 2. `Env: Recreate Full (Force)`
 3. `Streamlit: Clear Cache and Run`

@@ -5,6 +5,7 @@ Interactive web application for taking assessments, tracking progress, and visua
 ## Features
 
 ### 🎓 Assessment Taking
+
 - **Interactive Quiz Interface**: Take assessments with a clean, user-friendly interface
 - **Multiple Question Types**:
   - Multiple Choice: Radio button selection
@@ -15,6 +16,7 @@ Interactive web application for taking assessments, tracking progress, and visua
 - **Auto-Save**: Answers are saved as you progress
 
 ### 📊 Progress Visualization
+
 - **Score Progression**: Line chart showing scores over time
 - **Module Performance**: Bar charts comparing performance across modules
 - **Summary Statistics**:
@@ -25,6 +27,7 @@ Interactive web application for taking assessments, tracking progress, and visua
 - **Recent Activity**: Table of recent assessment attempts
 
 ### 💾 Data Persistence
+
 - **SQLite Database**: All results stored locally in `assessment_results.db`
 - **User Profiles**: Track multiple users with unique IDs
 - **Detailed Records**: Question-level response tracking
@@ -107,12 +110,14 @@ assessments/
 ## Database Schema
 
 ### Users Table
+
 - `user_id` (Primary Key): Unique user identifier
 - `username`: Display name
 - `email`: Optional email address
 - `created_at`: Registration timestamp
 
 ### Assessment Attempts Table
+
 - `attempt_id` (Primary Key): Unique attempt identifier
 - `user_id` (Foreign Key): User who took the assessment
 - `module_id`: Module identifier (e.g., "module-1")
@@ -125,6 +130,7 @@ assessments/
 - `time_taken_seconds`: Time taken to complete
 
 ### Question Responses Table
+
 - `response_id` (Primary Key): Unique response identifier
 - `attempt_id` (Foreign Key): Associated attempt
 - `question_id`: Question identifier
@@ -138,15 +144,18 @@ assessments/
 ## Grading Logic
 
 ### Multiple Choice
+
 - **Correct**: Full points awarded
 - **Incorrect**: Zero points
 
 ### Coding Exercises
+
 - **Production Note**: In a production system, code would be executed in a sandboxed environment with test cases
 - **Current Implementation**: Partial credit (80%) awarded if code is provided
 - **Future Enhancement**: Integration with code execution engine
 
 ### Conceptual Questions
+
 - **Keyword Matching**: Checks for keywords from rubric in answer
 - **Partial Credit**: Points awarded based on matching criteria
 - **Threshold**: 70% of points required to mark as "correct"
@@ -155,17 +164,20 @@ assessments/
 ## Features by Page
 
 ### Login Page
+
 - User registration and authentication
 - Email capture (optional)
 - Auto-login for returning users
 
 ### Dashboard (Select Assessment)
+
 - Quick stats overview (4 metrics)
 - Module selection dropdown
 - Sub-module selection based on available questions
 - Assessment preview (question count, total points)
 
 ### Assessment Taking Page
+
 - Progress indicator (e.g., "Question 3 of 20")
 - Question rendering based on type
 - Answer input (radio buttons, code editor, or text area)
@@ -173,12 +185,14 @@ assessments/
 - Auto-save on navigation
 
 ### Results Page
+
 - Overall score display (3 metrics)
 - Question-by-question breakdown table
 - Personalized feedback based on performance
 - Return to dashboard button
 
 ### Progress Page
+
 - Summary statistics (4 metrics)
 - Line chart: Score progression over time with passing thresholds
 - Bar chart: Average score by module
@@ -187,10 +201,13 @@ assessments/
 ## Configuration
 
 ### Passing Score
+
 Default: 70% (defined in grading logic)
 
 ### Available Modules
+
 All 11 modules are available:
+
 - Module 1: Python & Data Fundamentals
 - Module 2: Data Quality & Statistical Analysis
 - Module 3: Introduction to Machine Learning
@@ -206,6 +223,7 @@ All 11 modules are available:
 ## Troubleshooting
 
 ### App Won't Start
+
 ```powershell
 # Reinstall dependencies
 pip install --upgrade streamlit plotly pandas
@@ -215,6 +233,7 @@ python --version
 ```
 
 ### Database Errors
+
 ```powershell
 # Delete and recreate database
 Remove-Item assessments/assessment_results.db
@@ -222,14 +241,17 @@ Remove-Item assessments/assessment_results.db
 ```
 
 ### Questions Not Loading
+
 - Verify question JSON files exist in module directories
 - Check file naming: `X.Y-questions.json` format
 - Validate JSON syntax using validation script:
+
   ```powershell
   python assessments/validation/validate_all.py --module 1
   ```
 
 ### Port Already in Use
+
 ```powershell
 # Use a different port
 streamlit run assessments/assessment_app.py --server.port 8502
@@ -240,14 +262,17 @@ streamlit run assessments/assessment_app.py --server.port 8502
 ### Adding New Features
 
 **Custom Grading Logic**:
+
 - Modify `grade_*` functions in `assessment_app.py`
 - Add new question types in rendering section
 
 **New Visualizations**:
+
 - Add Plotly charts in `page_progress()` function
 - Query database for new metrics
 
 **Export Functionality**:
+
 - Add CSV/PDF export buttons
 - Use pandas `.to_csv()` or ReportLab for PDF
 
@@ -265,12 +290,14 @@ streamlit run assessments/assessment_app.py --server.port 8502
 ## Security Considerations
 
 **Current Implementation** (Development/Education):
+
 - Local SQLite database (not suitable for production)
 - No password authentication
 - User IDs are self-assigned
 - Code execution is simulated (not sandboxed)
 
 **Production Enhancements Needed**:
+
 - Authentication system (OAuth, JWT)
 - Password hashing
 - Sandboxed code execution (Docker, AWS Lambda)
@@ -298,6 +325,7 @@ streamlit run assessments/assessment_app.py --server.port 8502
 ## Support
 
 For issues or questions:
+
 1. Check the troubleshooting section above
 2. Validate question files with the validation script
 3. Review database schema for data integrity

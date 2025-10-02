@@ -17,6 +17,7 @@ Alternatively, use the keyboard shortcut: `Ctrl+Shift+B` (Windows/Linux) or `Cmd
 ### 🔧 Environment Setup Tasks
 
 #### **Env: Create Virtual Environment**
+
 Creates a new Python virtual environment in the `.venv` directory.
 
 ```bash
@@ -26,6 +27,7 @@ python -m venv .venv
 **When to use**: First time setup or when you need a fresh environment.
 
 #### **Env: Activate Virtual Environment (Info)**
+
 Displays instructions for activating the virtual environment in your terminal.
 
 - **PowerShell**: `.venv\Scripts\Activate.ps1`
@@ -33,6 +35,7 @@ Displays instructions for activating the virtual environment in your terminal.
 - **Mac/Linux**: `source .venv/bin/activate`
 
 #### **Env: Setup Basic**
+
 Installs basic tier dependencies (core Python libraries).
 
 ```bash
@@ -42,6 +45,7 @@ python env_setup.py --tier basic
 **Includes**: numpy, pandas, matplotlib, scikit-learn, jupyter
 
 #### **Env: Setup Intermediate**
+
 Installs intermediate tier dependencies (adds time series and additional ML tools).
 
 ```bash
@@ -51,6 +55,7 @@ python env_setup.py --tier intermediate
 **Includes**: Basic tier + statsmodels, pmdarima, prophet
 
 #### **Env: Setup Advanced**
+
 Installs advanced tier dependencies (adds deep learning).
 
 ```bash
@@ -60,6 +65,7 @@ python env_setup.py --tier advanced
 **Includes**: Intermediate tier + tensorflow, keras, torch, opencv
 
 #### **Env: Setup Full**
+
 Installs ALL dependencies including MLOps, visualization, and advanced tools.
 
 ```bash
@@ -69,6 +75,7 @@ python env_setup.py --tier full
 **Includes**: Everything (MLflow, Streamlit, Plotly, Dash, etc.)
 
 #### **Env: Recreate Full (Force)**
+
 Forcefully recreates the full environment from scratch.
 
 ```bash
@@ -78,6 +85,7 @@ python env_setup.py --tier full --force
 **When to use**: When your environment is corrupted or you need a clean slate.
 
 #### **Env: Install Streamlit Requirements**
+
 Installs only the requirements needed for the Streamlit assessment app.
 
 ```bash
@@ -87,6 +95,7 @@ pip install -r requirements-streamlit.txt
 **When to use**: Quick setup if you only want to run the assessment application.
 
 #### **Env: Install All Requirements**
+
 Directly installs all requirements from requirements-full.txt.
 
 ```bash
@@ -94,6 +103,7 @@ pip install -r requirements-full.txt
 ```
 
 #### **Env: Upgrade pip**
+
 Upgrades pip to the latest version.
 
 ```bash
@@ -105,6 +115,7 @@ pip install --upgrade pip
 ### 📊 Streamlit Assessment App Tasks
 
 #### **Streamlit: Run Assessment App**
+
 Launches the interactive assessment application in your browser.
 
 ```bash
@@ -112,6 +123,7 @@ streamlit run assessments/assessment_app.py
 ```
 
 **Features**:
+
 - Take module assessments interactively
 - Track your progress over time
 - View performance analytics with charts
@@ -120,6 +132,7 @@ streamlit run assessments/assessment_app.py
 **Access**: Opens automatically at `http://localhost:8501`
 
 #### **Streamlit: Run Assessment App (with auto-reload)**
+
 Runs the app with automatic reloading when you save changes to the code.
 
 ```bash
@@ -129,6 +142,7 @@ streamlit run assessments/assessment_app.py --server.runOnSave=true
 **When to use**: Development mode when making changes to the app.
 
 #### **Streamlit: Clear Cache and Run**
+
 Clears the assessment database and then launches the app with a fresh start.
 
 **When to use**: Testing or when you want to reset all progress data.
@@ -138,9 +152,11 @@ Clears the assessment database and then launches the app with a fresh start.
 ### 🗄️ Database Management Tasks
 
 #### **Database: Clear Assessment Results**
+
 Deletes the SQLite database containing all assessment attempts and user data.
 
 **PowerShell**:
+
 ```powershell
 Remove-Item 'assessments/assessment_results.db'
 ```
@@ -148,6 +164,7 @@ Remove-Item 'assessments/assessment_results.db'
 **⚠️ Warning**: This permanently deletes all assessment history!
 
 #### **Database: Backup Assessment Results**
+
 Creates a timestamped backup of the assessment database.
 
 **Output**: `assessments/assessment_results_backup_YYYYMMDD_HHMMSS.db`
@@ -159,6 +176,7 @@ Creates a timestamped backup of the assessment database.
 ### ✅ Assessment Validation Tasks
 
 #### **Assessment: Validate All**
+
 Validates all assessment JSON files across all modules for schema compliance.
 
 ```bash
@@ -166,12 +184,14 @@ python assessments/validation/validate_all.py --verbose
 ```
 
 **Checks**:
+
 - JSON syntax validity
 - Required fields present
 - Correct data types
 - Question structure integrity
 
 #### **Assessment: Validate Specific Module**
+
 Validates assessments for a single module (interactive selection).
 
 ```bash
@@ -185,6 +205,7 @@ python assessments/validation/validate_all.py --module <module-id> --verbose
 ### 🚀 Pipeline Script Tasks
 
 #### **Pipeline: Run Module 3.1 Regression**
+
 Example task for running the regression pipeline from Module 3.
 
 ```bash
@@ -203,6 +224,7 @@ python modules/foundation/module-3/3.1-regression-pipeline.py train \
 All existing test tasks for the grading system and notebook validation are preserved.
 
 #### **Test Grading Script**
+
 Runs pytest on the grading script test suite.
 
 ```bash
@@ -259,6 +281,7 @@ pytest projects/starter/wafer_defect_classifier/test_evaluate_submission.py -v
 ### Task Customization
 
 You can modify tasks in `.vscode/tasks.json` to:
+
 - Change default parameters
 - Add new pipeline scripts
 - Create custom workflows
@@ -269,23 +292,29 @@ You can modify tasks in `.vscode/tasks.json` to:
 ## Troubleshooting
 
 ### Task Not Found
+
 **Issue**: Task doesn't appear in the task list  
 **Solution**: Reload VS Code window (`Ctrl+Shift+P` → "Developer: Reload Window")
 
 ### Permission Errors (Windows)
+
 **Issue**: PowerShell script execution blocked  
 **Solution**: Run `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`
 
 ### Streamlit Won't Start
+
 **Issue**: "streamlit: command not found"  
 **Solution**:
+
 1. Ensure virtual environment is activated
 2. Run `Env: Install Streamlit Requirements`
 3. Verify installation: `pip list | grep streamlit`
 
 ### Database Locked Error
+
 **Issue**: SQLite database is locked  
 **Solution**:
+
 1. Close all Streamlit app instances
 2. Run `Database: Backup Assessment Results`
 3. Run `Database: Clear Assessment Results`
