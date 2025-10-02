@@ -328,9 +328,9 @@ docker run -p 8888:8888 ml-semiconductors
 - [Industry Case Studies](docs/resources/industry-case-studies.md)
 - [Tool Comparison Guides](docs/resources/tool-comparison-guides.md)
 
-### Assessment Reports
-- [Week 4 Complete Summary](assessments/WEEK_4_COMPLETE.md)
-- [Testing Progress](assessments/WEEK_4_TESTING_PROGRESS.md)
+### Project Documentation
+- [CHANGELOG.md](CHANGELOG.md) - Complete version history
+- [README.md](README.md) - Main documentation and getting started
 
 ---
 
