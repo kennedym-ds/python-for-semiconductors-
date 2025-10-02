@@ -6,7 +6,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)[![CI](https://github.com/kennedym-ds/python-for-semiconductors-/actions/workflows/ci.yml/badge.svg)](https://github.com/kennedym-ds/python-for-semiconductors-/actions/workflows/ci.yml)**Current Status**: Production-ready with comprehensive testing and documentation
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)**Current Status**: Production-ready with comprehensive testing and documentation
 
 
 
@@ -14,7 +14,9 @@
 
 
 
-**Current Status**: Production-ready with comprehensive testing and documentation[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)- ✅ **Modules 1-11**: All content complete and validated (11 modules, 44 files)
+**Current Status**: Production-ready with comprehensive testing and documentation
+
+- ✅ **Modules 1-11**: All content complete and validated (11 modules, 44 files)
 
 
 

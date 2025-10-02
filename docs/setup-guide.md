@@ -6,7 +6,7 @@ This guide will help you set up your development environment for the Machine Lea
 
 ## Prerequisites
 
-- **Python 3.9+** (recommended: Python 3.11)
+- **Python 3.10+** (recommended: Python 3.11 or 3.12)
 - **Git** for version control
 - **Docker** (optional but recommended for consistency)
 - **8GB+ RAM** for ML workloads

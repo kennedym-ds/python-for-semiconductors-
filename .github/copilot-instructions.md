@@ -4,6 +4,43 @@
 
 This is a production-ready **educational platform** teaching ML to semiconductor engineers through an 11-module, 22-week curriculum. The codebase prioritizes **learner accessibility** over production optimization—code must be educational first, efficient second.
 
+## First-Time Setup (5 Minutes)
+
+Complete beginners should follow this path:
+
+1. **Install Python 3.10+**: Download from [python.org](https://python.org) (Python 3.11 or 3.12 recommended)
+2. **Clone repository**:
+   ```powershell
+   git clone https://github.com/kennedym-ds/python-for-semiconductors-.git
+   cd python-for-semiconductors-
+   ```
+3. **Setup environment**:
+   ```powershell
+   python env_setup.py --tier basic  # Start with foundation modules
+   ```
+4. **Verify installation**:
+   ```powershell
+   python verification.py  # Check all dependencies installed correctly
+   ```
+5. **Start learning**: Open `modules/foundation/module-1/1.1-python-engineers.ipynb` in Jupyter Lab
+
+**Note**: Use VS Code task `Env: Setup Basic` (Ctrl+Shift+B) for automated setup.
+
+## Docker Workflow (Optional)
+
+For reproducible environments across all platforms:
+
+```bash
+# Build and run with Docker
+docker build -t ml-semiconductors .
+docker run -p 8888:8888 ml-semiconductors
+
+# Or use Docker Compose
+docker-compose up --build
+```
+
+Access Jupyter Lab at `http://localhost:8888`. Docker provides consistency across Windows, macOS, and Linux.
+
 ## Architecture: The 4-Content-Type System
 
 Every module follows a strict 4-file pattern:
@@ -24,8 +61,14 @@ This project uses **hierarchical dependency tiers** managed through `pyproject.t
 python env_setup.py --tier basic        # Modules 1-3 (numpy, pandas, sklearn)
 python env_setup.py --tier intermediate # + Modules 4-5 (xgboost, lightgbm, statsmodels)
 python env_setup.py --tier advanced     # + Modules 6-9 (torch, tensorflow, mlflow)
-python env_setup.py --tier full         # + Everything (prophet, PySpice)
+python env_setup.py --tier full         # + Modules 10-11 + everything (prophet, PySpice)
 ```
+
+**Module-to-Tier Mapping**:
+- **Basic**: Modules 1-3 (Foundation: Python, data quality, intro ML)
+- **Intermediate**: Modules 4-5 (Advanced ML, time series)
+- **Advanced**: Modules 6-9 (Deep learning, CV, MLOps)
+- **Full**: Modules 10-11 (Project dev, edge AI) + all optional tools
 
 **Lockfiles**: `requirements-{tier}.txt` are pinned lockfiles generated via `tools/compile_tier_lockfiles.py`. When suggesting dependencies:
 - Check which tier the code belongs to (see README module mapping)
@@ -216,6 +259,35 @@ See `.vscode/TASKS_README.md` for detailed documentation.
 
 ❌ **Don't**: Skip the 4-content-type pattern when adding modules  
 ✅ **Do**: Create .ipynb + .md (theory) + .py (pipeline) + .md (quick ref) for every module
+
+## Common Learner Mistakes
+
+Prevent frequent errors that cause frustration:
+
+1. **Environment Setup Errors**
+   - ❌ Running `pip install -r requirements-full.txt` directly
+   - ✅ Always use `python env_setup.py --tier <level>` for proper setup
+   - Why: env_setup.py handles virtual env creation, pip upgrades, and cross-platform compatibility
+
+2. **Import Errors from Wrong Tier**
+   - ❌ Importing `torch` or `tensorflow` in Module 1-3 code
+   - ✅ Check tier requirements - stick to numpy/pandas/sklearn in foundation modules
+   - Why: Learners with basic tier won't have deep learning libraries
+
+3. **Path Issues**
+   - ❌ Hardcoding `C:\Users\...\datasets\secom` or `/home/.../datasets`
+   - ✅ Use `Path(__file__).parent.parent / "datasets" / "secom"`
+   - Why: Makes code portable across different machines and OSes
+
+4. **Reproducibility Problems**
+   - ❌ Forgetting to set `RANDOM_SEED = 42` in pipelines
+   - ✅ Always set random seed at top of file for consistent results
+   - Why: Critical for educational purposes and debugging
+
+5. **Assessment Validation**
+   - ❌ Committing question JSON files without validation
+   - ✅ Run `python assessments/validation/validate_all.py --module <N>` first
+   - Why: Prevents schema errors that break the assessment app
 
 ## Quick Commands Reference
 
