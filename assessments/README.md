@@ -7,6 +7,8 @@ This directory contains the assessment infrastructure for the Python for Semicon
 ```text
 assessments/
 ├── schema.json                    # JSON schema for question banks
+├── validation/                    # Validation tools
+│   └── validate_all.py           # Unified validation script
 ├── templates/                     # Question templates
 │   ├── multiple_choice.json      # Multiple choice template
 │   ├── coding_exercise.json      # Coding exercise template
@@ -124,6 +126,35 @@ Test deep understanding and ability to apply concepts.
 }
 ```
 
+### Validating Questions
+
+Before committing new or modified question files, validate them:
+
+```powershell
+# Validate all modules
+python validation/validate_all.py
+
+# Validate specific module(s)
+python validation/validate_all.py --module 3
+python validation/validate_all.py --module 4 9 11
+
+# Show warnings in addition to errors
+python validation/validate_all.py --verbose
+```
+
+The validation script checks:
+- JSON syntax correctness
+- Required fields presence
+- Question type validity
+- Difficulty level validity
+- Type-specific requirements (options, test_cases, rubric)
+- Question ID uniqueness within files
+
+For comprehensive testing including cross-file ID uniqueness, use:
+```powershell
+pytest tests/test_assessment_system.py
+```
+
 ### Creating Questions
 
 #### Step 1: Choose a Template
@@ -164,14 +195,14 @@ All questions must validate against `schema.json`. Key requirements:
 
 #### Step 4: Validate Questions
 
-Use the assessment system's validation:
+After creating or modifying questions, validate them:
 
-```python
-from modules.foundation.assessment_system import ModuleAssessment
+```powershell
+# Validate your module
+python validation/validate_all.py --module 1
 
-# Load and validate question bank
-assessment = ModuleAssessment.load_from_json("assessments/module-1/1.1-questions.json")
-print(f"Loaded {len(assessment.questions)} valid questions")
+# For full test suite validation
+pytest tests/test_assessment_system.py -v
 ```
 
 ### Using Assessments

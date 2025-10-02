@@ -5,6 +5,25 @@ All notable changes to the Python for Semiconductors learning series project wil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed - Assessment Validation Organization
+
+- **Removed 21 redundant validation scripts** from `assessments/` root directory
+  * Deleted `validate_phase_2_*.py` (6 files) - phase-specific validators
+  * Deleted `validate_module_*.py` (15 files) - module-specific validators
+- **Created `assessments/validation/` directory** for better organization
+- **Added unified validation script** (`validation/validate_all.py`)
+  * CLI support for validating all or specific modules
+  * Same validation logic as redundant scripts but more flexible
+  * Provides quick feedback without pytest overhead
+- **Updated documentation**
+  * `assessments/README.md` - Updated with new validation workflow
+  * `assessments/validation/README.md` - Usage guide and examples
+- **Rationale**: The comprehensive test suite (`tests/test_assessment_system.py`) already validates all 685 questions with more thorough checks including cross-file ID uniqueness. The 21 scattered scripts were development artifacts that cluttered the directory structure.
+
+---
+
 ## [1.0.0] - 2025-01-XX
 
 ### 🎉 v1.0 Release - Production Ready!
@@ -221,10 +240,11 @@ First production-ready release of the comprehensive Python for Semiconductors le
 - Module 11 questions (`11.1-questions.json`, `11.2-questions.json`) - 60 total
 - **Total: 685 questions across all 11 modules**
 
-### Added - Assessment Validation Scripts
+### Added - Assessment System
 
-- `assessments/validate_phase_2_1.py` - Validates all question files
 - `assessments/schema.json` - JSON schema for question validation
+- `assessments/validation/validate_all.py` - Unified validation script for quick checks
+- `tests/test_assessment_system.py` - Comprehensive test suite (32 tests)
 
 ---
 
