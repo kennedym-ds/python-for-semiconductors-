@@ -37,7 +37,11 @@ def test_train_and_evaluate_roundtrip(tmp_path):
 def test_predict_single_record(tmp_path):
     model_path = tmp_path / "model.joblib"
     run_cmd(["train", "--model", "kmeans", "--k", "3", "--save", str(model_path)])
-    record = '{"f1":0.1,"f2":-0.2,"f3":0.05,"f4":0.3,"f5":-0.1}'
+
+    # Generate correct number of features (18 features in synthetic dataset)
+    record_dict = {f"f{i+1}": 0.1 for i in range(18)}
+    record = json.dumps(record_dict)
+
     pred_out = run_cmd(["predict", "--model-path", str(model_path), "--input-json", record])
     assert pred_out["status"] == "predicted"
     assert pred_out["model"] == "kmeans"

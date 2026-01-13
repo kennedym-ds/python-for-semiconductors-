@@ -46,7 +46,7 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
-from sklearn.cluster import KMeans, DBSCAN
+from sklearn.cluster import KMeans, DBSCAN, MiniBatchKMeans
 from sklearn.mixture import GaussianMixture
 from sklearn.ensemble import IsolationForest
 from sklearn.metrics import (
@@ -130,7 +130,7 @@ class UnsupervisedPipeline:
     def __init__(
         self,
         model: str = "kmeans",
-        n_clusters: int = 6,
+        n_clusters: int | str = 6,
         pca_variance: Optional[float] = 0.95,
         dbscan_eps: float = 0.9,
         dbscan_min_samples: int = 12,
@@ -153,6 +153,28 @@ class UnsupervisedPipeline:
         self.feature_names: Optional[List[str]] = None
 
     # --------------- Internal Helpers --------------- #
+    def _find_optimal_k(self, X: np.ndarray, max_k: int = 10) -> int:
+        """Find optimal k using Silhouette Score."""
+        best_score = -1.0
+        best_k = 2
+
+        # Check if we have enough samples for k=max_k
+        limit_k = min(max_k, len(X) - 1)
+
+        for k in range(2, limit_k + 1):
+            if self.model_name == "minibatch_kmeans":
+                 kmeans = MiniBatchKMeans(n_clusters=k, random_state=self.seed, n_init="auto")
+            else:
+                 kmeans = KMeans(n_clusters=k, random_state=self.seed, n_init="auto")
+
+            labels = kmeans.fit_predict(X)
+            score = silhouette_score(X, labels)
+
+            if score > best_score:
+                best_score = score
+                best_k = k
+        return best_k
+
     def _prepare_features(self, X: pd.DataFrame, fit: bool) -> np.ndarray:
         """Scale and optionally apply PCA to features.
 
@@ -184,10 +206,20 @@ class UnsupervisedPipeline:
         return arr
 
     def _build_model(self):
+        k = self.n_clusters
+        if isinstance(k, str) and k == "auto":
+             # Placeholder, actual k determined in fit
+             k = 2
+
+        # Ensure k is int
+        k = int(k)
+
         if self.model_name == "kmeans":
-            return KMeans(n_clusters=self.n_clusters, random_state=self.seed, n_init="auto")
+            return KMeans(n_clusters=k, random_state=self.seed, n_init="auto")
+        if self.model_name == "minibatch_kmeans":
+            return MiniBatchKMeans(n_clusters=k, random_state=self.seed, n_init="auto")
         if self.model_name == "gmm":
-            return GaussianMixture(n_components=self.n_clusters, random_state=self.seed)
+            return GaussianMixture(n_components=k, random_state=self.seed)
         if self.model_name == "dbscan":
             return DBSCAN(eps=self.dbscan_eps, min_samples=self.dbscan_min_samples)
         if self.model_name == "iso_forest":
@@ -197,7 +229,7 @@ class UnsupervisedPipeline:
                 contamination="auto",
             )
         if self.model_name == "kmeans_iso":  # hybrid pattern
-            return KMeans(n_clusters=self.n_clusters, random_state=self.seed, n_init="auto")
+            return KMeans(n_clusters=k, random_state=self.seed, n_init="auto")
         raise ValueError(f"Unsupported model: {self.model_name}")
 
     # --------------- Core API --------------- #
@@ -210,6 +242,10 @@ class UnsupervisedPipeline:
             X = pd.DataFrame(X)
         self.feature_names = list(X.columns)
         Z = self._prepare_features(X, fit=True)
+
+        if self.n_clusters == "auto" and self.model_name in ["kmeans", "minibatch_kmeans", "gmm", "kmeans_iso"]:
+            self.n_clusters = self._find_optimal_k(Z)
+
         self.cluster_model = self._build_model()
         model_type = self.model_name
 
@@ -227,7 +263,7 @@ class UnsupervisedPipeline:
                 raise RuntimeError("Unable to obtain cluster labels")
 
         # Hybrid anomaly scoring
-        if self.model_name in {"kmeans_iso", "kmeans"}:
+        if self.model_name in {"kmeans_iso", "kmeans", "minibatch_kmeans"}:
             self.iso_model = IsolationForest(
                 n_estimators=self.iso_estimators,
                 random_state=self.seed,
@@ -514,13 +550,12 @@ def build_parser():
     p_train.add_argument(
         "--model",
         default="kmeans",
-        choices=["kmeans", "gmm", "dbscan", "iso_forest", "kmeans_iso"],
+        choices=["kmeans", "minibatch_kmeans", "gmm", "dbscan", "iso_forest", "kmeans_iso"],
     )
     p_train.add_argument(
         "--k",
-        type=int,
-        default=6,
-        help="Number of clusters for kmeans/gmm",
+        default="6",
+        help="Number of clusters for kmeans/gmm. Use 'auto' for automatic selection.",
     )
     p_train.add_argument(
         "--pca-variance",
